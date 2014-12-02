@@ -79,6 +79,12 @@ bach_display_document:
     requirements:
         _method: GET
 
+bach_display_document_rdf:
+    pattern: /archives/rdf/{docid}
+    defaults: { _controller BachHomeBundle:Default:displayDocumentAsRdf }
+    requirements:
+        _method: GET
+
 bach_get_cover:
     pattern: /file/covers/{name}
     defaults: { _controller BachHomeBundle:Files:getCover }

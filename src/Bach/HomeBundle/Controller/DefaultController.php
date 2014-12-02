@@ -772,6 +772,122 @@ class DefaultController extends SearchController
     }
 
     /**
+     * Document display as RDF
+     *
+     * @param int $docid Document unique identifier
+     *
+     * @return void
+     */
+    public function displayDocumentAsRdfAction($docid)
+    {
+        $client = $this->get($this->entryPoint());
+        $query = $client->createSelect();
+        $query->setQuery('fragmentid:"' . $docid . '"');
+        $query->setFields(
+            'headerId, fragmentid, fragment, parents, ' .
+            'archDescUnitTitle, cUnittitle, cDate, ' .
+            'previous_id, previous_title, next_id, next_title'
+        );
+        $query->setStart(0)->setRows(1);
+
+        $rs = $client->select($query);
+
+        if ( $rs->getNumFound() !== 1 ) {
+            throw new \RuntimeException(
+                str_replace(
+                    '%count%',
+                    $rs->getNumFound(),
+                    _('%count% results found, 1 expected.')
+                )
+            );
+        }
+
+        $docs  = $rs->getDocuments();
+        $doc = $docs[0];
+        $children = array();
+
+        $parents = explode('/', $doc['parents']);
+        if ( count($parents) > 0 ) {
+            $pquery = $client->createSelect();
+            $query = null;
+            foreach ( $parents as $p ) {
+                if ( $query !== null ) {
+                    $query .= ' | ';
+                }
+                $query .= 'fragmentid:"' . $doc['headerId'] . '_' . $p . '"';
+            }
+            $pquery->setQuery($query);
+            $pquery->setFields('fragmentid, cUnittitle');
+            $rs = $client->select($pquery);
+            $ariane  = $rs->getDocuments();
+            if ( count($ariane) > 0 ) {
+                $tpl_vars['ariane'] = $ariane;
+            }
+        }
+
+        $cquery = $client->createSelect();
+        $pid = substr($docid, strlen($doc['headerId']) + 1);
+
+        $query = '+headerId:"' . $doc['headerId'] . '" +parents: ';
+        if ( $pid === 'description' ) {
+            $query .= '""';
+        } else {
+            if ( isset($doc['parents']) && trim($doc['parents'] !== '') ) {
+                $pid = $doc['parents'] . '/' . $pid;
+            }
+            $query .= $pid;
+        }
+        $cquery->setQuery($query);
+        $cquery->setFields('fragmentid, cUnittitle');
+        $rs = $client->select($cquery);
+        $children  = $rs->getDocuments();
+
+        if ( count($children) > 0 ) {
+            $tpl_vars['children'] = $children;
+        }
+
+        $proc = new \XsltProcessor();
+        $proc->importStylesheet(
+            simplexml_load_file(__DIR__ . '/../Twig/display_fragment_as_rdf.xsl')
+        );
+
+        $xml = simplexml_load_string($doc['fragment']);
+
+        if ( count($ariane) > 0 ) {
+            $xml->addChild('parents');
+            foreach ( $ariane as $parent ) {
+                $xml->parents->addChild(
+                    'related',
+                    $parent['fragmentid']
+                );
+            }
+        }
+
+        if ( count($children) > 0 ) {
+            $xml->addChild('children');
+            foreach ( $children as $child ) {
+                $xml->children->addChild(
+                    'related',
+                    $child['fragmentid']
+                );
+            }
+        }
+
+        $contents = $proc->transformToXml($xml);
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'xml');
+
+        return $this->render(
+            'BachHomeBundle:Default:rdf.xml.twig',
+            array(
+                'contents' => $contents
+            ),
+            $response
+        );
+    }
+
+    /**
      * Display classification scheme
      *
      * @return void

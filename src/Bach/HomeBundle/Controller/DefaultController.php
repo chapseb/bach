@@ -56,6 +56,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Bach\HomeBundle\Entity\Pdf;
 
+use Symfony\Component\HttpFoundation\HeaderBag;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\AcceptHeader;
 /**
  * Bach home controller
  *
@@ -885,6 +889,33 @@ class DefaultController extends SearchController
             ),
             $response
         );
+    }
+
+
+    /**
+     * Choice how to display document
+     *
+     * @param string $docid Document id
+     *
+     * @return void
+     */
+    public function displayChoiceAction($docid)
+    {
+        $header = $this->getRequest()->headers->get('Accept');
+        $accept = AcceptHeader::fromString($header);
+        if ($accept->has('application/rdf+xml')) {
+            $route = 'bach_display_document_rdf';
+        } else {
+            $route = 'bach_display_document';
+        }
+        $params = array(
+            'docid' => $docid
+        );
+        $redirectUrl = $this->get('router')->generate(
+            $route,
+            $params
+        );
+        return new RedirectResponse($redirectUrl);
     }
 
     /**

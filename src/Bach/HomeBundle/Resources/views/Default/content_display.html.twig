@@ -97,7 +97,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     {{ _('Next component') }}
                 </a>
             {% endif %}
-                <a href="{{ path('bach_display_document_rdf', {'docid': document.fragmentid}) }}">{{ _('RDF') }}</a>
+                <a href="{{ path('bach_display_document_rdf', {'docid': document.fragmentid}) }}" type='text/html'>{{ _('RDF') }}</a>
             </aside>
         {% endif%}
         {% endif %}

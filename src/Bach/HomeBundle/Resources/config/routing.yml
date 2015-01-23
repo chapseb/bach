@@ -80,8 +80,14 @@ bach_display_document:
         _method: GET
 
 bach_display_document_rdf:
-    pattern: /archives/rdf/{docid}
+    pattern: /archives/data/{docid}
     defaults: { _controller BachHomeBundle:Default:displayDocumentAsRdf }
+    requirements:
+        _method: GET
+
+bach_display_choice:
+    pattern: /archives/resource/{docid}
+    defaults: { _controller BachHomeBundle:Default:displayChoice }
     requirements:
         _method: GET
 

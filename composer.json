@@ -3,7 +3,10 @@
     "license": "BSD-3-Clause",
     "description": "Bach Archival search engine",
     "autoload": {
-        "psr-0": { "": "src/" }
+        "psr-0": {
+            "": "src/",
+            "easyrdf": "vendor/easyrdf/easyrdf/lib/"
+        }
     },
     "require": {
         "php": ">=5.4",

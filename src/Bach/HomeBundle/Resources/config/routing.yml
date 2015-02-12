@@ -80,7 +80,7 @@ bach_display_document:
         _method: GET
 
 bach_display_document_rdf:
-    pattern: /archives/data/{docid}
+    pattern: /archives/rdf/{docid}
     defaults: { _controller BachHomeBundle:Default:displayDocumentAsRdf }
     requirements:
         _method: GET
@@ -333,5 +333,17 @@ print_matresults_page:
 print_matdoc:
     pattern: /printMatdoc/{docid}
     defaults: {_controller: BachHomeBundle:Matricules:printPdfMatdoc}
+    requirements:
+        _method: GET
+
+bach_display_list_rdf:
+    pattern: /listrdf
+    defaults: {_controller: BachHomeBundle:Files:listRdf}
+    requirements:
+        _method: GET
+
+bach_download_rdf:
+    pattern: /downloadrdf/{file}
+    defaults: {_controller: BachHomeBundle:Files:downloadRdf}
     requirements:
         _method: GET

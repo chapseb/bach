@@ -54,8 +54,8 @@ use Bach\HomeBundle\Entity\ViewParams;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use easyrdf\easyrdf\lib\EasyRdf;
 use Bach\HomeBundle\Entity\Pdf;
-
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -68,6 +68,7 @@ use Symfony\Component\HttpFoundation\AcceptHeader;
  * @category Search
  * @package  Bach
  * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sébastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
@@ -784,101 +785,122 @@ class DefaultController extends SearchController
      */
     public function displayDocumentAsRdfAction($docid)
     {
-        $client = $this->get($this->entryPoint());
-        $query = $client->createSelect();
-        $query->setQuery('fragmentid:"' . $docid . '"');
-        $query->setFields(
-            'headerId, fragmentid, fragment, parents, ' .
-            'archDescUnitTitle, cUnittitle, cDate, ' .
-            'previous_id, previous_title, next_id, next_title'
-        );
-        $query->setStart(0)->setRows(1);
+        $pathDirectory = $this->container->getParameter('rdf_files_path');
+        $pathFile = $pathDirectory . $docid . ".rdf";
 
-        $rs = $client->select($query);
-
-        if ( $rs->getNumFound() !== 1 ) {
-            throw new \RuntimeException(
-                str_replace(
-                    '%count%',
-                    $rs->getNumFound(),
-                    _('%count% results found, 1 expected.')
-                )
+        $extension = '';
+        if (isset(pathinfo($docid)['extension'])) {
+            $extension = pathinfo($docid)['extension'];
+            $docid = pathinfo($docid)['filename'];
+        }
+        if (!file_exists($pathFile)) {
+            $client = $this->get($this->entryPoint());
+            $query = $client->createSelect();
+            $query->setQuery('fragmentid:"' . $docid . '"');
+            $query->setFields(
+                'headerId, fragmentid, fragment, parents, ' .
+                'archDescUnitTitle, cUnittitle, cDate, ' .
+                'previous_id, previous_title, next_id, next_title'
             );
-        }
+            $query->setStart(0)->setRows(1);
 
-        $docs  = $rs->getDocuments();
-        $doc = $docs[0];
-        $children = array();
+            $rs = $client->select($query);
 
-        $parents = explode('/', $doc['parents']);
-        if ( count($parents) > 0 ) {
-            $pquery = $client->createSelect();
-            $query = null;
-            foreach ( $parents as $p ) {
-                if ( $query !== null ) {
-                    $query .= ' | ';
+            if ( $rs->getNumFound() !== 1 ) {
+                throw new \RuntimeException(
+                    str_replace(
+                        '%count%',
+                        $rs->getNumFound(),
+                        _('%count% results found, 1 expected.')
+                    )
+                );
+            }
+
+            $docs  = $rs->getDocuments();
+            $doc = $docs[0];
+            $children = array();
+
+            $parents = explode('/', $doc['parents']);
+            if ( count($parents) > 0 ) {
+                $pquery = $client->createSelect();
+                $query = null;
+                foreach ( $parents as $p ) {
+                    if ( $query !== null ) {
+                        $query .= ' | ';
+                    }
+                    $query .= 'fragmentid:"' . $doc['headerId'] . '_' . $p . '"';
                 }
-                $query .= 'fragmentid:"' . $doc['headerId'] . '_' . $p . '"';
+                $pquery->setQuery($query);
+                $pquery->setFields('fragmentid, cUnittitle');
+                $rs = $client->select($pquery);
+                $ariane  = $rs->getDocuments();
+                if ( count($ariane) > 0 ) {
+                    $tpl_vars['ariane'] = $ariane;
+                }
             }
-            $pquery->setQuery($query);
-            $pquery->setFields('fragmentid, cUnittitle');
-            $rs = $client->select($pquery);
-            $ariane  = $rs->getDocuments();
+
+            $cquery = $client->createSelect();
+            $pid = substr($docid, strlen($doc['headerId']) + 1);
+
+            $query = '+headerId:"' . $doc['headerId'] . '" +parents: ';
+            if ( $pid === 'description' ) {
+                $query .= '""';
+            } else {
+                if ( isset($doc['parents']) && trim($doc['parents'] !== '') ) {
+                    $pid = $doc['parents'] . '/' . $pid;
+                }
+                $query .= $pid;
+            }
+            $cquery->setQuery($query);
+            $cquery->setFields('fragmentid, cUnittitle');
+            $rs = $client->select($cquery);
+            $children  = $rs->getDocuments();
+
+            if ( count($children) > 0 ) {
+                $tpl_vars['children'] = $children;
+            }
+
+            $proc = new \XsltProcessor();
+            $proc->importStylesheet(
+                simplexml_load_file(__DIR__ . '/../Twig/display_fragment_as_rdf.xsl')
+            );
+
+            $xml = simplexml_load_string($doc['fragment']);
+
             if ( count($ariane) > 0 ) {
-                $tpl_vars['ariane'] = $ariane;
+                $xml->addChild('parents');
+                foreach ( $ariane as $parent ) {
+                    $xml->parents->addChild(
+                        'related',
+                        $parent['fragmentid']
+                    );
+                }
             }
-        }
 
-        $cquery = $client->createSelect();
-        $pid = substr($docid, strlen($doc['headerId']) + 1);
+            if ( count($children) > 0 ) {
+                $xml->addChild('children');
+                foreach ( $children as $child ) {
+                    $xml->children->addChild(
+                        'related',
+                        $child['fragmentid']
+                    );
+                }
+            }
 
-        $query = '+headerId:"' . $doc['headerId'] . '" +parents: ';
-        if ( $pid === 'description' ) {
-            $query .= '""';
+            $contents = $proc->transformToXml($xml);
         } else {
-            if ( isset($doc['parents']) && trim($doc['parents'] !== '') ) {
-                $pid = $doc['parents'] . '/' . $pid;
-            }
-            $query .= $pid;
-        }
-        $cquery->setQuery($query);
-        $cquery->setFields('fragmentid, cUnittitle');
-        $rs = $client->select($cquery);
-        $children  = $rs->getDocuments();
-
-        if ( count($children) > 0 ) {
-            $tpl_vars['children'] = $children;
+            $contents = file_get_contents($pathFile);
         }
 
-        $proc = new \XsltProcessor();
-        $proc->importStylesheet(
-            simplexml_load_file(__DIR__ . '/../Twig/display_fragment_as_rdf.xsl')
-        );
-
-        $xml = simplexml_load_string($doc['fragment']);
-
-        if ( count($ariane) > 0 ) {
-            $xml->addChild('parents');
-            foreach ( $ariane as $parent ) {
-                $xml->parents->addChild(
-                    'related',
-                    $parent['fragmentid']
-                );
+        if ($extension !== 'rdf') {
+            $pathTurtle = $pathDirectory . $docid . 'ttl';
+            if (!file_exists($pathTurtle)) {
+                $graph = new \EasyRdf_Graph($docid, $contents, 'rdfxml');
+                $contents = $graph->serialise('turtle');
+            } else {
+                $contents = file_get_contents($pathTurtle);
             }
         }
-
-        if ( count($children) > 0 ) {
-            $xml->addChild('children');
-            foreach ( $children as $child ) {
-                $xml->children->addChild(
-                    'related',
-                    $child['fragmentid']
-                );
-            }
-        }
-
-        $contents = $proc->transformToXml($xml);
-
         $response = new Response();
         $response->headers->set('Content-Type', 'xml');
 

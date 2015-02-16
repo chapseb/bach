@@ -251,10 +251,11 @@ class FilesController extends Controller
         if ($repo = opendir($path)) {
             while (false !== ($file = readdir($repo))) {
                 $ext = pathinfo($file, PATHINFO_EXTENSION);
-                if (strpos($ext, 'rdf') !== false) {
+                if (strpos($ext, 'rdf') !== false || strpos($ext, 'ttl') !== false) {
                     array_push($files, $file);
                 }
             }
+            asort($files);
         }
         return $this->render(
             'BachHomeBundle:Default:listrdf.html.twig',
@@ -276,9 +277,12 @@ class FilesController extends Controller
         $path = $this->container->getParameter('rdf_files_path');
 
         $path .= $file;
-        $fileOpen = fopen($path, 'rb');
-        $out = fopen('php://output', 'wb');
-
+        if (file_exists($path)) {
+            $fileOpen = fopen($path, 'rb');
+            $out = fopen('php://output', 'wb');
+        } else {
+            exit('le fichier n existe pas.'.$path);
+        }
         $response = new Response();
 
         $response->headers

@@ -331,6 +331,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
         {% endif %}
     </div>
     {% endif %}
+    <a href="{{ path('bach_display_list_rdf') }}">{{ _("List of rdf files") }}</a>
     {% if suggestions is defined and searchResults is defined and searchResults|length > 0 %}
     <aside id="suggestions">
         <strong>{{ _('Additionnal search suggestions:') }}</strong><br/>

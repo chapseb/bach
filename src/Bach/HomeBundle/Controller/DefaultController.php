@@ -294,7 +294,10 @@ class DefaultController extends SearchController
             $query_session = str_replace("OR", " ", $query_session);
             $query_session = str_replace("NOT", " ", $query_session);
             $session->set('query_terms', $query_session);
-            $suggestions = $factory->getSuggestions($query_session);
+
+            if ($this->container->getParameter('display.disable_suggestions') != true) {
+                $suggestions = $factory->getSuggestions($query_session);
+            }
 
             $tpl_vars['resultCount'] = $resultCount;
             $tpl_vars['resultByPage'] = $view_params->getResultsbyPage();

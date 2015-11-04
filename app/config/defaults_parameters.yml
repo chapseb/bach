@@ -91,6 +91,7 @@ parameters:
     display.matricules.show_maps: '%display.show_maps%'
     display.matricules.show_daterange: '%display.show_daterange%'
     display.matricules.show_param: '%display.show_param%'
+    display.disable_suggestions: false
     cote_location: 'bottom' #either top or bottom
     #other
     feature.openid: false

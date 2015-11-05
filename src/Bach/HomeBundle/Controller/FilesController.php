@@ -128,6 +128,8 @@ class FilesController extends Controller
 
         fclose($out);
         fclose($file);
+
+        return new Response();
     }
 
     /**
@@ -183,6 +185,8 @@ class FilesController extends Controller
         );
 
         imagejpeg($image_p, null, 100);
+
+        return new Response();
     }
 
     /**

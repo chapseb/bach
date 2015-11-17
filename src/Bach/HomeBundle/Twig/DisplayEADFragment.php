@@ -239,7 +239,7 @@ class DisplayEADFragment extends \Twig_Extension
             // need to rebuild the link because link has the search word
             foreach ($allWord as $wordHigh) {
                 foreach ($matches[1] as $key => $link) {
-                    if (strpos($link, $wordHigh) != false) {
+                    if (strpos($link, $wordHigh) != false && !strpos('<em class="hl">', $wordHigh)) {
                         $result = str_replace(
                             $wordHigh,
                             '<em class="hl">'.$wordHigh.'</em>',
@@ -272,11 +272,13 @@ class DisplayEADFragment extends \Twig_Extension
                 if (!empty($matches[0][0])) {
                     $result = $matches[0][0];
                     foreach ($allWord as $wordHigh) {
-                        $result = str_replace(
-                            $wordHigh,
-                            '<em class="hl">'.$wordHigh.'</em>',
-                            $result
-                        );
+                        if(!strpos('<em class="hl">', $wordHigh)) {
+                            $result = str_replace(
+                                $wordHigh,
+                                '<em class="hl">'.$wordHigh.'</em>',
+                                $result
+                            );
+                        }
                     }
                     $text = str_replace($matches[0][0], $result, $text);
                 }

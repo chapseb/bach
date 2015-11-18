@@ -1945,6 +1945,10 @@ ul.legalsList {
     padding-left: 20px;
 }
 
+.intro strong {
+    font-weight: bold;
+}
+
 /* Mobile view */
 @media ( max-width : 767px) {
     /** Reset widths and heights */

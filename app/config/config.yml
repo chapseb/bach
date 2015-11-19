@@ -88,6 +88,8 @@ twig:
             matricules: '%label.matricules%'
             expos: '%label.expos%'
             browse: '%label.browse%'
+        display:
+            disable_searchmap: '%display.disable_searchmap%'
 
 # Assetic Configuration
 assetic:

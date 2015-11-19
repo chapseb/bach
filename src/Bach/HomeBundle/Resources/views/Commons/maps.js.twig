@@ -82,7 +82,7 @@
                 }
                 map.addControl(fullScreen);
 
-                {% if from_search %}
+                {% if from_search and display.disable_searchmap != true %}
                 new L.Control.GeoSearch({
                     provider: new L.GeoSearch.Provider.OpenStreetMap(),
                     showMarker: false,

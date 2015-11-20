@@ -165,7 +165,10 @@
                             _layers[_layers.length] = _layer;
                             _overlays[data.labels[field]] = _layer;
                         }
-                        var _groups = L.control.layers({}, _overlays).addTo(map);
+
+                        if (Object.keys(_overlays).length > 1) {
+                            var _groups = L.control.layers({}, _overlays).addTo(map);
+                        }
 
                         var _layers = L.layerGroup(_layers).addTo(map);
                         allpoints = L.featureGroup(_fields_points);

@@ -207,7 +207,13 @@ class DefaultController extends SearchController
         $container = new SolariumQueryContainer();
 
         if ( !is_null($query_terms) ) {
-            $container->setOrder($view_params->getOrder());
+            if ($request->get('results_order') !== null) {
+                $container->setOrder($request->get('results_order'));//$view_params->getOrder();
+            } else if ( $this->container->getParameter('display.ead.result_order') != null) {
+                $container->setOrder($this->container->getParameter('display.ead.result_order'));//$view_params->getOrder();
+            } else {
+                $container->setOrder($view_params->getOrder());
+            }
 
             if ( $this->search_form !== null ) {
                 $container->setSearchForm($search_forms[$this->search_form]);
@@ -336,6 +342,10 @@ class DefaultController extends SearchController
         $tpl_vars['form'] = $form->createView();
 
         $tpl_vars['view'] = $view_params->getView();
+        if ($session) {
+        } else {
+            $tpl_vars['results_order'] = $this->container->getParameter('display.ead.result_order');//$view_params->getOrder();
+        }
         if ( isset($suggestions) && $suggestions->count() > 0 ) {
             $tpl_vars['suggestions'] = $suggestions;
         }
@@ -387,7 +397,11 @@ class DefaultController extends SearchController
 
                 $session = $request->getSession();
                 $view_params = $session->get($this->getParamSessionName());
-                $view_params->setOrder((int)$request->get('results_order'));
+                if ($request->get('results_order') !== null) {
+                    $view_params->setOrder((int)$request->get('results_order'));//$view_params->getOrder();
+                } else {
+                    $view_params->setOrder((int)$this->container->getParameter('display.ead.result_order'));//$view_params->getOrder();
+                }
                 $session->set($this->getParamSessionName(), $view_params);
                 $url_vars['view'] = $view_params->getView();
                 //check for filtering informations

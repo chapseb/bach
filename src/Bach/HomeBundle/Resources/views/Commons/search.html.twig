@@ -498,6 +498,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                     bars: {
                         show: true,
                         align: "center",
+                        barWidth: 0.9,
                         fill: true,
                         fillColor: "{{ _plot_fill_color }}"
                     }
@@ -529,16 +530,24 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                 {% if disable_select_daterange is not defined or disable_select_daterange == false %}
                 plot.setSelection({
                     xaxis: {
-                        from: {{by_year_min}},
-                        to: {{by_year_max}}
+                        from: {{by_year_min}}-0.45,
+                        to: {{by_year_max}}+0.45
                     }
                 });
 
                 _dates_plot.bind("plotselected", function (event, ranges) {
-                    filterOnDate(
-                        Math.floor(ranges.xaxis.from),
-                        Math.ceil(ranges.xaxis.to)
-                    );
+                    if ( Math.floor(ranges.xaxis.from) === Math.floor(ranges.xaxis.to)) {
+                        filterOnDate(
+                            Math.floor(ranges.xaxis.from),
+                            Math.floor(ranges.xaxis.to)
+                        );
+                    } else {
+                        filterOnDate(
+                            Math.round(ranges.xaxis.from),
+                            Math.round(ranges.xaxis.to)
+                        );
+                    }
+
                 }).tooltip({
                     position: {
                         my: 'left bottom',

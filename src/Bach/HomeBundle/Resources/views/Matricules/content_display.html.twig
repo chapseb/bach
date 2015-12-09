@@ -155,7 +155,7 @@ POSSIBILITY OF SUCH DAMAGE.
                 {% if 'lieu_enregistrement' in matricules_listparameters %}
                 <tr>
                     <th>{{ _('Place of recording') }}</th>
-                    <td>{{ document.lieu_enregistrement }}</td>
+                    <td>{% if document.lieu_enregistrement is defined%}{{ document.lieu_enregistrement }}{% else %}-{% endif %}</td>
                 </tr>
                 {% endif %}
             </table>

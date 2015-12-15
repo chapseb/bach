@@ -95,6 +95,25 @@ class DisplayEADFragment extends \Twig_Extension
     }
 
     /**
+     * Get stopword array
+     *
+     * @return array
+     */
+    public function getStopWords()
+    {
+        $stopwordArray = array(
+            'au', 'aux', 'avec', 'ce', 'ces' ,'dans' ,'de' ,'des',
+            'du', 'elle', 'en', 'et', 'eux', 'il', 'je', 'la', 'le',
+            'leur', 'lui', 'ma', 'mais', 'me', 'même', 'mes', 'moi',
+            'mon', 'ne', 'nos', 'notre', 'nous', 'on', 'ou', 'par', 'pas',
+            'pour', 'qu', 'que', 'qui', 'sa', 'se', 'ses', 'son', 'sur',
+            'ta', 'te', 'tes', 'toi', 'ton', 'tu', 'un', 'une', 'vos',
+            'votre','vous'
+        );
+        return $stopwordArray;
+    }
+
+    /**
      * Set viewer URI
      *
      * @param string $viewer_uri Viewer URL
@@ -213,6 +232,7 @@ class DisplayEADFragment extends \Twig_Extension
             );
         }
 
+        //FIXME: Find a better way to handle highlight
         // highlight in descriptors
         if ($highlight != false ) {
             $wordHighArray = array();
@@ -224,10 +244,29 @@ class DisplayEADFragment extends \Twig_Extension
                     }
                 }
             }
+            // delete one character word and word whiche are in stoplist
+            $wordHighArray = array_filter(
+                $wordHighArray,
+                function ($v) {
+                    return strlen($v) > 1;
+                }
+            );
+            $wordHighArray = array_diff($wordHighArray, $this->getStopWords());
+
+            //do the same thing with query terms
+            $wordQuery = explode(" ", $request->getSession()->get('query_terms'));
+            $wordQuery = array_filter(
+                $wordQuery,
+                function ($v) {
+                    return strlen($v) > 1;
+                }
+            );
+            $wordQuery = array_diff($wordQuery, $this->getStopWords());
+
             $allWord = array_unique(
                 array_merge(
                     $wordHighArray,
-                    explode(" ", $request->getSession()->get('query_terms'))
+                    $wordQuery
                 )
             );
             $getLink = preg_match_all(
@@ -235,11 +274,13 @@ class DisplayEADFragment extends \Twig_Extension
                 $text,
                 $matches
             );
-
             // need to rebuild the link because link has the search word
             foreach ($allWord as $wordHigh) {
                 foreach ($matches[1] as $key => $link) {
-                    if (strpos($link, $wordHigh) != false && !strpos('<em class="hl">', $wordHigh)) {
+                    if (preg_match("/\b".$wordHigh."\b/i", $matches[2][$key])
+                        && strpos($link, $wordHigh) != false
+                        && !strpos('<em class="hl">', $wordHigh)
+                    ) {
                         $result = str_replace(
                             $wordHigh,
                             '<em class="hl">'.$wordHigh.'</em>',

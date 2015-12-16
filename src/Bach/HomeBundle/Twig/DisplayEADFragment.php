@@ -234,7 +234,7 @@ class DisplayEADFragment extends \Twig_Extension
 
         //FIXME: Find a better way to handle highlight
         // highlight in descriptors
-        if ($highlight != false ) {
+        if ($highlight != false && $request->getSession()->get('query_terms') != '*:*') {
             $wordHighArray = array();
             foreach ($highlight->getFields() as $fieldArray) {
                 foreach ( $fieldArray as $field) {

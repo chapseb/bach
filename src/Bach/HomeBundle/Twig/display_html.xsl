@@ -325,33 +325,66 @@ POSSIBILITY OF SUCH DAMAGE.
         </xsl:choose>
     </xsl:template>
 
+    <xsl:template match="extref|archref" mode="full">
+        <xsl:choose>
+            <xsl:when test="@href">
+                <xsl:choose>
+                    <xsl:when test="substring(@href, 1, 7) = 'http://'">
+                        <a href="{@href}">
+                            <xsl:if test="@title and . != ''">
+                                <xsl:attribute name="title">
+                                    <xsl:value-of select="@title"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="@title and . = ''">
+                                <xsl:value-of select="@title"/>
+                            </xsl:if>
+                            <xsl:apply-templates mode="full"/>
+                        </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
     <xsl:template match="item" mode="contents">
         <xsl:variable name="parent-name" select="local-name(parent::node())"/>
         <xsl:choose>
             <xsl:when test="$parent-name = 'list'">
                 <li>
-                    <xsl:apply-templates mode="contents"/>
-                    <xsl:element name="a">
-                        <xsl:attribute name="href">
-                            <xsl:variable name="varhref" select="archref/@href"/>
-                                <xsl:value-of select="translate($varhref, '.xml', '')" />
-
-                        </xsl:attribute>
-                        <xsl:if test="archref/@title">
-                            <xsl:attribute name="title">
-                                <xsl:value-of select="archref/@title" />
-                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:choose>
-                            <xsl:when test="archref/@title">
-                                <xsl:value-of select="archref/@title" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:variable name="varhref" select="archref/@href"/>
-                                <xsl:value-of select="translate($varhref, '.xml', '')" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:element>
+                    <xsl:choose>
+                        <xsl:when test="substring(extref/@href, 1, 7) = 'http://'">
+                            <xsl:apply-templates mode="full"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:choose>
+                                <xsl:when test="archref">
+                                    <xsl:element name="a">
+                                        <xsl:attribute name="href">
+                                            <xsl:variable name="varhref" select="archref/@href"/>
+                                            <xsl:value-of select="translate($varhref, '.xml', '')" />
+                                        </xsl:attribute>
+                                        <xsl:if test="archref/@title and . != ''">
+                                            <xsl:attribute name="title">
+                                                <xsl:value-of select="archref/@title"/>
+                                            </xsl:attribute>
+                                        </xsl:if>
+                                        <xsl:if test="archref/@title and . = ''">
+                                            <xsl:value-of select="archref/@title"/>
+                                        </xsl:if>
+                                        <xsl:apply-templates mode="contents"/>
+                                    </xsl:element>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:apply-templates mode="contents"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </li>
             </xsl:when>
             <xsl:when test="$parent-name = 'defitem' or $parent-name = 'change'">

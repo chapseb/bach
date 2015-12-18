@@ -351,6 +351,28 @@ POSSIBILITY OF SUCH DAMAGE.
         </xsl:choose>
     </xsl:template>
 
+
+<xsl:template name="replace-string">
+    <xsl:param name="text"/>
+    <xsl:param name="replace"/>
+    <xsl:param name="with"/>
+    <xsl:choose>
+      <xsl:when test="contains($text,$replace)">
+        <xsl:value-of select="substring-before($text,$replace)"/>
+        <xsl:value-of select="$with"/>
+        <xsl:call-template name="replace-string">
+          <xsl:with-param name="text"
+select="substring-after($text,$replace)"/>
+          <xsl:with-param name="replace" select="$replace"/>
+          <xsl:with-param name="with" select="$with"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
     <xsl:template match="item" mode="contents">
         <xsl:variable name="parent-name" select="local-name(parent::node())"/>
         <xsl:choose>
@@ -366,7 +388,12 @@ POSSIBILITY OF SUCH DAMAGE.
                                     <xsl:element name="a">
                                         <xsl:attribute name="href">
                                             <xsl:variable name="varhref" select="archref/@href"/>
-                                            <xsl:value-of select="translate($varhref, '.xml', '')" />
+                                            <xsl:call-template name="replace-string">
+                                                <xsl:with-param name="text" select="archref/@href"/>
+                                                    <xsl:with-param name="replace" select="'.xml'" />
+                                                      <xsl:with-param name="with" select="''"/>
+                                            </xsl:call-template>
+
                                         </xsl:attribute>
                                         <xsl:if test="archref/@title and . != ''">
                                             <xsl:attribute name="title">

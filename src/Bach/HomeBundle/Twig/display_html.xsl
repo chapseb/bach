@@ -376,7 +376,7 @@ POSSIBILITY OF SUCH DAMAGE.
                                         <xsl:if test="archref/@title and . = ''">
                                             <xsl:value-of select="archref/@title"/>
                                         </xsl:if>
-                                        <xsl:apply-templates mode="contents"/>
+                                        <xsl:apply-templates mode="full"/>
                                     </xsl:element>
                                 </xsl:when>
                                 <xsl:otherwise>

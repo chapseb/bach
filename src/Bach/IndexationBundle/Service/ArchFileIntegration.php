@@ -144,7 +144,7 @@ class ArchFileIntegration
      *
      * @return void
      */
-    public function integrateAll($tasks, ProgressHelper $progress, &$geonames)
+    public function integrateAll($tasks, ProgressHelper $progress, &$geonames, $debug)
     {
         $count = 0;
         $cleared = false;
@@ -157,6 +157,9 @@ class ArchFileIntegration
                     $task->setDocument($doc);
                 }
                 $progress->advance();
+                if ($debug == true) {
+                    print_r($task->getDocument()->getName());
+                }
                 $this->integrate($task, $geonames, false);
                 $count++;
             }

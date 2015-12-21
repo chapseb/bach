@@ -95,7 +95,13 @@ POSSIBILITY OF SUCH DAMAGE.
                 <ul>
                     {% if features.archives %}
                     <li{% if (app.request.attributes.get('_route') == 'bach_archives') and (app.request.attributes.get('_route_params').form_name is not defined or app.request.attributes.get('_route_params').form_name == 'default') %} class="active"{% endif %}>
-                        <a href="{{ path('bach_archives') }}">{{ _('Search') }}</a>
+                        <a href="{{ path('bach_archives') }}">
+                        {% if label.archives is null %}
+                            {{ _('Search') }}
+                        {% else %}
+                            {{ label.archives}}
+                        {% endif %}
+                        </a>
                     </li>
                     {% for name, search_form in search_forms %}
                         <li{% if (app.request.attributes.get('_route') == 'bach_archives' or  app.request.attributes.get('_route') == 'bach_search_form_homepage') and app.request.attributes.get('_route_params').form_name == name %} class="active"{% endif %}>
@@ -105,22 +111,46 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% endif %}
                     {% if features.matricules %}
                     <li{% if app.request.attributes.get('_route') == 'bach_matricules' %} class="active"{% endif %}>
-                        <a href="{{ path('bach_matricules') }}">{{ _('Matricules') }}</a>
+                        <a href="{{ path('bach_matricules') }}">
+                        {% if label.matricules is null %}
+                            {{ _('Matricules') }}
+                        {% else %}
+                            {{ label.matricules}}
+                        {% endif %}
+                        </a>
                     </li>
                     {% endif %}
                     {% if features.archives and features.cdc %}
                      <li{% if app.request.attributes.get('_route') == 'bach_classification' %} class="active"{% endif %}>
-                        <a href="{{ path('bach_classification') }}">{{ _('Classification scheme') }}</a>
+                        <a href="{{ path('bach_classification') }}">
+                        {% if label.cdc is null %}
+                            {{ _('Classification scheme') }}
+                        {% else %}
+                            {{ label.cdc }}
+                        {% endif %}
+                        </a>
                     </li>
                     {% endif %}
                     {% if features.archives and features.browse %}
                     <li{% if app.request.attributes.get('_route') == 'bach_browse' %} class="active"{% endif %}>
-                        <a href="{{ path('bach_browse') }}">{{ _('Consult index') }}</a>
+                        <a href="{{ path('bach_browse') }}">
+                        {% if label.browse is null %}
+                            {{ _('Consult index') }}
+                        {% else %}
+                            {{ label.browse}}
+                        {% endif %}
+                        </a>
                     </li>
                     {% endif %}
                     {% if features.expos %}
                     <li{% if app.request.attributes.get('_route') == 'expos_homepage' %} class="active"{% endif %}>
-                        <a href="{{ path('expos_homepage') }}">{{ _('Virtual expositions') }}</a>
+                        <a href="{{ path('expos_homepage') }}">
+                        {% if label.expos is null %}
+                            {{ _('Virtual expositions') }}
+                        {% else %}
+                            {{ label.expos }}
+                        {% endif %}
+                        </a>
                     </li>
                     {% endif %}
                     {% if app.user and is_granted("IS_AUTHENTICATED_REMEMBERED") %}

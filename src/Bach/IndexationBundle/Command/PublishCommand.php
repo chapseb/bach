@@ -124,6 +124,11 @@ EOF
                 null,
                 InputOption::VALUE_NONE,
                 _('Give stats informations (memory used, etc)')
+            )->addOption(
+                'debug',
+                null,
+                InputOption::VALUE_NONE,
+                _('Print last integration file')
             );
     }
 
@@ -399,7 +404,11 @@ EOF
                     throw $e;
                 }
 
-                $integrationService->integrateAll($tasks, $progress, $geonames);
+                $debug = $input->getOption('debug');
+                if ($debug != true) {
+                    $debug = false;
+                }
+                $integrationService->integrateAll($tasks, $progress, $geonames, $debug);
             }
 
             $this->_solrFullImport($output, $type, $progress, $dry);

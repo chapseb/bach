@@ -103,6 +103,11 @@ class EADFileFormat extends FileFormat
     protected $fragment;
 
     /**
+     * @ORM\Column(type="string", nullable=true, length=200)
+     */
+    protected $cRepository;
+
+    /**
      * @ORM\Column(type="integer", length=10, nullable=true)
      */
     protected $elt_order;
@@ -594,6 +599,29 @@ class EADFileFormat extends FileFormat
     public function getCControlacces()
     {
         return $this->cControlacces;
+    }
+
+    /**
+     * Set repository
+     *
+     * @param string $repository repository
+     *
+     * @return EADFileFormat
+     */
+    public function setRepository($repository)
+    {
+        $this->repository = $repository;
+        return $this;
+    }
+
+    /**
+     * Get repository
+     *
+     * @return string
+     */
+    public function getRepository()
+    {
+        return $this->repository;
     }
 
     /**

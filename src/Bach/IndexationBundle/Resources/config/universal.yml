@@ -44,4 +44,5 @@ fields:
         - unitid #Cotes, reférences etc...
         - unittitle #Intitulé
         - unitdate #Date
+        - repository #Service
 

@@ -82,6 +82,14 @@ twig:
         centerlon: '%centerlon%'
         zoommap: '%zoommap%'
         collapsecdc: '%collapsecdc%'
+        label:
+            cdc: '%label.cdc%'
+            archives: '%label.archives%'
+            matricules: '%label.matricules%'
+            expos: '%label.expos%'
+            browse: '%label.browse%'
+        display:
+            disable_searchmap: '%display.disable_searchmap%'
 
 # Assetic Configuration
 assetic:

@@ -321,7 +321,7 @@ POSSIBILITY OF SUCH DAMAGE.
                                     <xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Arrangement:')"/>
                                 </xsl:when>
                                 <xsl:when test="local-name() = 'relatedmaterial'">
-                                    <xsl:value-of select="php:function('bach\homebundle\twig\displayeadfragment::i18nfromxsl', 'related material:')"/>
+                                    <xsl:value-of select="php:function('Bach\Homebundle\twig\DisplayEADFragment::i18nfromxsl', 'Related material:')"/>
                                 </xsl:when>
                                 <xsl:when test="local-name() = 'bibliography'">
                                     <xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Bibliography:')"/>

@@ -178,18 +178,18 @@ requete : {{ q }}
                         {%- if hlSearchResults.getResult(document.id).getField('lieu_enregistrement')|length > 0 -%}
                             {{ hlSearchResults.getResult(document.id).getField('lieu_enregistrement')[0]|raw }}
                         {%- else -%}
-                            {{ document.lieu_enregistrement }}
+                            {% if document.lieu_enregistrement is defined %}{{ document.lieu_enregistrement }} {% else %}-{% endif %}
                         {%- endif -%}
                     </td>
                     {% endif %}
                     {% if 'date_enregistrement' in matricules_searchparameters %}
                     <td>
-                        {% if document.classe is defined %}{{ document.classe|date('Y') }}{% else %}-{% endif %}
+                        {% if document.date_enregistrement is defined %}{{ document.date_enregistrement|date('Y') }}{% else %}-{% endif %}
                     </td>
                     {% endif %}
                     {% if 'cote' in matricules_searchparameters %}
                     <td>
-                        {{ document.cote }}
+                        {% if document.cote is defined %}{{ document.cote }}{% else %}-{% endif %}
                     </td>
                     {% endif %}
 

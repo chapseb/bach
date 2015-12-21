@@ -230,7 +230,10 @@ class MatriculesController extends SearchController
                 $resultCount/$view_params->getResultsbyPage()
             );
 
-            $suggestions = $factory->getSuggestions($query_terms);
+
+            if ($this->container->getParameter('display.disable_suggestions') != true) {
+                $suggestions = $factory->getSuggestions($query_terms);
+            }
 
             if ( isset($suggestions) && $suggestions->count() > 0 ) {
                 $tpl_vars['suggestions'] = $suggestions;

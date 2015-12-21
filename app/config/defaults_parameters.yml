@@ -91,6 +91,9 @@ parameters:
     display.matricules.show_maps: '%display.show_maps%'
     display.matricules.show_daterange: '%display.show_daterange%'
     display.matricules.show_param: '%display.show_param%'
+    display.disable_suggestions: false
+    display.disable_searchmap: false
+    display.ead.result_order: null
     cote_location: 'bottom' #either top or bottom
     #other
     feature.openid: false
@@ -152,6 +155,11 @@ parameters:
     centerlat: null
     centerlon: null
     zoommap: null
+    label.cdc: null
+    label.archives: null
+    label.matricules: null
+    label.expos: null
+    label.browse: null
     #mail parameters (not used for now)
     #mailer_transport: smtp
     #mailer_host: localhost

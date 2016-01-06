@@ -59,8 +59,10 @@ POSSIBILITY OF SUCH DAMAGE.
             <hr />
 
             {% block show_results %}
+                {% set numSearch = resultStart %}
                 {% for document in searchResults %}
-                    <h2>Resultat n°{{ loop.index }}</h2>
+                    <h2>Resultat n°{{ numSearch }}</h2>
+                        {% set numSearch = numSearch + 1 %}
                         {%- if (document.parents_titles is defined or document.archDescUnitTitle is defined) -%}
                             {%- if document.archDescUnitTitle is defined -%}
                                     {{ document.archDescUnitTitle }}

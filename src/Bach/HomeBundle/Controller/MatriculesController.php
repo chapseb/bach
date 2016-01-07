@@ -838,7 +838,7 @@ class MatriculesController extends SearchController
             $container->setField(
                 "pager",
                 array(
-                    "start"     => ($page - 1) * $view_params->getResultsbyPage()*2,
+                    "start"     => ($page - 1) * $view_params->getResultsbyPage(),
                     "offset"    => $view_params->getResultsbyPage()*2
                 )
             );

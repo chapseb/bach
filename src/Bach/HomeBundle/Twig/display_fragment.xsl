@@ -585,6 +585,17 @@ POSSIBILITY OF SUCH DAMAGE.
         </p>
     </xsl:template>
 
+    <xsl:template match="dao" mode="full">
+        <xsl:choose>
+            <xsl:when test="@href">
+                <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayDao::getDao', string(@href), string(text()), $viewer_uri, 'thumb', $covers_dir, 'true')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="text()" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
     <xsl:template match="text()" mode="full">
         <xsl:copy-of select="."/>
     </xsl:template>

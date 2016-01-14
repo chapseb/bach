@@ -416,7 +416,7 @@ class DisplayDao extends \Twig_Extension
      * @return DOMElement
      */
     public static function getDao($dao, $title, $viewer, $format = 'thumb',
-        $covers_dir = null
+        $covers_dir = null, $linkDesc = false
     ) {
         $str = self::proceedDao(
             $dao,
@@ -425,7 +425,9 @@ class DisplayDao extends \Twig_Extension
             $format,
             false,
             true,
-            $covers_dir
+            $covers_dir,
+            true,
+            $linkDesc
         );
         $sxml = simplexml_load_string(
             str_replace('&', '&amp;', $str)
@@ -445,14 +447,31 @@ class DisplayDao extends \Twig_Extension
      * @param boolean $standalone Is a standalone document, defaults to true
      * @param boolean $covers_dir Covers directory
      * @param boolean $all        Proceed all daos
+     * @param boolean $linkDesc   If in description
      *
      * @return string
      */
     public static function proceedDao($dao, $daotitle, $viewer, $format,
-        $ajax = false, $standalone = true, $covers_dir = null, $all = true
+        $ajax = false, $standalone = true, $covers_dir = null, $all = true,
+        $linkDesc = false
     ) {
         $ret = null;
 
+        if ($linkDesc == true) {
+            switch ( self::_getType($dao) ) {
+            case self::SERIES:
+                $ret = '<a href="' . $viewer . 'series/' . $dao . '" target="_blank">';
+                $ret .=  $daotitle;
+                $ret .= '</a>';
+                break;
+            case self::IMAGE:
+                $ret = '<a href="' . $viewer . 'viewer/' . $dao . '" target="_blank">';
+                $ret .=  $daotitle;
+                $ret .= '</a>';
+                break;
+            }
+            return $ret;
+        }
         if ( !(substr($viewer, -1) === '/') ) {
             $viewer .= '/';
         }
@@ -484,7 +503,7 @@ class DisplayDao extends \Twig_Extension
         case self::XML:
             $ret = '<a href="/document/' . str_replace('.xml', '', $dao) . '" target="_blank">';
             if ( $daotitle !== null ) {
-                $ret .= '<span class="title">'. _('document') . ' : ' .str_replace('.xml', '', $dao) . '</span>';
+                $ret .= '<span class="title">'. _('document') . ' : ' .str_replace('.xml', '', ($daotitle) ? $daotitle : $dao) . '</span>';
             }
             $ret .= '</a>';
             break;

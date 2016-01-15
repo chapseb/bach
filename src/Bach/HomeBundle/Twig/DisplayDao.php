@@ -458,6 +458,7 @@ class DisplayDao extends \Twig_Extension
         $ret = null;
 
         if ($linkDesc == true) {
+            $ret = '<span/>';
             switch ( self::_getType($dao) ) {
             case self::SERIES:
                 $ret = '<a href="' . $viewer . 'series/' . $dao . '" target="_blank">';

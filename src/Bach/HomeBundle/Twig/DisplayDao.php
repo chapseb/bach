@@ -504,7 +504,7 @@ class DisplayDao extends \Twig_Extension
         case self::XML:
             $ret = '<a href="/document/' . str_replace('.xml', '', $dao) . '" target="_blank">';
             if ( $daotitle !== null ) {
-                $ret .= '<span class="title">'. _('document') . ' : ' .str_replace('.xml', '', ($daotitle) ? $daotitle : $dao) . '</span>';
+                $ret .= '<span class="title">' .str_replace('.xml', '', ($daotitle) ? $daotitle : $dao) . '</span>';
             }
             $ret .= '</a>';
             break;

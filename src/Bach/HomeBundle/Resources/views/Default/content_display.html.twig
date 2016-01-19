@@ -74,7 +74,7 @@ POSSIBILITY OF SUCH DAMAGE.
                 {%- else -%}
                     {{ _('Untitled unit') }}
                 {%- endif -%}
-                {%- if document.cDate is defined and document.cDate != '' -%}
+                {%- if document.cDate is defined and document.cDate != '' and document.cDate != document.cUnittitle -%}
                     <span class="date" property="dc:date"> • {{ document.cDate }}</span>
                 {%- endif -%}
               {% if context == true and print == false %}

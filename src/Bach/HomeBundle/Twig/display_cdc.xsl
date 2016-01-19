@@ -123,7 +123,8 @@ POSSIBILITY OF SUCH DAMAGE.
     <xsl:template match="unittitle">
         <strong property="dc:title"><xsl:apply-templates/></strong>
 
-        <xsl:if test="../unitdate and not(./unitdate)">
+        <xsl:variable name="titre" select="." />
+        <xsl:if test="../unitdate and not(./unitdate) and not(../unitdate = $titre)">
             <span class="date" property="dc:date">
                 <strong><xsl:value-of select="concat(' • ', ../unitdate)"/></strong>
             </span>

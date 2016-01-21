@@ -545,7 +545,17 @@ POSSIBILITY OF SUCH DAMAGE.
             <xsl:when test="@href">
                 <xsl:choose>
                     <xsl:when test="not(substring(@href, 1, 8) = 'http://')">
-                        <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayDao::getDao', string(@href), string(@title), $viewer_uri, 'thumb', $covers_dir)"/>
+                        <xsl:variable name="titleFrag">
+                            <xsl:choose>
+                            <xsl:when test="@title = ''">
+                                <xsl:value-of select="text()"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="@title"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        </xsl:variable>
+                        <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayDao::getDao', string(@href), $titleFrag, $viewer_uri, 'thumb', $covers_dir)"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <a href="{@href}">

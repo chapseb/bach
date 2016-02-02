@@ -329,9 +329,9 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
             {% spaceless %}
             <nav id="change_view">
             {% if matricules_listparameters is defined%}
-                <a href="{{ path('print_matresults_page', { form_name: search_form, query_terms: q, page: page })}}" class="printLink" title="{{ _('Print the first two result pages') }}">{{ _('Print the first two pages result pages') }}</a>
+                <a href="{{ path('print_matresults_page', { form_name: search_form, query_terms: q, page: page })}}" class="printLink" title="{{ _('Print the two next result pages') }}">{{ _('Print the two next result pages') }}</a>
             {% else %}
-                <a href="{{ path('print_results_page', { form_name: search_form, query_terms: q, page: page })}}" class="printLink" title="{{ _('Print the first two result pages') }}">{{ _('Print the first two result pages') }}</a>
+                <a href="{{ path('print_results_page', { form_name: search_form, query_terms: q, page: page })}}" class="printLink" title="{{ _('Print the two next result pages') }}">{{ _('Print the two next result pages') }}</a>
             {% endif %}
             {% if available_orders|length > 0 %}
                 <label for="results_order">{{ _('Order:') }}</label>

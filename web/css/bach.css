@@ -1668,6 +1668,12 @@ div.sonata-bc .btn-primary:hover {
     background-image: url(../img/collapse.png);
 }
 
+.css-treeview .media_informations {
+    float: right;
+    background: url(../img/img_link.png) 100% 50% no-repeat;
+    padding-right: 20px;
+}
+
 .css-treeview :target > label, .css-treeview :target > a {
     background-color: #d1c6c0;
 }

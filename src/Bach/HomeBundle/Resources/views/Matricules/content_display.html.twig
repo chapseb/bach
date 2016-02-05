@@ -160,6 +160,13 @@ POSSIBILITY OF SUCH DAMAGE.
                     <td>{% if document.lieu_enregistrement is defined%}{{ document.lieu_enregistrement }}{% else %}-{% endif %}</td>
                 </tr>
                 {% endif %}
+                {% if 'comment' in matricules_listparameters and additionalInformations is defined %}
+                <tr>
+                    <th>{{ _('Comment') }}</th>
+                    <td>{{ additionalInformations | raw }}</td>
+                </tr>
+                {% endif %}
+
             </table>
         </section>
         {% if comments is defined %}

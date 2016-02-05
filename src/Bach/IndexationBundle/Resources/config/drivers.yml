@@ -47,6 +47,7 @@ drivers:
             - lieu_naissance
             - start_dao
             - end_dao
+            - additional_informations
     ead:
         mapper: Bach\IndexationBundle\Entity\Mapper\EADDriverMapper
         fileformat: Bach\IndexationBundle\Entity\EADFileFormat

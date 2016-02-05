@@ -127,6 +127,11 @@ class MatriculesFileFormat extends FileFormat
     protected $end_dao;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $additional_informations;
+
+    /**
      * Extra fields not in database
      */
     public static $extra_fields = array(
@@ -155,7 +160,8 @@ class MatriculesFileFormat extends FileFormat
         'end_dao',
         'txt_prenoms',
         'created',
-        'updated'
+        'updated',
+        'additional_informations'
     );
 
     /**
@@ -213,7 +219,8 @@ class MatriculesFileFormat extends FileFormat
         'oNom',
         'oTxt_prenoms',
         'oLieu_naissance',
-        'oLieu_enregistrement'
+        'oLieu_enregistrement',
+        'additional_informations'
     );
 
     /**
@@ -618,4 +625,35 @@ class MatriculesFileFormat extends FileFormat
     {
         return $this->lieu_naissance;
     }
+
+    /**
+     * Set additional informations
+     *
+     * @param string $additional_informations Additional informations
+     *
+     * @return MatriculesFileFormat
+     */
+    public function setAdditionalInformations($additional_informations)
+    {
+        if ( $this->additional_informations !== $additional_informations ) {
+            $this->onPropertyChanged(
+                'additional_informations',
+                $this->additional_informations,
+                $additional_informations
+            );
+            $this->additional_informations = $additional_informations;
+        }
+        return $this;
+    }
+
+    /**
+     * Get additional_informations
+     *
+     * @return string
+     */
+    public function getAdditionalInformations()
+    {
+        return $this->additional_informations;
+    }
+
 }

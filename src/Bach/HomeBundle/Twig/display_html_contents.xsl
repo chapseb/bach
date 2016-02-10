@@ -87,9 +87,6 @@ POSSIBILITY OF SUCH DAMAGE.
     </xsl:template>
 
     <xsl:template match="unittitle">
-        <xsl:if test="../../dao or ../../daogrp or ../../daoloc">
-            <span class="media_informations well"></span>
-        </xsl:if>
         <a class="display_doc">
             <!-- URL cannot ben generated from here. Let's build a specific value to be replaced -->
             <xsl:attribute name="link">
@@ -119,6 +116,9 @@ POSSIBILITY OF SUCH DAMAGE.
                 <span class="unitid" property="dc:identifier">
                     <xsl:value-of select="../unitid[not(@type='ordre_c')]"/>
                 </span>
+            </xsl:if>
+             <xsl:if test="../../dao or ../../daogrp or ../../daoloc">
+                <span class="media_informations well"></span>
             </xsl:if>
         </a>
     </xsl:template>

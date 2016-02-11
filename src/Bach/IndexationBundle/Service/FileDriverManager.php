@@ -546,7 +546,7 @@ class FileDriverManager
         $converted_data = array();
         foreach ( $data as $k=>$v ) {
             //converts dates from yyyy-mm-dd to yyyy
-            $reg = '/^(\d{3,4})-?(\d{2})?-?(\d{2})?$/';
+            $reg = '/^(\d{3,4})-(\d{2})-(\d{2})?$/';
             if ( preg_match($reg, $v, $matches) ) {
                 $v = $matches[1];
             }
@@ -557,7 +557,6 @@ class FileDriverManager
             );
 
         }
-
         $obj = new Entity\MatriculesFileFormat(
             $converted_data,
             false
@@ -610,7 +609,15 @@ class FileDriverManager
         }
 
         $values['where1'] = $values['uniqid'];
-        $add = $stmt->execute($values);
+
+        try {
+            $add = $stmt->execute($values);
+        } catch ( \Exception $e) {
+            throw new \Exception(
+                'An error occured in execute statement '.
+                $values['uniqid']
+            );
+        }
     }
 
     /**

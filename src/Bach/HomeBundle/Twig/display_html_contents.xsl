@@ -118,7 +118,7 @@ POSSIBILITY OF SUCH DAMAGE.
                 </span>
             </xsl:if>
              <xsl:if test="../../dao or ../../daogrp or ../../daoloc">
-                <span class="media_informations well"></span>
+                <span class="media_informations"></span>
             </xsl:if>
         </a>
     </xsl:template>

@@ -131,7 +131,7 @@ requete : {{ q }}
                                     viewer/{{ document.start_dao }}
                                 {%- endif -%}
                             {% endset %}
-                            <a href="{{ viewer_uri ~ images_link }}" title="{{ _('Scan') }}" target="_blank" property="image"><img src="{{ asset('img/img_link.png') }}" alt="{{ _('Scan') }}"/></a>
+                            <a href="{{ viewer_uri ~ images_link }}" title="{{ _('Scan') }}" target="_blank" property="image"><img src="{{ asset('img/glyphicons-half.png') }}" alt="{{ _('Scan') }}"/></a>
                         {% endif %}
                     </td>
                     {% if 'matricule' in matricules_searchparameters %}

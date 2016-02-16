@@ -146,6 +146,9 @@ POSSIBILITY OF SUCH DAMAGE.
         }
         {% endif %}
 
+        $("span.related_informations").attr("title", "{{ _('Has link') }}");
+        $("span.media_informations").attr("title", "{{ _('Has media associated') }}");
+
     });
     {% include 'BachHomeBundle:Default:jsplayer.js.twig' %}
 {% endblock %}

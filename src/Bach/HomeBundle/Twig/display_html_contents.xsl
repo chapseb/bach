@@ -111,15 +111,21 @@ POSSIBILITY OF SUCH DAMAGE.
                 </span>
             </xsl:if>
 
+            <xsl:value-of select="../otherfindaid"/>
+
             <xsl:if test="../unitid[not(@type='ordre_c')]">
                 <xsl:text> - </xsl:text>
                 <span class="unitid" property="dc:identifier">
                     <xsl:value-of select="../unitid[not(@type='ordre_c')]"/>
                 </span>
             </xsl:if>
-             <xsl:if test="../../dao or ../../daogrp or ../../daoloc">
+            <xsl:if test="../../dao or ../../daogrp or ../../daoloc">
                 <span class="media_informations"></span>
             </xsl:if>
+            <xsl:if test="../../otherfindaid/list/item/archref or ../../relatedmaterial/list/item/extref">
+                <span class="related_informations"></span>
+            </xsl:if>
+
         </a>
     </xsl:template>
     <!-- ***** END CONTENTS ***** -->

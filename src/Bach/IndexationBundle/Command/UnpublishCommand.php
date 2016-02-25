@@ -52,7 +52,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 Use Symfony\Component\HttpFoundation\File\File;
 use Bach\IndexationBundle\Entity\Document;
-use Bach\IndexationBundle\Entity\Geoloc;
 use Bach\IndexationBundle\Entity\IntegrationTask;
 use Bach\AdministrationBundle\Entity\SolrCore\SolrCoreAdmin;
 use Bach\IndexationBundle\Service\ZendDb;
@@ -71,10 +70,6 @@ use Zend\Db\ResultSet\ResultSet;
  */
 class UnpublishCommand extends ContainerAwareCommand
 {
-    private $_insert_doc_stmt;
-    private $_update_doc_stmt;
-    private $_insert_geo_stmt;
-    private $_update_geo_stmt;
 
     /**
      * Configures command
@@ -88,8 +83,8 @@ class UnpublishCommand extends ContainerAwareCommand
             ->setDescription('File unpublication')
             ->setHelp(
                 <<<EOF
-The <info>%command.name%</info> launches whole publishing process
-(pre-processing, conversion, indexation)
+The <info>%command.name%</info> launches whole unpublishing process
+(pre-processing, conversion, desindexation)
 EOF
             )->addArgument(
                 'type',
@@ -105,10 +100,10 @@ EOF
                 InputOption::VALUE_NONE,
                 _('Assume yes for all questions')
             )->addOption(
-                'solr-only',
+                'not-delete-file',
                 null,
                 InputOption::VALUE_NONE,
-                _('Publish only in solr (full-import)')
+                _('Not delete unpublished file')
             )->addOption(
                 'dry-run',
                 null,
@@ -146,6 +141,8 @@ EOF
         if ( $stats === true ) {
             $start_time = new \DateTime();
         }
+
+        $flagDeleteFile = $input->getOption('not-delete-file');
 
         $dry = $input->getOption('dry-run');
         if ( $dry === true ) {
@@ -190,7 +187,7 @@ EOF
         $documents = $tf->getExistingFiles($type, $to_publish);
 
         $output->writeln(
-            "\n" .  _('Following files are about to be published: ')
+            "\n" .  _('Following files are about to be unpublished: ')
         );
         $output->writeln(
             implode("\n", $documents[$type])
@@ -214,7 +211,7 @@ EOF
 
             $output->writeln(
                 '<fg=green;options=bold>' .
-                _('Publication begins...') .
+                _('Unpublication begins...') .
                 '</fg=green;options=bold>'
             );
 
@@ -236,6 +233,11 @@ EOF
                 }
                 $extensions[$extension][] = $id;
                 $ids[] = $id;
+
+                if ($flagDeleteFile != true) {
+                    unlink($document);
+                }
+
             }
 
             // appel à zend db
@@ -260,7 +262,6 @@ EOF
                 $results = new ResultSet();
                 $rows = $results->initialize($result)->toArray();
                 $zdb->connection->commit();
-                print_r($rows);
             } catch ( \Exception $e ) {
                 $zdb->connection->rollBack();
                 throw $e;
@@ -383,105 +384,7 @@ EOF
                 $output->writeln('Memory peak: ' . $peak);
             }
         }
-    }
 
-    /**
-     * Store document
-     *
-     * @param ZendDb   $zdb      ZDB instance
-     * @param Document $document Document to store
-     *
-     * @return void
-     */
-    private function _storeDocument(ZendDb $zdb, Document $document)
-    {
-        $fields = array();
-        $values = $document->toArray();
-        foreach ( array_keys($values) as $field ) {
-            $fields[$field] = ':' . $field;
-        }
-
-        $stmt = null;
-        if ( $document->getId() === null ) {
-            if ( $this->_insert_doc_stmt === null ) {
-                $insert = $zdb->insert('documents')
-                    ->values($fields);
-                $stmt = $zdb->sql->prepareStatementForSqlObject(
-                    $insert
-                );
-                $this->_insert_doc_stmt = $stmt;
-            } else {
-                $stmt = $this->_insert_doc_stmt;
-            }
-        } else {
-            if ( $this->_update_doc_stmt === null ) {
-                $update = $zdb->update('documents')
-                    ->set($fields)
-                    ->where(
-                        array(
-                            'id' => ':id'
-                        )
-                    );
-                $stmt = $zdb->sql->prepareStatementForSqlObject(
-                    $update
-                );
-                $this->_update_doc_stmt = $stmt;
-            } else {
-                $stmt = $this->_update_doc_stmt;
-            }
-
-            $values['where1'] = $values['id'];
-        }
-
-        $stmt->execute($values);
-    }
-
-    /**
-     * Proceedd solr full data import
-     *
-     * @param OutputInterface $output   Stdout
-     * @param string          $type     Documents type
-     * @param Helper          $progress Progress bar instance
-     * @param boolean         $dry      Dry run mode
-     *
-     * @return void
-     */
-    private function _solrFullImport($output, $type, $progress, $dry)
-    {
-        $progress->advance();
-        $configreader = $this->getContainer()
-            ->get('bach.administration.configreader');
-        $corename = $this->getContainer()->getParameter($type . '_corename');
-        $sca = new SolrCoreAdmin($configreader);
-        if ( $dry === false ) {
-            $sca->fullImport($corename);
-        }
-
-        $done = false;
-
-        while ( !$done ) {
-            sleep(2);
-            $response = $sca->getImportStatus($corename);
-            if ( $response->getImportStatus() === 'idle' ) {
-                $progress->advance();
-                $done = true;
-                $messages = $response->getImportMessages();
-                $messages = \simplexml_import_dom($messages);
-                $output->writeln('');
-                $output->writeln('');
-                foreach ( $messages as $message ) {
-                    $str = (string)$message;
-                    if ( isset($message['name']) && trim($message['name']) !== '' ) {
-                        $str = $message['name'] . ': ' . $str;
-                    }
-
-                    $output->writeln(
-                        '<fg=green>' . $str . '</fg=green>'
-                    );
-                }
-
-            }
-        }
     }
 
     /**

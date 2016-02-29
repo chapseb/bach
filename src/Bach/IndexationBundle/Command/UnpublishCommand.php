@@ -309,7 +309,28 @@ EOF
                         throw $e;
                     }
                     ////////////////////////////////////////////////////////
+                } else {
+                    try {
+                        $zdb->connection->beginTransaction();
+                        $deleteFileFormat = $zdb->delete('matricules_file_format')
+                            ->where(
+                                array(
+                                    'id'  => $doc['docid']
+                                )
+                            );
+
+                        $stmt = $zdb->sql->prepareStatementForSqlObject(
+                            $deleteFileFormat
+                        );
+                        $stmt->execute();
+                        $zdb->connection->commit();
+
+                    } catch ( \Exception $e) {
+                        $zdb->connection->rollBack();
+                        throw $e;
+                    }
                 }
+
                 ////////////////////////////////////////////////////////
                 // Suppression du document
                 try {
@@ -327,6 +348,7 @@ EOF
                     $zdb->connection->commit();
                 } catch ( \Exception $e ) {
                     $zdb->connection->rollBack();
+                    $logger->error("error". $e);
                     throw $e;
                 }
                 ////////////////////////////////////////////////////////
@@ -355,7 +377,6 @@ EOF
                     );
                 }
             }
-
 
             if ($stats === true) {
                 $peak = $this->formatBytes(memory_get_peak_usage());

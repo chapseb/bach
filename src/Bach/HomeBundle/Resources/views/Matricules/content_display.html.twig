@@ -160,6 +160,13 @@ POSSIBILITY OF SUCH DAMAGE.
                     <td>{% if document.lieu_enregistrement is defined%}{{ document.lieu_enregistrement }}{% else %}-{% endif %}</td>
                 </tr>
                 {% endif %}
+                {% if 'lieu_residence' in matricules_listparameters %}
+                <tr>
+                    <th>{{ _('Place of residence') }}</th>
+                    <td>{% if document.lieu_residence is defined%}{{ document.lieu_residence }}{% else %}-{% endif %}</td>
+                </tr>
+                {% endif %}
+
                 {% if 'comment' in matricules_listparameters and additionalInformations is defined %}
                 <tr>
                     <th>{{ _('Comment') }}</th>

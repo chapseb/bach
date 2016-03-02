@@ -64,6 +64,7 @@ class MatriculesViewParams extends ViewParams
     const ORDER_RECORDPLACE = 16;
     const ORDER_COTE = 17;
     const ORDER_RECORDYEAR = 18;
+    const ORDER_RESIDENCEPLACE = 19;
 
     /**
      * Set order
@@ -84,6 +85,7 @@ class MatriculesViewParams extends ViewParams
             || $order === self::ORDER_RECORDPLACE
             || $order === self::ORDER_COTE
             || $order === self::ORDER_RECORDYEAR
+            || $order === self::ORDER_RESIDENCEPLACE
         ) {
             $this->order = $order;
         } else {

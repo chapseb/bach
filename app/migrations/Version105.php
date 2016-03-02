@@ -1,6 +1,6 @@
 <?php
 /**
- * Bach Solarium matricules decorator
+ * Bach 1.0.5 migration file
  *
  * PHP version 5
  *
@@ -35,68 +35,91 @@
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category Search
+ * @category Migrations
  * @package  Bach
- * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
- * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
- * @link     http://anaphore.eu
- */
-
-namespace Bach\HomeBundle\Entity\SolariumQueryDecorator;
-
-use Bach\HomeBundle\Entity\SolariumQueryDecoratorAbstract;
-
-/**
- * Bach Solarium matricules decorator
- *
- * @category Search
- * @package  Bach
- * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
  * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
-class MatriculesDecorator extends SolariumQueryDecoratorAbstract
+
+namespace Bach\Migrations;
+
+require_once 'BachMigration.php';
+
+use Doctrine\DBAL\Schema\Schema;
+use Bach\HomeBundle\Entity\Comment;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+/**
+ * Bach 1.0.5 migration file
+ *
+ * @category Migrations
+ * @package  Bach
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
+ * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
+ * @link     http://anaphore.eu
+ */
+class Version105 extends BachMigration implements ContainerAwareInterface
 {
-    protected $targetField = 'matricules';
+    private $_container;
 
     /**
-     * Default query fields and boost
+     * Sets container
      *
-     * @return string
-     */
-    protected function getDefaultQueryFields()
-    {
-        return 'txt_nom^2 txt_prenoms lieu_naissance ' .
-            'lieu_enregistrement lieu_residence matricule fulltext^0.1';
-    }
-
-    /**
-     * Decorate Query
-     *
-     * @param Query  $query Solarium query object to decorate
-     * @param string $data  Query data
+     * @param ContainerInterface $container Container
      *
      * @return void
      */
-    public function decorate(\Solarium\QueryType\Select\Query\Query $query, $data)
+    public function setContainer(ContainerInterface $container = null)
     {
-        if ( $data !== '*:*' ) {
-            $dismax = $query->getDisMax();
-            $dismax->setQueryFields(
-                $this->getQueryFields()
-            );
-        }
-        $query->setQuery($data);
+        $this->_container = $container;
     }
 
     /**
-     * Highlithed fields
+     * Ups database schema
      *
-     * @return string
+     * @param Schema $schema Database schema
+     *
+     * @return void
      */
-    public function getHlFields()
+    public function up(Schema $schema)
     {
-        return 'txt_nom,txt_prenoms,lieu_naissance,lieu_enregistrement,lieu_residence';
+        $this->checkDbPlatform();
+
+        $table = $schema->getTable('matricules_file_format');
+        $table->addColumn(
+            'lieu_residence',
+            'string',
+            array('notnull' => false, 'length' => 100)
+        );
+
+        $table = $schema->getTable('facets');
+        $this->connection->executeQuery(
+            "INSERT INTO facets (solr_field_name, active, fr_label, en_label, form)" .
+            " VALUES ('lieu_residence', 1, 'Lieu de résidence', 'Residence place', 'matricules')"
+        );
+    }
+
+    /**
+     * Downs database schema
+     *
+     * @param Schema $schema Database Schema
+     *
+     * @return void
+     */
+    public function down(Schema $schema)
+    {
+        $this->checkDbPlatform();
+
+        $table = $schema->getTable('matricules_file_format');
+        $table->dropColumn('lieu_residence');
+
+        $table = $schema->getTable('facets');
+        $this->connection->executeQuery(
+            "DELETE FROM facets WHERE " .
+            "solr_field_name = 'lieu_residence'"
+        );
+
     }
 }

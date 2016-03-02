@@ -524,6 +524,10 @@ class MatriculesController extends SearchController
                 $orders[MatriculesViewParams::ORDER_BIRTHPLACE]
                     = _('Place of birth');
                 break;
+            case 'lieu_residence':
+                $orders[MatriculesViewParams::ORDER_RESIDENCEPLACE]
+                    = _('Place of residence');
+                break;
             }
         }
         return $orders;

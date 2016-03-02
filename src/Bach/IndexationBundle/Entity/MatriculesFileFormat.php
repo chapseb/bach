@@ -122,6 +122,11 @@ class MatriculesFileFormat extends FileFormat
     protected $start_dao;
 
     /**
+     * @ORM\Column(type="string", nullable=true, length=100)
+     */
+    protected $lieu_residence;
+
+    /**
      * @ORM\Column(type="string", nullable=true, length=500)
      */
     protected $end_dao;
@@ -171,7 +176,8 @@ class MatriculesFileFormat extends FileFormat
         'nom',
         'prenoms',
         'lieu_enregistrement',
-        'lieu_naissance'
+        'lieu_naissance',
+        'lieu_residence'
     );
 
     /**
@@ -181,7 +187,8 @@ class MatriculesFileFormat extends FileFormat
         'nom',
         'prenoms',
         'lieu_enregistrement',
-        'lieu_naissance'
+        'lieu_naissance',
+        'lieu_residence'
     );
 
     /**
@@ -196,6 +203,7 @@ class MatriculesFileFormat extends FileFormat
         'oTxt_prenoms'          => 'alphaOnlySort',
         'oLieu_naissance'       => 'alphaOnlySort',
         'oLieu_enregistrement'  => 'alphaOnlySort',
+        'oLieu_residence'       => 'alphaOnlySort',
         'start_dao'             => 'ancestor_path',
         'end_dao'               => 'ancestor_path'
     );
@@ -220,6 +228,7 @@ class MatriculesFileFormat extends FileFormat
         'oTxt_prenoms',
         'oLieu_naissance',
         'oLieu_enregistrement',
+        'oLieu_residence',
         'additional_informations'
     );
 
@@ -262,6 +271,14 @@ class MatriculesFileFormat extends FileFormat
         array(
             'source'        => 'lieu_enregistrement',
             'dest'          => 'oLieu_enregistrement',
+            'type'          => 'alphaOnlySort',
+            'multivalued'   => 'false',
+            'indexed'       => 'true',
+            'stored'        => 'false'
+        ),
+        array(
+            'source'        => 'lieu_residence',
+            'dest'          => 'oLieu_residence',
             'type'          => 'alphaOnlySort',
             'multivalued'   => 'false',
             'indexed'       => 'true',
@@ -435,6 +452,37 @@ class MatriculesFileFormat extends FileFormat
     {
         return $this->lieu_enregistrement;
     }
+
+    /**
+     * Set lieu_residence
+     *
+     * @param string $lieuResidence Place
+     *
+     * @return MatriculesFileFormat
+     */
+    public function setLieuResidence($lieuResidence)
+    {
+        if ( $this->lieu_residence !== $lieuResidence ) {
+            $this->onPropertyChanged(
+                'lieu_residence',
+                $this->lieu_residence,
+                $lieuResidence
+            );
+            $this->lieu_residence = $lieuResidence;
+        }
+        return $this;
+    }
+
+    /**
+     * Get lieu_residence
+     *
+     * @return string
+     */
+    public function getLieuResidence()
+    {
+        return $this->lieu_residence;
+    }
+
 
     /**
      * Set classe

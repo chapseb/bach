@@ -119,6 +119,14 @@ class MatriculesType extends AbstractType
                 )
             )
             ->add(
+                'lieu_residence',
+                null,
+                array(
+                    'label'     => _('Place of residence'),
+                    'required'  => false
+                )
+            )
+            ->add(
                 'perform',
                 'submit',
                 array(

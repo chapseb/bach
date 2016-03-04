@@ -152,7 +152,7 @@ POSSIBILITY OF SUCH DAMAGE.
                         {% endif %}
                         {% if 'lieu_residence' in matricules_searchparameters %}
                         <th>
-                            <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_RECORDPLACE')})|raw }}">{{ _('Place of residence') }}</a>
+                            <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_RESIDENCEPLACE')})|raw }}">{{ _('Place of residence') }}</a>
                         </th>
                         {% endif %}
 

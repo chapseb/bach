@@ -124,6 +124,11 @@ EOF
                 null,
                 InputOption::VALUE_NONE,
                 _('Print last integration file')
+            )->addOption(
+                'docids',
+                null,
+                InputOption::VALUE_NONE,
+                _('Use document ids instead of files path')
             );
     }
 
@@ -180,21 +185,23 @@ EOF
         );
 
         $to_publish = $input->getArgument('document');
-
+        $flagDocIds = $input->getOption('docids');
 
         //let's proceed
-        $tf = $container->get('bach.indexation.typesfiles');
-        $documents = $tf->getExistingFiles($type, $to_publish);
+        if (!$flagDocIds) {
+            $tf = $container->get('bach.indexation.typesfiles');
+            $documents = $tf->getExistingFiles($type, $to_publish);
 
-        $output->writeln(
-            "\n" .  _('Following files are about to be unpublished: ')
-        );
-        $output->writeln(
-            implode("\n", $documents[$type])
-        );
+            $output->writeln(
+                "\n" .  _('Following files are about to be unpublished: ')
+            );
+            $output->writeln(
+                implode("\n", $documents[$type])
+            );
+        }
 
         $confirm = null;
-        if ( $input->getOption('assume-yes') ) {
+        if ($input->getOption('assume-yes')) {
             $confirm = 'yes';
         } else {
             $choices = array(_('yes'), _('no'));
@@ -207,7 +214,7 @@ EOF
             );
         }
 
-        if ( $confirm === 'yes' || $confirm === 'y' ) {
+        if ($confirm === 'yes' || $confirm === 'y') {
 
             $output->writeln(
                 '<fg=green;options=bold>' .
@@ -215,29 +222,36 @@ EOF
                 '</fg=green;options=bold>'
             );
 
-            // recuperation de l'id des documents
-            $ids = array();
-            $documents = $documents[$type];
-            foreach ( $documents as $document) {
-                $extension = $type;
+            $steps = 1;
+            $progress = $this->getHelperSet()->get('progress');
 
-                $getXML = simplexml_load_file($document);
-                if ($type == 'ead') {
-                    $id = strip_tags($getXML->eadheader->eadid->asXml());
-                } else {
-                    $id = strip_tags($getXML->id);
+            $flagDocIds = $input->getOption('docids');
+            if ( !$flagDocIds ) {
+                // recuperation de l'id des documents
+                $ids = array();
+                $documents = $documents[$type];
+                foreach ( $documents as $document) {
+                    $extension = $type;
+                    $getXML = simplexml_load_file($document);
+                    if ($type == 'ead') {
+                        $id = strip_tags($getXML->eadheader->eadid->asXml());
+                    } else {
+                        $id = strip_tags($getXML->id);
+                    }
+
+                    if ( !isset($extensions[$extension]) ) {
+                        $extensions[$extension] = array();
+                    }
+                    $extensions[$extension][] = $id;
+                    $ids[] = $id;
+
+                    if ($flagDeleteFile != true) {
+                        unlink($document);
+                    }
+
                 }
-
-                if ( !isset($extensions[$extension]) ) {
-                    $extensions[$extension] = array();
-                }
-                $extensions[$extension][] = $id;
-                $ids[] = $id;
-
-                if ($flagDeleteFile != true) {
-                    unlink($document);
-                }
-
+            } else {
+                $ids = $to_publish;
             }
 
             // appel à zend db
@@ -274,7 +288,12 @@ EOF
             $clients = array();
             $clients = array();
 
+            $cpt=0;
+            $steps += count($docs);
+            $progress->start($output, $steps);
             foreach ($docs as $doc) {
+                $progress->advance();
+                $cpt++;
                 if ( !isset($updates[$doc['corename']]) ) {
                     $client = $this->getContainer()->get('solarium.client.' . $doc['extension']);
                     $clients[$doc['corename']] = $client;
@@ -355,6 +374,7 @@ EOF
 
             }
 
+            $progress->advance();
             foreach ( $updates as $key=>$update ) {
                 $client = $clients[$key];
                 $update->addCommit(null, null, true);
@@ -378,6 +398,7 @@ EOF
                 }
             }
 
+            $progress->finish();
             if ($stats === true) {
                 $peak = $this->formatBytes(memory_get_peak_usage());
 

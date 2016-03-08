@@ -150,7 +150,7 @@ parameters:
     bach_default_theme: 'web'
 
     default_url: bach_archives
-    logo_url: %default_url%
+    logo_url: '%default_url%'
     tracker: null
     centerlat: null
     centerlon: null

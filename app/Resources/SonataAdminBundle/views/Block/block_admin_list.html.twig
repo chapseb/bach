@@ -78,8 +78,12 @@ POSSIBILITY OF SUCH DAMAGE.
                             </td>
                             <td>
                                 <div>
-                                    {% if admin.hasroute('create') and admin.isGranted('CREATE') %}
-                                        {% if admin.subClasses is empty %}
+                                    {% if admin.hasroute('create') and admin.isGranted('CREATE') 
+                                        and admin.getCode != 'sonata.admin.archives.comment'
+                                        and admin.getCode != 'sonata.admin.matricules.comment'
+                                        and admin.getCode != 'sonata.admin.images.comment'
+                                    %}
+                                        {% if admin.subClasses is empty  %}
                                             <a class="btn btn-link" href="{{ admin.generateUrl('create')}}">
                                                 <i class="icon-plus"></i>
                                                 {% trans from 'SonataAdminBundle' %}link_add{% endtrans %}

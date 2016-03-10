@@ -110,9 +110,25 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
             {% endif %}
         <div id="facets">
             {% for facet_field,facet in facets %}
-                <h3>{{ facet.label }}</h3>
-                <div{% if facet_field == 'cDateBegin' or facet_field == 'date_enregistrement' or facet_field == 'annee_naissance' or facet_field == 'classe' %} class="range_date"{% endif %}>
-                {% if facet_field == 'cDateBegin' or facet_field == 'date_enregistrement' or facet_field == 'annee_naissance' or facet_field == 'classe' %}
+                {% set diff = true%}
+                {% if (facet_field == 'cDateBegin' or facet_field == 'date_enregistrement' or facet_field == 'annee_naissance' or facet_field == 'classe')  %}
+                    {% if stats[facet_field].min|date('Y') != stats[facet_field].max|date('Y') %}
+                        <h3>{{ facet.label }}</h3>
+                    {% else %}
+                        {% set diff = false%}
+                    {%endif%}
+                {% else %}
+                    <h3>{{ facet.label }}</h3>
+                {% endif%}
+                {% if (facet_field == 'cDateBegin' or facet_field == 'date_enregistrement' or facet_field == 'annee_naissance' or facet_field == 'classe')  %}
+                    {% if stats[facet_field].min|date('Y') != stats[facet_field].max|date('Y') %}
+                        <div class="range_date">
+                    {%endif%}
+                {% else %}
+                    <div>
+                {% endif %}
+
+                {% if (facet_field == 'cDateBegin' or facet_field == 'date_enregistrement' or facet_field == 'annee_naissance' or facet_field == 'classe') and stats[facet_field].min|date('Y') != stats[facet_field].max|date('Y') %}
                     <form id="{{ facet_field }}_change">
                         <ul>
                             <li>
@@ -222,7 +238,11 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                     {% endif %}
                     </ol>
                 {% endif %}
-                </div>
+                {% if diff is defined and diff == false %}
+                {% else %}
+                    </div>
+                {% endif %}
+
             {% endfor %}
         </div>
         {% endif %}
@@ -309,9 +329,9 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
             {% spaceless %}
             <nav id="change_view">
             {% if matricules_listparameters is defined%}
-                <a href="{{ path('print_matresults_page', { form_name: search_form, query_terms: q, page: page })}}" class="printLink" title="{{ _('Print the first two result pages') }}">{{ _('Print the first two pages result pages') }}</a>
+                <a href="{{ path('print_matresults_page', { form_name: search_form, query_terms: q, page: page })}}" class="printLink" title="{{ _('Print the two next result pages') }}">{{ _('Print the two next result pages') }}</a>
             {% else %}
-                <a href="{{ path('print_results_page', { form_name: search_form, query_terms: q, page: page })}}" class="printLink" title="{{ _('Print the first two result pages') }}">{{ _('Print the first two result pages') }}</a>
+                <a href="{{ path('print_results_page', { form_name: search_form, query_terms: q, page: page })}}" class="printLink" title="{{ _('Print the two next result pages') }}">{{ _('Print the two next result pages') }}</a>
             {% endif %}
             {% if available_orders|length > 0 %}
                 <label for="results_order">{{ _('Order:') }}</label>

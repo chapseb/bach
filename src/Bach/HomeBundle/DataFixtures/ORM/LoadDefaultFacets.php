@@ -130,6 +130,12 @@ class LoadDefaultFacets implements FixtureInterface
                 'fr_label'  => 'Lieu d\'enregistrement',
                 'en_label'  => 'Place of recording',
                 'form'      => 'matricules'
+            ),
+            array(
+                'field'     => 'lieu_residence',
+                'fr_label'  => 'Lieu de résidence',
+                'en_label'  => 'Place of residence',
+                'form'      => 'matricules'
             )
         );
 

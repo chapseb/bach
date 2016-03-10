@@ -59,8 +59,10 @@ POSSIBILITY OF SUCH DAMAGE.
             <hr />
 
             {% block show_results %}
+                {% set numSearch = resultStart %}
                 {% for document in searchResults %}
-                    <h2>Resultat n°{{ loop.index }}</h2>
+                    <h2>Resultat n°{{ numSearch }}</h2>
+                        {% set numSearch = numSearch + 1 %}
                         {%- if (document.parents_titles is defined or document.archDescUnitTitle is defined) -%}
                             {%- if document.archDescUnitTitle is defined -%}
                                     {{ document.archDescUnitTitle }}
@@ -80,7 +82,7 @@ POSSIBILITY OF SUCH DAMAGE.
                                 {%- else -%}
                                     {{ _('Untitled unit') }}
                                 {%- endif -%}
-                                {%- if document.cDate is defined and document.cDate != '' -%}
+                                {%- if document.cDate is defined and document.cDate != '' and document.cDate != document.cUnittitle -%}
                                     <span class="date" property="dc:date"> • {{ document.cDate }}</span>
                                 {%- endif -%}
                             </h3>

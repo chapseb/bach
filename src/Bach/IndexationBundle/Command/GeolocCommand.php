@@ -172,7 +172,8 @@ EOF
         $know_databases = array(
             'ead'               => _('EAD indexes'),
             'matricules_born'   => _('Matricules places of birth'),
-            'matricules_rec'    => _('Matricules places of recording')
+            'matricules_rec'    => _('Matricules places of recording'),
+            'matricules_res'    => _('Matricules places of residence')
         );
         if ( $database && !isset($know_databases[$database]) ) {
             $know_str = '';
@@ -297,6 +298,44 @@ EOF
             if ( $verbose ) {
                 $output->writeln(
                     _('Query matricules born:') . "\n" . $query->getSQL()
+                );
+            }
+
+            $bdd_places = array_merge($bdd_places, $query->getResult());
+        }
+
+        if ( !$database || $database === 'matricules_res' ) {
+            $repo = $doctrine->getRepository(
+                'BachIndexationBundle:MatriculesFileFormat'
+            );
+            $qb = $repo->createQueryBuilder('a')
+                ->select('DISTINCT a.lieu_residence AS name')
+                ->leftJoin(
+                    'BachIndexationBundle:Geoloc',
+                    'g',
+                    'WITH',
+                    'a.lieu_residence = g.indexed_name'
+                )->where('g.indexed_name IS NULL')
+                ->andWhere('a.lieu_residence != \'\'');
+
+            if ( $with_notfound ) {
+                $qb->orWhere('g.found = false');
+            }
+
+            if ( $limit ) {
+                $qb->setMaxResults($limit);
+            }
+
+            if ( $find ) {
+                $qb->andWhere('a.name LIKE :name')
+                    ->setParameter('name', $find);
+            }
+
+            $query = $qb->getQuery();
+
+            if ( $verbose ) {
+                $output->writeln(
+                    _('Query matricules residence:') . "\n" . $query->getSQL()
                 );
             }
 

@@ -345,6 +345,17 @@ class MatriculesController extends SearchController
             }
         }
 
+        // get additional Informations about this record
+        $zdb = $this->container->get('zend_db');
+        $select = $zdb->select('matricules_file_format')->where(array('id' => $docid));
+        $stmt = $zdb->sql->prepareStatementForSqlObject(
+            $select
+        );
+        $result = $stmt->execute();
+        if ($result->current()['additional_informations'] != null) {
+            $tplParams['additionalInformations'] = nl2br($result->current()['additional_informations']);
+        }
+
         if ( $ajax === 'ajax' ) {
             $tpl = 'BachHomeBundle:Matricules:content_display.html.twig';
             $tplParams['ajax'] = true;
@@ -512,6 +523,10 @@ class MatriculesController extends SearchController
             case 'lieu_naissance':
                 $orders[MatriculesViewParams::ORDER_BIRTHPLACE]
                     = _('Place of birth');
+                break;
+            case 'lieu_residence':
+                $orders[MatriculesViewParams::ORDER_RESIDENCEPLACE]
+                    = _('Place of residence');
                 break;
             }
         }
@@ -838,7 +853,7 @@ class MatriculesController extends SearchController
             $container->setField(
                 "pager",
                 array(
-                    "start"     => ($page - 1) * $view_params->getResultsbyPage()*2,
+                    "start"     => ($page - 1) * $view_params->getResultsbyPage(),
                     "offset"    => $view_params->getResultsbyPage()*2
                 )
             );

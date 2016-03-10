@@ -99,6 +99,11 @@ requete : {{ q }}
                             {{ _('Place of recording') }}
                         </th>
                         {% endif %}
+                        {% if 'lieu_residence' in matricules_searchparameters %}
+                        <th>
+                            {{ _('Place of residence') }}
+                        </th>
+                        {% endif %}
                         {% if 'date_enregistrement' in matricules_searchparameters %}
                         <th>
                            {{ _('Record year') }}
@@ -131,7 +136,7 @@ requete : {{ q }}
                                     viewer/{{ document.start_dao }}
                                 {%- endif -%}
                             {% endset %}
-                            <a href="{{ viewer_uri ~ images_link }}" title="{{ _('Scan') }}" target="_blank" property="image"><img src="{{ asset('img/img_link.png') }}" alt="{{ _('Scan') }}"/></a>
+                            <a href="{{ viewer_uri ~ images_link }}" title="{{ _('Scan') }}" target="_blank" property="image"><img src="{{ asset('img/glyphicons-half.png') }}" alt="{{ _('Scan') }}"/></a>
                         {% endif %}
                     </td>
                     {% if 'matricule' in matricules_searchparameters %}
@@ -179,6 +184,15 @@ requete : {{ q }}
                             {{ hlSearchResults.getResult(document.id).getField('lieu_enregistrement')[0]|raw }}
                         {%- else -%}
                             {% if document.lieu_enregistrement is defined %}{{ document.lieu_enregistrement }} {% else %}-{% endif %}
+                        {%- endif -%}
+                    </td>
+                    {% endif %}
+                    {% if 'lieu_residence' in matricules_searchparameters %}
+                    <td>
+                        {%- if hlSearchResults.getResult(document.id).getField('lieu_residence')|length > 0 -%}
+                            {{ hlSearchResults.getResult(document.id).getField('lieu_residence')[0]|raw }}
+                        {%- else -%}
+                            {% if document.lieu_residence is defined %}{{ document.lieu_residence }} {% else %}-{% endif %}
                         {%- endif -%}
                     </td>
                     {% endif %}

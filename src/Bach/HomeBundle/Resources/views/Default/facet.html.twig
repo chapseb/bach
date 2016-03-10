@@ -85,8 +85,11 @@ POSSIBILITY OF SUCH DAMAGE.
         });
 
         // Update the count
-        var numberItems = count;
-        $("#filter-count").text('{{ _('%count filtered results')|escape('js') }}'.replace('%count', count));
+        if (count <= 1){
+            $("#filter-count").text('{{ _('%count filtered result')|escape('js') }}'.replace('%count', count));
+        } else {
+            $("#filter-count").text('{{ _('%count filtered results')|escape('js') }}'.replace('%count', count));
+        }
     });
 
     $('#facet_order').change(function(){

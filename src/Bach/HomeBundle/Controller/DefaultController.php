@@ -1342,7 +1342,8 @@ class DefaultController extends SearchController
             $tpl_vars['searchResults'] = $searchResults;
             $tpl_vars['resultStart'] = ($page - 1)
                 * $view_params->getResultsbyPage() + 1;
-            $resultEnd = $view_params->getResultsbyPage() * 2 + 1;
+            $resultEnd = ($page - 1) * $view_params->getResultsbyPage() +
+                $view_params->getResultsbyPage() * 2;
             if ( $resultEnd > $resultCount ) {
                 $resultEnd = $resultCount;
             }

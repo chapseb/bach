@@ -104,11 +104,14 @@ POSSIBILITY OF SUCH DAMAGE.
                 <xsl:apply-templates />
             </strong>
 
-            <xsl:if test="../unitdate and not(./unitdate)">
+            <xsl:variable name="titre" select="." />
+            <xsl:if test="../unitdate and not(./unitdate) and not(../unitdate = $titre)">
                 <span class="date" property="dc:date">
                     <strong><xsl:value-of select="concat(' • ', ../unitdate)"/></strong>
                 </span>
             </xsl:if>
+
+            <xsl:value-of select="../otherfindaid"/>
 
             <xsl:if test="../unitid[not(@type='ordre_c')]">
                 <xsl:text> - </xsl:text>
@@ -116,6 +119,13 @@ POSSIBILITY OF SUCH DAMAGE.
                     <xsl:value-of select="../unitid[not(@type='ordre_c')]"/>
                 </span>
             </xsl:if>
+            <xsl:if test="../../dao or ../../daogrp or ../../daoloc">
+                <span class="media_informations"></span>
+            </xsl:if>
+            <xsl:if test="../../otherfindaid/list/item/archref or ../../relatedmaterial/list/item/extref">
+                <span class="related_informations"></span>
+            </xsl:if>
+
         </a>
     </xsl:template>
     <!-- ***** END CONTENTS ***** -->

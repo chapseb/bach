@@ -253,6 +253,9 @@ class Fields
         case 'lieu_naissance':
             return _('Place of birth');
             break;
+        case 'lieu_residence':
+            return _('Place of residence');
+            break;
         case 'prenoms':
             return _('Surnames');
             break;

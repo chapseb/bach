@@ -356,6 +356,9 @@ POSSIBILITY OF SUCH DAMAGE.
                                 <xsl:when test="local-name() = 'originalsloc'">
                                     <xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Original localisation')"/>
                                 </xsl:when>
+                                <xsl:when test="local-name() = 'abstract'">
+                                    <xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Summarize')"/>
+                                </xsl:when>
                                 <xsl:when test="local-name() = 'repository'">
                                     <xsl:choose>
                                         <xsl:when test="@label">
@@ -385,7 +388,7 @@ POSSIBILITY OF SUCH DAMAGE.
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="accessrestrict|legalstatus|odd|processinfo|custodhist|arrangement|relatedmaterial|originalsloc|bibliography|userestrict|bioghist|acqinfo|separatedmaterial|otherfindaid|repository|physdesc|container|controlaccess|origination" mode="full">
+    <xsl:template match="accessrestrict|legalstatus|odd|processinfo|custodhist|arrangement|relatedmaterial|originalsloc|bibliography|userestrict|bioghist|acqinfo|separatedmaterial|otherfindaid|repository|physdesc|container|controlaccess|origination|abstract" mode="full">
         <xsl:call-template name="section_content">
             <xsl:with-param name="title">
                 <xsl:choose>
@@ -545,7 +548,17 @@ POSSIBILITY OF SUCH DAMAGE.
             <xsl:when test="@href">
                 <xsl:choose>
                     <xsl:when test="not(substring(@href, 1, 8) = 'http://')">
-                        <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayDao::getDao', string(@href), string(@title), $viewer_uri, 'thumb', $covers_dir)"/>
+                        <xsl:variable name="titleFrag">
+                            <xsl:choose>
+                            <xsl:when test="@title = ''">
+                                <xsl:value-of select="text()"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="@title"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        </xsl:variable>
+                        <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayDao::getDao', string(@href), $titleFrag, $viewer_uri, 'thumb', $covers_dir)"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <a href="{@href}">
@@ -583,6 +596,17 @@ POSSIBILITY OF SUCH DAMAGE.
             </xsl:if>
             <xsl:apply-templates mode="full"/>
         </p>
+    </xsl:template>
+
+    <xsl:template match="dao" mode="full">
+        <xsl:choose>
+            <xsl:when test="@href">
+                <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayDao::getDao', string(@href), string(text()), $viewer_uri, 'thumb', $covers_dir, 'true')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="text()" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="text()" mode="full">

@@ -189,11 +189,16 @@ class DisplayHtml extends \Twig_Extension
             $callback = function ($matches) use ($router, $request) {
                 $href = '';
                 if ( count($matches) > 2 ) {
+                    $fieldTested = $matches[1];
+                    if (substr($fieldTested, 0, 8) !== 'dyndescr') {
+                        $fieldTested = 'c' . ucwords($matches[1]);
+                    }
+
                     $href = $router->generate(
                         'bach_archives',
                         array(
                             'query_terms'   => $request->get('query_terms'),
-                            'filter_field'  => 'c' . ucwords($matches[1]),
+                            'filter_field'  => $fieldTested,
                             'filter_value'  => $matches[2]
                         )
                     );

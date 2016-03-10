@@ -150,6 +150,12 @@ POSSIBILITY OF SUCH DAMAGE.
                             <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_RECORDPLACE')})|raw }}">{{ _('Place of recording') }}</a>
                         </th>
                         {% endif %}
+                        {% if 'lieu_residence' in matricules_searchparameters %}
+                        <th>
+                            <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_RESIDENCEPLACE')})|raw }}">{{ _('Place of residence') }}</a>
+                        </th>
+                        {% endif %}
+
                         {% if 'date_enregistrement' in matricules_searchparameters %}
                         <th>
                             <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_RECORDYEAR')})|raw }}">{{ _('Record year') }}</a>
@@ -185,7 +191,7 @@ POSSIBILITY OF SUCH DAMAGE.
                                 {%- endif -%}
                             {% endset %}
                             <a href="{{ viewer_uri ~ images_link }}" title="{{ _('Scan') }}" target="_blank" property="image">
-                                <img src="{{ asset('img/img_link.png') }}" alt="{{ _('Scan') }}"/>
+                                <i class="link_viewer" title="{{ _('Scan')}}"></i>
                             </a>
                         {% endif %}
                     </td>
@@ -237,6 +243,16 @@ POSSIBILITY OF SUCH DAMAGE.
                         {%- endif -%}
                     </td>
                     {% endif %}
+                    {% if 'lieu_residence' in matricules_searchparameters %}
+                    <td>
+                        {%- if hlSearchResults.getResult(document.id).getField('lieu_residence')|length > 0 -%}
+                            {{ hlSearchResults.getResult(document.id).getField('lieu_residence')[0]|raw }}
+                        {%- else -%}
+                            {% if document.lieu_residence is defined %}{{ document.lieu_residence }} {% else %}-{% endif %}
+                        {%- endif -%}
+                    </td>
+                    {% endif %}
+
                     {% if 'date_enregistrement' in matricules_searchparameters %}
                     <td>
                         {% if document.date_enregistrement is defined %}{{ document.date_enregistrement|date('Y') }}{% else %}-{% endif %}

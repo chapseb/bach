@@ -1,3 +1,25 @@
+1.2.3 (2016-03-10)
+
+- Remove add comment feature in admin dashboard
+- Add abstract tag content in one result view
+- Add option in unpublished command to unpublished with ids documents
+- Add delete file option in unpublished document command
+- Add unpublish document feature in commande line
+- Fix date regex and add exception in execute statement
+- Add comment field in matricules
+- Add place of residence field in matricules
+- Add symbol if media or link associated in document view
+- Fix display issues
+- Not display date facet when is no need
+- Add text if title is empty in xsl display fragment
+- Doesn't display date when title is the same
+- Fix link in composer for zend librairies
+- Fix xsl with unexpected cases in display html
+- Fix link display in one search result
+- Fix print feature (matricules and ead format)
+- Fix search link generation in presentation
+- Update some translations
+
 1.2.2 (2015-12-21)
 
 - Fix of display link in list (xsl)

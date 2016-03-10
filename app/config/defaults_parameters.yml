@@ -101,8 +101,8 @@ parameters:
     feature.register: false
     feature.heritage: true
     matricules_histogram: 'annee_naissance'
-    matricules_listparameters: ['cote', 'date_enregistrement', 'lieu_enregistrement', 'classe', 'nom', 'prenoms', 'matricule', 'annee_naissance', 'lieu_naissance']
-    matricules_searchparameters: ['cote', 'date_enregistrement', 'lieu_enregistrement', 'classe', 'nom', 'prenoms', 'matricule', 'annee_naissance', 'lieu_naissance']
+    matricules_listparameters: ['cote', 'date_enregistrement', 'lieu_enregistrement', 'classe', 'nom', 'prenoms', 'matricule', 'annee_naissance', 'lieu_naissance', 'lieu_residence', 'comment']
+    matricules_searchparameters: ['cote', 'date_enregistrement', 'lieu_enregistrement', 'classe', 'nom', 'prenoms', 'matricule', 'annee_naissance', 'lieu_naissance', 'lieu_residence', 'comment']
 
     #UI parameters
     viewer_uri: http://viewer.localhost/
@@ -150,7 +150,7 @@ parameters:
     bach_default_theme: 'web'
 
     default_url: bach_archives
-    logo_url: %default_url%
+    logo_url: '%default_url%'
     tracker: null
     centerlat: null
     centerlon: null

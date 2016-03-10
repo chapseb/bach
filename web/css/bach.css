@@ -466,6 +466,17 @@ p {
     overflow: hidden;
 }
 
+.link_viewer {
+    background-image: url(../img/glyphicons-halflings.png);
+    background-position: -96px -120px;
+    background-repeat: no-repeat;
+    padding: 3px 0.6em 0em;
+    margin-left: 5px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+}
+
 /**
  * ===== Search results =====
  */
@@ -1666,6 +1677,27 @@ div.sonata-bc .btn-primary:hover {
 
 .css-treeview .expand.expanded {
     background-image: url(../img/collapse.png);
+}
+
+.css-treeview .related_informations {
+    background-image: url(../img/link.png);
+    background-repeat: no-repeat;
+    padding: 1px 0.6em 0.5em;
+    margin-left: 5px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+}
+
+.css-treeview .media_informations {
+    background-image: url(../img/glyphicons-halflings.png);
+    background-position: -96px -120px;
+    background-repeat: no-repeat;
+    padding: 1px 0.6em 0.5em;
+    margin-left: 5px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
 }
 
 .css-treeview :target > label, .css-treeview :target > a {

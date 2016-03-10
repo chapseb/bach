@@ -1,6 +1,6 @@
 <?php
 /**
- * Bach geolocalization fields management for matricules
+ * Bach 1.0.4 migration file
  *
  * PHP version 5
  *
@@ -35,65 +35,80 @@
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category Search
+ * @category Migrations
  * @package  Bach
- * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
 
-namespace Bach\HomeBundle\Entity;
+namespace Bach\Migrations;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\EntityManager;
+require_once 'BachMigration.php';
+
+use Doctrine\DBAL\Schema\Schema;
+use Bach\HomeBundle\Entity\Comment;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Bach geolocalization fields management for matricules
+ * Bach 1.0.4 migration file
  *
- * @ORM\Entity
- * @ORM\Table(name="geoloc_fields")
- *
- * @category Search
+ * @category Migrations
  * @package  Bach
- * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
-class GeolocMatriculesFields extends GeolocFields
+class Version104 extends BachMigration implements ContainerAwareInterface
 {
+    private $_container;
 
     /**
-     * Get query builder
+     * Sets container
      *
-     * @param EntityManager $em Entity manager
+     * @param ContainerInterface $container Container
      *
-     * @return QueryBuilder
+     * @return void
      */
-    protected function getQueryBuilder(EntityManager $em)
+    public function setContainer(ContainerInterface $container = null)
     {
-        $qb = $em->createQueryBuilder()
-            ->add('select', 'gf')
-            ->add('from', 'Bach\HomeBundle\Entity\GeolocMatriculesFields gf');
-        return $qb;
+        $this->_container = $container;
     }
 
     /**
-     * Get default fields
+     * Ups database schema
      *
-     * @return array
+     * @param Schema $schema Database schema
+     *
+     * @return void
      */
-    protected function getDefaultFields()
+    public function up(Schema $schema)
     {
-        return array('lieu_naissance', 'lieu_enregistrement', 'lieu_residence');
+        $this->checkDbPlatform();
+
+        $table = $schema->getTable('matricules_file_format');
+        $table->addColumn(
+            'additional_informations',
+            'text',
+            array(
+                'notnull' => false,
+            )
+        );
     }
 
     /**
-     * String representation
+     * Downs database schema
      *
-     * @return string
+     * @param Schema $schema Database Schema
+     *
+     * @return void
      */
-    public function __toString()
+    public function down(Schema $schema)
     {
-        return _('Geolocalization fields for matricules');
+        $this->checkDbPlatform();
+
+        $table = $schema->getTable('matricules_file_format');
+        $table->dropColumn('additional_informations');
     }
 }

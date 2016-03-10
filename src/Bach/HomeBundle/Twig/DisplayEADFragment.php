@@ -466,6 +466,9 @@ class DisplayEADFragment extends \Twig_Extension
         case 'Original localisation':
             return _('Original localisation');
             break;
+        case 'Abstract':
+            return _('Abstract');
+            break;
 
         default:
             if ( strpos($ref, 'dyndescr_') === 0 ) {

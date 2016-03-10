@@ -753,6 +753,7 @@ td.actions {
 }
 
 .content section.scopecontent,
+.content section.abstract,
 .content section#images,
 .content.archdesc section {
     color: inherit;

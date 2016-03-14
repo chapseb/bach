@@ -596,7 +596,7 @@ msgstr "Afficher/Masquer les informations"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1624
 msgid "Has link"
-msgstr "Contient des liens vers d'autres documents"
+msgstr "Contient des liens vers des documents"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1628
 msgid "Has media associated"

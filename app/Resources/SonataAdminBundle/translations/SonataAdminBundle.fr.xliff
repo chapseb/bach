@@ -395,7 +395,10 @@
                 <source>Facets</source>
                 <target>Facettes</target>
             </trans-unit>
-
+            <trans-unit id="Dashboard">
+                <source>Dashboard</source>
+                <target>Tableau de bord</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

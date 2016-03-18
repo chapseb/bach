@@ -26,10 +26,49 @@ msgstr "Comments"
 msgid "Tag cloud"
 msgstr "Tag cloud"
 
+msgid "Fields"
+msgstr "Fields"
+
+msgid "Tag Cloud List"
+msgstr "Tag Cloud List"
+
+msgid "Geoloc Main Fields List"
+msgstr "Geoloc Main Fields List"
+
+msgid "Archives Comment List"
+msgstr "Archives Comment List"
+
+msgid "Matricules Comment List"
+msgstr "Matricules Comment List"
+
+msgid "Images Comment List"
+msgstr "Images Comment List"
+
+msgid "Facets List"
+msgstr "Facets List"
+
 msgid "Geolocalization fields"
 msgstr "Geolocalization fields"
 
 msgid "Geolocalization fields (matricules)"
 msgstr "Geolocalization fields (matricules)"
+
+msgid "Browse Fields List"
+msgstr "Browse Fields List"
+
+msgid "Geoloc List"
+msgstr "Geoloc List"
+
+msgid "Content administrator"
+msgstr "Content administrator"
+
+msgid "Administrator"
+msgstr "Administrator"
+
+msgid "Archivist"
+msgstr "Archivist"
+
+msgid "User"
+msgstr "User"
 
 #/Admin translations

@@ -271,7 +271,7 @@ msgstr "Votre commentaire a été enregistré. Merci !"
 
 #: src/Bach/HomeBundle/Entity/BrowseFields.php:267
 msgid "New browsing field"
-msgstr "Nouveau champ de navigation"
+msgstr "Nouvel index"
 
 #: src/Bach/HomeBundle/Entity/TagCloud.php:178
 msgid "Tag cloud"
@@ -360,7 +360,7 @@ msgstr "Nom du champ Solr"
 
 #: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:148
 msgid "Activate field"
-msgstr "Activer le champ"
+msgstr "Activer l'index"
 
 #: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:154
 #: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:225
@@ -567,7 +567,7 @@ msgstr "Navigation par champs"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1242
 msgid "There are no configured fields for browsing."
-msgstr "Il n'y a pas de champs configurés pour la navigation."
+msgstr "Il n'y a pas d index configurés pour la navigation."
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1361
 msgid "Consult document \"%title\""

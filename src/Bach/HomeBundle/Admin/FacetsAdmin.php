@@ -208,6 +208,13 @@ class FacetsAdmin extends Admin
                 )
             )
             ->add(
+                'on_home',
+                null,
+                array(
+                    'label' => _('Home')
+                )
+            )
+            ->add(
                 'fr_label',
                 null,
                 array(

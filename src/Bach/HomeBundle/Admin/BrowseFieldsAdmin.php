@@ -184,10 +184,31 @@ class BrowseFieldsAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('solr_field_name')
-            ->add('active')
-            ->add('fr_label')
-            ->add('en_label');
+            ->add(
+                'solr_field_name',
+                null,
+                array(
+                    'label' => _('Solr field name')
+                )
+            )->add(
+                'active',
+                null,
+                array(
+                    'label' => _('Active')
+                )
+            )->add(
+                'fr_label',
+                null,
+                array(
+                    'label' => _('French label')
+                )
+            )->add(
+                'en_label',
+                null,
+                array(
+                    'label' => _('English label')
+                )
+            );
     }
 
     /**

@@ -75,10 +75,11 @@ class Comment
     const IMPROVEMENT = 1;
     const BUG = 2;
 
-    //sates
+    //states
     const MODERATED = 0;
     const PUBLISHED = 1;
     const REJECTED = 2;
+    const PROCESSEED = 3;
 
     /**
      * @var integer
@@ -463,9 +464,10 @@ class Comment
     public static function getKnownStates()
     {
         return array(
-            self::MODERATED => _('Moderated'),
-            self::PUBLISHED => _('Published'),
-            self::REJECTED  => _('Rejected')
+            self::MODERATED  => _('Moderated'),
+            self::PUBLISHED  => _('Published'),
+            self::REJECTED   => _('Rejected'),
+            self::PROCESSEED => _('Processed')
         );
     }
 

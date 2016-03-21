@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-03 12:59+0100\n"
+"POT-Creation-Date: 2016-03-21 15:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,18 +25,18 @@ msgid "Subject"
 msgstr ""
 
 #: src/Bach/HomeBundle/Form/Type/CommentType.php:87
-#: src/Bach/HomeBundle/Entity/Comment.php:452
+#: src/Bach/HomeBundle/Entity/Comment.php:453
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6964
 msgid "Comment"
 msgstr ""
 
 #: src/Bach/HomeBundle/Form/Type/CommentType.php:88
-#: src/Bach/HomeBundle/Entity/Comment.php:453
+#: src/Bach/HomeBundle/Entity/Comment.php:454
 msgid "Improvement"
 msgstr ""
 
 #: src/Bach/HomeBundle/Form/Type/CommentType.php:89
-#: src/Bach/HomeBundle/Entity/Comment.php:454
+#: src/Bach/HomeBundle/Entity/Comment.php:455
 msgid "Bug"
 msgstr ""
 
@@ -60,6 +60,7 @@ msgstr ""
 
 #: src/Bach/HomeBundle/Form/Type/MatriculesType.php:77
 #: src/Bach/HomeBundle/Controller/MatriculesController.php:509
+#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:98
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6804
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7275
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8067
@@ -305,25 +306,29 @@ msgstr ""
 msgid "Geolocalization fields for matricules"
 msgstr ""
 
-#: src/Bach/HomeBundle/Entity/Comment.php:211
+#: src/Bach/HomeBundle/Entity/Comment.php:212
 msgid "Y-m-d"
 msgstr ""
 
-#: src/Bach/HomeBundle/Entity/Comment.php:440
+#: src/Bach/HomeBundle/Entity/Comment.php:441
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3960
 msgid "New comment"
 msgstr ""
 
-#: src/Bach/HomeBundle/Entity/Comment.php:466
+#: src/Bach/HomeBundle/Entity/Comment.php:467
 msgid "Moderated"
 msgstr ""
 
-#: src/Bach/HomeBundle/Entity/Comment.php:467
+#: src/Bach/HomeBundle/Entity/Comment.php:468
 msgid "Published"
 msgstr ""
 
-#: src/Bach/HomeBundle/Entity/Comment.php:468
+#: src/Bach/HomeBundle/Entity/Comment.php:469
 msgid "Rejected"
+msgstr ""
+
+#: src/Bach/HomeBundle/Entity/Comment.php:470
+msgid "Processed"
 msgstr ""
 
 #: src/Bach/HomeBundle/DependencyInjection/Compiler/AddDependencyCallsCompilerPass.php:228
@@ -333,28 +338,32 @@ msgstr ""
 msgid "Facets"
 msgstr ""
 
-#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:104
-msgid "Bounding box"
-msgstr ""
-
-#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:110
-#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:169
-msgid "Latitude"
-msgstr ""
-
-#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:116
+#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:78
+#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:85
+#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:156
 #: src/Bach/HomeBundle/Admin/GeolocAdmin.php:175
-msgid "Longitude"
-msgstr ""
-
-#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:163
 msgid "Indexed name"
 msgstr ""
 
+#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:110
+msgid "Bounding box"
+msgstr ""
+
+#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:116
+#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:181
+msgid "Latitude"
+msgstr ""
+
+#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:122
+#: src/Bach/HomeBundle/Admin/GeolocAdmin.php:187
+msgid "Longitude"
+msgstr ""
+
 #: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:141
-#: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:212
+#: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:191
+#: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:233
 #: src/Bach/HomeBundle/Admin/FacetsAdmin.php:150
-#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:258
+#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:265
 msgid "Solr field name"
 msgstr ""
 
@@ -363,20 +372,23 @@ msgid "Activate field"
 msgstr ""
 
 #: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:154
-#: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:225
-#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:214
+#: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:203
+#: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:246
+#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:221
 msgid "French label"
 msgstr ""
 
 #: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:160
-#: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:231
-#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:221
+#: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:209
+#: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:252
+#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:228
 msgid "English label"
 msgstr ""
 
-#: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:219
+#: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:197
+#: src/Bach/HomeBundle/Admin/BrowseFieldsAdmin.php:240
 #: src/Bach/HomeBundle/Admin/FacetsAdmin.php:207
-#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:265
+#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:272
 msgid "Active"
 msgstr ""
 
@@ -394,20 +406,21 @@ msgid "Show on homepage"
 msgstr ""
 
 #: src/Bach/HomeBundle/Admin/FacetsAdmin.php:170
-#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:278
+#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:285
 msgid "French text"
 msgstr ""
 
 #: src/Bach/HomeBundle/Admin/FacetsAdmin.php:176
-#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:284
+#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:291
 msgid "English text"
 msgstr ""
 
-#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:272
+#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:214
+#: src/Bach/HomeBundle/Admin/FacetsAdmin.php:279
 msgid "Home"
 msgstr ""
 
-#: src/Bach/HomeBundle/Admin/TagCloudAdmin.php:112
+#: src/Bach/HomeBundle/Admin/TagCloudAdmin.php:113
 msgid "Number of occurences"
 msgstr ""
 
@@ -1199,7 +1212,11 @@ msgstr ""
 msgid "Original localisation"
 msgstr ""
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:505
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:470
+msgid "Abstract"
+msgstr ""
+
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:508
 msgid "without specific"
 msgstr ""
 

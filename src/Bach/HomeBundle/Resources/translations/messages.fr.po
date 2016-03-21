@@ -35,6 +35,9 @@ msgstr "Gestion du nuage de tags"
 msgid "Geoloc Main Fields List"
 msgstr "Gestion des champs de géolocalisation"
 
+msgid "Geoloc Matricules Fields List"
+msgstr "Gestion des champs de géolocalisation (matricules)"
+
 msgid "Archives Comment List"
 msgstr "Gestion des commentaires (archives)"
 

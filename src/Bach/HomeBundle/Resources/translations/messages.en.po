@@ -35,6 +35,9 @@ msgstr "Tag Cloud List"
 msgid "Geoloc Main Fields List"
 msgstr "Geoloc Main Fields List"
 
+msgid "Geoloc Matricules Fields List"
+msgstr "Geoloc Matricules Fields List"
+
 msgid "Archives Comment List"
 msgstr "Archives Comment List"
 

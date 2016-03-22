@@ -156,7 +156,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% if app.user and is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                         {% if is_granted('ROLE_ARCHIVIST') %}
                     <li{% if app.request.attributes.get('_route')|slice(0, 15) == 'bach_indexation' %} class="active"{% endif %}>
-                        <a href="{{ path('bach_indexation_homepage') }}">{{ _('Publish') }}</a>
+                        <a href="{% if features.publication %}/upload4anaphore/restricted{% else %}{{ path('bach_indexation_homepage') }}{% endif%}">{{ _('Publish') }}</a>
                     </li>
                         {% endif %}
                         {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_CONTENT_ADMIN') %}

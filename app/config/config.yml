@@ -74,6 +74,7 @@ twig:
             maps: '%feature.maps%'
             register: '%feature.register%'
             comments: '%feature.comments%'
+            publication: '%feature.publication%'
         default_url: '%default_url%'
         logo_url: '%logo_url%'
         tracker: '%tracker%'

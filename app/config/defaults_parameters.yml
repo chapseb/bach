@@ -78,6 +78,7 @@ parameters:
     feature.maps: true
     feature.tagcloud: true
     feature.comments: true
+    feature.publication: false
     display.show_maps: true
     display.show_daterange: true
     display.disable_select_daterange: false

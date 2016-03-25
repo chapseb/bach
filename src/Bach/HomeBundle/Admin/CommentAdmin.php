@@ -61,6 +61,8 @@ use Bach\HomeBundle\Entity\Comment;
 class CommentAdmin extends Admin
 {
 
+    public $docId = '';
+
     /**
      * Fields to be shown on create/edit forms
      *
@@ -117,6 +119,7 @@ class CommentAdmin extends Admin
                     'label'     => _('State')
                 )
             );
+        $this->docId = $this->getSubject()->getDocId();
     }
 
     /**

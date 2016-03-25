@@ -65,6 +65,8 @@ services:
             - ~
             - Bach\HomeBundle\Entity\ArchivesComment
             - BachHomeBundle:CommentAdmin
+        calls:
+            - [ setTemplate, [edit, BachHomeBundle:Admin:edit_comment.html.twig] ]
 
     sonata.admin.archives.browsefields:
         class: Bach\HomeBundle\Admin\BrowseFieldsAdmin

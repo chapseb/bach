@@ -161,11 +161,15 @@ parameters:
     label.matricules: null
     label.expos: null
     label.browse: null
-    #mail parameters (not used for now)
-    #mailer_transport: smtp
-    #mailer_host: localhost
-    #mailer_user: null
-    #mailer_password: null
+
+    #mail parameters
+    mailer_transport: smtp
+    mailer_host: localhost
+    mailer_user: null
+    mailer_password: null
+    mailer_port: 25
+    mailer_encryption: null
+
     weight.descriptors: 2
     weight.cUnittitle : 1
     weight.parents_titles: 1

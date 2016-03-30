@@ -48,6 +48,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Bach\HomeBundle\Entity\Comment;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Bach comments management
@@ -62,6 +63,19 @@ class CommentAdmin extends Admin
 {
 
     public $docId = '';
+    public $statusComment = '';
+
+    /**
+     * Constructor
+     *
+     * @param string $code               ?
+     * @param string $class              ?
+     * @param string $baseControllerName ?
+     */
+    public function __construct($code, $class, $baseControllerName)
+    {
+        parent::__construct($code, $class, $baseControllerName);
+    }
 
     /**
      * Fields to be shown on create/edit forms
@@ -213,6 +227,18 @@ class CommentAdmin extends Admin
     }
 
     /**
+     * Container injenction
+     *
+     * @param ContainerInterface $container Container
+     *
+     * @return void
+     */
+    public function setContainer(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
      * Configure batch actions
      *
      * @return array
@@ -257,4 +283,62 @@ class CommentAdmin extends Admin
         return $states[$index];
     }
 
+    /**
+    * Pre treatment before update comment
+    *
+    * @param Comment $comment Current comment
+    *
+    * @return void
+    */
+    public function preUpdate($comment)
+    {
+        $DM = $this->getConfigurationPool()->getContainer()->get('Doctrine')->getManager();
+        $uow = $DM->getUnitOfWork();
+        $OriginalEntityComment = $uow->getOriginalEntityData($comment);
+        $this->statusComment = $OriginalEntityComment['state'];
+    }
+
+    /**
+    * Post treatment after update comment
+    *
+    * @param Comment $comment Current comment
+    *
+    * @return void
+    */
+    public function postUpdate($comment)
+    {
+        if ($this->statusComment == '0'
+            && ($comment->getState() == '1' || $comment->getState() == '3')
+        ) {
+            $userTo  = $comment->getOpenedBy()->getEmail();
+            if ($userTo != null && filter_var($userTo, FILTER_VALIDATE_EMAIL)) {
+                $container  = $this->getConfigurationPool()->getContainer();
+                $user       = $container ->getParameter('mailer_user');
+                $password   = $container ->getParameter('mailer_password');
+                $port       = $container ->getParameter('mailer_port');
+                $host       = $container ->getParameter('mailer_host');
+                $encryption = $container ->getParameter('mailer_encryption');
+
+                $transport  = \Swift_SmtpTransport::newInstance(
+                    $host,
+                    $port,
+                    $encryption
+                );
+                $transport->setUserName($user);
+                $transport->setPassword($password);
+                $mailer  = \Swift_Mailer::newInstance($transport);
+                $message = \Swift_Message::newInstance();
+                //FIXME Manage english and translation
+                $message->setSubject('Bach - Traitement commentaire');
+                $message->setFrom($user);
+                $message->setTo($userTo);
+                //FIXME Add a way to call here a template with the content
+                $message->setBody(
+                    "Bonjour, <br><br>Vote message " . $comment->getSubject() . " a été " . strtolower($this->getStateLabel($comment->getState())) .".<br><br>Cordialement.",
+                    'text/html'
+                );
+                $mailer->send($message);
+            }
+        }
+    }
 }

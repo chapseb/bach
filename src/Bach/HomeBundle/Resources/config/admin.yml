@@ -101,6 +101,8 @@ services:
             - ~
             - Bach\HomeBundle\Entity\MatriculesComment
             - BachHomeBundle:CommentAdmin
+        calls:
+            - [ setTemplate, [edit, BachHomeBundle:Admin:edit_matricules_comment.html.twig] ]
 
     sonata.admin.matricules.geolocfields:
         class: Bach\HomeBundle\Admin\GeolocFieldsAdmin

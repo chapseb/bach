@@ -99,7 +99,7 @@ class Comment
 
     /**
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="opened_by_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="opened_by_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected $opened_by;
 
@@ -112,7 +112,7 @@ class Comment
 
     /**
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="closed_by_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="closed_by_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $closed_by;
 

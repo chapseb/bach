@@ -134,6 +134,9 @@ class CommentAdmin extends Admin
                 )
             );
         $this->docId = $this->getSubject()->getDocId();
+        //FIXME optimize this call with related document type images
+        $container  = $this->getConfigurationPool()->getContainer();
+        $this->viewerAddress = $container ->getParameter('viewer_uri');
     }
 
     /**

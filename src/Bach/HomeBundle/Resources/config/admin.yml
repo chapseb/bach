@@ -124,6 +124,8 @@ services:
             - ~
             - Bach\HomeBundle\Entity\ImagesComment
             - BachHomeBundle:CommentAdmin
+        calls:
+            - [ setTemplate, [edit, BachHomeBundle:Admin:edit_images_comment.html.twig] ]
 
 
     sonata.admin.geoloc:

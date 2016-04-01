@@ -183,10 +183,12 @@ POSSIBILITY OF SUCH DAMAGE.
                     {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
                 </a>
             {% else %}
-                <a class="login" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
-                {% if features.openid %}
-                <a class="openid" href="{{ path('fp_openid_security_login') }}" title="{{ _('Login with OpenID') }}"><img src="{{ asset('img/openid-16x16.gif') }}" alt="OpenID"/></a>
-                {% endif %}
+                {% if display.disable_connectbutton != true %}
+                    <a class="login" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+                    {% if features.openid %}
+                    <a class="openid" href="{{ path('fp_openid_security_login') }}" title="{{ _('Login with OpenID') }}"><img src="{{ asset('img/openid-16x16.gif') }}" alt="OpenID"/></a>
+                    {% endif %}
+                {% endif%}
             {% endif %}
             </div>
 

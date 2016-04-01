@@ -91,6 +91,7 @@ twig:
             browse: '%label.browse%'
         display:
             disable_searchmap: '%display.disable_searchmap%'
+            disable_connectbutton: '%display.disable_connectbutton%'
 
 # Assetic Configuration
 assetic:

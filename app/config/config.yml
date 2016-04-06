@@ -75,6 +75,7 @@ twig:
             register: '%feature.register%'
             comments: '%feature.comments%'
             publication: '%feature.publication%'
+            minify: '%feature.minify%'
         default_url: '%default_url%'
         logo_url: '%logo_url%'
         tracker: '%tracker%'
@@ -92,6 +93,10 @@ twig:
         display:
             disable_searchmap: '%display.disable_searchmap%'
             disable_connectbutton: '%display.disable_connectbutton%'
+        minify:
+            providerversion: '%minify.providerversion%'
+            apikey: '%minify.apikey%'
+            login: '%minify.login%'
 
 # Assetic Configuration
 assetic:

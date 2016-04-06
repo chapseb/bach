@@ -102,6 +102,7 @@ parameters:
     feature.social: true
     feature.register: false
     feature.heritage: true
+    feature.minify: false
     matricules_histogram: 'annee_naissance'
     matricules_listparameters: ['cote', 'date_enregistrement', 'lieu_enregistrement', 'classe', 'nom', 'prenoms', 'matricule', 'annee_naissance', 'lieu_naissance', 'lieu_residence', 'comment']
     matricules_searchparameters: ['cote', 'date_enregistrement', 'lieu_enregistrement', 'classe', 'nom', 'prenoms', 'matricule', 'annee_naissance', 'lieu_naissance', 'lieu_residence', 'comment']
@@ -142,6 +143,9 @@ parameters:
     #scoopit - http://www.scoop.it/install-button
     social.scoopit: true
     social.scoopit.layout: 'horizontal' #either 'horizontal', 'vertical' or 'none'
+    minify.providerversion: null
+    minify.login: null
+    minify.apikey: null
 
     #supported gettext bundle languages
     gettext.locale_shortcuts:

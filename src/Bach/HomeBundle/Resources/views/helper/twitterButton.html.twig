@@ -38,7 +38,11 @@ POSSIBILITY OF SUCH DAMAGE.
 {% spaceless %}
  <a href="https://twitter.com/share" class="twitter-share-button"
     data-text="{{message}}"
-    data-url="{{url}}"
+    {% if features.minify %}
+        data-url="{{url|minify}}"
+    {% else %}
+        data-url="{{url}}"
+    {%endif%}
     data-lang="{{locale}}"
 {% if via is not sameas(false) %}
     data-via="{{via}}"

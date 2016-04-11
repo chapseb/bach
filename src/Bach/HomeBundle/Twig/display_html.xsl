@@ -379,6 +379,60 @@ POSSIBILITY OF SUCH DAMAGE.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    <xsl:template match="extref|archref" mode="contents">
+        <xsl:choose>
+            <xsl:when test="@href">
+                <xsl:choose>
+                    <xsl:when test="substring(@href, 1, 7) = 'http://'">
+                        <a href="{@href}">
+                            <xsl:if test="@title and . != ''">
+                                <xsl:attribute name="title">
+                                    <xsl:value-of select="@title"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:if test="@title and . = ''">
+                                <xsl:value-of select="@title"/>
+                            </xsl:if>
+                            <xsl:apply-templates mode="contents"/>
+                        </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:element name="a">
+                                <xsl:attribute name="href">
+                                    <xsl:variable name="varhref" select="@href"/>
+                                    <xsl:call-template name="replace-string">
+                                        <xsl:with-param name="text" select="@href"/>
+                                        <xsl:with-param name="replace" select="'.xml'" />
+                                        <xsl:with-param name="with" select="''"/>
+                                    </xsl:call-template>
+                                </xsl:attribute>
+
+                            <xsl:if test="@title and . != ''">
+                                <xsl:attribute name="title">
+                                    <xsl:value-of select="@title"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="@title and not(. = '')">
+                                    <xsl:value-of select="@title"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:variable name="varhref" select="@href"/>
+                                    <xsl:call-template name="replace-string">
+                                        <xsl:with-param name="text" select="@href"/>
+                                        <xsl:with-param name="replace" select="'.xml'" />
+                                        <xsl:with-param name="with" select="''"/>
+                                    </xsl:call-template>
+                            </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:element>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 
 
 <xsl:template name="replace-string">

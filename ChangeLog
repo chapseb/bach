@@ -1,3 +1,17 @@
+1.2.4 (2016-04-11)
+
+- Fix link in extref and archref tag
+- Fix delete user when this one has comment
+- Add document link in comment admin
+- Add translations in admin
+- Unrequired name in solr field name in admin tagcloud
+- Add user and groupe management for simple admin
+- Add state in comment
+- Add possibility to minify url in twitter
+- Fix some translations
+- Fix some display issues
+
+
 1.2.3 (2016-03-10)
 
 - Remove add comment feature in admin dashboard

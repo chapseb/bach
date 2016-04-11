@@ -78,6 +78,7 @@ parameters:
     feature.maps: true
     feature.tagcloud: true
     feature.comments: true
+    feature.publication: false
     display.show_maps: true
     display.show_daterange: true
     display.disable_select_daterange: false
@@ -92,14 +93,16 @@ parameters:
     display.matricules.show_daterange: '%display.show_daterange%'
     display.matricules.show_param: '%display.show_param%'
     display.disable_suggestions: false
-    display.disable_searchmap: false
+    display.disable_searchmap: true
     display.ead.result_order: null
+    display.disable_connectbutton: false
     cote_location: 'bottom' #either top or bottom
     #other
     feature.openid: false
     feature.social: true
     feature.register: false
     feature.heritage: true
+    feature.minify: false
     matricules_histogram: 'annee_naissance'
     matricules_listparameters: ['cote', 'date_enregistrement', 'lieu_enregistrement', 'classe', 'nom', 'prenoms', 'matricule', 'annee_naissance', 'lieu_naissance', 'lieu_residence', 'comment']
     matricules_searchparameters: ['cote', 'date_enregistrement', 'lieu_enregistrement', 'classe', 'nom', 'prenoms', 'matricule', 'annee_naissance', 'lieu_naissance', 'lieu_residence', 'comment']
@@ -140,6 +143,9 @@ parameters:
     #scoopit - http://www.scoop.it/install-button
     social.scoopit: true
     social.scoopit.layout: 'horizontal' #either 'horizontal', 'vertical' or 'none'
+    minify.providerversion: null
+    minify.login: null
+    minify.apikey: null
 
     #supported gettext bundle languages
     gettext.locale_shortcuts:
@@ -160,11 +166,15 @@ parameters:
     label.matricules: null
     label.expos: null
     label.browse: null
-    #mail parameters (not used for now)
-    #mailer_transport: smtp
-    #mailer_host: localhost
-    #mailer_user: null
-    #mailer_password: null
+
+    #mail parameters
+    mailer_transport: smtp
+    mailer_host: localhost
+    mailer_user: null
+    mailer_password: null
+    mailer_port: 25
+    mailer_encryption: null
+
     weight.descriptors: 2
     weight.cUnittitle : 1
     weight.parents_titles: 1

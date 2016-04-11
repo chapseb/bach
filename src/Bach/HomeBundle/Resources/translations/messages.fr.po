@@ -15,7 +15,7 @@ msgid "Facets"
 msgstr "Facettes"
 
 msgid "Browse fields"
-msgstr "Champs de navigation"
+msgstr "Index"
 
 msgid "Geolocalization"
 msgstr "Géolocalisation"
@@ -26,10 +26,52 @@ msgstr "Commentaires"
 msgid "Tag cloud"
 msgstr "Nuage de tags"
 
+msgid "Fields"
+msgstr "Champs Solr"
+
+msgid "Tag Cloud List"
+msgstr "Gestion du nuage de tags"
+
+msgid "Geoloc Main Fields List"
+msgstr "Gestion des champs de géolocalisation"
+
+msgid "Geoloc Matricules Fields List"
+msgstr "Gestion des champs de géolocalisation (matricules)"
+
+msgid "Archives Comment List"
+msgstr "Gestion des commentaires (archives)"
+
+msgid "Matricules Comment List"
+msgstr "Gestion des commentaires (matricules)"
+
+msgid "Images Comment List"
+msgstr "Gestion des commentaires (images)"
+
+msgid "Facets List"
+msgstr "Gestion des facettes"
+
 msgid "Geolocalization fields"
 msgstr "Champs de géolocalisation"
 
 msgid "Geolocalization fields (matricules)"
 msgstr "Champs de géolocalisation (matricules)"
+
+msgid "Browse Fields List"
+msgstr "Gestion des index"
+
+msgid "Geoloc List"
+msgstr "Gestion de la géolocalisation"
+
+msgid "Content administrator"
+msgstr "Gestionnaire de contenus"
+
+msgid "Administrator"
+msgstr "Administrateur"
+
+msgid "Archivist"
+msgstr "Archiviste"
+
+msgid "User"
+msgstr "Utilisateur"
 
 #/Admin translations

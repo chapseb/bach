@@ -156,7 +156,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% if app.user and is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                         {% if is_granted('ROLE_ARCHIVIST') %}
                     <li{% if app.request.attributes.get('_route')|slice(0, 15) == 'bach_indexation' %} class="active"{% endif %}>
-                        <a href="{{ path('bach_indexation_homepage') }}">{{ _('Publish') }}</a>
+                        <a href="{% if features.publication %}/upload4anaphore/restricted{% else %}{{ path('bach_indexation_homepage') }}{% endif%}">{{ _('Publish') }}</a>
                     </li>
                         {% endif %}
                         {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_CONTENT_ADMIN') %}
@@ -183,10 +183,12 @@ POSSIBILITY OF SUCH DAMAGE.
                     {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
                 </a>
             {% else %}
-                <a class="login" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
-                {% if features.openid %}
-                <a class="openid" href="{{ path('fp_openid_security_login') }}" title="{{ _('Login with OpenID') }}"><img src="{{ asset('img/openid-16x16.gif') }}" alt="OpenID"/></a>
-                {% endif %}
+                {% if display.disable_connectbutton != true %}
+                    <a class="login" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+                    {% if features.openid %}
+                    <a class="openid" href="{{ path('fp_openid_security_login') }}" title="{{ _('Login with OpenID') }}"><img src="{{ asset('img/openid-16x16.gif') }}" alt="OpenID"/></a>
+                    {% endif %}
+                {% endif%}
             {% endif %}
             </div>
 

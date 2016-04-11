@@ -71,6 +71,24 @@ class BachSocialBar extends \Twig_Extension
     }
 
     /**
+     * Add Filter for twig template
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
+        return array(
+            new \Twig_SimpleFilter(
+                'minify',
+                array(
+                    $this,
+                    'getMinifyUrl'
+                )
+            )
+        );
+    }
+
+    /**
      * Extension name
      *
      * @return string
@@ -273,6 +291,36 @@ class BachSocialBar extends \Twig_Extension
 
         return $this->container->get('bach.socialBarHelper')
             ->scoopitButton($parameters);
+    }
+
+    /**
+     * Return minify url
+     *
+     * @param string $url longUrl to minify
+     *
+     * @return string
+     */
+    public function getMinifyUrl($url)
+    {
+
+        $minifyProviderVersion = $this->container->getParameter(
+            'minify.providerversion'
+        );
+        $minifyLogin           = $this->container->getParameter('minify.login');
+        $minifyApikey          = $this->container->getParameter('minify.apikey');
+
+        //create the URL
+        $bitly = 'http://api.bit.ly/shorten?version='. $minifyProviderVersion.
+            '&longUrl='.urlencode($url).
+            '&login='.$minifyLogin.
+            '&apiKey='.$minifyApikey.
+            '&format=json';
+
+        //get the url
+        //could also use cURL here
+        $response = file_get_contents($bitly);
+        $json = @json_decode($response, true);
+        return $json['results'][$url]['shortUrl'];
     }
 
 }

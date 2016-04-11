@@ -753,6 +753,7 @@ td.actions {
 }
 
 .content section.scopecontent,
+.content section.abstract,
 .content section#images,
 .content.archdesc section {
     color: inherit;
@@ -1763,6 +1764,11 @@ h3.no-accordion span {
 
 #jvm_usage {
     margin-right: 0;
+}
+
+#CommentAdminLink {
+    position: absolute;
+    right: 50px;
 }
 
 /* Custom page CSS

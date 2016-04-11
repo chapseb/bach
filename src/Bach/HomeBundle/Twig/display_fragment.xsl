@@ -357,7 +357,14 @@ POSSIBILITY OF SUCH DAMAGE.
                                     <xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Original localisation')"/>
                                 </xsl:when>
                                 <xsl:when test="local-name() = 'abstract'">
-                                    <xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Summarize')"/>
+                                    <xsl:choose>
+                                        <xsl:when test="@label">
+                                            <xsl:value-of select="@label"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Abstract')"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
                                 </xsl:when>
                                 <xsl:when test="local-name() = 'repository'">
                                     <xsl:choose>
@@ -392,7 +399,7 @@ POSSIBILITY OF SUCH DAMAGE.
         <xsl:call-template name="section_content">
             <xsl:with-param name="title">
                 <xsl:choose>
-                    <xsl:when test ="/archdesc">true</xsl:when>
+                    <xsl:when test ="/archdesc or local-name() ='abstract'">true</xsl:when>
                     <xsl:otherwise>false</xsl:otherwise>
                 </xsl:choose>
             </xsl:with-param>

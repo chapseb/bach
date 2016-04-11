@@ -74,6 +74,8 @@ twig:
             maps: '%feature.maps%'
             register: '%feature.register%'
             comments: '%feature.comments%'
+            publication: '%feature.publication%'
+            minify: '%feature.minify%'
         default_url: '%default_url%'
         logo_url: '%logo_url%'
         tracker: '%tracker%'
@@ -90,6 +92,11 @@ twig:
             browse: '%label.browse%'
         display:
             disable_searchmap: '%display.disable_searchmap%'
+            disable_connectbutton: '%display.disable_connectbutton%'
+        minify:
+            providerversion: '%minify.providerversion%'
+            apikey: '%minify.apikey%'
+            login: '%minify.login%'
 
 # Assetic Configuration
 assetic:
@@ -129,12 +136,12 @@ doctrine_migrations:
     name: Bach Database Migrations
 
 # Swiftmailer Configuration
-#swiftmailer:
-#    transport: "%mailer_transport%"
-#    host:      "%mailer_host%"
-#    username:  "%mailer_user%"
-#    password:  "%mailer_password%"
-#    spool:     { type: memory }
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    spool:     { type: memory }
 
 # Solarium Configuration
 nelmio_solarium:

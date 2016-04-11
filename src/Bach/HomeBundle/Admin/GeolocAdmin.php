@@ -75,12 +75,14 @@ class GeolocAdmin extends Admin
         $iname_params = array(
             'required'  => true,
             'disabled'  => false,
+            'label'     => _('Indexed name')
         );
 
         if ( $this->getSubject()->getId() !== null ) {
             $iname_params = array(
                 'required'  => false,
                 'disabled'  => true,
+                'label'     => _('Indexed name')
             );
         }
 
@@ -90,7 +92,11 @@ class GeolocAdmin extends Admin
                 null,
                 $iname_params
             )->add(
-                'name'
+                'name',
+                null,
+                array(
+                    'label' => _('Name')
+                )
             )->add(
                 'place_id'
             )->add(
@@ -143,7 +149,13 @@ class GeolocAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('indexed_name');
+            ->add(
+                'indexed_name',
+                null,
+                array(
+                    'label' => _('Indexed name')
+                )
+            );
     }
 
     /**

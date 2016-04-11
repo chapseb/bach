@@ -31,25 +31,12 @@ IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 #}
 
-{% if url is not defined or url == null %}
-    {% set url = app.request.uri|replace({'/ajax': ''}) %}
-{% endif %}
+{% extends 'SonataAdminBundle:CRUD:base_edit.html.twig' %}
 
-{% spaceless %}
- <a href="https://twitter.com/share" class="twitter-share-button"
-    data-text="{{message}}"
-    {% if features.minify %}
-        data-url="{{url|minify}}"
-    {% else %}
-        data-url="{{url}}"
-    {%endif%}
-    data-lang="{{locale}}"
-{% if via is not sameas(false) %}
-    data-via="{{via}}"
-{% endif %}
-{% if tag is not sameas(false) %}
-    data-hashtags="{{tag}}"
-{% endif %}
-     >{{text}}</a>
-<script src="//platform.twitter.com/widgets.js" id="twitter-wjs"></script>
-{% endspaceless %}
+{% block sonata_tab_content %}
+    {% if admin.docId != ''  %}
+    <div id="CommentAdminLink">
+        <a href="{{path('bach_display_matricules', {docid: admin.docId})}}" target="_blank">{{ _('link to the original document') }}</a>
+    </div>
+    {% endif %}
+{% endblock %}

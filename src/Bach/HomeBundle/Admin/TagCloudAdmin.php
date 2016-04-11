@@ -103,7 +103,8 @@ class TagCloudAdmin extends Admin
                 array(
                     'choices'   => $solr_fields,
                     'label'     => _('Fields'),
-                    'multiple'  => true
+                    'multiple'  => true,
+                    'required'  => false
                 )
             )->add(
                 'number',

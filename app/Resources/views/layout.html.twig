@@ -49,7 +49,7 @@ POSSIBILITY OF SUCH DAMAGE.
                 <div id="oldie"><strong>{{ _('Your browser is quite old, some features may not work.') }}</strong><br/>{{ _('You may have a better experience with a more recent or an alternative one.') }}</div>
             <![endif]-->
             {% block headCookie %}
-            {% if cookie_param is not defined %}
+            {% if cookie_param is not defined and not app.user %}
                 <div id="head_cookie">
                     <a class="alert">x</a>
                     En continuant à naviguer sur ce site, vous acceptez l'utilisation des cookies. <a href="{{ path("cookie_link") }}"><strong>En savoir plus</strong></a>

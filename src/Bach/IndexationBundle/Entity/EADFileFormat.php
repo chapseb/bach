@@ -1209,7 +1209,7 @@ class EADFileFormat extends FileFormat
             }
 
             if ( $var instanceof \DateTime ) {
-                $var = $var->format('Y-m-d H:m:s');
+                $var = $var->format('Y-m-d H:i:s');
             }
         }*/
         unset($vars['eadheader']);

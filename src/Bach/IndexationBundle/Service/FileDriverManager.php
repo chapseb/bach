@@ -185,8 +185,8 @@ class FileDriverManager
                 if ( $eadh === false ) {
                     //EAD header does not exists yet. Store it.
                     $now = new \DateTime();
-                    $eadheader['created'] = $now->format('Y-m-d h:m:s');
-                    $eadheader['updated'] = $now->format('Y-m-d h:m:s');
+                    $eadheader['created'] = $now->format('Y-m-d h:i:s');
+                    $eadheader['updated'] = $now->format('Y-m-d h:i:s');
 
                     $stmt = null;
                     if ( isset($this->_stmts['insert_header']) ) {

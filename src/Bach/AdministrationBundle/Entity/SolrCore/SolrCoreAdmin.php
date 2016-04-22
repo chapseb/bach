@@ -94,7 +94,7 @@ class SolrCoreAdmin
             $this->_reader->getCoresURL() . '/' . $coreName . '/dataimport',
             array(
                 'command'   => 'full-import',
-                'clean'     => 'true',
+                'clean'     => 'false',
                 'commit'    => 'true'
             )
         );
@@ -896,7 +896,9 @@ class SolrCoreAdmin
                 $query .= ', ' . $v . ' AS ' . $k;
             }
         }
-        $query .= ' FROM ' . $table_name;
+        $query .= ' FROM ' . $table_name . ' WHERE '.
+            '\'${dataimporter.request.clean}\'' . ' != \'false\' '.
+            ' OR updated > ' . '\'${dataimporter.last_index_time}\'';
 
         $elt->setAttribute('query', $query);
 

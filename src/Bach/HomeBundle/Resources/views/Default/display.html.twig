@@ -44,7 +44,6 @@ POSSIBILITY OF SUCH DAMAGE.
 
 {% block container %}
     {% include 'BachHomeBundle:Default:content_display.html.twig' with {'docid': docid, 'document': document, 'children': children, 'print': print} %}
-    <a href="#container" id="back2top">{{ _('Back to top') }}</a>
 {% endblock %}
 
 {% block js_calls %}

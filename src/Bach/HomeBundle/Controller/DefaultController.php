@@ -53,6 +53,7 @@ use Bach\HomeBundle\Entity\Filters;
 use Bach\HomeBundle\Entity\ViewParams;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Bach\HomeBundle\Entity\Pdf;
 
 /**
@@ -1054,15 +1055,15 @@ class DefaultController extends SearchController
         $query = $client->createSelect();
         $query->setQuery('dao:' . $qry_string);
         $query->setFields(
-            'headerId, fragmentid, parents, archDescUnitTitle, cUnittitle'
+            'headerId, fragmentid, parents, archDescUnitTitle, cUnittitle, cUnitid, cLegalstatus, cRepository'
         );
         $query->setStart(0)->setRows(1);
 
         $rs = $client->select($query);
         $docs = $rs->getDocuments();
         $parents_docs = null;
-        $response = null;
 
+        $response = array();
         if ( count($docs) > 0 ) {
             $doc = $docs[0];
             $parents = explode('/', $doc['parents']);
@@ -1081,6 +1082,7 @@ class DefaultController extends SearchController
                 $parents_docs = $rs->getDocuments();
             }
 
+            $response['ead'] = array();
             //link to main document
             $doc_url = $this->get('router')->generate(
                 'bach_ead_html',
@@ -1088,7 +1090,10 @@ class DefaultController extends SearchController
                     'docid' => $doc['headerId']
                 )
             );
-            $response = '<a href="' . $doc_url . '">' .
+            $response['ead']['unitid'] = $docs[0]['cUnitid'];
+            $response['ead']['cUnittitle'] = $docs[0]['cUnittitle'];
+            $response['ead']['cLegalstatus'] = $docs[0]['cLegalstatus'];
+            $response['ead']['link'] = '<a href="' . $doc_url . '">' .
                 $doc['archDescUnitTitle'] . '</a>';
 
             //links to parents
@@ -1099,7 +1104,7 @@ class DefaultController extends SearchController
                         'docid' => $pdoc['fragmentid']
                     )
                 );
-                $response .= ' » <a href="' . $doc_url . '">' .
+                $response['ead']['link'] .= ' » <a href="' . $doc_url . '">' .
                     $pdoc['cUnittitle'] . '</a>';
             }
 
@@ -1110,36 +1115,41 @@ class DefaultController extends SearchController
                     'docid' => $doc['fragmentid']
                 )
             );
-            $response .= ' » <a href="' . $doc_url . '">' .
+            $response['ead']['link'] .= ' » <a href="' . $doc_url . '">' .
                 $doc['cUnittitle'] . '</a>';
-        } else {
-            if ( $this->container->getParameter('feature.matricules') ) {
-                //we did not find any restuls in archives, try with matricules.
-                $route = 'remote_matimage_infos';
-                $params = array(
-                    'path'  => $path,
-                    'img'   => $img,
-                    'ext'   => $ext
-                );
-                if ( $path === null ) {
-                    $route = 'remote_matimage_infos_nopath';
-                    unset($params['path']);
-                }
-                if ( $img === null ) {
-                    $route = 'remote_matimage_infos_noimg';
-                    unset($params['img']);
-                    unset($params['ext']);
-                }
-
-                $redirectUrl = $this->get('router')->generate(
-                    $route,
-                    $params
-                );
-                return new RedirectResponse($redirectUrl);
-            }
+            $response['ead']['doclink'] = '<a href="' . $doc_url .'">' .
+                $doc['cUnittitle'] . '</a>';
         }
+        if ( $this->container->getParameter('feature.matricules') ) {
+            //we did not find any restuls in archives, try with matricules.
+            $route = 'remote_matimage_infos';
+            $params = array(
+                'path'  => $path,
+                'img'   => $img,
+                'ext'   => $ext
+            );
+            if ( $path === null ) {
+                $route = 'remote_matimage_infos_nopath';
+                unset($params['path']);
+            }
+            if ( $img === null ) {
+                $route = 'remote_matimage_infos_noimg';
+                unset($params['img']);
+                unset($params['ext']);
+            }
 
-        return new Response($response, 200);
+            $redirectUrl = $this->get('router')->generate(
+                $route,
+                $params
+            );
+            $urlBase = $this->container->get('router')->getContext()->getHost();
+            $response_mat = @file_get_contents('http://'.$urlBase.$redirectUrl);
+            $response_mat = (array)json_decode($response_mat);
+        }
+        $total_response = array_merge($response, $response_mat);
+        $jsonResponse = new JsonResponse();
+        $jsonResponse->setData($total_response);
+        return $jsonResponse;
     }
 
     /**

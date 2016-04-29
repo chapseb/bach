@@ -55,6 +55,7 @@ use Bach\HomeBundle\Entity\MatriculesViewParams;
 use Bach\HomeBundle\Entity\Comment;
 use Bach\HomeBundle\Entity\Pdf;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Bach matricules controller
@@ -654,7 +655,9 @@ class MatriculesController extends SearchController
             'start_dao:' . $qry_string . ' or end_dao:' . $qry_string
         );
         $query->setFields(
-            'id, nom, txt_prenoms, classe'
+            'id, nom, txt_prenoms, classe, cote, date_enregistrement,
+            lieu_enregistrement, prenoms, matricule, annee_naissance, lieu_naissance,
+            lieu_residence'
         );
         $query->setStart(0)->setRows(1);
 
@@ -664,7 +667,6 @@ class MatriculesController extends SearchController
 
         if ( count($docs) > 0 ) {
             $doc = $docs[0];
-
             //link to document
             $doc_url = $this->get('router')->generate(
                 'bach_display_matricules',
@@ -674,12 +676,15 @@ class MatriculesController extends SearchController
             );
 
             $class = new \DateTime($doc['classe']);
-            $response = '<a href="' . $doc_url . '">' .
+            $response['mat']['link_mat'] = '<a href="' . $doc_url . '">' .
                 $doc['nom'] . ' ' . $doc['txt_prenoms'] .
                 ' (' . $class->format('Y') . ')' . '</a>';
+            $response['mat']['record'] = $doc->getFields();
         }
 
-        return new Response($response, 200);
+        $jsonResponse = new JsonResponse();
+        $jsonResponse->setData($response);
+        return $jsonResponse;
     }
 
     /**

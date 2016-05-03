@@ -78,6 +78,16 @@ class EADFileFormat extends FileFormat
     protected $cUnitid;
 
     /**
+     * @ORM\Column(type="string", nullable=true, length=500)
+     */
+    protected $cUnitidbegin;
+
+   /**
+     * @ORM\Column(type="string", nullable=true, length=500)
+     */
+    protected $cUnitidend;
+
+    /**
      * @ORM\Column(type="string", nullable=true, length=3000)
      */
     protected $cUnittitle;
@@ -308,7 +318,9 @@ class EADFileFormat extends FileFormat
         'parents_titles'        => 'text',
         'cDateBegin'            => 'date',
         'cDateEnd'              => 'date',
-        'dao'                   => 'ancestor_path'
+        'dao'                   => 'ancestor_path',
+        'cUnitidbegin'          => 'int',
+        'cUnitidend'            => 'int'
     );
 
     /**
@@ -530,6 +542,52 @@ class EADFileFormat extends FileFormat
     public function getCUnitid()
     {
         return $this->cUnitid;
+    }
+
+    /**
+     * Set cUnitidbegin
+     *
+     * @param string $cUnitidbegin unitidbegin
+     *
+     * @return EADFileFormat
+     */
+    public function setCUnitidbegin($cUnitidbegin)
+    {
+        $this->cUnitidbegin = $cUnitidbegin;
+        return $this;
+    }
+
+    /**
+     * Get cUnitidbegin
+     *
+     * @return string
+     */
+    public function getCUnitidbegin()
+    {
+        return $this->cUnitidbegin;
+    }
+
+    /**
+     * Set cUnitidend
+     *
+     * @param string $cUnitidend unitidend
+     *
+     * @return EADFileFormat
+     */
+    public function setCUnitidend($cUnitidend)
+    {
+        $this->cUnitidend = $cUnitidend;
+        return $this;
+    }
+
+    /**
+     * Get cUnitidend
+     *
+     * @return string
+     */
+    public function getCUnitidend()
+    {
+        return $this->cUnitidend;
     }
 
     /**

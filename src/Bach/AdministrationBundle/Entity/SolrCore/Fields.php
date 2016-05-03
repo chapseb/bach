@@ -204,6 +204,12 @@ class Fields
         case 'cUnitid':
             return _('Unit ID');
             break;
+        case 'cUnitidbegin':
+            return _('Unit ID begin');
+            break;
+        case 'cUnitidend':
+            return _('Unit ID end');
+            break;
         case 'cUnittitle':
             return _('Unit title');
             break;

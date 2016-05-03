@@ -105,7 +105,6 @@ class Filters extends \ArrayObject
                     'date_' . $matches[1] . '_' . $matches[2],
                     $request->get($qry_p)
                 );
-
             }
         }
     }

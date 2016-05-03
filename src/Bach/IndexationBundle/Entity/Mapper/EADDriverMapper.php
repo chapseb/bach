@@ -118,6 +118,8 @@ class EADDriverMapper implements DriverMapperInterface
 
         $archdesc_elements = array(
             'cUnitId'           => 'did/unitid',
+            'cUnitidbegin'      => 'did/unitid/[@type=\'numDebut\']',
+            'cUnitidend'        => 'did/unitid/[@type=\"numFin\"]',
             'cUnitTitle'        => 'did/unittitle',
             'cDate'             => 'did/unitdate|did/unittitle/unitdate',
             'cScopeContent'     => 'scopecontent',
@@ -161,6 +163,8 @@ class EADDriverMapper implements DriverMapperInterface
 
         $ead_elements = array(
             'cUnitid'       => 'did/unitid',
+            'cUnitidbegin'  => 'did/unitid/[@type="numDebut"]',
+            'cUnitidend'    => 'did/unitid/[@type="numFin"]',
             'cUnittitle'    => 'did/unittitle',
             'cScopcontent'  => 'scopecontent',
             'cControlacces' => 'controlacces',
@@ -186,6 +190,18 @@ class EADDriverMapper implements DriverMapperInterface
                 && $element === 'parents'
             ) {
                 $mapped_data[$map] = $data['c'][$element][0]['value'];
+            }
+            if (isset($data['c']['did/unitid']) and ($map == 'cUnitidbegin' or $map == 'cUnitidend')) {
+                foreach ($data['c']['did/unitid'] as $key=>$value) {
+                    if ((isset($value['attributes']['type']))
+                        && (($value['attributes']['type'] == 'numDebut'
+                        && $map == 'cUnitidbegin')
+                        || ($value['attributes']['type'] == 'numFin'
+                        && $map == 'cUnitidend'))
+                    ) {
+                        $mapped_data[$map] = $value['value'];
+                    }
+                }
             }
         }
 

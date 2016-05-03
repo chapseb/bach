@@ -250,6 +250,12 @@ class SolariumQueryFactory
                         $this->_query->createFilterQuery('geoloc')
                             ->setQuery($query);
                         break;
+                    case 'cUnitidbegin':
+                        foreach ( $value as $v ) {
+                            $query = '(cUnitidbegin:[* TO ' . $v . '] AND cUnitidend:[' . $v . ' TO *])';
+                            $this->getQuery()->createFilterQuery($name)->setQuery($query);
+                        }
+                        break;
                     default:
                         $i = 0;
                         foreach ( $value as $v ) {

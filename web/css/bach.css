@@ -378,6 +378,16 @@ p {
     margin-bottom: .3em;
 }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}
+
 /**
  * ===== Search form =====
  */
@@ -440,6 +450,10 @@ p {
 
 .range_date input[type=submit] {
     margin-top: .5em;
+}
+
+.interv_unitid {
+    width: 2.5em;
 }
 
 /**

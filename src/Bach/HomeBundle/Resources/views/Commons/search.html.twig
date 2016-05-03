@@ -78,10 +78,15 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
         </ul>
     {% endif %}
 
+    {% set testcUnitidbegin = false %}
     {% if filters is defined %}
+
         <h2>{{ _('Active filters') }} <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, clear_filters: true}) }}" class="clear-btn" title="{{ _('Clear refined query') }}">{{ _('Clear') }}</a></h2>
         <div id="active_filters">
             {% for filter_name,values in filters %}
+                {% if filter_name == 'cUnitidbegin'%}
+                    {% set testcUnitidbegin = true %}
+                {% endif %}
                 {% if values is not iterable %}
                     {% set values = []|merge([values]) %}
                 {% endif %}
@@ -118,14 +123,43 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                         {% set diff = false%}
                     {%endif%}
                 {% else %}
-                    <h3>{{ facet.label }}</h3>
+                    {% if facet_field == 'cUnitidbegin' and testcUnitidbegin == true %}
+                    {% else%}
+                        <h3>{{ facet.label }}</h3>
+                    {%endif%}
                 {% endif%}
                 {% if (facet_field == 'cDateBegin' or facet_field == 'date_enregistrement' or facet_field == 'annee_naissance' or facet_field == 'classe')  %}
                     {% if stats[facet_field].min|date('Y') != stats[facet_field].max|date('Y') %}
                         <div class="range_date">
                     {%endif%}
                 {% else %}
+
+                    {% if facet_field == 'cUnitidbegin' and testcUnitidbegin == true %}
+                    {% else %}
                     <div>
+                    {% endif%}
+                {% endif %}
+
+                {% if facet_field == 'cUnitidbegin' and testcUnitidbegin == false %}
+                <form id="{{ facet_field}}_change">
+                    <ul>
+                        <li>
+                            <input id="facet_field" name="filter_field" value="{{facet_field}}" type="hidden" />
+                            <input class="interv_unitid" type="number" name="filter_value" id="{{ facet_field }}_input" value=""/>
+                            <span class="buttons_container"><input type="submit" id="{{ facet_field }}_date_set" value="{{ _('Go') }}"/></span>
+                        </li>
+                    </ul>
+                </form>
+                <script type="text/javascript">
+                    $(function(){
+
+                        $('#cUnitidbegin_input').spinner({
+                            min: 0,
+                            page: 1,
+                            value: 0
+                        });
+                     });
+                    </script>
                 {% endif %}
 
                 {% if (facet_field == 'cDateBegin' or facet_field == 'date_enregistrement' or facet_field == 'annee_naissance' or facet_field == 'classe') and stats[facet_field].min|date('Y') != stats[facet_field].max|date('Y') %}
@@ -154,6 +188,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                                 change: updateSlider,
                                 stop: updateSlider
                             });
+
                             $('#{{ facet_field }}_range_date_set').button();
                             $('#{{ facet_field }}_change').on('submit', function(){
                                 //check for date input validity
@@ -200,7 +235,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                         });
                     </script>
                 {% endif %}
-                {% if facet.content|length > 0 %}
+                {% if facet.content|length > 0 and facet_field !='cUnitidbegin'  %}
                     <ol>
                     {% set index_name = facet.index_name %}
                     {% if facet_name is defined and facet_name == index_name or facet.content|length < 20 %}
@@ -240,7 +275,10 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                 {% endif %}
                 {% if diff is defined and diff == false %}
                 {% else %}
-                    </div>
+                    {% if facet_field == 'cUnitidbegin' and testcUnitidbegin == true %}
+                    {% else %}
+                        </div>
+                    {%endif%}
                 {% endif %}
 
             {% endfor %}

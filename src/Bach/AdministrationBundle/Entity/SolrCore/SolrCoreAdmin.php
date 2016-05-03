@@ -1112,6 +1112,16 @@ class SolrCoreAdmin
             $newEntity->appendChild($newField);
 
             $newField = $doc->createElement('field');
+            $newField->setAttribute('column', 'cUnitidbegin');
+            $newField->setAttribute('name', 'cUnitidbegin');
+            $newEntity->appendChild($newField);
+
+            $newField = $doc->createElement('field');
+            $newField->setAttribute('column', 'cUnitidend');
+            $newField->setAttribute('name', 'cUnitidend');
+            $newEntity->appendChild($newField);
+
+            $newField = $doc->createElement('field');
             $newField->setAttribute('column', 'cUnittitle');
             $newField->setAttribute('name', 'archDescUnitTitle');
             $newEntity->appendChild($newField);

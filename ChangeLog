@@ -1,3 +1,10 @@
+1.2.5 (2016-05-09)
+
+- Open tree on every click left menu in cdc view
+- Fix delta solr import
+- Fix element create and update minute value in bdd
+- Factorization of some code
+
 1.2.4 (2016-04-11)
 
 - Fix link in extref and archref tag

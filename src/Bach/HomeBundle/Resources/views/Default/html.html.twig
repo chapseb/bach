@@ -90,7 +90,7 @@ POSSIBILITY OF SUCH DAMAGE.
             active: 1
         });
 
-        $('#inventory_scheme .ui-accordion-header a').on('click', function(){
+        $('#inventory_scheme .ui-accordion-header a, #inventory_scheme .ui-accordion-content a').on('click', function(){
             $('input[type=checkbox]').prop('checked', true);
             if ( $('#inventory_contents').accordion('option', 'active') != 1 ) {
                 $('#inventory_contents').accordion('option', 'active', 1)
@@ -208,7 +208,6 @@ POSSIBILITY OF SUCH DAMAGE.
     {% else %}
         {{ displayCdc(docs)|raw }}
     {% endif %}
-    <a href="#container" id="back2top">{{ _('Back to top') }}</a>
 {% endblock %}
 
 {% block menu %}

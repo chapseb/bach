@@ -290,6 +290,35 @@ class DefaultController extends SearchController
             $tpl_vars
         );
 
+        $all_facets_table = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:Facets')
+            ->findBy(
+                array(
+                    'form'   => $current_form,
+                ),
+                array('position' => 'ASC')
+            );
+
+        $all_facets = $tpl_vars['facet_names'];
+        foreach ( $all_facets_table as $field ) {
+            if ( !isset($all_facets_table[$field->getSolrFieldName()]) ) {
+                $all_facets[$field->getSolrFieldName()]
+                    = $field->getLabel($request->getLocale());
+            }
+        }
+
+        $browse_fields = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:BrowseFields')
+            ->findAll();
+        foreach ( $browse_fields as $field ) {
+            if ( !isset($browse_fields[$field->getSolrFieldName()]) ) {
+                $all_facets[$field->getSolrFieldName()]
+                    = $field->getLabel($request->getLocale());
+            }
+        }
+
+        $tpl_vars['all_facets'] = $all_facets;
+
         if ( !is_null($query_terms) ) {
             $hlSearchResults = $factory->getHighlighting();
             $scSearchResults = $factory->getSpellcheck();

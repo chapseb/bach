@@ -90,7 +90,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                 {% if values is not iterable %}
                     {% set values = []|merge([values]) %}
                 {% endif %}
-            <h3>{% if facet_names[filter_name] is defined %} {{ facet_names[filter_name] }}{% else %}{{ _('Unknown filter') }}{% endif %}</h3>
+            <h3>{% if all_facets[filter_name] is defined %} {{ all_facets[filter_name] }}{% else %}{{ _('Unknown filter') }}{% endif %}</h3>
             <ul>
                 {% for value in values %}
                 <li>

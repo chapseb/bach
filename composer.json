@@ -41,7 +41,7 @@
         "doctrine/instantiator": "~1.0.1",
         "zendframework/zend-db": "2.3.*",
         "zendframework/zend-stdlib": "2.3.*",
-        "tecnick.com/tcpdf": "6.2.*"
+        "tecnickcom/tcpdf": "^6.2"
     },
     "require-dev": {
         "atoum/atoum": "1.0.x",

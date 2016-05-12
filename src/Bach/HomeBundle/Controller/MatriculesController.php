@@ -265,7 +265,7 @@ class MatriculesController extends SearchController
             $tpl_vars['matricules_searchparameters']
                 = $this->container->getParameter('matricules_searchparameters');
         }
-
+        $tpl_vars['all_facets'] = $tpl_vars['facet_names'];
         $tpl_vars['disable_select_daterange']
             = $this->container->getParameter('display.disable_select_daterange');
         return $this->render(

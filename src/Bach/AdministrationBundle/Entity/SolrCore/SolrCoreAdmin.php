@@ -1152,8 +1152,13 @@ class SolrCoreAdmin
             $newField = $doc->createElement('field');
             $newField->setAttribute('column', 'href');
             $newField->setAttribute('name', 'dao');
-
             $newEntity->appendChild($newField);
+
+            $newField = $doc->createElement('field');
+            $newField->setAttribute('column', 'cMediaContent');
+            $newField->setAttribute('name', 'cMediaContent');
+            $newEntity->appendChild($newField);
+
             $elt->appendChild($newEntity);
         }
 

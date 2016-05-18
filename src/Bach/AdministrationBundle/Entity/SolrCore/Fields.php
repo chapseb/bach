@@ -237,6 +237,9 @@ class Fields
         case 'dao':
             return _('Digital substitute');
             break;
+        case 'cMediaContent':
+            return _('Media content');
+            break;
         case 'cDateBegin':
             return _('Dates periods');
             break;

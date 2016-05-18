@@ -46,7 +46,7 @@
 namespace Bach\IndexationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * EAD DAOs entity
@@ -101,6 +101,13 @@ class EADDaos
     protected $role;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $cMediaContent;
+
+    /**
      * @ORM\ManyToOne(targetEntity="EADFileFormat", inversedBy="daos")
      * @ORM\JoinColumn(name="eadfile_id", referencedColumnName="uniqid", onDelete="CASCADE")
      */
@@ -122,6 +129,7 @@ class EADDaos
             case 'audience':
             case 'title':
             case 'role':
+            case 'cMediaContent':
                 $this->$attr = $value;
                 break;
             }
@@ -241,6 +249,29 @@ class EADDaos
     public function getRole()
     {
         return $this->role;
+    }
+
+    /**
+     * Set cMediaContent
+     *
+     * @param string $cMediaContent MediaContent
+     *
+     * @return EADDaos
+     */
+    public function setCMediaContent($cMediaContent = null)
+    {
+        $this->cMediaContent = $cMediaContent;
+        return $this;
+    }
+
+    /**
+     * Get cMediaContent
+     *
+     * @return string
+     */
+    public function getCMediaContent()
+    {
+        return $this->cMediaContent;
     }
 
     /**

@@ -185,13 +185,13 @@ class EADFileFormat extends FileFormat
      * @param array   $data    The input data
      * @param boolean $changes Take care of changes
      */
-    public function __construct($data, $changes = true)
+    public function __construct($data, $changes = true, $pdfFlag)
     {
         $this->indexes = new ArrayCollection();
         $this->dates = new ArrayCollection();
         $this->daos = new ArrayCollection();
         $this->parents_titles = new ArrayCollection();
-        parent::__construct($data, $changes);
+        parent::__construct($data, $changes, $pdfFlag);
     }
 
     /**
@@ -218,6 +218,7 @@ class EADFileFormat extends FileFormat
         'cDateEnd',
         'dao',
         'cTitle',
+        'cMediaContent',
         'cFunction',
         'headerId',
         'headerTitle',
@@ -266,7 +267,8 @@ class EADFileFormat extends FileFormat
         'previous_title',
         'next_id',
         'next_title',
-        'cLegalstatus'
+        'cLegalstatus',
+        'cMediaContent'
     );
 
     /**
@@ -320,7 +322,8 @@ class EADFileFormat extends FileFormat
         'cDateEnd'              => 'date',
         'dao'                   => 'ancestor_path',
         'cUnitidbegin'          => 'int',
-        'cUnitidend'            => 'int'
+        'cUnitidend'            => 'int',
+        'cMediaContent'         => 'text'
     );
 
     /**
@@ -369,7 +372,8 @@ class EADFileFormat extends FileFormat
         'previous_title',
         'updated',
         'created',
-        'elt_order'
+        'elt_order',
+        'cMediaContent'
     );
 
     /**
@@ -402,7 +406,7 @@ class EADFileFormat extends FileFormat
      *
      * @return void
      */
-    protected function parseData($data, $changes = true)
+    protected function parseData($data, $pdfFlag, $changes = true)
     {
         $this->check_changes = $changes;
         foreach ($data as $key=>$value) {
@@ -419,7 +423,7 @@ class EADFileFormat extends FileFormat
             } elseif ($key === 'cDate') {
                 $this->parseDates($value);
             } elseif ( $key == 'daolist' ) {
-                $this->parseDaos($value);
+                $this->parseDaos($value, $pdfFlag);
             } else {
                 throw new \RuntimeException(
                     __CLASS__ . ' - Key ' . $key . ' is not known!'
@@ -934,7 +938,7 @@ class EADFileFormat extends FileFormat
      *
      * @return void
      */
-    protected function parseDaos($data)
+    protected function parseDaos($data, $pdfFlag)
     {
         $daos = clone $this->daos;
         $has_changed = false;
@@ -973,6 +977,29 @@ class EADFileFormat extends FileFormat
                     $id = $dao['id'];
                     unset($dao['id']);
                 }
+
+                if ($pdfFlag == true && $dao['attributes']['href']) {
+                    $daolink = $dao['attributes']['href'];
+                    if (file_exists(BACH_FILES_MISC . $daolink)) {
+                        $parser = new \Smalot\PdfParser\Parser();
+                        try {
+                            $pdf = $parser->parseFile(BACH_FILES_MISC . $daolink);
+                            if ($pdf->getDetails() != null) {
+                                $content = $pdf->getText();
+                                $search = array("\t", "\n", "\r");
+                                $content = str_replace($search, ' ', $content);
+                                // Replace Multiple spaces with single space
+                                $content = preg_replace('/ +/', ' ', $content);
+                                // Trim the string of leading/trailing space
+                                $content = trim($content);
+                                $dao['attributes']['cMediaContent'] = $content;
+                            }
+                        } catch (\Exception $e) {
+                            //FIXME Add a track in publication log file
+                        }
+                    }
+                }
+
                 $ndao = new EADDaos($this, $dao);
                 if ( $id !== null ) {
                     $ndao->setId($id);

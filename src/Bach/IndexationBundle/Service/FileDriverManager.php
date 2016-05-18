@@ -115,7 +115,7 @@ class FileDriverManager
      * @return FileFormat the normalized file object
      */
     public function convert(DataBag $bag, $format, $doc, $transaction = true,
-        $preprocessor = null, &$geonames = null
+        $preprocessor = null, &$geonames = null, $pdfFlag
     ) {
         $start_memory = memory_get_usage();
 
@@ -253,7 +253,10 @@ class FileDriverManager
                     $docid,
                     $doc,
                     $headerid,
-                    $header_obj
+                    $header_obj,
+                    null,
+                    null,
+                    $pdfFlag
                 );
 
                 $archdescid = $handledArchdesc['id'];
@@ -280,7 +283,8 @@ class FileDriverManager
                         $headerid,
                         $header_obj,
                         $archdescid,
-                        $archdesc_obj
+                        $archdesc_obj,
+                        $pdfFlag
                     );
 
                     $count++;
@@ -307,7 +311,9 @@ class FileDriverManager
 
                     if ( $db_record === false ) {
                         $record = new Entity\MatriculesFileFormat(
-                            $record
+                            $record,
+                            true,
+                            $pdfFlag
                         );
                         $record = $record->toArray();
 
@@ -390,7 +396,7 @@ class FileDriverManager
      * )
      */
     private function _handleEadComponent($data, $docid, $doc, $headerid,
-        $header_obj, $archdescid = null, $archdesc_obj = null
+        $header_obj, $archdescid = null, $archdesc_obj = null, $pdfFlag
     ) {
         $translated = $this->_mapper->translate($data);
 
@@ -410,7 +416,9 @@ class FileDriverManager
 
         if ( $db_record === false ) {
             $obj = new Entity\EADFileFormat(
-                $translated
+                $translated,
+                false,
+                $pdfFlag
             );
             $fragment = $obj->toArray();
             //EAD archdesc does not exists yet. Store it.
@@ -418,7 +426,8 @@ class FileDriverManager
                 $fragment,
                 $headerid,
                 $archdescid,
-                $docid
+                $docid,
+                $pdfFlag
             );
         } else {
             $id = $db_record['uniqid'];
@@ -630,7 +639,7 @@ class FileDriverManager
      *
      * @return int
      */
-    private function _storeEadFragment($fragment, $headerid, $archdescid, $docid)
+    private function _storeEadFragment($fragment, $headerid, $archdescid, $docid, $pdfFlag)
     {
         $indexes = $fragment['indexes'];
         unset($fragment['indexes']);
@@ -662,7 +671,8 @@ class FileDriverManager
             $indexes,
             $dates,
             $daos,
-            $parents_titles
+            $parents_titles,
+            $pdfFlag
         );
 
         return $fragid;
@@ -698,7 +708,7 @@ class FileDriverManager
      *
      * @return void
      */
-    private function _addSubElements($fid, $indexes, $dates, $daos, $ptitles)
+    private function _addSubElements($fid, $indexes, $dates, $daos, $ptitles, $pdfFlag)
     {
         if ( count($indexes) > 0 ) {
             //handle indexes

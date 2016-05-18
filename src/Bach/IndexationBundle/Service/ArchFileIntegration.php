@@ -118,7 +118,7 @@ class ArchFileIntegration
      *
      * @return void
      */
-    public function integrate(IntegrationTask $task, &$geonames, $transaction = true)
+    public function integrate(IntegrationTask $task, &$geonames, $pdfFlag, $transaction = true)
     {
         $spl = new \SplFileInfo($task->getPath());
         $doc = $task->getDocument();
@@ -131,7 +131,8 @@ class ArchFileIntegration
             $doc,
             $transaction,
             $preprocessor,
-            $geonames
+            $geonames,
+            $pdfFlag
         );
     }
 
@@ -144,7 +145,7 @@ class ArchFileIntegration
      *
      * @return void
      */
-    public function integrateAll($tasks, ProgressHelper $progress, &$geonames, $debug)
+    public function integrateAll($tasks, ProgressHelper $progress, &$geonames, $debug, $pdfFlag = false)
     {
         $count = 0;
         $cleared = false;
@@ -160,7 +161,7 @@ class ArchFileIntegration
                 if ($debug == true) {
                     print_r($task->getDocument()->getName());
                 }
-                $this->integrate($task, $geonames, false);
+                $this->integrate($task, $geonames, $pdfFlag, false);
                 $count++;
             }
             $this->_zdb->connection->commit();

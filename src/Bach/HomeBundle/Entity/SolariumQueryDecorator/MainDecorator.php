@@ -73,7 +73,7 @@ class MainDecorator extends SolariumQueryDecoratorAbstract
             }
             return $requestWeight.'archDescUnitTitle^0.0000000000000000001';
         } else {
-            return 'descriptors^2 cUnittitle^1 parents_titles^1 fulltext^0.1';
+            return 'descriptors^2 cUnittitle^1 parents_titles^1 fulltext^0.1 cMediaContent^0.1';
         }
     }
 

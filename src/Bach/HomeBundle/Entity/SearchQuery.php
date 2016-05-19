@@ -59,6 +59,7 @@ class SearchQuery
 {
     protected $query;
     public $keep_filters;
+    public $pdf_filters;
 
     /**
      * Set query
@@ -82,4 +83,29 @@ class SearchQuery
     {
         return $this->query;
     }
+
+    /**
+     * Set search pdf
+     *
+     * @param boolean $pdf Search_pdf
+     *
+     * @return boolean
+     */
+    public function setPdfFilters($pdf)
+    {
+        $this->pdf_filters = $pdf;
+        return $this->pdf_filters;
+    }
+
+    /**
+     * Get pdf
+     *
+     * @return boolean
+     */
+    public function hasPdfFilters()
+    {
+        return $this->pdf_filters;
+    }
+
+
 }

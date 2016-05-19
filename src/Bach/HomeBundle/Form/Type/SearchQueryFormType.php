@@ -62,17 +62,20 @@ class SearchQueryFormType extends AbstractType
 {
     private $_value = "";
     private $_keep;
+    private $_pdf;
 
     /**
      * Instanciate search form
      *
      * @param string  $value Search term (default to empty string)
      * @param boolean $keep  Wheter to display keep filters checkbox
+     * @param boolean $pdf   Wheter to display pdf filters checkbox
      */
-    public function __construct($value = '', $keep = true)
+    public function __construct($value = '', $keep = true, $pdf = true)
     {
         $this->_value = $value;
         $this->_keep = $keep;
+        $this->_pdf = $pdf;
     }
 
     /**
@@ -96,7 +99,7 @@ class SearchQueryFormType extends AbstractType
                 )
             )
         );
-        if ( $this->_keep === true ) {
+        if ($this->_keep === true) {
             $builder->add(
                 'keep_filters',
                 'checkbox',
@@ -107,6 +110,16 @@ class SearchQueryFormType extends AbstractType
                 )
             );
         }
+        $builder->add(
+            'pdf_filters',
+            'checkbox',
+            array(
+                'data'      => $this->_pdf,
+                'label'     => _('Search in pdf'),
+                'required'  => false
+            )
+        );
+
         $builder->add(
             'perform_search',
             'submit',

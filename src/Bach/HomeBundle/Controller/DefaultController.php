@@ -184,7 +184,8 @@ class DefaultController extends SearchController
         $form = $this->createForm(
             new SearchQueryFormType(
                 $query_terms,
-                !is_null($query_terms)
+                !is_null($query_terms),
+                $session->get('pdf_filters')
             ),
             new SearchQuery()
         );
@@ -242,6 +243,13 @@ class DefaultController extends SearchController
                 "parents_titles" => $this->container->getParameter('weight.parents_titles'),
                 "fulltext" => $this->container->getParameter('weight.fulltext')
             );
+            $cMediaContentQuery = array();
+            if ($session->get('pdf_filters') == true) {
+                $cMediaContentQuery = array(
+                    "cMediaContent" => "0.1"
+                );
+            }
+            $weight = array_merge($weight, $cMediaContentQuery);
             $container->setWeight($weight);
             if ( $filters->count() > 0 ) {
                 $tpl_vars['filters'] = $filters;
@@ -443,7 +451,11 @@ class DefaultController extends SearchController
                 if ( $form->getData()->keep_filters != 1 ) {
                     $session->set($this->getFiltersName(), null);
                 }
-
+                if ($form->getData()->pdf_filters == 1) {
+                    $session->set('pdf_filters', true);
+                } else {
+                    $session->set('pdf_filters', false);
+                }
                 $route = 'bach_archives';
                 if ( $this->search_form !== null ) {
                     $url_vars['form_name'] = $this->search_form;

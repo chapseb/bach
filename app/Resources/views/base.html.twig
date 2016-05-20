@@ -258,6 +258,13 @@ POSSIBILITY OF SUCH DAMAGE.
     <script type="text/javascript">
         {% block javascripts %}{% endblock %}
 
+            var _scrolled = function(elt){
+                if (elt.scrollTop()) {
+                    $('#back2top').fadeIn();
+                } else {
+                    $('#back2top').fadeOut();
+                }
+            };
             var clickCookie = function() {
                 if( $("#head_cookie").length > 0 ) {
                     $.ajax({
@@ -330,6 +337,18 @@ POSSIBILITY OF SUCH DAMAGE.
                 _help.dialog('open');
                 return false;
             });
+
+
+            if (!$('#wrapper').scrollTop() && !$('html').scrollTop() ) {
+                $('#back2top').fadeOut();
+            }
+            $('#wrapper').scroll(function() {
+                _scrolled($(this));
+            });
+            $(window).scroll(function() {
+                _scrolled($(this));
+            });
+
 
         });
     </script>

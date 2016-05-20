@@ -57,25 +57,7 @@ POSSIBILITY OF SUCH DAMAGE.
 {% endblock %}
 
 {% block javascripts %}
-        var _scrolled = function(elt){
-            if (elt.scrollTop()) {
-                $('#back2top').fadeIn();
-            } else {
-                $('#back2top').fadeOut();
-            }
-        };
-
         $(function() {
             _doTabs('#browse_tabs');
-
-            if (!$('#wrapper').scrollTop() && !$('html').scrollTop() ) {
-                $('#back2top').fadeOut();
-            }
-            $('#wrapper').scroll(function() {
-                _scrolled($(this));
-            });
-            $(window).scroll(function() {
-                _scrolled($(this));
-            });
         });
 {% endblock %}

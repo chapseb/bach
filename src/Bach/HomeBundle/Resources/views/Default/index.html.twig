@@ -108,7 +108,7 @@ POSSIBILITY OF SUCH DAMAGE.
                             </a>
                      {% if view == 'list' or view == 'txtlist' %}
                         {% set subid = document.fragmentid|replace({(document.headerId ~ '_'): ''}) %}
-                        <a href="{{ path('bach_ead_html', {'docid': document.headerId}) }}#{{ subid }}" class="treeLinkResults" title="{{ _('Locate in document tree') }}" >{{ _('Locate in document tree') }}</a>
+                        <a href="{{ path('bach_ead_html', {'docid': document.headerId}) }}#{{ subid }}" class="treeLinkResults" title="{{ _('Locate in document tree') }}" >{{ _('Locate in document tree') }}</a>{% if cMediaContent is defined and cMediaContent[loop.index0] == 1 %}<span class="cMedia"></span>{% endif %}
                         </h3>
                     </header>
                     {% set rend = displayFragment(document.fragment, document.fragmentid, search_form,false,false,false,0,false,false, hlSearchResults.getResult(document.fragmentid)) %}
@@ -123,6 +123,10 @@ POSSIBILITY OF SUCH DAMAGE.
 {% block mobile_js_off %}
     {{ parent() }}
 
+    $(function(){
+        $("span.cMedia").attr("title", "{{ _('Have one or several words in linked documents') }}");
+        $("span.cMedia").tooltip();
+    });
     $('.display_doc').click(function(event){
         event.stopImmediatePropagation();
         event.preventDefault();

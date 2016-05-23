@@ -1987,6 +1987,19 @@ video[poster] {
     vertical-align: text-bottom;
 }
 
+.cMedia {
+    background-image: url(../img/glyphicons-halflings.png);
+    background-position: -96px -115px;
+    background-repeat: no-repeat;
+    height: 14px;
+    line-height: 14px;
+    margin-left: 5px;
+    width: 14px;
+    padding-bottom: 0;
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+}
+
 #change_view > .printLink {
     margin-top: 3px;
 }

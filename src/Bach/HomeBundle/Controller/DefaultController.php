@@ -289,6 +289,28 @@ class DefaultController extends SearchController
             $conf_facets
         );
 
+        if ($session->get('pdf_filters') == true) {
+            $query_words = explode(" ", $query_terms);
+            $cMediaContentResult = array();
+            foreach ($searchResults as $res) {
+                if (isset($res->getFields()['cMediaContent'])) {
+                    foreach ($query_words as $word) {
+                        $test = preg_match(
+                            "/".$word."/i",
+                            $res->getFields()['cMediaContent']
+                        );
+                        if ($test == 1) {
+                            break;
+                        }
+                    }
+                    array_push($cMediaContentResult, $test);
+                } else {
+                    $test = 0;
+                    array_push($cMediaContentResult, $test);
+                }
+            }
+            $tpl_vars['cMediaContent']   = $cMediaContentResult;
+        }
         $this->handleFacets(
             $factory,
             $conf_facets,
@@ -347,7 +369,7 @@ class DefaultController extends SearchController
             $tpl_vars['totalPages'] = ceil(
                 $resultCount/$view_params->getResultsbyPage()
             );
-            $tpl_vars['searchResults'] = $searchResults;
+            $tpl_vars['searchResults']   = $searchResults;
             $tpl_vars['hlSearchResults'] = $hlSearchResults;
             $tpl_vars['scSearchResults'] = $scSearchResults;
             $tpl_vars['resultStart'] = ($page - 1)

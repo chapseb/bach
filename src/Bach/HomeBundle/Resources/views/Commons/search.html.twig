@@ -480,6 +480,12 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                 };
             }
 
+            $("#search").submit(function(event) {
+                var valueSearch = $("#searchQuery_query").val();
+                valueSearch = valueSearch.replace(/\//g," ");
+                $("#searchQuery_query").val(valueSearch);
+            });
+
             function filterOnDate(min_date, max_date) {
                 {% if q is defined and q != '' -%}
                 var _new_loc = document.location.href;

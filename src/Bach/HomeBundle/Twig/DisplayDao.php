@@ -797,7 +797,7 @@ class DisplayDao extends \Twig_Extension
     private static function _getType($dao)
     {
 
-        if (strpos($dao, 'http://') === 0) {
+        if (strpos($dao, 'http://') === 0 || strpos($dao, 'https://') === 0) {
             return self::EXTERNAL;
         }
 

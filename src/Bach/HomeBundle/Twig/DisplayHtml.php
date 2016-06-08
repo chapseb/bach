@@ -566,6 +566,7 @@ class DisplayHtml extends \Twig_Extension
         $ret .='</descriptors>';
 
         $doc = new \DOMDocument();
+        $ret = preg_replace('/&(?!#?[a-z0-9]+;)/', '&amp;', $ret);
         $doc->loadXML($ret);
         return $doc;
     }

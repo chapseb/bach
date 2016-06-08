@@ -591,6 +591,7 @@ class DisplayEADFragment extends \Twig_Extension
         $ret .='</div>';
 
         $doc = new \DOMDocument();
+        $ret = preg_replace('/&(?!#?[a-z0-9]+;)/', '&amp;', $ret);
         $doc->loadXML($ret);
         return $doc;
     }

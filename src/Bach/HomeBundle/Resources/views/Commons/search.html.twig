@@ -96,9 +96,9 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                 <li>
                     <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, rm_filter_field: filter_name, rm_filter_value: value}) }}" class="remove_filter" title="{{ _('Remove filter on \'%value%\'')|replace({'%value%': value}) }}">
                         {% if facet_labels[filter_name] is defined %}
-                            {{ facet_labels[filter_name][value] -}}
+                            {{ facet_labels[filter_name][value] | replace({'&amp;':'&'}) }}
                         {% else %}
-                            {{ value -}}
+                            {{ value | replace({'&amp;': '&'}) }}
                         {% endif %}
                     </a>
                 </li>
@@ -256,9 +256,9 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                         <li>
                             <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, filter_field: index_name, filter_value: facet}) }}">
                             {% if facet_labels[index_name] is defined %}
-                                {{ facet_labels[index_name][facet] }} ({{ count }})
+                                {{ facet_labels[index_name][facet] | replace({'&amp;': '&'}) }} ({{ count }})
                             {% else %}
-                                {{ facet }} ({{ count }})
+                                {{ facet | replace({'&amp;': '&'}) }} ({{ count }})
                             {% endif %}
                             </a>
                         </li>

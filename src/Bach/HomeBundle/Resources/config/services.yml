@@ -52,7 +52,7 @@ services:
             - { name: twig.extension }
     bach.home.display_dao:
         class: Bach\HomeBundle\Twig\DisplayDao
-        arguments: [ '%viewer_uri%', '%covers_dir%' ]
+        arguments: [ '%viewer_uri%', '%covers_dir%', '%bach_default_theme%' ]
         tags:
             - { name: twig.extension }
 

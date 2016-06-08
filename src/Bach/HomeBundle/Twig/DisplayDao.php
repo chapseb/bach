@@ -82,13 +82,14 @@ class DisplayDao extends \Twig_Extension
      * @param string $viewer_uri Viewer URI
      * @param string $covers_dir Covers directory
      */
-    public function __construct($viewer_uri, $covers_dir)
+    public function __construct($viewer_uri, $covers_dir, $bach_default_theme)
     {
         if ( !(substr($viewer_uri, -1) === '/') ) {
             $viewer_uri .= '/';
         }
         $this->_viewer = $viewer_uri;
         $this->_covers_dir = $covers_dir;
+        $this->_bach_default_theme = $bach_default_theme;
     }
 
     /**
@@ -123,7 +124,9 @@ class DisplayDao extends \Twig_Extension
                 false,
                 true,
                 $this->_covers_dir,
-                false
+                false,
+                false,
+                $this->_bach_default_theme
             );
         } else {
             $res = '';
@@ -135,6 +138,9 @@ class DisplayDao extends \Twig_Extension
                     $format,
                     false,
                     true,
+                    $this->_covers_dir,
+                    true,
+                    false,
                     $this->_covers_dir
                 );
             }
@@ -453,7 +459,7 @@ class DisplayDao extends \Twig_Extension
      */
     public static function proceedDao($dao, $daotitle, $viewer, $format,
         $ajax = false, $standalone = true, $covers_dir = null, $all = true,
-        $linkDesc = false
+        $linkDesc = false, $bach_default_theme = 'web'
     ) {
         $ret = null;
 
@@ -673,7 +679,13 @@ class DisplayDao extends \Twig_Extension
                     $src .= $cover_name;
                 } else {
                     $filetype = self::_guessFileType($dao);
-                    $src = '/img/' . $filetype . 'nocover.png';
+                    if (($bach_default_theme != 'web' || $bach_default_theme != 'phone')
+                    && (file_exists('assetic/img/'.$bach_default_theme.'_'.$filetype.'nocover.png'))
+                    ) {
+                        $src= '/assetic/img/' . $bach_default_theme . '_' . $filetype . 'nocover.png';
+                    } else {
+                        $src = '/img/' . $filetype . 'nocover.png';
+                    }
                 }
 
                 if ( $daotitle ) {

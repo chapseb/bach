@@ -437,7 +437,8 @@ class FileDriverManager
                 $translated,
                 $header_obj,
                 $archdesc_obj,
-                $doc
+                $doc,
+                $pdfFlag
             );
         }
 
@@ -760,7 +761,7 @@ class FileDriverManager
      * @return EADFileFormat
      */
     private function _updateEadFragment($fragment, $newvals,
-        Entity\EADHeader $header, $archdesc, Entity\Document $doc
+        Entity\EADHeader $header, $archdesc, Entity\Document $doc, $pdfFlag = false
     ) {
         unset($fragment['doc_id']);
         $fragment['document'] = $doc;
@@ -842,7 +843,8 @@ class FileDriverManager
 
         $obj = new Entity\EADFileFormat(
             $fragment,
-            false
+            false,
+            $pdfFlag
         );
         $obj->hydrate($newvals);
 

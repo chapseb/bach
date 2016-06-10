@@ -1064,6 +1064,7 @@ class DefaultController extends SearchController
         $parents_docs = null;
 
         $response = array();
+        $response_mat = array();
         if ( count($docs) > 0 ) {
             $doc = $docs[0];
             $parents = explode('/', $doc['parents']);

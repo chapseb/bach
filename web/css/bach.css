@@ -969,25 +969,26 @@ h2.back a:hover {
     font-size: 1.4em !important;
     line-height: 1.4em;
     font-weight: bold;
-    overflow: auto;
+    overflow: visible;
 }
 
 [id=inventory_contents] h4, [id=inventory_contents] h4.ui-accordion-header {
     font-size: 1.2em !important;
     line-height: 1.2em;
     font-weight: bold;
-    overflow: auto;
+    overflow: visible;
 }
 
 [id=inventory_contents] h5, [id=inventory_contents] h5.ui-accordion-header {
     font-size: 1em !important;
     line-height: 1em;
     font-weight: bold;
-    overflow: auto;
+    overflow: visible;
 }
 
 [id=inventory_contents].ui-accordion .ui-accordion-content {
     padding: .5em;
+    overflow: visible;
 }
 
 [id=inventory_contents] table {

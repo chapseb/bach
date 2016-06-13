@@ -120,6 +120,11 @@ EOF
                 InputOption::VALUE_NONE,
                 _('Do not check if file has been modified')
             )->addOption(
+                'pdf-indexation',
+                null,
+                InputOption::VALUE_NONE,
+                _('Pdf indexation.')
+            )->addOption(
                 'stats',
                 null,
                 InputOption::VALUE_NONE,
@@ -150,6 +155,9 @@ EOF
         }
 
         $dry = $input->getOption('dry-run');
+
+        $pdfFlag = $input->getOption('pdf-indexation');
+
         if ( $dry === true ) {
             $output->writeln(
                 '<fg=green;options=bold>' .
@@ -309,7 +317,7 @@ EOF
                         $task = new IntegrationTask($document);
 
                         if ( $dry === false ) {
-                            $integrationService->integrate($task, $geonames);
+                            $integrationService->integrate($task, $geonames, $pdfFlag);
                             $logger->info(
                                 str_replace(
                                     '%doc',

@@ -94,11 +94,11 @@ abstract class FileFormat implements NotifyPropertyChanged
       * @param array   $data    The input data
       * @param boolean $changes Take care of changes
       */
-    public function __construct($data, $changes = true)
+    public function __construct($data, $changes = true, $pdfFlag)
     {
         $this->created = new \DateTime('NOW', new \DateTimeZone('UTC'));
         $this->updated = new \DateTime('NOW', new \DateTimeZone('UTC'));
-        $this->parseData($data, $changes);
+        $this->parseData($data, $pdfFlag, $changes);
     }
 
     /**
@@ -121,7 +121,7 @@ abstract class FileFormat implements NotifyPropertyChanged
      *
      * @return void
      */
-    protected function parseData($data, $changes = true)
+    protected function parseData($data, $pdfFlag, $changes = true)
     {
         $this->check_changes = $changes;
         foreach ($data as $key=>$datum) {

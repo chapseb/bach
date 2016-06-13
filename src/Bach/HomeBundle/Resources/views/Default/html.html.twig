@@ -45,13 +45,6 @@ POSSIBILITY OF SUCH DAMAGE.
     var _width = $(window).width() * 0.8;
     var _height = $(window).height() * 0.8;
 
-    var _scrolled = function(elt){
-        if (elt.scrollTop()) {
-            $('#back2top').fadeIn();
-        } else {
-            $('#back2top').fadeOut();
-        }
-    };
 
     $(function(){
         var _p = $('<p id="doccontrol"></p>');
@@ -98,15 +91,6 @@ POSSIBILITY OF SUCH DAMAGE.
             window.location.href = $(this).attr('href');
         });
 
-        if (!$('#wrapper').scrollTop() && !$('html').scrollTop() ) {
-            $('#back2top').fadeOut();
-        }
-        $('#wrapper').scroll(function() {
-            _scrolled($(this));
-        });
-        $(window).scroll(function() {
-            _scrolled($(this));
-        });
 
         $('#inventory_summary_mnu a').on('click', function(){
             var _index = null;
@@ -148,6 +132,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
         $("span.related_informations").attr("title", "{{ _('Has link') }}");
         $("span.media_informations").attr("title", "{{ _('Has media associated') }}");
+        $("span.cMedia").attr("title", "{{ _('Has media associated') }}");
 
     });
     {% include 'BachHomeBundle:Default:jsplayer.js.twig' %}

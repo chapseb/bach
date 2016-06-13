@@ -1,3 +1,20 @@
+1.3 (2016-06-13)
+
+- Fix some display issues
+- Add nocover pdf image for theme
+- Fix display &amp in some views
+- Update translations
+- Add right to delete facets ans browsefield for archivist user
+- Add remote infos to display in viewer
+- Fix external link in display document (https)
+- Remove slash from search query
+- Factorize back2top button in code
+- Add pdf content in ead search
+- Fix unknown filter in matricules
+- Fix tcpdf composer install
+- Add possibility to search in article number
+- Add all facets and browsefields for labelling
+
 1.2.5 (2016-05-09)
 
 - Open tree on every click left menu in cdc view

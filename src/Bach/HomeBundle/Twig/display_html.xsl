@@ -50,7 +50,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
     <xsl:template match="ead">
         <article>
-            <header>
+            <header id="cdcTitle">
                 <xsl:apply-templates select="eadheader" mode="header"/>
             </header>
             <div id="inventory_contents">

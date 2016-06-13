@@ -307,7 +307,7 @@ class MatriculesFileFormat extends FileFormat
      *
      * @return void
      */
-    protected function parseData($data, $changes = true)
+    protected function parseData($data, $container, $changes = true)
     {
         $this->check_changes = $changes;
         foreach ($data as $key=>$datum) {

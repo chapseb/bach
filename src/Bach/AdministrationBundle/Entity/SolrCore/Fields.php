@@ -204,6 +204,12 @@ class Fields
         case 'cUnitid':
             return _('Unit ID');
             break;
+        case 'cUnitidbegin':
+            return _('Unit ID begin');
+            break;
+        case 'cUnitidend':
+            return _('Unit ID end');
+            break;
         case 'cUnittitle':
             return _('Unit title');
             break;
@@ -230,6 +236,9 @@ class Fields
             break;
         case 'dao':
             return _('Digital substitute');
+            break;
+        case 'cMediaContent':
+            return _('Media content');
             break;
         case 'cDateBegin':
             return _('Dates periods');

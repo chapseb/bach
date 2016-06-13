@@ -53,6 +53,7 @@ use Bach\HomeBundle\Entity\Filters;
 use Bach\HomeBundle\Entity\ViewParams;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Bach\HomeBundle\Entity\Pdf;
 
 /**
@@ -184,7 +185,8 @@ class DefaultController extends SearchController
         $form = $this->createForm(
             new SearchQueryFormType(
                 $query_terms,
-                !is_null($query_terms)
+                !is_null($query_terms),
+                $session->get('pdf_filters')
             ),
             new SearchQuery()
         );
@@ -242,6 +244,13 @@ class DefaultController extends SearchController
                 "parents_titles" => $this->container->getParameter('weight.parents_titles'),
                 "fulltext" => $this->container->getParameter('weight.fulltext')
             );
+            $cMediaContentQuery = array();
+            if ($session->get('pdf_filters') == true) {
+                $cMediaContentQuery = array(
+                    "cMediaContent" => "0.1"
+                );
+            }
+            $weight = array_merge($weight, $cMediaContentQuery);
             $container->setWeight($weight);
             if ( $filters->count() > 0 ) {
                 $tpl_vars['filters'] = $filters;
@@ -281,6 +290,28 @@ class DefaultController extends SearchController
             $conf_facets
         );
 
+        if ($session->get('pdf_filters') == true) {
+            $query_words = explode(" ", $query_terms);
+            $cMediaContentResult = array();
+            foreach ($searchResults as $res) {
+                if (isset($res->getFields()['cMediaContent'])) {
+                    foreach ($query_words as $word) {
+                        $test = preg_match(
+                            "/".$word."/i",
+                            $res->getFields()['cMediaContent']
+                        );
+                        if ($test == 1) {
+                            break;
+                        }
+                    }
+                    array_push($cMediaContentResult, $test);
+                } else {
+                    $test = 0;
+                    array_push($cMediaContentResult, $test);
+                }
+            }
+            $tpl_vars['cMediaContent']   = $cMediaContentResult;
+        }
         $this->handleFacets(
             $factory,
             $conf_facets,
@@ -289,6 +320,35 @@ class DefaultController extends SearchController
             $facet_name,
             $tpl_vars
         );
+
+        $all_facets_table = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:Facets')
+            ->findBy(
+                array(
+                    'form'   => $current_form,
+                ),
+                array('position' => 'ASC')
+            );
+
+        $all_facets = $tpl_vars['facet_names'];
+        foreach ( $all_facets_table as $field ) {
+            if ( !isset($all_facets_table[$field->getSolrFieldName()]) ) {
+                $all_facets[$field->getSolrFieldName()]
+                    = $field->getLabel($request->getLocale());
+            }
+        }
+
+        $browse_fields = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:BrowseFields')
+            ->findAll();
+        foreach ( $browse_fields as $field ) {
+            if ( !isset($browse_fields[$field->getSolrFieldName()]) ) {
+                $all_facets[$field->getSolrFieldName()]
+                    = $field->getLabel($request->getLocale());
+            }
+        }
+
+        $tpl_vars['all_facets'] = $all_facets;
 
         if ( !is_null($query_terms) ) {
             $hlSearchResults = $factory->getHighlighting();
@@ -310,7 +370,7 @@ class DefaultController extends SearchController
             $tpl_vars['totalPages'] = ceil(
                 $resultCount/$view_params->getResultsbyPage()
             );
-            $tpl_vars['searchResults'] = $searchResults;
+            $tpl_vars['searchResults']   = $searchResults;
             $tpl_vars['hlSearchResults'] = $hlSearchResults;
             $tpl_vars['scSearchResults'] = $scSearchResults;
             $tpl_vars['resultStart'] = ($page - 1)
@@ -414,7 +474,11 @@ class DefaultController extends SearchController
                 if ( $form->getData()->keep_filters != 1 ) {
                     $session->set($this->getFiltersName(), null);
                 }
-
+                if ($form->getData()->pdf_filters == 1) {
+                    $session->set('pdf_filters', true);
+                } else {
+                    $session->set('pdf_filters', false);
+                }
                 $route = 'bach_archives';
                 if ( $this->search_form !== null ) {
                     $url_vars['form_name'] = $this->search_form;
@@ -991,15 +1055,16 @@ class DefaultController extends SearchController
         $query = $client->createSelect();
         $query->setQuery('dao:' . $qry_string);
         $query->setFields(
-            'headerId, fragmentid, parents, archDescUnitTitle, cUnittitle'
+            'headerId, fragmentid, parents, archDescUnitTitle, cUnittitle, cUnitid, cLegalstatus, cRepository'
         );
         $query->setStart(0)->setRows(1);
 
         $rs = $client->select($query);
         $docs = $rs->getDocuments();
         $parents_docs = null;
-        $response = null;
 
+        $response = array();
+        $response_mat = array();
         if ( count($docs) > 0 ) {
             $doc = $docs[0];
             $parents = explode('/', $doc['parents']);
@@ -1018,6 +1083,7 @@ class DefaultController extends SearchController
                 $parents_docs = $rs->getDocuments();
             }
 
+            $response['ead'] = array();
             //link to main document
             $doc_url = $this->get('router')->generate(
                 'bach_ead_html',
@@ -1025,7 +1091,10 @@ class DefaultController extends SearchController
                     'docid' => $doc['headerId']
                 )
             );
-            $response = '<a href="' . $doc_url . '">' .
+            $response['ead']['unitid'] = $docs[0]['cUnitid'];
+            $response['ead']['cUnittitle'] = $docs[0]['cUnittitle'];
+            $response['ead']['cLegalstatus'] = $docs[0]['cLegalstatus'];
+            $response['ead']['link'] = '<a href="' . $doc_url . '">' .
                 $doc['archDescUnitTitle'] . '</a>';
 
             //links to parents
@@ -1036,7 +1105,7 @@ class DefaultController extends SearchController
                         'docid' => $pdoc['fragmentid']
                     )
                 );
-                $response .= ' » <a href="' . $doc_url . '">' .
+                $response['ead']['link'] .= ' » <a href="' . $doc_url . '">' .
                     $pdoc['cUnittitle'] . '</a>';
             }
 
@@ -1047,36 +1116,41 @@ class DefaultController extends SearchController
                     'docid' => $doc['fragmentid']
                 )
             );
-            $response .= ' » <a href="' . $doc_url . '">' .
+            $response['ead']['link'] .= ' » <a href="' . $doc_url . '">' .
                 $doc['cUnittitle'] . '</a>';
-        } else {
-            if ( $this->container->getParameter('feature.matricules') ) {
-                //we did not find any restuls in archives, try with matricules.
-                $route = 'remote_matimage_infos';
-                $params = array(
-                    'path'  => $path,
-                    'img'   => $img,
-                    'ext'   => $ext
-                );
-                if ( $path === null ) {
-                    $route = 'remote_matimage_infos_nopath';
-                    unset($params['path']);
-                }
-                if ( $img === null ) {
-                    $route = 'remote_matimage_infos_noimg';
-                    unset($params['img']);
-                    unset($params['ext']);
-                }
-
-                $redirectUrl = $this->get('router')->generate(
-                    $route,
-                    $params
-                );
-                return new RedirectResponse($redirectUrl);
-            }
+            $response['ead']['doclink'] = '<a href="' . $doc_url .'">' .
+                $doc['cUnittitle'] . '</a>';
         }
+        if ( $this->container->getParameter('feature.matricules') ) {
+            //we did not find any restuls in archives, try with matricules.
+            $route = 'remote_matimage_infos';
+            $params = array(
+                'path'  => $path,
+                'img'   => $img,
+                'ext'   => $ext
+            );
+            if ( $path === null ) {
+                $route = 'remote_matimage_infos_nopath';
+                unset($params['path']);
+            }
+            if ( $img === null ) {
+                $route = 'remote_matimage_infos_noimg';
+                unset($params['img']);
+                unset($params['ext']);
+            }
 
-        return new Response($response, 200);
+            $redirectUrl = $this->get('router')->generate(
+                $route,
+                $params
+            );
+            $urlBase = $this->container->get('router')->getContext()->getHost();
+            $response_mat = @file_get_contents('http://'.$urlBase.$redirectUrl);
+            $response_mat = (array)json_decode($response_mat);
+        }
+        $total_response = array_merge($response, $response_mat);
+        $jsonResponse = new JsonResponse();
+        $jsonResponse->setData($total_response);
+        return $jsonResponse;
     }
 
     /**

@@ -42,7 +42,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% set values = []|merge([values]) %}
                 {% endif %}
                 {% for value in values %}
-                        {{ value }}<br />
+                        {{ value | replace({'&amp;': '&'}) }}<br />
                 {% endfor %}
         {% endfor %}
     {% endif %}

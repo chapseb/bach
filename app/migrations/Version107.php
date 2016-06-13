@@ -1,6 +1,6 @@
 <?php
 /**
- * Bach Solarium main decorator
+ * Bach 1.0.7 migration file
  *
  * PHP version 5
  *
@@ -35,74 +35,84 @@
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category Search
+ * @category Migrations
  * @package  Bach
- * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
 
-namespace Bach\HomeBundle\Entity\SolariumQueryDecorator;
+namespace Bach\Migrations;
 
-use Bach\HomeBundle\Entity\SolariumQueryDecoratorAbstract;
+require_once 'BachMigration.php';
+
+use Doctrine\DBAL\Schema\Schema;
+use Bach\HomeBundle\Entity\Comment;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Bach Solarium main decorator
+ * Bach 1.0.7 migration file
  *
- * @category Search
+ * @category Migrations
  * @package  Bach
- * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
-class MainDecorator extends SolariumQueryDecoratorAbstract
+class Version107 extends BachMigration implements ContainerAwareInterface
 {
-    protected $targetField = 'main';
+    private $_container;
 
     /**
-     * Default query fields and boost
+     * Sets container
      *
-     * @return string
-     */
-    protected function getDefaultQueryFields()
-    {
-        if ( $this->getWeight() ) {
-            $requestWeight = '';
-            foreach ( $this->getWeight() as $key => $simpleWeight ) {
-                $requestWeight .= $key . '^' . $simpleWeight .' ';
-            }
-            return $requestWeight.'archDescUnitTitle^0.0000000000000000001';
-        } else {
-            return 'descriptors^2 cUnittitle^1 parents_titles^1 fulltext^0.1 cMediaContent^0.1';
-        }
-    }
-
-    /**
-     * Decorate Query
-     *
-     * @param Query  $query Solarium query object to decorate
-     * @param string $data  Query data
+     * @param ContainerInterface $container Container
      *
      * @return void
      */
-    public function decorate(\Solarium\QueryType\Select\Query\Query $query, $data)
+    public function setContainer(ContainerInterface $container = null)
     {
-        if ( $data !== '*:*' ) {
-            $dismax = $query->getDisMax();
-            $dismax->setQueryFields(
-                $this->getQueryFields()
-            );
-        }
-        $query->setQuery($data);
+        $this->_container = $container;
     }
 
     /**
-     * Highlithed fields
+     * Ups database schema
      *
-     * @return string
+     * @param Schema $schema Database schema
+     *
+     * @return void
      */
-    public function getHlFields()
+    public function up(Schema $schema)
     {
-        return 'cUnittitle,parents_titles,subject_w_expanded,cSubject,cGeogname';
+        $this->checkDbPlatform();
+
+        $table = $schema->getTable('ead_file_format');
+        $table->addColumn(
+            'cUnitidbegin',
+            'integer',
+            array('notnull' => false, 'length' => 11)
+        );
+        $table->addColumn(
+            'cUnitidend',
+            'integer',
+            array('notnull' => false, 'length' => 11)
+        );
+    }
+
+    /**
+     * Downs database schema
+     *
+     * @param Schema $schema Database Schema
+     *
+     * @return void
+     */
+    public function down(Schema $schema)
+    {
+        $this->checkDbPlatform();
+
+        $table = $schema->getTable('ead_file_format');
+        $table->dropColumn('cUnitidbegin');
+        $table->dropColumn('cUnitidend');
     }
 }

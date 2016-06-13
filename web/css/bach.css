@@ -378,6 +378,16 @@ p {
     margin-bottom: .3em;
 }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}
+
 /**
  * ===== Search form =====
  */
@@ -440,6 +450,10 @@ p {
 
 .range_date input[type=submit] {
     margin-top: .5em;
+}
+
+.interv_unitid {
+    width: 2.5em;
 }
 
 /**
@@ -955,25 +969,26 @@ h2.back a:hover {
     font-size: 1.4em !important;
     line-height: 1.4em;
     font-weight: bold;
-    overflow: auto;
+    overflow: visible;
 }
 
 [id=inventory_contents] h4, [id=inventory_contents] h4.ui-accordion-header {
     font-size: 1.2em !important;
     line-height: 1.2em;
     font-weight: bold;
-    overflow: auto;
+    overflow: visible;
 }
 
 [id=inventory_contents] h5, [id=inventory_contents] h5.ui-accordion-header {
     font-size: 1em !important;
     line-height: 1em;
     font-weight: bold;
-    overflow: auto;
+    overflow: visible;
 }
 
 [id=inventory_contents].ui-accordion .ui-accordion-content {
     padding: .5em;
+    overflow: visible;
 }
 
 [id=inventory_contents] table {
@@ -1971,6 +1986,19 @@ video[poster] {
     display: inline-block;
     margin-left: 5px;
     vertical-align: text-bottom;
+}
+
+.cMedia {
+    background-image: url(../img/glyphicons-halflings.png);
+    background-position: -96px -115px;
+    background-repeat: no-repeat;
+    height: 14px;
+    line-height: 14px;
+    margin-left: 5px;
+    width: 14px;
+    padding-bottom: 0;
+    padding-left: 0.6em;
+    padding-right: 0.6em;
 }
 
 #change_view > .printLink {

@@ -1112,6 +1112,16 @@ class SolrCoreAdmin
             $newEntity->appendChild($newField);
 
             $newField = $doc->createElement('field');
+            $newField->setAttribute('column', 'cUnitidbegin');
+            $newField->setAttribute('name', 'cUnitidbegin');
+            $newEntity->appendChild($newField);
+
+            $newField = $doc->createElement('field');
+            $newField->setAttribute('column', 'cUnitidend');
+            $newField->setAttribute('name', 'cUnitidend');
+            $newEntity->appendChild($newField);
+
+            $newField = $doc->createElement('field');
             $newField->setAttribute('column', 'cUnittitle');
             $newField->setAttribute('name', 'archDescUnitTitle');
             $newEntity->appendChild($newField);
@@ -1142,8 +1152,13 @@ class SolrCoreAdmin
             $newField = $doc->createElement('field');
             $newField->setAttribute('column', 'href');
             $newField->setAttribute('name', 'dao');
-
             $newEntity->appendChild($newField);
+
+            $newField = $doc->createElement('field');
+            $newField->setAttribute('column', 'cMediaContent');
+            $newField->setAttribute('name', 'cMediaContent');
+            $newEntity->appendChild($newField);
+
             $elt->appendChild($newEntity);
         }
 

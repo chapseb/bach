@@ -1051,21 +1051,23 @@ class DefaultController extends SearchController
             $qry_string = $path . '/' . $qry_string;
         }
 
-        $client = $this->get($this->entryPoint());
-        $query = $client->createSelect();
-        $query->setQuery('dao:' . $qry_string);
-        $query->setFields(
-            'headerId, fragmentid, parents, archDescUnitTitle, cUnittitle, cUnitid, cLegalstatus, cRepository'
-        );
-        $query->setStart(0)->setRows(1);
+        if ($this->container->getParameter('feature.archives')) {
+            $client = $this->get($this->entryPoint());
+            $query = $client->createSelect();
+            $query->setQuery('dao:' . $qry_string);
+            $query->setFields(
+                'headerId, fragmentid, parents, archDescUnitTitle, cUnittitle, cUnitid, cLegalstatus, cRepository'
+            );
+            $query->setStart(0)->setRows(1);
 
-        $rs = $client->select($query);
-        $docs = $rs->getDocuments();
-        $parents_docs = null;
+            $rs = $client->select($query);
+            $docs = $rs->getDocuments();
+            $parents_docs = null;
+        }
 
         $response = array();
         $response_mat = array();
-        if ( count($docs) > 0 ) {
+        if ($this->container->getParameter('feature.archives') && count($docs) > 0 ) {
             $doc = $docs[0];
             $parents = explode('/', $doc['parents']);
             if ( count($parents) > 0 ) {

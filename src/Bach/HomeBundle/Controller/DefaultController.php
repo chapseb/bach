@@ -1302,6 +1302,7 @@ class DefaultController extends SearchController
         }
 
         $factory = $this->get($this->factoryName());
+        $factory->setGeolocFields($this->getGeolocFields());
 
         // On effectue une recherche
         $form = $this->createForm(

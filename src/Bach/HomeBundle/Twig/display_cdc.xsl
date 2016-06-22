@@ -130,12 +130,12 @@ POSSIBILITY OF SUCH DAMAGE.
             </span>
         </xsl:if>
 
-        <xsl:if test="../unitid">
+        <!--<xsl:if test="../unitid">
             <xsl:text> - </xsl:text>
             <span class="unitid" property="dc:identifier">
                 <xsl:value-of select="../unitid"/>
             </span>
-        </xsl:if>
+        </xsl:if>-->
     </xsl:template>
 
     <xsl:template match="unittitle/unitdate">

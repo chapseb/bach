@@ -842,15 +842,19 @@ abstract class SearchController extends Controller
             $docsMat = array();
         }
 
+        $arraytpl = array(
+            'documents'     => $docs,
+            'documentsMat'  => $docsMat,
+            'typeDocuments' => $typeDocuments,
+            'resultAction'  => $resultAction
+        );
+        if (isset($_COOKIE[$this->getCookieName()]) ) {
+            $arraytpl['cookie_param'] = true;
+        }
 
         return $this->render(
             'BachHomeBundle:Default:listbracket.html.twig',
-            array(
-                'documents'     => $docs,
-                'documentsMat'  => $docsMat,
-                'typeDocuments' => $typeDocuments,
-                'resultAction'  => $resultAction
-            )
+            $arraytpl
         );
     }
 

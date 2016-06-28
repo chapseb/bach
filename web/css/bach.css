@@ -2042,6 +2042,11 @@ video[poster] {
     display: inline-block;
 }
 
+#formBasketDeleteAll {
+    padding-top: 1em;
+    padding-left: 0.5em;
+}
+
 .cMedia {
     background-image: url(../img/glyphicons-halflings.png);
     background-position: -96px -115px;

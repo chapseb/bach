@@ -51,6 +51,7 @@ POSSIBILITY OF SUCH DAMAGE.
                 {{ socialButtons() }}
             </div>
         {% endif %}
+            <a class="addBasket" title="{{ _('Add to basket')}}" href="{{ path('basket_add_mat',{'docid': docid})}}">{{ _('Add to basket')}}</a>
             </h2>
         </header>
         {% if features.social and features.comments and (print is not defined or print != true) %}<div id="social">
@@ -239,6 +240,24 @@ POSSIBILITY OF SUCH DAMAGE.
                 load: function(event, ui){
                     $('#loading').remove();
                 }
+            });
+
+            $('.addBasket').click(function(event){
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                $.ajax({
+                    url: $(this).attr('href'),
+                    success: function(data) {
+                        if (data.addFlag == true) {
+                            alert("{{ _('This document has been added to your basket') }}");
+                        }
+                        else {
+                            alert("{{  _('This document already exists in your basket') }}");
+                        }
+                    }
+                });
+                $(this).blur();
+                return false;
             });
         });
     </script>

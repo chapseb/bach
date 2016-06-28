@@ -194,6 +194,7 @@ POSSIBILITY OF SUCH DAMAGE.
                                 <i class="link_viewer" title="{{ _('Scan')}}"></i>
                             </a>
                         {% endif %}
+                        <a class="addBasket" title="{{ _('Add to basket')}}" href="{{ path('basket_add_mat',{'docid': document.id})}}">{{ _('Add to basket')}}
                     </td>
                     {% if 'matricule' in matricules_searchparameters %}
                         <td>
@@ -324,6 +325,26 @@ POSSIBILITY OF SUCH DAMAGE.
             }
         });
 
+        return false;
+    });
+
+    $('.addBasket').click(function(event){
+        event.stopImmediatePropagation();
+        event.preventDefault();
+
+        $.ajax({
+            url: $(this).attr('href'),
+            success: function(data) {
+                if (data.addFlag == true) {
+                    alert("{{ _('This document has been added to your basket') }}");
+                }
+                else {
+                    alert("{{  _('This document already exists in your basket') }}");
+                }
+            }
+        });
+
+        $(this).blur();
         return false;
     });
 {% endblock %}

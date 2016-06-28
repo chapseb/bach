@@ -323,3 +323,51 @@ print_matdoc:
     defaults: {_controller: BachHomeBundle:Matricules:printPdfMatdoc}
     requirements:
         _method: GET
+
+basket_add:
+    pattern: /basketAdd/{docid}
+    defaults: { _controller: BachHomeBundle:Default:basketAdd}
+    requirements:
+        _method: GET
+
+basket_add_mat:
+    pattern: /basketAddMat/{docid}
+    defaults: { _controller: BachHomeBundle:Matricules:basketAdd}
+    requirements:
+        _method: GET
+
+bach_display_list_basket:
+    pattern: /basketList
+    defaults: { _controller: BachHomeBundle:Default:basketList}
+    requirements:
+        _method: GET
+
+basket_delete:
+    pattern: /basketDelete
+    defaults: { _controller: BachHomeBundle:Default:basketDelete}
+    requirements:
+        _method: POST
+
+basket_delete_mat:
+    pattern: /basketDeleteMat
+    defaults: { _controller: BachHomeBundle:Matricules:basketDelete}
+    requirements:
+        _method: POST
+
+basket_delete_all:
+    pattern: /basketDeleteAll
+    defaults: { _controller: BachHomeBundle:Default:basketDeleteAll}
+    requirements:
+        _method: POST
+
+basket_delete_all_mat:
+    pattern: /basketDeleteAllMat
+    defaults: { _controller: BachHomeBundle:Matricules:basketDeleteAllMat}
+    requirements:
+        _method: POST
+
+basket_delete_all_ead:
+    pattern: /basketDeleteAllEad
+    defaults: { _controller: BachHomeBundle:Default:basketDeleteAllEad}
+    requirements:
+        _method: POST

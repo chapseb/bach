@@ -1988,6 +1988,60 @@ video[poster] {
     vertical-align: text-bottom;
 }
 
+.addBasket {
+    background-image: url(../img/basket.png);
+    background-size: 18px 18px;
+    text-indent: -9999px;
+    height: 18px;
+    width: 18px;
+    display: inline-block;
+    margin-left: 5px;
+    vertical-align: text-bottom;
+}
+
+.listBasket {
+    width: 100%;
+}
+
+.listBasket tbody tr:nth-child(even) {
+    background-color: #d1c6c0;
+}
+
+#basketListBtn {
+    position: absolute;
+    top: 2em;
+    right: .5em;
+    font-size: .9em;
+    text-align: right;
+}
+
+.fragmentIdBasket, .fragmentIdMatBasket {
+    display: none;
+}
+
+#manageListBasket, #manageListMatBasket {
+    background-color: #d1c6c0;
+    width: 100% !important;
+}
+
+.listBasket tbody tr:nth-child(2n+1) {
+    background-color: #e4dfdb;
+}
+
+#resultAction {
+    background-color: #dff0d8;
+    border-bottom-color: #d6e9c6;
+    border-left-color: #d6e9c6;
+    border-right-color: #d6e9c6;
+    border-top-color: #d6e9c6;
+    color: #468847;
+    padding: 10px 5px;
+}
+
+.formBasket {
+    display: inline-block;
+}
+
 .cMedia {
     background-image: url(../img/glyphicons-halflings.png);
     background-position: -96px -115px;

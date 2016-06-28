@@ -1,0 +1,229 @@
+{#
+Copyright (c) 2014, Anaphore
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    (1) Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+    (2) Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the
+    distribution.
+
+    (3)The name of the author may not be used to
+   endorse or promote products derived from this software without
+   specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+#}
+
+{% extends '::base.html.twig' %}
+
+{% block css %}
+    {{ parent() }}
+    <link href="{{ asset('css/datatable/datatables.min.css') }}" type="text/css" rel="stylesheet" media="screen" />
+    <link href="{{ asset('css/datatable/select.dataTables.min.css') }}" type="text/css" rel="stylesheet" media="screen" />
+{% endblock %}
+
+{% block js_calls %}
+    {{ parent() }}
+    <script src="{{ asset('js/datatable/datatables.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/datatable/dataTables.select.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/jquery-ui/jquery.ui.tabs.min.js') }}" type="text/javascript"></script>
+    <script src="{{ path('dynamic_js', {name: 'tabs'}) }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block title_extend %} - {{ _('Basket')}} {% endblock %}
+
+{% block container %}
+
+<h2>{{ _('Basket') }}</h2>
+{% if resultAction is defined and resultAction is not empty %}
+    <div id="resultAction">{{resultAction}}</div>
+{% endif %}
+{% if (documents is not defined or documents is empty) and (documentsMat is not defined or documentsMat is empty) %}
+{{ _('Your basket is empty.') }}
+{% else %}
+<div id="allBasket">
+    <ul>
+        {% if typeDocuments['ead'] == true %}<li><a href="#ead">{{ _('Documents') }}</a></li>{% endif%}
+        {% if typeDocuments['matricules'] == true %}<li><a href="#matricules">{{ _('Matricules') }}</a></li>{% endif %}
+    </ul>
+
+{% if typeDocuments['ead'] == true %}
+    <div id="ead">
+        <table class="listBasket" id="manageListBasket">
+            <thead>
+                <tr>
+                    <th>{{ _('Title') }}</th>
+                    <th>{{ _('Cote') }}</th>
+                    <th>{{ _('Dates periods') }}</th>
+                    <th class="fragmentIdBasket"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for document in documents %}
+                <tr>
+                    <td><a href="{{ path('bach_display_document', {docid: document['fragmentid']}) }}" class="display_doc" target="_blank">{{ document['cUnittitle'] }}</a></td>
+                    <td>{{ document['cUnitid']}}</td>
+                    <td>{{document['date']}}</td>
+                    <td class="fragmentIdBasket">{{document['fragmentid']}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if not documents is empty %}
+        <form action="{{ path('basket_delete') }}" method="POST" class="formBasket">
+            <input type="submit" id="deleteFilesAction" value="{{ _('Delete those documents') }}"/>
+            <input type="hidden" id="deleteFiles" name="deleteFiles">
+        </form>
+        <form action="{{ path('basket_delete_all_ead') }}" method="POST" class="formBasket">
+            <input type="submit" id="deleteFilesEadAll" value="{{ _('Delete all documents') }}"/>
+        </form>
+        {% endif %}
+    </div>
+{% endif %}
+
+{% if typeDocuments['matricules'] == true %}
+    <div id="matricules">
+        <table class="listBasket" id="manageListMatBasket">
+            <thead>
+                <tr>
+                    <th>{{ _('Nom') }}</th>
+                    <th>{{ _('Prenoms') }}</th>
+                    <th>{{ _('Cote') }}</th>
+                    <th class="fragmentIdMatBasket"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for document in documentsMat%}
+                <tr>
+                    <td><a href="{{ path('bach_display_matricules', {docid: document['id']}) }}" class="display_doc" target="_blank">{{ document['nom']}}</a></td>
+                    <td>{{ document['prenoms']}}</td>
+                    <td>{{ document['cote']}}</td>
+                    <td class="fragmentIdMatBasket">{{ document['id']}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if not documentsMat is empty %}
+        <form action="{{ path('basket_delete_mat') }}" method="POST" class="formBasket">
+            <input type="submit" id="deleteFilesMatAction" value="{{ _('Delete those matricules') }}" />
+            <input type="hidden" id="deleteFilesMat" name="deleteFilesMat"/>
+        </form>
+        <form action="{{ path('basket_delete_all_mat') }}" method="POST" class="formBasket">
+            <input type="submit" id="deleteFilesMatAll" value="{{ _('Delete all matricules') }}" />
+        </form>
+        {% endif %}
+    </div>
+{% endif %}
+    <form action="{{ path('basket_delete_all') }}" method="POST">
+        <input type="submit" id="deleteFilesAll" value="{{ _('Truncate the basket') }}" />
+    </form>
+</div>
+{% endif%}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    $(document).ready(function() {
+        _doTabs("#allBasket");
+
+        var jsonLang = '';
+        {% if lang is defined and lang == 'fr'%}
+            jsonLang = '{{ asset('js/datatable/French.json') }}';
+        {% else %}
+            jsonLang = '{{ asset('js/datatable/English.json') }}';
+        {% endif %}
+        var table = $('#manageListBasket').DataTable( {
+            language: {
+                url: jsonLang
+            },
+            select: {
+                style:    'multi',
+            },
+            order: [[ 0, 'asc' ]]
+        } );
+
+        var table2 = $('#manageListMatBasket').DataTable( {
+            language: {
+                url: jsonLang
+            },
+            select: {
+                style:    'multi',
+            },
+            order: [[ 0, 'asc' ]]
+        } );
+
+
+        var listDeleteFiles = [];
+        $('#manageListBasket tbody').on('click', 'tr', function (){
+            if( $(this).hasClass("selected")) {
+                listDeleteFiles.push($(this).children('td.fragmentIdBasket').text());
+            } else {
+                var valueTD = $(this).children('td.fragmentIdBasket').text();
+                listDeleteFiles = jQuery.grep(listDeleteFiles, function(value) {
+                    return value != valueTD;
+                });
+            }
+        });
+        var listDeleteFilesMat = [];
+        $('#manageListMatBasket tbody').on('click', 'tr', function (){
+            if( $(this).hasClass("selected")) {
+                listDeleteFilesMat.push($(this).children('td.fragmentIdMatBasket').text());
+            } else {
+                var valueTD = $(this).children('td.fragmentIdMatBasket').text();
+                listDeleteFilesMat = jQuery.grep(listDeleteFilesMat, function(value) {
+                    return value != valueTD;
+                });
+            }
+        });
+
+        $("#deleteFilesAction").click(function(event){
+            if ( listDeleteFiles.length == 0) {
+                alert("{{ _('No files selected') }}");
+                return false;
+            } else {
+                var popupDel = confirm("{{ _("Are you sure ?")}}");
+                if (popupDel != true) {
+                    return false;
+                }
+                $("#deleteFiles").val(JSON.stringify(listDeleteFiles));
+            }
+        });
+        $("#deleteFilesMatAction").click(function(event){
+            if ( listDeleteFilesMat.length == 0) {
+                alert("{{ _('No files selected') }}");
+                return false;
+            } else {
+                var popupDel = confirm("{{ _("Are you sure ?")}}");
+                if (popupDel != true) {
+                    return false;
+                }
+               $("#deleteFilesMat").val(JSON.stringify(listDeleteFilesMat));
+            }
+        });
+
+        $("#deleteFilesMatAll, #deleteFilesEadAll, #deleteFilesAll").click(function(){
+            var popupDel = confirm("{{ _("Are you sure ?")}}");
+            if (popupDel != true) {
+                return false;
+            }
+        });
+
+    } );
+{% endblock %}

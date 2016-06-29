@@ -1483,12 +1483,10 @@ class DefaultController extends SearchController
         }
         $docs = $session->set('documents', $basketArray);
 
+        $session->set('resultAction', _('Documents have sucessfully been removed.'));
         return $this->redirect(
             $this->generateUrl(
-                'bach_display_list_basket',
-                array(
-                    'resultAction' => _('Documents have successfully been removed.')
-                )
+                'bach_display_list_basket'
             )
         );
     }
@@ -1506,17 +1504,10 @@ class DefaultController extends SearchController
         unset($basketArray['ead']);
         $docs = $session->set('documents', $basketArray);
 
-        if (isset($session->get('documents')['ead'])) {
-            $deleteFlag = false;
-        } else {
-            $deleteFlag = true;
-        }
+        $session->set('resultAction', _('Documents have sucessfully been removed.'));
         return $this->redirect(
             $this->generateUrl(
-                'bach_display_list_basket',
-                array(
-                    'resultAction' => _('Documents have successfully been removed.')
-                )
+                'bach_display_list_basket'
             )
         );
     }

@@ -811,7 +811,8 @@ abstract class SearchController extends Controller
             'feature.matricules'
         );
 
-        $resultAction = $this->getRequest()->get('resultAction');
+        $resultAction = $this->getRequest()->getSession()->get('resultAction');
+        $this->getRequest()->getSession()->remove('resultAction');
         $session = $this->getRequest()->getSession();
         if ($typeDocuments['ead']
             && isset($session->get('documents')['ead'])
@@ -873,12 +874,10 @@ abstract class SearchController extends Controller
             $deleteFlag = true;
         }
 
+        $resultAction = $this->getRequest()->getSession()->get('resultAction');
         return $this->redirect(
             $this->generateUrl(
-                'bach_display_list_basket',
-                array(
-                    'resultAction' => _('All files have successfully been removed.')
-                )
+                'bach_display_list_basket'
             )
         );
     }

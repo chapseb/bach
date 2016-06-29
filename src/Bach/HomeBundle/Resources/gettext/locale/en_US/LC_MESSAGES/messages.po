@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Bach\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-29 08:54+0200\n"
-"PO-Revision-Date: 2016-06-29 08:57+0200\n"
+"POT-Creation-Date: 2016-06-29 16:27+0200\n"
+"PO-Revision-Date: 2016-06-29 16:27+0200\n"
 "Last-Translator: Sebastien Chaptal <sebastien.chaptal@anaphore.eu>\n"
 "Language-Team: French\n"
 "Language: en_US\n"
@@ -168,10 +168,10 @@ msgstr "Thumbnails"
 msgid "View search results as thumbnails"
 msgstr "View search results as thumbnails"
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1490
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1518
-msgid "Documents have successfully been removed."
-msgstr "Documents have successfully been removed."
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1486
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1507
+msgid "Ead have successfully been removed."
+msgstr "Ead have successfully been removed."
 
 #: src/Bach/HomeBundle/Controller/MatriculesController.php:494
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8159
@@ -209,9 +209,9 @@ msgstr "Year of birth"
 msgid "View search results as a list"
 msgstr "View search results as a list"
 
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:998
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:1027
-msgid "Records have successfully been removed."
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:994
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1015
+msgid "Matricules have successfully been removed."
 msgstr "Records have successfully been removed."
 
 #: src/Bach/HomeBundle/Controller/CommentAdminController.php:95
@@ -262,9 +262,9 @@ msgstr "End birth date"
 msgid "Document"
 msgstr "Document"
 
-#: src/Bach/HomeBundle/Controller/SearchController.php:880
-msgid "All files have successfully been removed."
-msgstr "All files have successfully been removed."
+#: src/Bach/HomeBundle/Controller/SearchController.php:877
+msgid "Documents have sucessfully been removed."
+msgstr "Documents have successfully been removed."
 
 #: src/Bach/HomeBundle/Controller/FilesController.php:79
 msgid "Videos path is not defined!"

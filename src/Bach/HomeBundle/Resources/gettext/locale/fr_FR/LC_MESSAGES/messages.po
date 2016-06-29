@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Bach\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-29 08:58+0200\n"
-"PO-Revision-Date: 2016-06-29 09:09+0200\n"
+"POT-Creation-Date: 2016-06-29 16:26+0200\n"
+"PO-Revision-Date: 2016-06-29 16:26+0200\n"
 "Last-Translator: Sebastien Chaptal <sebastien.chaptal@anaphore.eu>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -168,9 +168,9 @@ msgstr "Miniatures"
 msgid "View search results as thumbnails"
 msgstr "Voir les résultats de recherche en miniatures"
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1490
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1518
-msgid "Documents have successfully been removed."
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1486
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1507
+msgid "Ead have successfully been removed."
 msgstr "Les ead ont bien été supprimés."
 
 #: src/Bach/HomeBundle/Controller/MatriculesController.php:494
@@ -209,9 +209,9 @@ msgstr "Année de naissance"
 msgid "View search results as a list"
 msgstr "Voir les résultats de recherche en liste"
 
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:998
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:1027
-msgid "Records have successfully been removed."
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:994
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1015
+msgid "Matricules have successfully been removed."
 msgstr "Les matricules ont bien été supprimés."
 
 #: src/Bach/HomeBundle/Controller/CommentAdminController.php:95
@@ -262,9 +262,9 @@ msgstr "Année de naissance : fin"
 msgid "Document"
 msgstr "Document"
 
-#: src/Bach/HomeBundle/Controller/SearchController.php:880
-msgid "All files have successfully been removed."
-msgstr "Tous les documents ont bien été supprimés."
+#: src/Bach/HomeBundle/Controller/SearchController.php:877
+msgid "Documents have sucessfully been removed."
+msgstr "Les documents ont bien été supprimés."
 
 #: src/Bach/HomeBundle/Controller/FilesController.php:79
 msgid "Videos path is not defined!"

@@ -19,5 +19,12 @@
     "oAria": {
         "sSortAscending":  ": activate to sort column ascending",
         "sSortDescending": ": activate to sort column descending"
+    },
+    "select": {
+        "rows": {
+            "_": "You have selected %d rows",
+            "0": "Click a row to select",
+            "1": "1 row selected"
+        }
     }
 }

@@ -18,5 +18,12 @@
     "oAria": {
         "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
         "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+    },
+    "select": {
+        "rows": {
+            "_": "Vous avez sélectionné %d documents",
+            "0": "Cliquez sur une ligne pour selectionner",
+            "1": "Vous avez sélectionné %d document"
+        }
     }
 }

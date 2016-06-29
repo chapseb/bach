@@ -1483,7 +1483,7 @@ class DefaultController extends SearchController
         }
         $docs = $session->set('documents', $basketArray);
 
-        $session->set('resultAction', _('Documents have sucessfully been removed.'));
+        $session->set('resultAction', _('Ead have successfully been removed.'));
         return $this->redirect(
             $this->generateUrl(
                 'bach_display_list_basket'
@@ -1504,7 +1504,7 @@ class DefaultController extends SearchController
         unset($basketArray['ead']);
         $docs = $session->set('documents', $basketArray);
 
-        $session->set('resultAction', _('Documents have sucessfully been removed.'));
+        $session->set('resultAction', _('Ead have successfully been removed.'));
         return $this->redirect(
             $this->generateUrl(
                 'bach_display_list_basket'

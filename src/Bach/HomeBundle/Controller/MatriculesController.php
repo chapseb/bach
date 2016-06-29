@@ -991,7 +991,7 @@ class MatriculesController extends SearchController
         }
         $docs = $session->set('documents', $basketArray);
 
-        $session->set('resultAction', _('Documents have sucessfully been removed.'));
+        $session->set('resultAction', _('Matricules have successfully been removed.'));
         return $this->redirect(
             $this->generateUrl(
                 'bach_display_list_basket'
@@ -1012,7 +1012,7 @@ class MatriculesController extends SearchController
         unset($basketArray['matricules']);
         $docs = $session->set('documents', $basketArray);
 
-        $session->set('resultAction', _('Documents have sucessfully been removed.'));
+        $session->set('resultAction', _('Matricules have successfully been removed.'));
         return $this->redirect(
             $this->generateUrl(
                 'bach_display_list_basket'

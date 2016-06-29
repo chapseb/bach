@@ -874,6 +874,7 @@ abstract class SearchController extends Controller
             $deleteFlag = true;
         }
 
+        $session->set('resultAction', _('Documents have sucessfully been removed.'));
         $resultAction = $this->getRequest()->getSession()->get('resultAction');
         return $this->redirect(
             $this->generateUrl(

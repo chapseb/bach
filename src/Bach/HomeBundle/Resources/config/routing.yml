@@ -381,3 +381,22 @@ basket_export:
 basket_import:
     pattern: /basketImport
     defaults: { _controller: BachHomeBundle:Default:basketImport }
+        _method: GET
+        
+bach_display_searchhisto:
+    pattern: /searchhistoList
+    defaults: { _controller: BachHomeBundle:Default:searchhistoList}
+    requirements:
+        _method: GET
+        
+searchhisto_add:
+    pattern: /searchhistoAdd
+    defaults: { _controller: BachHomeBundle:Default:searchhistoAdd}
+    requirements:
+        _method: GET
+
+searchhisto_deleteone:
+    pattern: /searchhistoDeleteone/{timedelete}
+    defaults: { _controller: BachHomeBundle:Default:searchHistoDeleteOne}
+    requirements:
+        _method: POST

@@ -939,4 +939,60 @@ abstract class SearchController extends Controller
             )
         );
     }
+    
+    /**
+     *  Search historic list action
+     *
+     * @return void
+     */
+    public function searchhistoListAction()
+    {
+        $typeDocuments = array();
+        $typeDocuments['ead'] = $this->container->getParameter(
+            'feature.archives'
+        );
+        $typeDocuments['matricules'] = $this->container->getParameter(
+            'feature.matricules'
+        );
+
+        $resultAction = $this->getRequest()->getSession()->get('resultSearchAction');
+        $this->getRequest()->getSession()->remove('resultSearchAction');
+
+        $session = $this->getRequest()->getSession();
+        if ($typeDocuments['ead']
+            && isset($session->get('histosave')['ead'])
+            && !empty($session->get('histosave')['ead'])
+        ) {
+            $searchEad = $session->get('histosave')['ead'];
+        } else {
+            $searchEad = array();
+        }
+
+        if ($typeDocuments['matricules']
+            && isset($session->get('histosave')['matricules'])
+            && !empty($session->get('histosave')['matricules'])
+        ) {
+            $searchMat = $session->get('histosave')['matricules'];
+        } else {
+            $searchMat = array();
+        }
+
+        $arraytpl = array(
+            'searchEad'         => $searchEad,
+            'searchMatricules'  => $searchMat,
+            'typeDocuments'     => $typeDocuments,
+            'resultAction'      => $resultAction,
+            'facet_names'       => $session->get('allFacetsName'),
+            'ead_dates'         => $session->get('histosaveDate')
+        );
+        if (isset($_COOKIE[$this->getCookieName()])) {
+            $arraytpl['cookie_param'] = true;
+        }
+
+        return $this->render(
+            'BachHomeBundle:Default:listsearch.html.twig',
+            $arraytpl
+        );
+    }
+
 }

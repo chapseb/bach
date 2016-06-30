@@ -21,9 +21,9 @@
     },
     "select": {
         "rows": {
-            "_": "Vous avez sélectionné %d documents",
+            "_": "Vous avez sélectionné %d lignes",
             "0": "Cliquez sur une ligne pour selectionner",
-            "1": "Vous avez sélectionné %d document"
+            "1": "Vous avez sélectionné %d ligne"
         }
     }
 }

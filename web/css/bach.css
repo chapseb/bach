@@ -2015,7 +2015,16 @@ video[poster] {
     text-align: right;
 }
 
-.fragmentIdBasket, .fragmentIdMatBasket {
+#searchhistoListBtn {
+    position: absolute;
+    top: 3em;
+    right: .5em;
+    font-size: .9em;
+    text-align: right;
+}
+
+.fragmentidbasket, .fragmentidmatbasket,
+.dateidsearchhisto, .dateidmatsearchhisto{
     display: none;
 }
 

@@ -331,6 +331,7 @@ class DefaultController extends SearchController
             );
 
         $all_facets = $tpl_vars['facet_names'];
+        $session->set('allFacetsName', $all_facets);
         foreach ( $all_facets_table as $field ) {
             if ( !isset($all_facets_table[$field->getSolrFieldName()]) ) {
                 $all_facets[$field->getSolrFieldName()]
@@ -356,6 +357,7 @@ class DefaultController extends SearchController
             $resultCount = $searchResults->getNumFound();
 
             $session->set('highlight', $hlSearchResults);
+            $session->set('query_orig', $query_terms);
             $query_session = str_replace("AND", " ", $query_terms);
             $query_session = str_replace("OR", " ", $query_session);
             $query_session = str_replace("NOT", " ", $query_session);
@@ -412,6 +414,9 @@ class DefaultController extends SearchController
         $tpl_vars['disable_select_daterange']
             = $this->container->getParameter('display.disable_select_daterange');
         $tpl_vars['current_date'] = 'cDateBegin';
+
+        $this->searchhistoAddAction($searchResults->getNumFound(), $all_facets);
+
         return $this->render(
             'BachHomeBundle:Default:index.html.twig',
             $tpl_vars
@@ -1426,7 +1431,6 @@ class DefaultController extends SearchController
             }
             $tpl_vars['resultEnd'] = $resultEnd;
         }
-
         $tpl_vars['form'] = $form->createView();
 
         $tpl_vars['view'] = $view_params->getView();
@@ -1512,4 +1516,90 @@ class DefaultController extends SearchController
         );
     }
 
+    /**
+     *  Search historic add action
+     *
+     * @return void
+     */
+    public function searchhistoAddAction($nbResults = null)
+    {
+        $time = time();
+        $session = $this->getRequest()->getSession();
+
+        $query = $session->get('query_orig');
+        $filters = $session->get($this->getFiltersName());
+
+        $histoArray = $session->get('histosave');
+        if ($histoArray == null) {
+            $histoArray = array();
+        }
+        if (!isset($histoArray['ead'])) {
+            $histoArray['ead'] = array();
+        }
+        $filtersClone = unserialize(serialize($filters));
+        $arraySave = array(
+            'query'     => $query,
+            'filters'   => $filtersClone,
+            'nbResults' => $nbResults
+        );
+
+        if ($query != null
+            && $filters != null
+            && !in_array($arraySave, $histoArray['ead'])
+        ) {
+            $histoArray['ead'][$time] = $arraySave;
+            $session->set('histosave', $histoArray);
+            $AddFlag = true;
+        } else {
+            $AddFlag = false;
+        }
+
+        /*$basketArray = $session->get('documents');
+        if ($basketArray == null) {
+            $basketArray = array();
+        }
+        if (!isset($basketArray['ead'])) {
+            $basketArray['ead'] = array();
+        }
+        if (!in_array($docid, $basketArray['ead'])) {
+            array_push($basketArray['ead'], $docid);
+            $session->set('documents', $basketArray);
+            $AddFlag = true;
+        } else {
+            $AddFlag = false;
+        }
+        return new JsonResponse(
+            array(
+                'addFlag' => $AddFlag
+            )
+        );*/
+    }
+
+    /**
+     * Delete one search historic action
+     *
+     * @param string $timedelete Search time to delete
+     *
+     * @return JsonResponse
+     */
+    public function searchHistoDeleteOneAction($timedelete)
+    {
+        $session = $this->getRequest()->getSession();
+        $searchhistoArray = $session->get('histosave');
+
+        if (isset($session->get('histosave')['ead'][$timedelete])) {
+            unset($searchhistoArray['ead'][$timedelete]);
+        }
+        $session->set('histosave', $searchhistoArray);
+        if (isset($session->get('histosave')['ead'][$timedelete])) {
+            $deleteFlag = false;
+        } else {
+            $deleteFlag = true;
+        }
+        return new JsonResponse(
+            array(
+                'deleteFlag' => $deleteFlag
+            )
+        );
+    }
 }

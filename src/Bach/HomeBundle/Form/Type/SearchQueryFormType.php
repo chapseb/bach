@@ -114,7 +114,7 @@ class SearchQueryFormType extends AbstractType
             'pdf_filters',
             'checkbox',
             array(
-                'data'      => $this->_pdf,
+                'data'      => true,
                 'label'     => _('Search in pdf'),
                 'required'  => false
             )

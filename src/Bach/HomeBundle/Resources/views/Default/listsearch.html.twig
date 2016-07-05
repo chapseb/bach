@@ -52,8 +52,8 @@ POSSIBILITY OF SUCH DAMAGE.
 {% block container %}
 
 <h2>{{ _('Search historic') }}</h2>
-{% if resultSearchAction is defined and resultSearchAction is not empty %}
-    <div id="resultAction">{{ resultSearchAction }}</div>
+{% if resultAction is defined and resultAction is not empty %}
+    <div id="resultAction">{{ resultAction }}</div>
 {% endif %}
 <!-- Votre historique de requêtes est vide -->
 {#% if (documents is not defined or documents is empty) and (documentsMat is not defined or documentsMat is empty) %#}
@@ -96,13 +96,22 @@ POSSIBILITY OF SUCH DAMAGE.
                     <td>{{search['nbResults']}}</td>
                     <td>
                         <input type="submit" class="deleteSearchInput" id="deleteSearch{{loop.index0}}" value="{{ _('Delete') }}" />
-                        <input type="submit" class="executeSearchInput" id="executeSearch{{loop.index0}}" value="{{ _('Execute') }}" />
+                        <form action="{{ path('searchhisto_execute', {'query_terms': search['query'], 'filtersListSearchhisto': search['filters'] })}}" method="post"><input type="submit" class="executeSearchInput" id="executeSearch{{loop.index0}}" value="{{ _('Execute') }}" /></form>
                     </td>
                     <td class="dateidsearchhisto">{{date}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+    {% if not typeDocuments['ead'] is empty %}
+        <form action="{{ path('search_histo_delete') }}" method="POST" class="formSearch">
+            <input type="submit" id="deleteSearchAction" value="{{ _('Delete those ead searches') }}"/>
+            <input type="hidden" id="deleteSearch" name="deleteSearch">
+        </form>
+        <form action="{{ path('search_histo_delete_all_ead') }}" method="POST" class="formBasket">
+            <input type="submit" id="deleteSearchEadAll" value="{{ _('Delete all ead search') }}"/>
+        </form>
+    {% endif %}
     </div>
     {% endif %}
 
@@ -159,13 +168,13 @@ POSSIBILITY OF SUCH DAMAGE.
         } );
 
 
-        var listDeleteFiles = [];
+        var listDeleteSearch = [];
         $('#manageListSearch tbody').on('click', 'tr', function (){
             if( $(this).hasClass("selected")) {
-                listDeleteFiles.push($(this).children('td.fragmentIdBasket').text());
+                listDeleteSearch.push($(this).children('td.dateidsearchhisto').text());
             } else {
-                var valueTD = $(this).children('td.fragmentIdBasket').text();
-                listDeleteFiles = jQuery.grep(listDeleteFiles, function(value) {
+                var valueTD = $(this).children('td.dateidsearchhisto').text();
+                listDeleteSearch = jQuery.grep(listDeleteSearch, function(value) {
                     return value != valueTD;
                 });
             }
@@ -207,8 +216,8 @@ POSSIBILITY OF SUCH DAMAGE.
             return false;
         });
 
-        $("#deleteFilesAction").click(function(event){
-            if ( listDeleteFiles.length == 0) {
+        $("#deleteSearchAction").click(function(event){
+            if ( listDeleteSearch.length == 0) {
                 alert("{{ _('No files selected') }}");
                 return false;
             } else {
@@ -216,7 +225,7 @@ POSSIBILITY OF SUCH DAMAGE.
                 if (popupDel != true) {
                     return false;
                 }
-                $("#deleteFiles").val(JSON.stringify(listDeleteFiles));
+                $("#deleteSearch").val(JSON.stringify(listDeleteSearch));
             }
         });
         $("#deleteFilesMatAction").click(function(event){
@@ -232,7 +241,7 @@ POSSIBILITY OF SUCH DAMAGE.
             }
         });
 
-        $("#deleteFilesMatAll, #deleteFilesEadAll, #deleteFilesAll").click(function(){
+        $("#deleteFilesMatAll, #deleteSearchEadAll, #deleteSearchAll").click(function(){
             var popupDel = confirm("{{ _("Are you sure ?")}}");
             if (popupDel != true) {
                 return false;

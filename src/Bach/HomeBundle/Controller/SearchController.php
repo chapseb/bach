@@ -955,8 +955,8 @@ abstract class SearchController extends Controller
             'feature.matricules'
         );
 
-        $resultAction = $this->getRequest()->getSession()->get('resultSearchAction');
-        $this->getRequest()->getSession()->remove('resultSearchAction');
+        $resultAction = $this->getRequest()->getSession()->get('resultAction');
+        $this->getRequest()->getSession()->remove('resultAction');
 
         $session = $this->getRequest()->getSession();
         if ($typeDocuments['ead']

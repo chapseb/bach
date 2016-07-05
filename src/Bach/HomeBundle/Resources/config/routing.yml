@@ -400,3 +400,15 @@ searchhisto_deleteone:
     defaults: { _controller: BachHomeBundle:Default:searchHistoDeleteOne}
     requirements:
         _method: POST
+
+searchhisto_execute:
+    pattern: /searchhistoexecute
+    defaults: { _controller: BachHomeBundle:Default:searchHistoExecute}
+    requirements:
+        _method: POST
+
+search_histo_delete:
+    pattern: /searchhistoDeleteEad
+    defaults: { _controller: BachHomeBundle:Default:searchHistoDeleteEad}
+    requirements:
+        _method: POST

@@ -1602,4 +1602,65 @@ class DefaultController extends SearchController
             )
         );
     }
+
+    /**
+     * Execute query
+     *
+     * @return void
+     */
+    public function searchHistoExecuteAction()
+    {
+        $request = $this->getRequest();
+        $newFilters = $request->get('filtersListSearchhisto');
+        $query_terms = $request->get('query_terms');
+        $filters = new Filters();
+        if (is_array($newFilters) || is_object($newFilters)) {
+            foreach ( $newFilters as $key => $values) {
+                if (is_array($values)) {
+                    foreach ($values as $value) {
+                        $filters->addFilter($key, $value, true);
+                    }
+                } else {
+                    $filters->addFilter($key, $values, true);
+                }
+            }
+        }
+
+        $request->getSession()->set($this->getFiltersName(), $filters);
+
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_archives',
+                array(
+                    'query_terms' => $query_terms
+                )
+            )
+        );
+
+    }
+
+    /**
+     * Delete ead search in historic
+     *
+     * @return void
+     */
+    public function searchhistoDeleteEadAction()
+    {
+        $searchToDelete = json_decode($this->getRequest()->get('deleteSearch'));
+        $session = $this->getRequest()->getSession();
+        $searchArray = $session->get('histosave');
+        foreach ($searchToDelete as $search) {
+            unset($searchArray['ead'][$search]);
+        }
+        $search = $session->set('histosave', $searchArray);
+
+        $session->set('resultAction', _('Ead search have successfully been removed.'));
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_searchhisto'
+            )
+        );
+
+    }
+
 }

@@ -412,3 +412,9 @@ search_histo_delete:
     defaults: { _controller: BachHomeBundle:Default:searchHistoDeleteEad}
     requirements:
         _method: POST
+
+search_histo_delete_all_ead:
+    pattern: /searchhistoDeleteAllEad
+    defaults: { _controller: BachHomeBundle:Default:searchHistoDeleteAllEad}
+    requirements:
+        _method: POST

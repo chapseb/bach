@@ -331,7 +331,6 @@ class DefaultController extends SearchController
             );
 
         $all_facets = $tpl_vars['facet_names'];
-        $session->set('allFacetsName', $all_facets);
         foreach ( $all_facets_table as $field ) {
             if ( !isset($all_facets_table[$field->getSolrFieldName()]) ) {
                 $all_facets[$field->getSolrFieldName()]
@@ -1654,13 +1653,37 @@ class DefaultController extends SearchController
         }
         $search = $session->set('histosave', $searchArray);
 
-        $session->set('resultAction', _('Ead search have successfully been removed.'));
+        $session->set(
+            'resultAction',
+            _('Ead search have successfully been removed.')
+        );
         return $this->redirect(
             $this->generateUrl(
                 'bach_display_searchhisto'
             )
         );
 
+    }
+
+    /**
+     * Delete ead search in historic
+     *
+     * @return void
+     */
+    public function searchhistoDeleteAllEadAction()
+    {
+        $session = $this->getRequest()->getSession();
+
+        $searchArray = $session->get('histosave');
+        unset($searchArray['ead']);
+        $docs = $session->set('histosave', $searchArray);
+
+        $session->set('resultAction', _('Ead search have successfully been removed.'));
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_searchhisto'
+            )
+        );
     }
 
 }

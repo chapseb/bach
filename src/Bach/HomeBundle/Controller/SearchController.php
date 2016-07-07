@@ -977,12 +977,42 @@ abstract class SearchController extends Controller
             $searchMat = array();
         }
 
+
+        $all_facets_table = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:Facets')
+            ->findAll();
+
+        $all_facets = array(
+            'geoloc'                       => _('Map selection'),
+            'date_cDateBegin_min'          => _('Start date'),
+            'date_cDateBegin_max'          => _('End date'),
+            'date_classe_min'              => _('Start class date'),
+            'date_classe_max'              => _('End class date'),
+            'date_date_enregistrement_min' => _('Start record date'),
+            'date_date_enregistrement_max' => _('End record date'),
+            'date_annee_naissance_min'     => _('Start birth date'),
+            'date_annee_naissance_max'     => _('End birth date'),
+            'headerId'                     => _('Document')
+        );
+        foreach ( $all_facets_table as $field ) {
+            $all_facets[$field->getSolrFieldName()]
+                = $field->getLabel($this->getRequest()->getLocale());
+        }
+
+        $browse_fields = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:BrowseFields')
+            ->findAll();
+        foreach ( $browse_fields as $field ) {
+            $all_facets[$field->getSolrFieldName()]
+                = $field->getLabel($this->getRequest()->getLocale());
+        }
+
         $arraytpl = array(
             'searchEad'         => $searchEad,
             'searchMatricules'  => $searchMat,
             'typeDocuments'     => $typeDocuments,
             'resultAction'      => $resultAction,
-            'facet_names'       => $session->get('allFacetsName'),
+            'facet_names'       => $all_facets,
             'ead_dates'         => $session->get('histosaveDate')
         );
         if (isset($_COOKIE[$this->getCookieName()])) {

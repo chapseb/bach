@@ -2028,7 +2028,8 @@ video[poster] {
     display: none;
 }
 
-#manageListBasket, #manageListMatBasket {
+#manageListBasket, #manageListMatBasket,
+#manageListSearch, #manageListMatSearch {
     background-color: #d1c6c0;
     width: 100% !important;
 }
@@ -2047,7 +2048,7 @@ video[poster] {
     padding: 10px 5px;
 }
 
-.formBasket {
+.formBasket, .formSearch {
     display: inline-block;
 }
 

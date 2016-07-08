@@ -1552,26 +1552,6 @@ class DefaultController extends SearchController
         } else {
             $AddFlag = false;
         }
-
-        /*$basketArray = $session->get('documents');
-        if ($basketArray == null) {
-            $basketArray = array();
-        }
-        if (!isset($basketArray['ead'])) {
-            $basketArray['ead'] = array();
-        }
-        if (!in_array($docid, $basketArray['ead'])) {
-            array_push($basketArray['ead'], $docid);
-            $session->set('documents', $basketArray);
-            $AddFlag = true;
-        } else {
-            $AddFlag = false;
-        }
-        return new JsonResponse(
-            array(
-                'addFlag' => $AddFlag
-            )
-        );*/
     }
 
     /**
@@ -1635,7 +1615,6 @@ class DefaultController extends SearchController
                 )
             )
         );
-
     }
 
     /**
@@ -1662,7 +1641,6 @@ class DefaultController extends SearchController
                 'bach_display_searchhisto'
             )
         );
-
     }
 
     /**

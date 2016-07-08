@@ -94,6 +94,7 @@ class MatriculesController extends SearchController
 
         if ( $query_terms !== null ) {
             $query_terms = urldecode($query_terms);
+            $session->set('query_orig', $query_terms);
         }
 
         $this->search_form = $form_name;
@@ -269,6 +270,8 @@ class MatriculesController extends SearchController
         $tpl_vars['all_facets'] = $tpl_vars['facet_names'];
         $tpl_vars['disable_select_daterange']
             = $this->container->getParameter('display.disable_select_daterange');
+
+        $this->searchhistoMatAddAction($searchResults->getNumFound());
         return $this->render(
             'BachHomeBundle:Matricules:search_form.html.twig',
             array_merge(
@@ -987,11 +990,19 @@ class MatriculesController extends SearchController
         $session = $this->getRequest()->getSession();
         $basketArray = $session->get('documents');
         foreach ($filesToDelete as $file) {
-            unset($basketArray['matricules'][array_search($file, $basketArray['matricules'])]);
+            unset(
+                $basketArray['matricules'][array_search(
+                    $file,
+                    $basketArray['matricules']
+                )]
+            );
         }
         $docs = $session->set('documents', $basketArray);
 
-        $session->set('resultAction', _('Matricules have successfully been removed.'));
+        $session->set(
+            'resultAction',
+            _('Matricules have successfully been removed.')
+        );
         return $this->redirect(
             $this->generateUrl(
                 'bach_display_list_basket'
@@ -1012,7 +1023,10 @@ class MatriculesController extends SearchController
         unset($basketArray['matricules']);
         $docs = $session->set('documents', $basketArray);
 
-        $session->set('resultAction', _('Matricules have successfully been removed.'));
+        $session->set(
+            'resultAction',
+            _('Matricules have successfully been removed.')
+        );
         return $this->redirect(
             $this->generateUrl(
                 'bach_display_list_basket'
@@ -1021,4 +1035,151 @@ class MatriculesController extends SearchController
 
     }
 
+    /**
+     *  Search historic add action
+     *
+     * @param string $nbResults Results search number
+     *
+     * @return void
+     */
+    public function searchhistoMatAddAction($nbResults = null)
+    {
+        $time = time();
+        $session = $this->getRequest()->getSession();
+        $query = $session->get('query_orig');
+        $filters = $session->get($this->getFiltersName());
+
+        $histoArray = $session->get('histosave');
+        if ($histoArray == null) {
+            $histoArray = array();
+        }
+        if (!isset($histoArray['matricules'])) {
+            $histoArray['matricules'] = array();
+        }
+        $filtersClone = unserialize(serialize($filters));
+        $arraySave = array(
+            'query'     => $query,
+            'filters'   => $filtersClone,
+            'nbResults' => $nbResults
+        );
+
+        if ($query != null
+            && $filters != null
+            && !in_array($arraySave, $histoArray['matricules'])
+        ) {
+            $histoArray['matricules'][$time] = $arraySave;
+            $session->set('histosave', $histoArray);
+            $AddFlag = true;
+        } else {
+            $AddFlag = false;
+        }
+    }
+
+    /**
+     * Delete one search historic action
+     *
+     * @param string $timedelete Search time to delete
+     *
+     * @return JsonResponse
+     */
+    public function searchHistoMatDeleteOneAction($timedelete)
+    {
+        $session = $this->getRequest()->getSession();
+        $searchhistoArray = $session->get('histosave');
+
+        if (isset($session->get('histosave')['matricules'][$timedelete])) {
+            unset($searchhistoArray['matricules'][$timedelete]);
+        }
+        $session->set('histosave', $searchhistoArray);
+        if (isset($session->get('histosave')['marticules'][$timedelete])) {
+            $deleteFlag = false;
+        } else {
+            $deleteFlag = true;
+        }
+        return new JsonResponse(
+            array(
+                'deleteFlag' => $deleteFlag
+            )
+        );
+    }
+
+    /**
+     * Execute query
+     *
+     * @return void
+     */
+    public function searchHistomatExecuteAction()
+    {
+        $request = $this->getRequest();
+        $newFilters = $request->get('filtersListSearchhisto');
+        $query_terms = $request->get('query_terms');
+        $filters = new Filters();
+        if (is_array($newFilters) || is_object($newFilters)) {
+            foreach ( $newFilters as $key => $values) {
+                if (is_array($values)) {
+                    foreach ($values as $value) {
+                        $filters->addFilter($key, $value, true);
+                    }
+                } else {
+                    $filters->addFilter($key, $values, true);
+                }
+            }
+        }
+        $request->getSession()->set($this->getFiltersName(), $filters);
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_matricules',
+                array(
+                    'query_terms' => $query_terms
+                )
+            )
+        );
+    }
+
+    /**
+     * Delete matricules search in historic
+     *
+     * @return void
+     */
+    public function searchhistoDeleteMatAction()
+    {
+        $searchToDelete = json_decode($this->getRequest()->get('deleteSearchMat'));
+        $session = $this->getRequest()->getSession();
+        $searchArray = $session->get('histosave');
+        foreach ($searchToDelete as $search) {
+            unset($searchArray['matricules'][$search]);
+        }
+        $search = $session->set('histosave', $searchArray);
+
+        $session->set(
+            'resultAction',
+            _('Matricules search have successfully been removed.')
+        );
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_searchhisto'
+            )
+        );
+    }
+
+    /**
+     * Delete ead search in historic
+     *
+     * @return void
+     */
+    public function searchhistoDeleteAllMatAction()
+    {
+        $session = $this->getRequest()->getSession();
+
+        $searchArray = $session->get('histosave');
+        unset($searchArray['matricules']);
+        $docs = $session->set('histosave', $searchArray);
+
+        $session->set('resultAction', _('Matricules search have successfully been removed.'));
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_searchhisto'
+            )
+        );
+    }
 }

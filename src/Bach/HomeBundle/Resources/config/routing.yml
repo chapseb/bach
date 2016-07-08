@@ -242,6 +242,7 @@ remote_image_infos_nopath:
     requirements:
         _method: GET
         path: '(.+)?'
+
 remote_image_infos:
     pattern: /infosimage/{path}/{img}.{ext}
     defaults: { _controller: BachHomeBundle:Default:infosImage}
@@ -381,17 +382,24 @@ basket_export:
 basket_import:
     pattern: /basketImport
     defaults: { _controller: BachHomeBundle:Default:basketImport }
-        _method: GET
-        
+    requirements:
+        _method: POST
+
 bach_display_searchhisto:
     pattern: /searchhistoList
     defaults: { _controller: BachHomeBundle:Default:searchhistoList}
     requirements:
         _method: GET
-        
+
 searchhisto_add:
     pattern: /searchhistoAdd
     defaults: { _controller: BachHomeBundle:Default:searchhistoAdd}
+    requirements:
+        _method: GET
+
+searchhistomat_add:
+    pattern: /searchhistomatAdd
+    defaults: { _controller: BachHomeBundle:Matricules:searchhistomatAdd}
     requirements:
         _method: GET
 
@@ -401,9 +409,21 @@ searchhisto_deleteone:
     requirements:
         _method: POST
 
+searchhistomat_deleteone:
+    pattern: /searchhistomatDeleteone/{timedelete}
+    defaults: { _controller: BachHomeBundle:Matricules:searchHistoMatDeleteOne}
+    requirements:
+        _method: POST
+
 searchhisto_execute:
     pattern: /searchhistoexecute
     defaults: { _controller: BachHomeBundle:Default:searchHistoExecute}
+    requirements:
+        _method: POST
+
+searchhistomat_execute:
+    pattern: /searchhistomatexecute
+    defaults: { _controller: BachHomeBundle:Matricules:searchHistomatExecute}
     requirements:
         _method: POST
 
@@ -413,8 +433,26 @@ search_histo_delete:
     requirements:
         _method: POST
 
+search_histo_delete_mat:
+    pattern: /searchhistoDeleteMat
+    defaults: { _controller: BachHomeBundle:Matricules:searchHistoDeleteMat}
+    requirements:
+        _method: POST
+
 search_histo_delete_all_ead:
     pattern: /searchhistoDeleteAllEad
     defaults: { _controller: BachHomeBundle:Default:searchHistoDeleteAllEad}
+    requirements:
+        _method: POST
+
+search_histo_delete_all_mat:
+    pattern: /searchhistoDeleteAllMat
+    defaults: { _controller: BachHomeBundle:Matricules:searchHistoDeleteAllMat}
+    requirements:
+        _method: POST
+
+search_histo_delete_all:
+    pattern: /searchhistoDeleteAll
+    defaults: { _controller: BachHomeBundle:Default:searchHistoDeleteAll}
     requirements:
         _method: POST

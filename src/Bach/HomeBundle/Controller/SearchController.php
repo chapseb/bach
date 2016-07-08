@@ -977,7 +977,6 @@ abstract class SearchController extends Controller
             $searchMat = array();
         }
 
-
         $all_facets_table = $this->getDoctrine()
             ->getRepository('BachHomeBundle:Facets')
             ->findAll();
@@ -1025,4 +1024,30 @@ abstract class SearchController extends Controller
         );
     }
 
+    /**
+     *  Search historic deleteAll action
+     *
+     * @return void
+     */
+    public function searchHistoDeleteAllAction()
+    {
+        $session = $this->getRequest()->getSession();
+        $session->remove('histosave');
+        if ($session->has('histosave')) {
+            $deleteFlag = false;
+        } else {
+            $deleteFlag = true;
+        }
+
+        $session->set(
+            'resultAction',
+            _('All searches have sucessfully been removed.')
+        );
+        $resultAction = $this->getRequest()->getSession()->get('resultAction');
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_searchhisto'
+            )
+        );
+    }
 }

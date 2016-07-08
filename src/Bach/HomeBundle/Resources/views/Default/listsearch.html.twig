@@ -103,12 +103,12 @@ POSSIBILITY OF SUCH DAMAGE.
                 {% endfor %}
             </tbody>
         </table>
-    {% if not typeDocuments['ead'] is empty %}
+    {% if not searchEad is empty %}
         <form action="{{ path('search_histo_delete') }}" method="POST" class="formSearch">
             <input type="submit" id="deleteSearchAction" value="{{ _('Delete those ead searches') }}"/>
             <input type="hidden" id="deleteSearch" name="deleteSearch">
         </form>
-        <form action="{{ path('search_histo_delete_all_ead') }}" method="POST" class="formBasket">
+        <form action="{{ path('search_histo_delete_all_ead') }}" method="POST" class="formSearch">
             <input type="submit" id="deleteSearchEadAll" value="{{ _('Delete all ead search') }}"/>
         </form>
     {% endif %}
@@ -125,13 +125,50 @@ POSSIBILITY OF SUCH DAMAGE.
                     <th>{{ _('Filtres') }}</th>
                     <th>{{ _('Results number') }}</th>
                     <th>{{ _('Actions') }}</th>
+                    <th class="dateidsearchhisto"></th>
                 </tr>
             </thead>
             <tbody>
+                {% for date, search in searchMatricules %}
+                <tr>
+                    <td>{{ date | date('d/m/y H:i:s')}}</td>
+                    <td>{{ search['query']}}</td>
+                    <td>
+                    {% for filter_name,values in search['filters'] %}
+                        {% if facet_names[filter_name] is defined %} {{ facet_names[filter_name] }}{% else %}{{ _('Unknown filter') }}{% endif %}
+                        {% if values is not iterable %}
+                            {% set values = []|merge([values]) %}
+                            {% endif %}
+                        {% for value in values %}
+                            {{ value | replace({'&amp;': '&'}) }}<br />
+                        {% endfor %}
+                    {% endfor %}
+                    </td>
+                    <td>{{search['nbResults']}}</td>
+                    <td>
+                        <input type="submit" class="deleteSearchMatInput" id="deleteSearchMat{{loop.index0}}" value="{{ _('Delete') }}" />
+                        <form action="{{ path('searchhistomat_execute', {'query_terms': search['query'], 'filtersListSearchhisto': search['filters'] })}}" method="post"><input type="submit" class="executeSearchMatInput" id="executeSearchMat{{loop.index0}}" value="{{ _('Execute') }}" /></form>
+                    </td>
+                    <td class="dateidsearchhisto">{{date}}</td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
+    {% if not searchMatricules is empty %}
+        <form action="{{ path('search_histo_delete_mat') }}" method="POST" class="formSearch">
+            <input type="submit" id="deleteSearchMatAction" value="{{ _('Delete those matricules searches') }}"/>
+            <input type="hidden" id="deleteSearchMat" name="deleteSearchMat">
+        </form>
+        <form action="{{ path('search_histo_delete_all_mat') }}" method="POST" class="formBasket">
+            <input type="submit" id="deleteSearchMatAll" value="{{ _('Delete all matricules search') }}"/>
+        </form>
+    {% endif %}
+
     </div>
     {% endif %}
+    <form style="padding-top:10px;padding-left: 0.5em;" action="{{ path('search_histo_delete_all') }}" method="POST">
+        <input type="submit" id="deleteSearchAll" value="{{ _('Truncate the historic search') }}" />
+    </form>
 </div>
 {#% endif%#}
 {% endblock %}
@@ -179,13 +216,13 @@ POSSIBILITY OF SUCH DAMAGE.
                 });
             }
         });
-        var listDeleteFilesMat = [];
+        var listDeleteSearchMat = [];
         $('#manageListMatSearch tbody').on('click', 'tr', function (){
             if( $(this).hasClass("selected")) {
-                listDeleteFilesMat.push($(this).children('td.fragmentIdMatBasket').text());
+                listDeleteSearchMat.push($(this).children('td.dateidsearchhisto').text());
             } else {
                 var valueTD = $(this).children('td.fragmentIdMatBasket').text();
-                listDeleteFilesMat = jQuery.grep(listDeleteFilesMat, function(value) {
+                listDeleteSearchMat = jQuery.grep(listDeleteSearchMat, function(value) {
                     return value != valueTD;
                 });
             }
@@ -216,6 +253,30 @@ POSSIBILITY OF SUCH DAMAGE.
             return false;
         });
 
+        $(".deleteSearchMatInput").click(function(event){
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            var url = '{{ path('searchhistomat_deleteone', {'timedelete': 'timedelete'})}}';
+            var deletetime = String($(this).parent().siblings('.dateidsearchhisto').text());
+            url = url.replace('timedelete', deletetime);
+            var trRow = $(this);
+            $.ajax({
+                url: url,
+                method: 'POST',
+                success: function(data) {
+                    if (data.deleteFlag == true) {
+                        table2.row(trRow.parents('tr')).remove().draw();
+                        alert("{{ _('This search has been deleted') }}");
+                    }
+                    else {
+                        alert("{{  _('Something goes wrong, your search may be not deleted') }}");
+                    }
+                }
+            });
+            $(this).blur();
+            return false;
+        });
+
         $("#deleteSearchAction").click(function(event){
             if ( listDeleteSearch.length == 0) {
                 alert("{{ _('No files selected') }}");
@@ -228,8 +289,8 @@ POSSIBILITY OF SUCH DAMAGE.
                 $("#deleteSearch").val(JSON.stringify(listDeleteSearch));
             }
         });
-        $("#deleteFilesMatAction").click(function(event){
-            if ( listDeleteFilesMat.length == 0) {
+        $("#deleteSearchMatAction").click(function(event){
+            if ( listDeleteSearchMat.length == 0) {
                 alert("{{ _('No files selected') }}");
                 return false;
             } else {
@@ -237,7 +298,7 @@ POSSIBILITY OF SUCH DAMAGE.
                 if (popupDel != true) {
                     return false;
                 }
-               $("#deleteFilesMat").val(JSON.stringify(listDeleteFilesMat));
+                $("#deleteSearchMat").val(JSON.stringify(listDeleteSearchMat));
             }
         });
 

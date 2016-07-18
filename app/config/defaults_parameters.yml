@@ -111,13 +111,12 @@ parameters:
     viewer_uri: http://viewer.localhost/
     covers_dir: '%kernel.root_dir%/../web/covers/'
     cdc_path: '%kernel.root_dir%/../cdc.xml'
-    tiles_url: 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg'
-    tiles_attribution: '<a href="http://www.mapquest.com/">MapQuest</a>'
+    tiles_url: 'http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png'
+    tiles_attribution: 'donn&eacute;es &copy; <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu OSM France'
     tiles_subdomains:
-        - otile1
-        - otile2
-        - otile3
-        - otile4
+        - a
+        - b
+        - c
 
     #social networks parameters
     #twitter  https://dev.twitter.com/docs/tweet-button

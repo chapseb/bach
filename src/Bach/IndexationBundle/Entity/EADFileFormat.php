@@ -986,7 +986,7 @@ class EADFileFormat extends FileFormat
                             $pdf = $parser->parseFile(BACH_FILES_MISC . $daolink);
                             if ($pdf->getDetails() != null) {
                                 $content = $pdf->getText();
-                                $search = array("\t", "\n", "\r");
+                                $search = array("\t", "\n", "\r", ".");
                                 $content = str_replace($search, ' ', $content);
                                 // Replace Multiple spaces with single space
                                 $content = preg_replace('/ +/', ' ', $content);

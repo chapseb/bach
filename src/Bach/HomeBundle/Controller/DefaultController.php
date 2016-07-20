@@ -1437,6 +1437,79 @@ class DefaultController extends SearchController
         );
     }
 
+    /**
+     *  Basket add action
+     *
+     * @param string $docid Document id
+     *
+     * @return void
+     */
+    public function basketAddAction($docid)
+    {
+        $session = $this->getRequest()->getSession();
+        $basketArray = $session->get('documents');
+        if ($basketArray == null) {
+            $basketArray = array();
+        }
+        if (!isset($basketArray['ead'])) {
+            $basketArray['ead'] = array();
+        }
+        if (!in_array($docid, $basketArray['ead'])) {
+            array_push($basketArray['ead'], $docid);
+            $session->set('documents', $basketArray);
+            $AddFlag = true;
+        } else {
+            $AddFlag = false;
+        }
+        return new JsonResponse(
+            array(
+                'addFlag' => $AddFlag
+            )
+        );
+    }
 
+    /**
+     * Basket delete action
+     *
+     * @return void
+     */
+    public function basketDeleteAction()
+    {
+        $filesToDelete = json_decode($this->getRequest()->get('deleteFiles'));
+        $session = $this->getRequest()->getSession();
+        $basketArray = $session->get('documents');
+        foreach ($filesToDelete as $file) {
+            unset($basketArray['ead'][array_search($file, $basketArray['ead'])]);
+        }
+        $docs = $session->set('documents', $basketArray);
+
+        $session->set('resultAction', _('Ead have successfully been removed.'));
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_list_basket'
+            )
+        );
+    }
+
+    /**
+     *  Basket delete all ead action
+     *
+     * @return void
+     */
+    public function basketDeleteAllEadAction()
+    {
+        $session = $this->getRequest()->getSession();
+
+        $basketArray = $session->get('documents');
+        unset($basketArray['ead']);
+        $docs = $session->set('documents', $basketArray);
+
+        $session->set('resultAction', _('Ead have successfully been removed.'));
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_list_basket'
+            )
+        );
+    }
 
 }

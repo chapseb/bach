@@ -795,4 +795,92 @@ abstract class SearchController extends Controller
      * @return void
      */
     abstract public function infosImageAction($path, $img, $ext);
+
+    /**
+     *  Basket list action
+     *
+     * @return void
+     */
+    public function basketListAction()
+    {
+        $typeDocuments = array();
+        $typeDocuments['ead'] = $this->container->getParameter(
+            'feature.archives'
+        );
+        $typeDocuments['matricules'] = $this->container->getParameter(
+            'feature.matricules'
+        );
+
+        $resultAction = $this->getRequest()->getSession()->get('resultAction');
+        $this->getRequest()->getSession()->remove('resultAction');
+        $session = $this->getRequest()->getSession();
+        if ($typeDocuments['ead']
+            && isset($session->get('documents')['ead'])
+            && !empty($session->get('documents')['ead'])
+        ) {
+            $docs = $this->getDoctrine()->getManager()->createQuery(
+                'SELECT e.cUnittitle, e.fragmentid, e.cUnitid, d.date ' .
+                'FROM BachIndexationBundle:EADFileFormat e ' .
+                'JOIN e.dates d WHERE e.fragmentid IN (:ids)'
+            )->setParameter('ids', $session->get('documents')['ead'])->getResult();
+        } else {
+            $docs = array();
+        }
+
+        if ($typeDocuments['matricules'] 
+            && isset($session->get('documents')['matricules'])
+            && !empty($session->get('documents')['matricules'])
+        ) {
+            $docsMat = $this->getDoctrine()->getManager()->createQuery(
+                'SELECT m.id, m.cote, m.nom, m.prenoms ' .
+                'FROM BachIndexationBundle:MatriculesFileFormat m ' .
+                'WHERE m.id IN (:ids)'
+            )->setParameter(
+                'ids',
+                $session->get('documents')['matricules']
+            )->getResult();
+        } else {
+            $docsMat = array();
+        }
+
+        $arraytpl = array(
+            'documents'     => $docs,
+            'documentsMat'  => $docsMat,
+            'typeDocuments' => $typeDocuments,
+            'resultAction'  => $resultAction
+        );
+        if (isset($_COOKIE[$this->getCookieName()]) ) {
+            $arraytpl['cookie_param'] = true;
+        }
+
+        return $this->render(
+            'BachHomeBundle:Default:listbracket.html.twig',
+            $arraytpl
+        );
+    }
+
+    /**
+     *  Basket deleteAll action
+     *
+     * @return void
+     */
+    public function basketDeleteAllAction()
+    {
+        $session = $this->getRequest()->getSession();
+        $session->remove('documents');
+        if ($session->has('documents')) {
+            $deleteFlag = false;
+        } else {
+            $deleteFlag = true;
+        }
+
+        $session->set('resultAction', _('Documents have sucessfully been removed.'));
+        $resultAction = $this->getRequest()->getSession()->get('resultAction');
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_list_basket'
+            )
+        );
+    }
+
 }

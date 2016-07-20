@@ -93,9 +93,10 @@ class SearchQueryFormType extends AbstractType
             'text',
             array(
                 'attr'  => array(
-                    'placeholder'   => _('Enter your search'),
-                     'value'        => $this->_value,
-                     'autocomplete' => 'off',
+                    'placeholder'  => _('Enter your search'),
+                    'value'        => $this->_value,
+                    'autocomplete' => 'off',
+                    'title'        => _('Enter your search')
                 )
             )
         );
@@ -114,7 +115,7 @@ class SearchQueryFormType extends AbstractType
             'pdf_filters',
             'checkbox',
             array(
-                'data'      => $this->_pdf,
+                'data'      => true,
                 'label'     => _('Search in pdf'),
                 'required'  => false
             )

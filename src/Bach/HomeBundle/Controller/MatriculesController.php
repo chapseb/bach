@@ -945,4 +945,80 @@ class MatriculesController extends SearchController
         );
     }
 
+    /**
+     *  Basket add action
+     *
+     * @param string $docid Document id
+     *
+     * @return void
+     */
+    public function basketAddAction($docid)
+    {
+        $session = $this->getRequest()->getSession();
+        $basketArray = $session->get('documents');
+        if ($basketArray == null) {
+            $basketArray = array();
+        }
+        if (!isset($basketArray['matricules'])) {
+            $basketArray['matricules'] = array();
+        }
+        if (!in_array($docid, $basketArray['matricules'])) {
+            array_push($basketArray['matricules'], $docid);
+            $session->set('documents', $basketArray);
+            $AddFlag = true;
+        } else {
+            $AddFlag = false;
+        }
+        return new JsonResponse(
+            array(
+                'addFlag' => $AddFlag
+            )
+        );
+    }
+
+    /**
+     * Basket delete action
+     *
+     * @return void
+     */
+    public function basketDeleteAction()
+    {
+        $filesToDelete = json_decode($this->getRequest()->get('deleteFilesMat'));
+        $session = $this->getRequest()->getSession();
+        $basketArray = $session->get('documents');
+        foreach ($filesToDelete as $file) {
+            unset($basketArray['matricules'][array_search($file, $basketArray['matricules'])]);
+        }
+        $docs = $session->set('documents', $basketArray);
+
+        $session->set('resultAction', _('Matricules have successfully been removed.'));
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_list_basket'
+            )
+        );
+    }
+
+    /**
+     *  Basket delete all matricules action
+     *
+     * @return void
+     */
+    public function basketDeleteAllMatAction()
+    {
+        $session = $this->getRequest()->getSession();
+
+        $basketArray = $session->get('documents');
+        unset($basketArray['matricules']);
+        $docs = $session->set('documents', $basketArray);
+
+        $session->set('resultAction', _('Matricules have successfully been removed.'));
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_list_basket'
+            )
+        );
+
+    }
+
 }

@@ -175,6 +175,12 @@ POSSIBILITY OF SUCH DAMAGE.
             </nav>
 {% endblock %}
 
+{% block basket_list %}
+    <div id="basketListBtn">
+        <a href="{{ path('bach_display_list_basket') }}">{{ _('Go to basket') }}</a>
+    </div>
+{% endblock %}
+
 {% block login %}
             <div id="user_login">
             {% if app.user and is_granted("IS_AUTHENTICATED_REMEMBERED") %}
@@ -233,6 +239,7 @@ POSSIBILITY OF SUCH DAMAGE.
 {% block content %}
     {{ block ('headCookie')}}
     {{ block('navigation') }}
+    {{ block('basket_list') }}
     {{ block('login') }}
     {{ block('flash_messages') }}
     {{ block('container') }}

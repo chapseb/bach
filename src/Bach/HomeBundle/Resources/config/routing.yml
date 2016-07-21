@@ -456,3 +456,16 @@ search_histo_delete_all:
     defaults: { _controller: BachHomeBundle:Default:searchHistoDeleteAll}
     requirements:
         _method: POST
+
+search_histo_export:
+    pattern: /searchhistoExport
+    defaults: { _controller: BachHomeBundle:Default:searchHistoExport }
+    requirements:
+        _method: POST
+
+search_histo_import:
+    pattern: /searchhistoImport
+    defaults: { _controller: BachHomeBundle:Default:searchHistoImport }
+    requirements:
+        _method: POST
+

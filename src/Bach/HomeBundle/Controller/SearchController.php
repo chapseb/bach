@@ -939,7 +939,7 @@ abstract class SearchController extends Controller
             )
         );
     }
-    
+
     /**
      *  Search historic list action
      *
@@ -1050,4 +1050,62 @@ abstract class SearchController extends Controller
             )
         );
     }
+
+    /**
+     * Search historic import action
+     *
+     * @return void
+     */
+    public function searchhistoImportAction()
+    {
+        $files = $this->getRequest()->files;
+        $flagExtension = null;
+        foreach ($files as $file) {
+            if ($file != null) {
+                $searchHisto = file_get_contents($file->getPathName());
+                $flagExtension = (
+                    $file->getClientOriginalExtension() == 'json'
+                ) ? true : false;
+            } else {
+                $searchHisto = null;
+                $flagExtension = false;
+            }
+        }
+        if ($flagExtension == true) {
+            $searchHisto = json_decode($searchHisto, true);
+            $this->getRequest()->getSession()->set('histosave', $searchHisto);
+
+            $this->getRequest()->getSession()->set(
+                'resultAction',
+                _('Your historic is now uploaded')
+            );
+        } else if ($searchHisto == null) {
+            $this->getRequest()->getSession()->set(
+                'resultAction',
+                _('Yout forget to put a file')
+            );
+        }
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_searchhisto'
+            )
+        );
+    }
+
+    /**
+     * Search historic export action
+     *
+     * @return void
+     */
+    public function searchHistoExportAction()
+    {
+        $session = $this->getRequest()->getSession();
+        $export = $session->get('histosave');
+
+        header('Content-disposition: attachment; filename=historicBach.json');
+        header('Content-type: application/json');
+
+        return new JsonResponse($export);
+    }
+
 }

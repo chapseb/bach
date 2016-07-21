@@ -135,7 +135,23 @@ POSSIBILITY OF SUCH DAMAGE.
         <input type="submit" id="deleteFilesAll" value="{{ _('Truncate the basket') }}" />
     </form>
 </div>
+    <h2>{{ _('Import/Export') }}</h2>
+<div>
+    <form style="padding-top:10px;padding-left: 0.5em;" action="{{ path('basket_export')}}" method="POST">
+        <input id="exportBasket" type="submit" value="{{ _('Export your basket') }}"/>
+    </form>
+</div>
+<br />
 {% endif%}
+<div>
+{% if documents is empty and documentsMat is empty %}
+    <h2>{{ _('Import') }}</h2>
+{% endif %}
+    <form style="padding-top:10px;padding-left: 0.5em;" enctype="multipart/form-data" action="{{ path('basket_import') }}" method="POST">
+        <input type="file" name="uploadBasket" /><br />
+        <input type="submit" id="importBasket" value="{{ _('Import your basket') }}"/>
+    </form>
+</div>
 {% endblock %}
 
 {% block javascripts %}

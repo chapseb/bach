@@ -52,6 +52,7 @@ use Bach\HomeBundle\Entity\Filters;
 use Bach\HomeBundle\Service\SolariumQueryFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Bach search controller
@@ -883,4 +884,59 @@ abstract class SearchController extends Controller
         );
     }
 
+    /**
+     *  Basket export action
+     *
+     *  @return JsonResponse
+     */
+    public function basketExportAction()
+    {
+        $session = $this->getRequest()->getSession();
+        $export = $session->get('documents');
+
+        header('Content-disposition: attachment; filename=basket.json');
+        header('Content-type: application/json');
+
+        return new JsonResponse($export);
+    }
+
+    /**
+     *  Basket import action
+     *
+     *  @return void
+     */
+    public function basketImportAction()
+    {
+        $files = $this->getRequest()->files;
+        $flagExtension = null;
+        foreach ($files as $file) {
+            if ($file != null) {
+                $basket = file_get_contents($file->getPathName());
+                $flagExtension = (
+                    $file->getClientOriginalExtension() == 'json'
+                ) ? true : false;
+            } else {
+                $basket = null;
+            }
+        }
+        if ($flagExtension == true) {
+            $basket = get_object_vars(json_decode($basket));
+            $this->getRequest()->getSession()->set('documents', $basket);
+
+            $this->getRequest()->getSession()->set(
+                'resultAction',
+                _('Your basket is now uploaded')
+            );
+        } else if ($basket == null) {
+            $this->getRequest()->getSession()->set(
+                'resultAction',
+                _('Yout forget to put a file')
+            );
+        }
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_list_basket'
+            )
+        );
+    }
 }

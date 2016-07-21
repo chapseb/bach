@@ -371,3 +371,13 @@ basket_delete_all_ead:
     defaults: { _controller: BachHomeBundle:Default:basketDeleteAllEad}
     requirements:
         _method: POST
+
+basket_export:
+    pattern: /basketExport
+    defaults: { _controller: BachHomeBundle:Default:basketExport }
+    requirements:
+        _method: POST
+
+basket_import:
+    pattern: /basketImport
+    defaults: { _controller: BachHomeBundle:Default:basketImport }

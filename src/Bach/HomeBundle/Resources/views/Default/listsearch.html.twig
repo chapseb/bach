@@ -147,7 +147,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     <td>{{search['nbResults']}}</td>
                     <td>
                         <input type="submit" class="deleteSearchMatInput" id="deleteSearchMat{{loop.index0}}" value="{{ _('Delete') }}" />
-                        <form action="{{ path('searchhistomat_execute', {'query_terms': search['query'], 'filtersListSearchhisto': search['filters'] })}}" method="post"><input type="submit" class="executeSearchMatInput" id="executeSearchMat{{loop.index0}}" value="{{ _('Execute') }}" /></form>
+                        <form action="{{ path('searchhistomat_execute', {'query_terms': search['query'], 'filtersListSearchhisto': search['filters'] })}}" method="post" class="formSearch"><input type="submit" class="executeSearchMatInput" id="executeSearchMat{{loop.index0}}" value="{{ _('Execute') }}" /></form>
                     </td>
                     <td class="dateidsearchhisto">{{date}}</td>
                 </tr>
@@ -159,7 +159,7 @@ POSSIBILITY OF SUCH DAMAGE.
             <input type="submit" id="deleteSearchMatAction" value="{{ _('Delete those matricules searches') }}"/>
             <input type="hidden" id="deleteSearchMat" name="deleteSearchMat">
         </form>
-        <form action="{{ path('search_histo_delete_all_mat') }}" method="POST" class="formBasket">
+        <form action="{{ path('search_histo_delete_all_mat') }}" method="POST" class="formSearch">
             <input type="submit" id="deleteSearchMatAll" value="{{ _('Delete all matricules search') }}"/>
         </form>
     {% endif %}
@@ -175,7 +175,7 @@ POSSIBILITY OF SUCH DAMAGE.
 <h2>{{ _('Import/Export') }}</h2>
 <div>
     <form style="padding-top:10px;padding-left: 0.5em;" action="{{ path('search_histo_export')}}" method="POST">
-        <input id="exportBasket" type="submit" value="{{ _('Export your historic') }}"/>
+        <input id="exportSearchHisto" type="submit" value="{{ _('Export your historic') }}"/>
     </form>
 </div>
 <br />

@@ -921,16 +921,23 @@ abstract class SearchController extends Controller
         }
         if ($flagExtension == true) {
             $basket = get_object_vars(json_decode($basket));
-            $this->getRequest()->getSession()->set('documents', $basket);
-
+            $testFormat = $this->testBasketFormat($basket);
+            if ($testFormat) {
+                $this->getRequest()->getSession()->set('documents', $basket);
+                $this->getRequest()->getSession()->set(
+                    'resultAction',
+                    _('Your basket is now uploaded')
+                );
+            } else {
+                $this->getRequest()->getSession()->set(
+                    'resultAction',
+                    _('Wrong file format')
+                );
+            }
+        } else if ($basket == null || $flagExtension != true) {
             $this->getRequest()->getSession()->set(
                 'resultAction',
-                _('Your basket is now uploaded')
-            );
-        } else if ($basket == null) {
-            $this->getRequest()->getSession()->set(
-                'resultAction',
-                _('Yout forget to put a file')
+                _('You forget to put a file')
             );
         }
         return $this->redirect(
@@ -938,6 +945,30 @@ abstract class SearchController extends Controller
                 'bach_display_list_basket'
             )
         );
+    }
+
+    /**
+     * Test input json basket format
+     *
+     * @param array $inputArray array basket
+     *
+     * @return boolean
+     */
+    public function testBasketFormat($inputArray)
+    {
+        $flag = false;
+        foreach ($inputArray as $key => $basketFiles) {
+            if (($key == 'matricules' or $key == 'ead') and is_array($basketFiles)) {
+                foreach ($basketFiles as $basketFile) {
+                    if (is_string($basketFile)) {
+                        $flag = true;
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+        return $flag;
     }
 
     /**
@@ -1073,16 +1104,24 @@ abstract class SearchController extends Controller
         }
         if ($flagExtension == true) {
             $searchHisto = json_decode($searchHisto, true);
-            $this->getRequest()->getSession()->set('histosave', $searchHisto);
+            $testFormat = $this->testHistoricFormat($searchHisto);
 
+            if ($testFormat) {
+                $this->getRequest()->getSession()->set('histosave', $searchHisto);
+                $this->getRequest()->getSession()->set(
+                    'resultAction',
+                    _('Your historic is now uploaded')
+                );
+            } else {
+                $this->getRequest()->getSession()->set(
+                    'resultAction',
+                    _('Wrong format file.')
+                );
+            }
+        } else if ($searchHisto == null || $flagExtension != true) {
             $this->getRequest()->getSession()->set(
                 'resultAction',
-                _('Your historic is now uploaded')
-            );
-        } else if ($searchHisto == null) {
-            $this->getRequest()->getSession()->set(
-                'resultAction',
-                _('Yout forget to put a file')
+                _('You forget to put a json file')
             );
         }
         return $this->redirect(
@@ -1106,6 +1145,42 @@ abstract class SearchController extends Controller
         header('Content-type: application/json');
 
         return new JsonResponse($export);
+    }
+
+    /**
+     * Test input json historic search format
+     *
+     * @param array $inputArray array historic search
+     *
+     * @return boolean
+     */
+    public function testHistoricFormat($inputArray)
+    {
+        $flag = false;
+        $keySearchHisto = array(
+            'query',
+            'filters',
+            'nbResults'
+        );
+        foreach ($inputArray as $key => $search) {
+            if (is_array($search)) {
+                if ($key == 'matricules' or $key == 'ead') {
+                    foreach ($search as $infos ) {
+                        if (is_array($infos)) {
+                            $arraysAreEqual = (
+                                array_keys($infos) == $keySearchHisto
+                            );
+                            $flag = $arraysAreEqual;
+                        }
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        return $flag;
     }
 
 }

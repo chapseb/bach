@@ -2057,7 +2057,8 @@ video[poster] {
     padding-left: 0.5em;
 }
 
-#exportBasket, #importBasket {
+#exportBasket, #importBasket,
+#exportSearchHisto, #importSearchHisto{
     background:none!important;
     border:none;
     padding:0!important;

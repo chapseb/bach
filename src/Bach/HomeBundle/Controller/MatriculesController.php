@@ -1091,7 +1091,7 @@ class MatriculesController extends SearchController
             unset($searchhistoArray['matricules'][$timedelete]);
         }
         $session->set('histosave', $searchhistoArray);
-        if (isset($session->get('histosave')['marticules'][$timedelete])) {
+        if (isset($session->get('histosave')['matricules'][$timedelete])) {
             $deleteFlag = false;
         } else {
             $deleteFlag = true;

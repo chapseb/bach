@@ -156,7 +156,7 @@ parameters:
     bach_themes: ['web', 'phone']
     bach_default_theme: 'web'
 
-    default_url: bach_archives
+    default_url: federate_search
     logo_url: '%default_url%'
     tracker: null
     centerlat: null

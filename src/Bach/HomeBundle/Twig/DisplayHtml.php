@@ -196,7 +196,7 @@ class DisplayHtml extends \Twig_Extension
                     }
 
                     $href = $router->generate(
-                        'bach_archives',
+                        'federate_search',
                         array(
                             'query_terms'   => $request->get('query_terms'),
                             'filter_field'  => $fieldTested,

@@ -101,7 +101,7 @@ class BachHomeBundle extends Bundle
 
                 if ( $this->container->getParameter('feature.archives') === true ) {
                     //main search URL
-                    $url = $bach_url . $router->generate('bach_archives');
+                    $url = $bach_url . $router->generate('federate_search');
 
                     //add homepage url to the urlset named default
                     $event->getGenerator()->addUrl(

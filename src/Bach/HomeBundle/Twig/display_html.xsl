@@ -49,7 +49,7 @@ POSSIBILITY OF SUCH DAMAGE.
     <xsl:param name="expanded" select="'false'"/>
 
     <xsl:template match="ead">
-        <article>
+        <article id="cdcContainer">
             <header id="cdcTitle">
                 <xsl:apply-templates select="eadheader" mode="header"/>
             </header>

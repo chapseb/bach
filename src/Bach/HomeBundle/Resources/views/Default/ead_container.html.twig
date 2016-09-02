@@ -1,0 +1,79 @@
+{#
+Copyright (c) 2014, Anaphore
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    (1) Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+    (2) Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the
+    distribution.
+
+    (3)The name of the author may not be used to
+   endorse or promote products derived from this software without
+   specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+#}
+
+{% if (filters is defined and filters is not empty) or (facets is defined and facets is not empty) %}
+    <div class="menu">
+        {% include 'BachHomeBundle:Commons:menu.html.twig' with {'search_path': search_path, 'page_mat': matriculesSearch['page']} %}
+    </div>
+    <div id="blockEad" class="blockWithMenu">
+{% else %}
+    <div id="blockEad" class="blockWithoutMenu">
+{% endif %}
+
+    {% if by_year is defined %}
+        {% if current_date == 'date_enregistrement' %}
+            {% set display_date = _('record date') %}
+        {% elseif current_date == 'classe' %}
+            {% set display_date = _('class') %}
+        {% elseif current_date == 'annee_naissance' %}
+            {% set display_date = _('birthdate') %}
+        {% else %}
+            {% set display_date =  _('Date')|lower %}
+        {% endif %}
+
+
+    {% if suggestions is defined and searchResults is defined and searchResults|length > 0 %}
+    <aside id="suggestions">
+        <strong>{{ _('Additionnal search suggestions:') }}</strong><br/>
+        {% for term,termResult in suggestions %}
+            {% if termResult|length > 0 %}
+                {% for suggest in termResult %}
+                    <a href="{{ path(search_path, {form_name: search_form, query_terms: suggest}) }}">{{ suggest }}</a>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </aside>
+    {% endif %}
+
+
+    <div id="dates_plot" class="hidden" title="{% if disable_select_daterange is not defined or disable_select_daterange == false %}{{ _('Please adjust the period to narrow the search by %datetype%')|replace({'%datetype%':display_date}) }}{% else %}{{ _('Number of records by %datetype%')|replace({'%datetype%': display_date}) }}{% endif %}"></div>
+    {% endif %}
+    {% if show_maps -%}
+        <div id="map" class="hidden"></div>
+    {% endif %}
+
+    {% if searchResults is defined %}
+        {% include 'BachHomeBundle:Default:results.html.twig' with {'search_path':search_path} %}
+    {% endif %}
+</div>
+

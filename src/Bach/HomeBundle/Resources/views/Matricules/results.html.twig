@@ -31,23 +31,41 @@ IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 #}
 
-{% extends 'BachHomeBundle:Commons:search.html.twig' %}
+<section id="search_results_mat" role="main">
+    {% if searchResults is defined and searchResults.documents is not empty %}
+    <div class="results_count">
+        {% if resultCount == 1 %}
+            {{ _('1 result') }}
+        {% else %}
+            {{ _('Results %resultStart% to %resultEnd% on %resultCount%')|replace({'%resultStart%': resultStart, '%resultEnd%': resultEnd, '%resultCount%': resultCount}) }}
+        {% endif %}
+        {% if available_orders|length > 0 or available_views|length > 0 %}
+            {% spaceless %}
+            <nav id="change_view">
+            {% if matricules_listparameters is defined%}
+                <a href="{{ path('print_matresults_page', { form_name: search_form, query_terms: q, page: page })}}" class="printLink" title="{{ _('Print the two next result pages') }}">{{ _('Print the two next result pages') }}</a>
+            {% else %}
+                <a href="{{ path('print_results_page', { form_name: search_form, query_terms: q, page: page })}}" class="printLink" title="{{ _('Print the two next result pages') }}">{{ _('Print the two next result pages') }}</a>
+            {% endif %}
+            {% if available_orders|length > 0 %}
+                <label for="results_order">{{ _('Order:') }}</label>
+                <select name="results_order" id="results_order_mat">
+                    <option value="{{ constant('Bach\\HomeBundle\\Entity\\ViewParams::ORDER_RELEVANCE') }}"{% if results_order is constant('Bach\\HomeBundle\\Entity\\ViewParams::ORDER_RELEVANCE') %} selected="selected"{% endif %}>{{ _('Relevance (default)') }}</option>
+                    {% for key,order in available_orders %}
+                    <option value="{{ key }}"{% if results_order == key %} selected="selected"{% endif %}>{{ order }}</option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+            {% if available_views|length > 0 %}
+                {% for key,values in available_views %}
+                <a href="{{ path('federate_search', {form_name: search_form, query_terms: q, view: key, page: pageEad, page_mat: page}) }}" class="btn-{{ key }}{% if view == key %} selected{% endif %}" title="{{ values.title }}">{{ values.text }}</a>
+                {% endfor %}
+            {% endif %}
+            </nav>
+            {% endspaceless %}
+        {% endif %}
+    </div>
 
-{% block intro %}
-    {% if html_intro_exists('intro_matricules.html') %}
-        {{ get_html_intro('intro_matricules.html')|raw }}
-    {% else %}
-        <h2 id="welcome">{{ _('Search in matricules') }}</h2>
-    {% endif %}
-{% endblock %}
-
-{% block title_extend %} - {{ _('Matricules search') }}{% endblock %}
-{% block search_path %}bach_matricules{% endblock %}
-{% block fullfacet_path %}bach_matricules_fullfacet{% endblock %}
-{% block do_search_path %}{{ search_path }}{% endblock %}
-{% block geojson_path %}bach_matricules_geojson{% endblock %}
-
-{% block show_results %}
     {% if view == 'thumbs' %}
         {% for document in searchResults %}
         <article id="result_{{ document.id }}" role="document" about="{{ document.id }}" class="thumbs">
@@ -122,59 +140,59 @@ POSSIBILITY OF SUCH DAMAGE.
         </article>
         {% endfor %}
     {% else %}
-            <table class="list matricules">
+            <table class="matriculesTabResults list matricules">
                 <thead>
                     <tr>
                         <th></th>
                         {% if 'matricule' in matricules_searchparameters %}
                             <th>
-                                <!--<a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_MATRICULE') })|raw }}">-->{{ _('Matricule') }}<!--</a>-->
+                                <!--<a href="{{ path('federate_search', {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_MATRICULE') })|raw }}">-->{{ _('Matricule') }}<!--</a>-->
                             </th>
                         {% endif %}
                         {% if 'nom' in matricules_searchparameters %}
                         <th>
-                            <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_NAME')})|raw }}">{{ _('Name') }}</a>
+                            <a href="{{ path('federate_search', {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_NAME')})|raw }}">{{ _('Name') }}</a>
                         </th>
                         {% endif %}
                         {% if 'prenoms' in matricules_searchparameters %}
                         <th>
-                            <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_SURNAME')})|raw }}">{{ _('Surnames') }}</a>
+                            <a href="{{ path('federate_search', {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_SURNAME')})|raw }}">{{ _('Surnames') }}</a>
                         </th>
                         {% endif %}
                         {% if 'annee_naissance' in matricules_searchparameters %}
                         <th>
-                            <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_BIRTHYEAR')})|raw }}">{{ _('Year of birth') }}</a>
+                            <a href="{{ path('federate_search', {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_BIRTHYEAR')})|raw }}">{{ _('Year of birth') }}</a>
                         </th>
                         {% endif %}
                         {% if 'lieu_naissance' in matricules_searchparameters %}
                         <th>
-                            <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_BIRTHPLACE')})|raw }}">{{ _('Place of birth') }}</a>
+                            <a href="{{ path('federate_search', {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_BIRTHPLACE')})|raw }}">{{ _('Place of birth') }}</a>
                         </th>
                         {% endif %}
                         {% if 'classe' in matricules_searchparameters %}
                         <th>
-                            <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_CLASS')})|raw }}">{{ _('Class') }}</a>
+                            <a href="{{ path('federate_search', {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_CLASS')})|raw }}">{{ _('Class') }}</a>
                         </th>
                         {% endif %}
                         {% if 'lieu_enregistrement' in matricules_searchparameters %}
                         <th>
-                            <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_RECORDPLACE')})|raw }}">{{ _('Place of recording') }}</a>
+                            <a href="{{ path('federate_search', {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_RECORDPLACE')})|raw }}">{{ _('Place of recording') }}</a>
                         </th>
                         {% endif %}
                         {% if 'lieu_residence' in matricules_searchparameters %}
                         <th>
-                            <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_RESIDENCEPLACE')})|raw }}">{{ _('Place of residence') }}</a>
+                            <a href="{{ path('federate_search', {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_RESIDENCEPLACE')})|raw }}">{{ _('Place of residence') }}</a>
                         </th>
                         {% endif %}
 
                         {% if 'date_enregistrement' in matricules_searchparameters %}
                         <th>
-                            <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_RECORDYEAR')})|raw }}">{{ _('Record year') }}</a>
+                            <a href="{{ path('federate_search', {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_RECORDYEAR')})|raw }}">{{ _('Record year') }}</a>
                         </th>
                         {% endif %}
                         {% if 'cote' in matricules_searchparameters %}
                         <th>
-                            <a href="{{ path(block('search_path'), {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_COTE')})|raw }}">{{ _('Classification') }}</a>
+                            <a href="{{ path('federate_search', {form_name: search_form, query_terms: q, results_order: constant('Bach\\HomeBundle\\Entity\\MatriculesViewParams::ORDER_COTE')})|raw }}">{{ _('Classification') }}</a>
                         </th>
                         {% endif %}
  
@@ -209,7 +227,9 @@ POSSIBILITY OF SUCH DAMAGE.
                     </td>
                     {% if 'matricule' in matricules_searchparameters %}
                         <td>
-                            {{ document.matricule }}
+                            {% if document.matricule is defined %}
+                                {{ document.matricule }}
+                            {% endif%}
                         </td>
                     {% endif %}
                     {% if 'nom' in matricules_searchparameters %}
@@ -281,86 +301,27 @@ POSSIBILITY OF SUCH DAMAGE.
                 </tbody>
             </table>
     {% endif %}
-{% endblock %}
 
-{% block autocomplete %}
-    $('#searchQuery_query').autocomplete({
-        source: function(request, response) {
-            $.getJSON(
-                '{{ path('bach_matricules_suggest') }}', {
-                    q: request.term
-                }, response
-            );
-        }
-    }).data('uiAutocomplete')._renderItem = function( ul, item ) {
-        var newText = String(item.value).replace(
-            new RegExp(preg_quote(this.term), "gi"),
-            "<span class='ui-state-highlight'>$&</span>"
-        );
+    {% include 'BachHomeBundle:Commons:pagination.html.twig' with {
+        currentFilters: { form_name: search_form, query_terms: q },
+        typeDoc: 'mat',
+        currentPageEad: pageEad,
+        currentPageMat: page,
+        paginationPath: 'federate_search',
+        lastPage: totalPages
+    } only %}
 
-        return $("<li></li>")
-            .data("item.autocomplete", item)
-            .append("<a>" + newText + "</a>")
-            .appendTo(ul);
-    };
-{% endblock %}
-
-{# Binded when not in mobile mode #}
-{% block mobile_js_off %}
-    {{ parent() }}
-
-    $('.display_doc').click(function(event){
-        $(this).blur();
-        event.stopImmediatePropagation();
-        event.preventDefault();
-
-        var _elt = $('<div id="display_doc" title="{{ _('Detailled description')|escape('js') }}"></div>');
-        _elt.appendTo('body');
-
-        var _width = $(window).width() * 0.5;
-        var _height = $(window).height() * 0.6;
-
-        $.ajax({
-            url: $(this).attr('href') + '/ajax',
-            {% include '::loader.js.twig' with {'error_message': _('An error occured loading document :(')} %}
-            success: function(data) {
-                _elt.append(data);
-                _elt.dialog({
-                    height: _height,
-                    width: _width,
-                    modal: true,
-                    close: function(event, ui){
-                        _elt.remove();
-                    }
-                });
-            }
-        });
-
-        return false;
-    });
-
-    $('.addBasket').click(function(event){
-        event.stopImmediatePropagation();
-        event.preventDefault();
-
-        $.ajax({
-            url: $(this).attr('href'),
-            success: function(data) {
-                if (data.addFlag == true) {
-                    alert("{{ _('This document has been added to your basket') }}");
-                }
-                else {
-                    alert("{{  _('This document already exists in your basket') }}");
-                }
-            }
-        });
-
-        $(this).blur();
-        return false;
-    });
-{% endblock %}
-
-{# Binded when in mobile mode #}
-{% block mobile_js_on %}
-    $('.display_doc').unbind('click');
-{% endblock %}
+    {% else %}
+            <p>{{ _('No result found.') }}</p>
+            {% if scSearchResults is not null %}
+            <aside id="suggestions">
+                {{ _('Spelling suggestions:') }}
+                {% for suggestion in scSearchResults %}
+                    {% for word in suggestion.getWords() %}
+                        <a href="{{ path('federate_search', {form_name: search_form, query_terms: word.word}) }}">{{ word.word }}</a>
+                    {% endfor %}
+                {% endfor %}
+            </aside>
+            {% endif %}
+    {% endif %}
+</section>

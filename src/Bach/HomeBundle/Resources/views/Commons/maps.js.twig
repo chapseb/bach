@@ -2,9 +2,12 @@
     {% set from_search = false %}
 {% endif %}
             var map;
+            var map2;
             var allpoints;
             var info;
+            var info2;
             var _fields_points = [];
+            var _fields_points2 = [];
 
             {% if from_search %}
                 // get color depending on number of results
@@ -47,6 +50,7 @@
                     } catch (ex) {}
 
                     info.update(layer.feature.properties);
+                    info2.update(layer.feature.properties);
                 }
 
                 function resetHighlight(e) {
@@ -54,9 +58,137 @@
                         _fields_points[field].resetStyle(e.target);
                     }
                     info.update();
+                    info2.update();
                 }
 
             {% endif %}
+
+            var _initMap2 = function(callback) {
+                map2 = L.map('map2', {
+                    minZoom: 1,
+                    zoomControl: false
+                });
+
+                var zoomControl = new L.Control.Zoom({
+                    position: 'topleft',
+                    zoomInTitle: '{{ _('Zoom in') }}',
+                    zoomOutTitle: '{{ _('Zoom out') }}'
+                });
+                map2.addControl(zoomControl);
+
+                var fullScreen = new L.Control.FullScreen({
+                    title: '{{ _('Full screen')|escape('js') }}'
+                });
+                fullScreen.onAdd = function(map){
+                    var className = 'leaflet-control-zoom-fullscreen', container;
+                    var container = zoomControl._container;
+                    this._createButton(this.options.title, className, container, this.toggleFullScreen, this);
+                    return container;
+                }
+                map2.addControl(fullScreen);
+
+                {% if from_search and display.disable_searchmap != true %}
+                new L.Control.GeoSearch({
+                    provider: new L.GeoSearch.Provider.OpenStreetMap(),
+                    showMarker: false,
+                    searchLabel: '{{ _('Search a place on the map.')|escape('js') }}',
+                    notFoundMessage: '{{ _('Sorry, that place cannot be found.')|escape('js') }}',
+                    zoomLevel: 10
+                }).addTo(map2);
+                {% endif %}
+
+                L.tileLayer('{{ tiles_url }}', {
+                    {% if tiles_subdomains is iterable -%}
+                    subdomains: [{% for subdomain in tiles_subdomains %}'{{ subdomain }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+                    {% endif -%}
+                    maxZoom: 18,
+                    attribution: '{{ _('© Cartographic data')|escape('js') }} <a href="http://openstreetmap.org">{{ _('OpenStreetMap contributors')|escape('js') }}</a>, {{ _('© Imagery')|escape('js') }} {{ tiles_attribution|raw }}'
+                }).addTo(map2);
+
+
+                {% if from_search %}
+                // control that shows location info on hover
+                info2 = L.control();
+
+                info2.onAdd = function (map2) {
+                    this._div = L.DomUtil.create('div', 'info');
+                    this.update();
+                    return this._div;
+                };
+
+                info2.update = function (props) {
+                    this._div.innerHTML = (props ?
+                        '<strong>' + props.name + '</strong> - ' + props.results
+                        : '{{ _('Hover over a zone') }}');
+                };
+
+                {% endif %}
+
+                $.ajax({
+                    url: '/app_dev.php/matricules/geojson/default',
+                    {% include '::loader.js.twig' with {'parent_elt': '#map2', 'silent_error': true} %}
+                    success: function(data) {
+                        if ( data.data.length == 0 ) {
+                         {% if (centerlat is not null) and (centerlon is not null) and (zoommap is not null) %}
+                            map2.setView([{{centerlat}}, {{centerlon}}],{{zoommap}});
+                         {% else %}
+                            map2.setView([47.010, 5.087], 5);
+                         {% endif %}
+                            var _div = $('<div class="nomapres">{{ _('No geolocalized places were found!') }} </div>');
+                            {% if from_search %}
+                            var _a = $('<a href="#" id="nores_hide">{{ _('Hide map') }}</a>');
+                            _a.on('click', _bindMapHide);
+                            _div.append(_a);
+                            {% endif %}
+                            $('#map2').append(_div);
+                            return;
+                        }
+
+                        {% if from_search %}
+                        info2.addTo(map2);
+                        {% endif %}
+                        var _layers = [];
+                        var _overlays = [];
+                        var _markers = [];
+                        {#var _marker = L.markerClusterGroup({
+                            showCoverageOnHover: false,
+                            disableClusteringAtZoom: 12
+                        });#}
+
+                        for ( field in data.data) {
+                            var _points = L.geoJson(
+                                data.data[field], {
+                                    {% if from_search %}style: style,{% endif %}
+                                    onEachFeature: onEachFeature2
+                                }
+                            );
+                            _fields_points2[_fields_points2.length] = _points;
+                            {#_marker.addLayer(_points);#}
+
+                            {#var _layer = L.layerGroup([_marker]);#}
+                            var _layer = L.layerGroup([_points]);
+                            _layers[_layers.length] = _layer;
+                            _overlays[data.labels[field]] = _layer;
+                        }
+
+                        if (Object.keys(_overlays).length > 1) {
+                            var _groups = L.control.layers({}, _overlays).addTo(map2);
+                        }
+
+                        var _layers = L.layerGroup(_layers).addTo(map2);
+                        allpoints = L.featureGroup(_fields_points2);
+
+                        map2.fitBounds(allpoints.getBounds(), {
+                            padding: [50, 50],
+                            maxZoom: 13
+                        });
+
+                        if ( callback ) {
+                            callback();
+                        }
+                    }
+                });
+            }
 
             var _initMap = function(callback) {
                 map = L.map('map', {

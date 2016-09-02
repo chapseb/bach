@@ -33,6 +33,13 @@ POSSIBILITY OF SUCH DAMAGE.
 
 {% extends '::base.html.twig' %}
 
+    {% if parameters['display.ead.show_maps'] is defined %}
+        {% set show_maps = parameters['display.ead.show_maps'] %}
+        {% set show_map = parameters['display.ead.show_maps'] %}
+    {% else %}
+        {% set show_maps = false%}
+        {% set show_map = false%}
+    {% endif %}
 {% block search_path %}bach_archives{%endblock %}
 {% block fullfacet_path %}bach_fullfacet{%endblock %}
 {% block do_search_path %}bach_do_search{% endblock %}
@@ -41,7 +48,7 @@ POSSIBILITY OF SUCH DAMAGE.
 {% block title_extend %}{% if q is defined and q|trim != '' %} - {{ _('Search on "%term"')|replace({'%term': q}) }}{% endif %}{% endblock %}
 
 {% block css %}
-    {% if show_maps -%}
+    {% if show_maps == 'true' %}
     {% stylesheets
         'js/leaflet/leaflet.css'
         'js/leaflet/leaflet.fullscreen/Control.FullScreen.css'
@@ -57,9 +64,9 @@ POSSIBILITY OF SUCH DAMAGE.
 {% endblock %}
 
 {% block menu %}
-    {% if by_year is defined or show_maps %}
+    {% if by_year is defined or show_maps == 'true' %}
         <ul class="interactions">
-        {% if show_maps -%}
+        {% if show_maps == 'true' -%}
             <li><a id="sh_map" href="?show_map={% if show_map == true %}off{% else %}on{% endif %}" title="{{ _('Shows or hides map') }}"{% if show_map == false %} class="disabled"{% endif %}><img src="{% include '::images/map.html.twig' %}" alt="{{ _('Show/Hide map') }}"/></a></li>
         {%- endif %}
         {% if by_year is defined -%}
@@ -285,7 +292,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
         </div>
         {% endif %}
 
-        {% if tagcloud is defined %}
+        {% if tagflag is defined and tagflag == true and tagcloud is defined %}
             <ul id="tagcloud">
             {% for tag,weight in tagcloud %}
                 <li>
@@ -357,7 +364,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
 
         <div id="dates_plot" class="hidden" title="{% if disable_select_daterange is not defined or disable_select_daterange == false %}{{ _('Please adjust the period to narrow the search by %datetype%')|replace({'%datetype%':display_date}) }}{% else %}{{ _('Number of records by %datetype%')|replace({'%datetype%': display_date}) }}{% endif %}"></div>
     {% endif %}
-    {% if show_maps -%}
+    {% if show_maps == 'true' %}
     <div id="map" class="hidden"></div>
     {%- endif %}
 
@@ -444,7 +451,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
     {% endjavascripts %}
     {% endif %}
     <script src="{{ asset('js/jquery.cookie.js') }}" type="text/javascript"></script>
-    {% if show_maps %}
+    {% if show_maps == 'true' %}
     <script src="{{ asset('js/leaflet/leaflet.js') }}" type="text/javascript"></script>
     {% javascripts
         'js/leaflet/leaflet.fullscreen/Control.FullScreen.js'
@@ -477,7 +484,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
             if ( !_view_params ) {
                 _view_params = {
                     'daterange': {% if show_daterange == true %}true{% else %}false{% endif %},
-                    'map':       {% if show_map == true %}true{% else %}false{% endif %}
+                    'map':       {% if show_map == 'true' %}true{% else %}false{% endif %}
                 };
             }
 
@@ -650,7 +657,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                 _setCookie();
                 return false;
             });
-{% if show_maps %}
+{% if show_maps == 'true' %}
             var _bindMapHide = function() {
                 $('#map').toggleClass('hidden');
                 $('#sh_map').toggleClass('disabled');
@@ -675,7 +682,12 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                     click: facetFeature
                 });
             }
-
+                {% if parameters['centerlon'] is defined and parameters['centerlat'] is defined and parameters['zoommap'] is defined %}
+                    {% set centerlon, centerlat, zoommap = parameters['centerlon'], parameters['centerlat'], parameters['zoommap'] %}
+                {% endif %}
+                {% if parameters['display.disable_searchmap'] is defined%}
+                    {% set disable_searchmap = parameters['display.disable_searchmap']%}
+                {% endif %}
             {% include 'BachHomeBundle:Commons:maps.js.twig' with {'ajax_path': path(block('geojson_path'), {form_name: search_form}), 'from_search': true} %}
 
             if ( _view_params['map'] == true ) {

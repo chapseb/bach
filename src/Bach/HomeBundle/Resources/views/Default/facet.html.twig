@@ -57,7 +57,11 @@ POSSIBILITY OF SUCH DAMAGE.
 
     {% for label,content in facet_content %}
         <li>
-            <a href="{{ path(search_uri, {form_name: search_form, query_terms: q, filter_field: index_name, filter_value: content.key}) }}">{{ label }} ({{ content.count }})</a>
+        {% if search_uri == 'bach_matricules' %}
+            <a href="{{ path('federate_search', {form_name: 'matricules', query_terms: q, filter_field: index_name, filter_value: content.key}) }}">{{ label }} ({{ content.count }})</a>
+        {% else %}
+            <a href="{{ path('federate_search', {form_name: search_form, query_terms: q, filter_field: index_name, filter_value: content.key}) }}">{{ label }} ({{ content.count }})</a>
+        {% endif %}
         </li>
     {% endfor %}
     </ol>

@@ -42,7 +42,7 @@ POSSIBILITY OF SUCH DAMAGE.
                 {% if field_name == 'headerId' %}
                     <a href="{{ path('bach_ead_html', {docid: field.headerId}) }}">{{ field.headerTitle }}</a>
                 {%- else -%}
-                    <a href="{{ path('bach_archives', {filter_field: field_name, filter_value: field.term, clear_filters: 1}) }}">{{ field.term }}</a> ({{ field.count }})
+                    <a href="{{ path('federate_search', {filter_field: field_name, filter_value: field.term, clear_filters: 1, form_name: 'default'}) }}">{{ field.term }}</a> ({{ field.count }})
                 {%- endif -%}
                 </li>
             {% endfor %}

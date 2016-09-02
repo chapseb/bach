@@ -1,0 +1,165 @@
+{#
+Copyright (c) 2014, Anaphore
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    (1) Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+    (2) Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the
+    distribution.
+
+    (3)The name of the author may not be used to
+   endorse or promote products derived from this software without
+   specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+#}
+
+<section id="search_results" role="main">
+    {% if searchResults|length > 0 %}
+
+    <div class="results_count">
+    {% if resultCount == 1 %}
+        {{ _('1 result') }}
+    {% else %}
+        {{ _('Results %resultStart% to %resultEnd% on %resultCount%')|replace({'%resultStart%': resultStart, '%resultEnd%': resultEnd, '%resultCount%': resultCount}) }}
+    {% endif %}
+    {% if available_orders|length > 0 or available_views|length > 0 %}
+        {% spaceless %}
+        <nav id="change_view">
+        {% if matricules_listparameters is defined%}
+            <a href="{{ path('print_matresults_page', { form_name: search_form, query_terms: q, page: page })}}" class="printLink" title="{{ _('Print the two next result pages') }}">{{ _('Print the two next result pages') }}</a>
+        {% else %}
+            <a href="{{ path('print_results_page', { form_name: search_form, query_terms: q, page: page })}}" class="printLink" title="{{ _('Print the two next result pages') }}">{{ _('Print the two next result pages') }}</a>
+        {% endif %}
+        {% if available_orders|length > 0 %}
+            <label for="results_order">{{ _('Order:') }}</label>
+            <select name="results_order" id="results_order">
+                <option value="{{ constant('Bach\\HomeBundle\\Entity\\ViewParams::ORDER_RELEVANCE') }}"{% if results_order is constant('Bach\\HomeBundle\\Entity\\ViewParams::ORDER_RELEVANCE') %} selected="selected"{% endif %}>{{ _('Relevance (default)') }}</option>
+                {% for key,order in available_orders %}
+                <option value="{{ key }}"{% if results_order == key %} selected="selected"{% endif %}>{{ order }}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
+        {% if available_views|length > 0 %}
+            {% for key,values in available_views %}
+            <a href="{{ path(search_path, {form_name: search_form, query_terms: q, view: key}) }}" class="btn-{{ key }}{% if view == key %} selected{% endif %}" title="{{ values.title }}">{{ values.text }}</a>
+            {% endfor %}
+        {% endif %}
+        </nav>
+        {% endspaceless %}
+    {% endif %}
+    </div>
+
+    {% for document in searchResults %}
+        <article id="result_{{ document.fragmentid }}" role="document" about="{{ document.fragmentid }}"{% if view == 'thumbs' %} class="thumbs"{% endif %}>
+            {% if show_pics %}
+            <figure class="result_pic{% if document.dao is not defined %} no-image{% endif %}">
+                {% if document.dao is defined %}
+                    {{ displayDao(document.dao)|raw }}
+                {% else %}
+                    <img src="{% include '::images/noimage.html.twig' %}" alt=""/>
+                {% endif %}
+            </figure>
+            {% endif %}
+
+            <div{% if not show_pics %} class="nopic"{% endif %}>
+            {%- if (view == 'list' or view == 'txtlist') and (document.parents_titles is defined or document.archDescUnitTitle is defined) -%}
+                <ul class="breadcrumb">
+                {%- if document.archDescUnitTitle is defined -%}
+                    <li>
+                        <a href="{{ path('bach_display_document', {docid: document.headerId ~ '_description'}) }}" property="dc:isPartOf">{{ document.archDescUnitTitle }}</a>
+                    </li>
+                {%- endif -%}
+                {%- if document.parents_titles is defined -%}
+                    {% set parents_ids = document.parents|split('/') %}
+                    {% for ptitle in document.parents_titles %}
+                        <li>
+                            <a href="{{ path('bach_display_document', {docid: document.headerId ~ '_' ~ parents_ids[loop.index0]}) }}" property="dc:isPartOf">
+                                {% set testHighlight = 0 %}
+                            {% if hlSearchResults.getResult(document.fragmentid).getField('parents_titles') %}
+                                {% for ptitleHighlight in hlSearchResults.getResult(document.fragmentid).getField('parents_titles') if testHighlight == 0 %}
+                                    {% if ptitleHighlight|striptags in ptitle %}
+                                        {% set testHighlight = 1 %}
+                                        {{ ptitle|replace({ (ptitleHighlight|striptags): ptitleHighlight })|raw }}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if testHighlight == 0%}
+                                    {{ ptitle }}
+                                {% endif%}
+                            {% else %}
+                                {{ ptitle }}
+                            {% endif %}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    {%- endif -%}
+                </ul>
+            {%- endif -%}
+
+            <header>
+                <h3 property="dc:title">
+                    <a href="{{ path('bach_display_document', {docid: document.fragmentid}) }}" class="display_doc">
+                    {%- if hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')|length > 0 -%}
+                        {{ hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')[0]|raw }}
+                    {%- elseif document.cUnittitle is defined -%}
+                        {{ document.cUnittitle }}
+                    {%- else -%}
+                        {{ _('Untitled unit') }}
+                    {%- endif -%}
+                    {%- if document.cDate is defined and document.cDate != '' and document.cDate != document.cUnittitle -%}
+                        <span class="date" property="dc:date"> • {{ document.cDate }}</span>
+                    {%- endif -%}
+                    </a>
+            {% if view == 'list' or view == 'txtlist' %}
+                {% set subid = document.fragmentid|replace({(document.headerId ~ '_'): ''}) %}
+                <a href="{{ path('bach_ead_html', {'docid': document.headerId}) }}#{{ subid }}" class="treeLinkResults" title="{{ _('Locate in document tree') }}" >{{ _('Locate in document tree') }}</a>{% if cMediaContent is defined and cMediaContent[loop.index0] == 1 %}<span class="cMedia"></span>{% endif %}<a class="addBasket" title="{{ _('Add to basket')}}" href="{{ path('basket_add',{'docid': document.fragmentid})}}">{{ _('Add to basket')}}</a>
+                </h3>
+            </header>
+            {% set rend = displayFragment(document.fragment, document.fragmentid, search_form,false,false,false,0,false,false, hlSearchResults.getResult(document.fragmentid)) %}
+            {{ rend|raw }}
+            {% endif %}
+            </div>
+        </article>
+    {% endfor %}
+
+    {% include 'BachHomeBundle:Commons:pagination.html.twig' with {
+        currentFilters: { form_name: search_form, query_terms: q },
+        typeDoc: 'ead',
+        currentPageEad: page,
+        currentPageMat: matriculesSearch['page'],
+        paginationPath: search_path,
+        lastPage: totalPages
+    } only %}
+
+    {% else %}
+        <p>{{ _('No result found.') }}</p>
+        {% if scSearchResults is not null %}
+            <aside id="suggestions">
+            {{ _('Spelling suggestions:') }}
+            {% for suggestion in scSearchResults %}
+                {% for word in suggestion.getWords() %}
+                    <a href="{{ path(search_path, {form_name: search_form, query_terms: word.word}) }}">{{ word.word }}</a>
+                {% endfor %}
+            {% endfor %}
+            </aside>
+        {% endif %}
+    {% endif %}
+
+</section>

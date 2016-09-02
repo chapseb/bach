@@ -77,25 +77,25 @@ POSSIBILITY OF SUCH DAMAGE.
 {% endblock %}
 
 {% block header %}
-    <aside id="menu" role="search">
-        <header class="header">
-            <h1>
-                <a href="{% if logo_url|slice(0,7) == 'http://' %}{{ logo_url }}{% else %}{{  path(logo_url) }}{% endif %}">
-                    <img src="{% include '::images/logo.html.twig' %}" alt="Bach"/>
-                </a>
-            </h1>
-        </header>
-        {{ block('menu') }}
-    </aside>
-{% endblock %}
+    {% endblock %}
 
 {% block navigation %}
+        <aside id="menu" role="search">
+            <header class="header">
+                <h1>
+                    <a href="{% if logo_url|slice(0,7) == 'http://' %}{{ logo_url }}{% else %}{{  path(logo_url) }}{% endif %}">
+                        <img src="{% include '::images/logo.html.twig' %}" alt="Bach"/>
+                    </a>
+                </h1>
+            </header>
+            {{ block('menu') }}
+        </aside>
             <nav role="navigation" id="navigation" class="nav-opened">
             {% spaceless %}
                 <ul>
                     {% if features.archives %}
                     <li{% if (app.request.attributes.get('_route') == 'bach_archives') and (app.request.attributes.get('_route_params').form_name is not defined or app.request.attributes.get('_route_params').form_name == 'default') %} class="active"{% endif %}>
-                        <a href="{{ path('bach_archives') }}">
+                        <a href="{{ path('federate_search') }}">
                         {% if label.archives is null %}
                             {{ _('Search') }}
                         {% else %}
@@ -108,17 +108,6 @@ POSSIBILITY OF SUCH DAMAGE.
                             <a href="{{ path('bach_search_form_homepage', {'form_name': name}) }}">{{ search_form.menu_entry}}</a>
                         </li>
                     {% endfor %}
-                    {% endif %}
-                    {% if features.matricules %}
-                    <li{% if app.request.attributes.get('_route') == 'bach_matricules' %} class="active"{% endif %}>
-                        <a href="{{ path('bach_matricules') }}">
-                        {% if label.matricules is null %}
-                            {{ _('Matricules') }}
-                        {% else %}
-                            {{ label.matricules}}
-                        {% endif %}
-                        </a>
-                    </li>
                     {% endif %}
                     {% if features.archives and features.cdc %}
                      <li{% if app.request.attributes.get('_route') == 'bach_classification' %} class="active"{% endif %}>

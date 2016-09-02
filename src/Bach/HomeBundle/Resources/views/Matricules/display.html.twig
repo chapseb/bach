@@ -39,5 +39,7 @@ POSSIBILITY OF SUCH DAMAGE.
 {% endblock %}
 
 {% block container %}
+    <div class="containerArticle">
     {% include 'BachHomeBundle:Matricules:content_display.html.twig' with {'docid': docid, 'document': document, 'matricules_listparameters': matricules_listparameters, 'communicability':communicability} %}
+    </div>
 {% endblock %}

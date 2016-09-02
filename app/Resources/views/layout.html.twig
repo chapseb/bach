@@ -65,16 +65,16 @@ POSSIBILITY OF SUCH DAMAGE.
             {% block login %}{% endblock %}
             {% block flash_messages %}{% endblock %}
             {% block container %}{% endblock %}
-            {% block footer %}
-                <div id="footer_wrapper">
-                    <div id="footer">
-                        &copy; {{ "now"|date("Y") }} Bach | {{ _('Designed by Anaphore') }} |
-                        <a href="{{ path("footer_link", {'type':  'legals'}) }}" target="_blank">{{ _('general conditions of use') }}</a> |
-                        <a href="{{ path("footer_link", {'type': 'credits'}) }}" target="_blank">{{ _('credits') }}</a>
-                    </div>
-                </div>
-            {% endblock %}
         </div>
+        {% block footer %}
+        <div id="footer_wrapper">
+            <div id="footer">
+                &copy; {{ "now"|date("Y") }} Bach | {{ _('Designed by Anaphore') }} |
+                <a href="{{ path("footer_link", {'type':  'legals'}) }}" target="_blank">{{ _('general conditions of use') }}</a> |
+                <a href="{{ path("footer_link", {'type': 'credits'}) }}" target="_blank">{{ _('credits') }}</a>
+                </div>
+        </div>
+        {% endblock %}
     </div> {# /#wrapper #}
 
     {% block main_js %}{% endblock %}

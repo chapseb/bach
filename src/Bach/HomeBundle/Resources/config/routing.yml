@@ -49,8 +49,8 @@ bach_search_form_homepage:
         _method: GET
 
 bach_do_search:
-    pattern:  /archives/do-search/{form_name}
-    defaults: { _controller: BachHomeBundle:Default:doSearch, 'form_name': null }
+    pattern:  /archives/do-search/{form_name}/{fromDocView}
+    defaults: { _controller: BachHomeBundle:Default:doSearch, 'form_name': null, 'fromDocView': null }
     requirements:
         _method: POST
 

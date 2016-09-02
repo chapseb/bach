@@ -59,7 +59,7 @@ requete : {{ q }}
             {% endif %}
         </div>
 
-{% block show_results %}
+        {% block show_results %}
             <table class="list matricules" align="center" border="1">
                 <thead>
                     <tr>
@@ -211,8 +211,9 @@ requete : {{ q }}
             {% endfor %}
                 </tbody>
             </table>
-{% endblock %}
+    {% endblock %}
 
 {%endif%}
+</section>
 {%endif%}
 {%endblock%}

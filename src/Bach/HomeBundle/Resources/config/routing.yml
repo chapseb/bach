@@ -469,3 +469,17 @@ search_histo_import:
     requirements:
         _method: POST
 
+federate_search:
+    pattern: /federate/search/{query_terms}/{page}/{page_mat}/{facet_name}
+    defaults: { _controller: BachHomeBundle:Federate:search, 'query_terms': null, 'page': 0, 'page_mat': 0, 'facet_name': null }
+    requirements:
+        _method: GET|POST
+        page: \d+
+        page_mat: \d+
+
+federate_suggest:
+    pattern: /federate/suggest
+    defaults: { _controller: BachHomeBundle:Federate:doSuggest }
+    requirements:
+        _method: GET
+

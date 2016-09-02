@@ -128,17 +128,20 @@ class DefaultController extends SearchController
     /**
      * Search page
      *
-     * @param string $query_terms Term(s) we search for
-     * @param int    $page        Page
-     * @param string $facet_name  Display more terms in suggests
-     * @param string $form_name   Search form name
+     * @param string  $query_terms Term(s) we search for
+     * @param int     $page        Page
+     * @param string  $facet_name  Display more terms in suggests
+     * @param string  $form_name   Search form name
+     * @param Request $request     Request from federatesearch
      *
      * @return void
      */
     public function searchAction($query_terms = null, $page = 1,
-        $facet_name = null, $form_name = null
+        $facet_name = null, $form_name = null, $request = null
     ) {
-        $request = $this->getRequest();
+        if ($request == null) {
+            $request = $this->getRequest();
+        }
         $session = $request->getSession();
 
         if ( $query_terms !== null && $query_terms != '*:*') {
@@ -150,13 +153,14 @@ class DefaultController extends SearchController
         }
 
         /** Manage view parameters */
-        $view_params = $this->handleViewParams();
+        $view_params = $this->handleViewParams($request);
 
         $filters = $session->get($this->getFiltersName());
-        if (!$filters instanceof Filters || $request->get('clear_filters')) {
+        if ( !$filters instanceof Filters || $session->get('clear_filters_ead') ) {
             $filters = new Filters();
             $session->set($this->getFiltersName(), null);
         }
+        $session->set('clear_filters_ead', null);
 
         $filters->bind($request);
         $session->set($this->getFiltersName(), $filters);
@@ -511,10 +515,8 @@ class DefaultController extends SearchController
 
         $this->searchhistoAddAction($searchResults->getNumFound(), $all_facets);
 
-        return $this->render(
-            'BachHomeBundle:Default:index.html.twig',
-            $tpl_vars
-        );
+        $session->set('searchEad', $tpl_vars);
+        return new Response();
     }
 
     /**
@@ -526,8 +528,9 @@ class DefaultController extends SearchController
      *
      * @return void
      */
-    public function doSearchAction($form_name = null)
+    public function doSearchAction($form_name = null, $fromDocView = null)
     {
+        print_r($fromDocView);
         if ($form_name !== 'default') {
             $this->search_form = $form_name;
         }
@@ -537,13 +540,10 @@ class DefaultController extends SearchController
         $redirectUrl = null;
         if ($this->search_form !== null) {
             $redirectUrl = $this->get('router')->generate(
-                'bach_search_form_homepage',
-                array(
-                    'form_name' => $this->search_form
-                )
+                'federate_search'
             );
         } else {
-            $redirectUrl = $this->get('router')->generate('bach_archives');
+            $redirectUrl = $this->get('router')->generate('federate_search');
         }
 
         $request = $this->getRequest();
@@ -578,9 +578,15 @@ class DefaultController extends SearchController
                 } else {
                     $session->set('pdf_filters', false);
                 }
-                $route = 'bach_archives';
+                // faire passer ici l'argument
+                $route = 'federate_search';
                 if ($this->search_form !== null) {
                     $url_vars['form_name'] = $this->search_form;
+                } else {
+                    $url_vars['form_name'] = 'default';
+                }
+                if ($fromDocView != null) {
+                    $url_vars['from_doc_view'] = $fromDocView;
                 }
                 $redirectUrl = $this->get('router')->generate(
                     $route,
@@ -1453,10 +1459,11 @@ class DefaultController extends SearchController
         $view_params = $this->handleViewParams();
 
         $filters = $session->get($this->getFiltersName());
-        if (!$filters instanceof Filters || $request->get('clear_filters')) {
+        if ( !$filters instanceof Filters || $session->get('clear_filters_ead') ) {
             $filters = new Filters();
             $session->set($this->getFiltersName(), null);
         }
+        $session->set('clear_filters_ead', null);
 
         $filters->bind($request);
         $session->set($this->getFiltersName(), $filters);
@@ -1782,7 +1789,7 @@ class DefaultController extends SearchController
 
         return $this->redirect(
             $this->generateUrl(
-                'bach_archives',
+                'federate_search',
                 array(
                     'query_terms' => $query_terms
                 )

@@ -79,17 +79,20 @@ class MatriculesController extends SearchController
     /**
      * Search page
      *
-     * @param string $query_terms Term(s) we search for
-     * @param int    $page        Page
-     * @param string $facet_name  Display more terms in suggests
-     * @param string $form_name   Search form name
+     * @param string  $query_terms Term(s) we search for
+     * @param int     $page        Page
+     * @param string  $facet_name  Display more terms in suggests
+     * @param string  $form_name   Search form name
+     * @param Request $request     Request from federatesearch
      *
      * @return void
      */
     public function searchAction($query_terms = null, $page = 1,
-        $facet_name = null, $form_name = null
+        $facet_name = null, $form_name = null, $request = null
     ) {
-        $request = $this->getRequest();
+        if ($request == null) {
+            $request = $this->getRequest();
+        }
         $session = $request->getSession();
 
         if ($query_terms !== null) {
@@ -100,7 +103,7 @@ class MatriculesController extends SearchController
         $this->search_form = $form_name;
 
         /* Manage view parameters */
-        $view_params = $this->handleViewParams();
+        $view_params = $this->handleViewParams($request);
 
         $tpl_vars = $this->searchTemplateVariables($view_params, $page);
         if ($tpl_vars['view'] == 'txtlist') {
@@ -111,10 +114,12 @@ class MatriculesController extends SearchController
         }
 
         $filters = $session->get($this->getFiltersName());
-        if (!$filters instanceof Filters || $request->get('clear_filters')) {
+        if ( !$filters instanceof Filters || $session->get('clear_filters_mat') ) {
             $filters = new Filters();
             $session->set($this->getFiltersName(), null);
         }
+
+        $session->set('clear_filters_mat', null);
 
         $filters->bind($request);
         $session->set($this->getFiltersName(), $filters);
@@ -274,8 +279,8 @@ class MatriculesController extends SearchController
         $this->searchhistoMatAddAction($searchResults->getNumFound());
 
         $tpl_vars['readingroomIp'] = $this->container->getParameter('readingroom');
-        return $this->render(
-            'BachHomeBundle:Matricules:search_form.html.twig',
+        $session->set(
+            'searchMat',
             array_merge(
                 $tpl_vars,
                 array(
@@ -284,6 +289,7 @@ class MatriculesController extends SearchController
                 )
             )
         );
+        return new Response();
     }
 
     /**
@@ -292,7 +298,7 @@ class MatriculesController extends SearchController
      * @param int     $docid Document unique identifier
      * @param int     $page  Page
      * @param boolean $ajax  Called from ajax
-     * @param boolean $print Flag to add print in template
+     * @param boolean $print Flag to know if printing
      *
      * @return void
      */
@@ -812,11 +818,12 @@ class MatriculesController extends SearchController
         }
 
         $filters = $session->get($this->getFiltersName());
-        if (!$filters instanceof Filters || $request->get('clear_filters')) {
+        if ( !$filters instanceof Filters || $session->get('clear_filters_mat') ) {
             $filters = new Filters();
             $session->set($this->getFiltersName(), null);
         }
 
+        $session->set('clear_filters_mat', null);
         $filters->bind($request);
         $session->set($this->getFiltersName(), $filters);
 
@@ -1162,7 +1169,7 @@ class MatriculesController extends SearchController
         $request->getSession()->set($this->getFiltersName(), $filters);
         return $this->redirect(
             $this->generateUrl(
-                'bach_matricules',
+                'federate_search',
                 array(
                     'query_terms' => $query_terms
                 )

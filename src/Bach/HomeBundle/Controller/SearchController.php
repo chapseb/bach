@@ -490,10 +490,13 @@ abstract class SearchController extends Controller
      *
      * @return void
      */
-    public function doSuggestAction()
+    public function doSuggestAction($word_query = null)
     {
+        if ($word_query == null) {
+            $word_query = $this->getRequest()->get('q');
+        }
         $query = $this->get($this->entryPoint())->createSuggester();
-        $query->setQuery(strtolower($this->getRequest()->get('q')));
+        $query->setQuery(strtolower($word_query));
         $query->setDictionary('suggest');
         $query->setOnlyMorePopular(true);
         $query->setCount(10);
@@ -506,7 +509,6 @@ abstract class SearchController extends Controller
                 $term->getSuggestions()
             );
         }
-
         return new JsonResponse($suggestions);
     }
 
@@ -747,10 +749,13 @@ abstract class SearchController extends Controller
      *
      * @return ViewParams
      */
-    protected function handleViewParams()
+    protected function handleViewParams($request_ext = null)
     {
         $request = $this->getRequest();
         $session = $request->getSession();
+        if ($request_ext != null) {
+            $request = $request_ext;
+        }
 
         /* Manage view parameters */
         $view_params = $session->get($this->getParamSessionName());

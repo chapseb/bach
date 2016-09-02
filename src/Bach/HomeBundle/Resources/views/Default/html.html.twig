@@ -197,7 +197,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 {% block menu %}
     {% if cdc is not defined %}
-    <form action="{{ path('bach_do_search', {form_name: 'default', facet_name: '', fromDocView: true}) }}" method="post" {{ form_enctype(form) }} name="search" id="search">
+    <form action="{{ path('bach_do_search', {form_name: 'default', facet_name: '', from_doc_view: true}) }}" method="post" {{ form_enctype(form) }} name="search" id="search">
         <div>
             {{ form_widget(form.query) }}
             {{ form_widget(form._token) }}

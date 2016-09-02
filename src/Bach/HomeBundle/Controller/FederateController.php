@@ -83,11 +83,8 @@ class FederateController extends Controller
      * @return void
      */
     public function searchAction($query_terms = null, $page = 1, $page_mat = 1,
-        $facet_name = null, $form_name = null, $from_doc_view = null
+        $facet_name = null, $form_name = null
     ) {
-        if ($this->getRequest()->get('from_doc_view') != null ) {
-            print_r($this->getRequest()->get('from_doc_view'));
-        }
         if ($page == 0) {
             $page = 1;
         }
@@ -140,7 +137,6 @@ class FederateController extends Controller
                     'facet_name'  => $facet_name
                 )
             );
-
             if ($this->getRequest()->get('from_doc_view') == null ) {
                 $this->forward(
                     'BachHomeBundle:Matricules:search',
@@ -164,7 +160,6 @@ class FederateController extends Controller
                     'facet_name'  => $facet_name
                 )
             );
-
             if ($this->getRequest()->get('from_doc_view') == null ) {
                 $this->forward(
                     'BachHomeBundle:Matricules:search',

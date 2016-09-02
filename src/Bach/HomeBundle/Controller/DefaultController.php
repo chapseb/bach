@@ -524,13 +524,13 @@ class DefaultController extends SearchController
      *
      * Will take care of search terms, and reroute with proper URI
      *
-     * @param string $form_name Search form name
+     * @param string $form_name     Search form name
+     * @param string $from_doc_view If comes from document view
      *
      * @return void
      */
-    public function doSearchAction($form_name = null, $fromDocView = null)
+    public function doSearchAction($form_name = null, $from_doc_view = null)
     {
-        print_r($fromDocView);
         if ($form_name !== 'default') {
             $this->search_form = $form_name;
         }
@@ -585,8 +585,8 @@ class DefaultController extends SearchController
                 } else {
                     $url_vars['form_name'] = 'default';
                 }
-                if ($fromDocView != null) {
-                    $url_vars['from_doc_view'] = $fromDocView;
+                if ($from_doc_view != null) {
+                    $url_vars['from_doc_view'] = $from_doc_view;
                 }
                 $redirectUrl = $this->get('router')->generate(
                     $route,

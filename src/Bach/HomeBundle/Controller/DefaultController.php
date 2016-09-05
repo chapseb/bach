@@ -403,6 +403,7 @@ class DefaultController extends SearchController
         $tpl_vars['form'] = $form->createView();
 
         $tpl_vars['view'] = $view_params->getView();
+        $tpl_vars['pdf_search'] = $this->container->getParameter('pdf_search');
         if ($session) {
         } else {
             $tpl_vars['results_order'] = $this->container->getParameter('display.ead.result_order');//$view_params->getOrder();

@@ -1664,7 +1664,7 @@ div.sonata-bc .btn-primary:hover {
     margin-bottom: .2em;
 }
 
-#keepFilters {
+#keepFilters, #pdfFilters {
     padding: 0.5em;
     text-align: right;
     float: right

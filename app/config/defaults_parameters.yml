@@ -180,6 +180,7 @@ parameters:
     weight.parents_titles: 1
     weight.fulltext: 0.1
     collapsecdc: false
+    pdf_search: false
     print:
        header:
             image: '%kernel.root_dir%/../web/img/smlogo.png'

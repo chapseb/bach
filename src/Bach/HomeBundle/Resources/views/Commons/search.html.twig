@@ -311,8 +311,8 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                 {{ form_widget(form.keep_filters) }}
             </div>
             {% endif %}
-            {% if form.pdf_filters is defined and matricules_listparameters is not defined %}
-            <div id="keepFilters" title="{{ _('Ckeck if you want to search in pdf associated files') }}">
+            {% if form.pdf_filters is defined and matricules_listparameters is not defined and pdf_search is defined and pdf_search == true %}
+            <div id="pdfFilters" title="{{ _('Ckeck if you want to search in pdf associated files') }}">
                 {{ form_label(form.pdf_filters) }}
                 {{ form_widget(form.pdf_filters) }}
             </div>
@@ -466,6 +466,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
 
 {% block mobile_js_off %}
     $('#keepFilters').tooltip();
+    $('#pdfFilters').tooltip();
 {% endblock %}
 
 {% block javascripts %}

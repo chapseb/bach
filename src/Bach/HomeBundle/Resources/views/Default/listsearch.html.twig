@@ -95,7 +95,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     </td>
                     <td>{{search['nbResults']}}</td>
                     <td>
-                        <input type="submit" class="deleteSearchInput" id="deleteSearch{{loop.index0}}" value="{{ _('Delete') }}" />
+                        <input type="submit" class="deleteSearchInput" id="deleteSearch{{loop.index0}}" value="{{ _('Delete ') }}" />
                         <form action="{{ path('searchhisto_execute', {'query_terms': search['query'], 'filtersListSearchhisto': search['filters'] })}}" method="post"><input type="submit" class="executeSearchInput" id="executeSearch{{loop.index0}}" value="{{ _('Execute') }}" /></form>
                     </td>
                     <td class="dateidsearchhisto">{{date}}</td>
@@ -146,7 +146,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     </td>
                     <td>{{search['nbResults']}}</td>
                     <td>
-                        <input type="submit" class="deleteSearchMatInput" id="deleteSearchMat{{loop.index0}}" value="{{ _('Delete') }}" />
+                        <input type="submit" class="deleteSearchMatInput" id="deleteSearchMat{{loop.index0}}" value="{{ _('Delete ') }}" />
                         <form action="{{ path('searchhistomat_execute', {'query_terms': search['query'], 'filtersListSearchhisto': search['filters'] })}}" method="post" class="formSearch"><input type="submit" class="executeSearchMatInput" id="executeSearchMat{{loop.index0}}" value="{{ _('Execute') }}" /></form>
                     </td>
                     <td class="dateidsearchhisto">{{date}}</td>

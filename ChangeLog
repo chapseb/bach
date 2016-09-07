@@ -1,3 +1,11 @@
+1.3.3 (2016-09-07)
+
+- Add export and import basket and historic search
+- Add search historic
+- Add parameter for checkbox in search
+- Update translations
+- Fix some display issues
+
 1.3.2 (2016-07-20)
 
 - Fix MapQuest bug with openstreetmapfr tiles

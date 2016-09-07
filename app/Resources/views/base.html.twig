@@ -181,6 +181,12 @@ POSSIBILITY OF SUCH DAMAGE.
     </div>
 {% endblock %}
 
+{% block searchhisto_list %}
+    <div id="searchhistoListBtn">
+        <a href="{{ path('bach_display_searchhisto') }}">{{ _('Go to historic search') }}</a>
+    </div>
+{% endblock %}
+
 {% block login %}
             <div id="user_login">
             {% if app.user and is_granted("IS_AUTHENTICATED_REMEMBERED") %}
@@ -240,6 +246,7 @@ POSSIBILITY OF SUCH DAMAGE.
     {{ block ('headCookie')}}
     {{ block('navigation') }}
     {{ block('basket_list') }}
+    {{ block('searchhisto_list') }}
     {{ block('login') }}
     {{ block('flash_messages') }}
     {{ block('container') }}

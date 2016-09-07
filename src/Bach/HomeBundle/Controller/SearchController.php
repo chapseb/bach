@@ -52,6 +52,7 @@ use Bach\HomeBundle\Entity\Filters;
 use Bach\HomeBundle\Service\SolariumQueryFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Bach search controller
@@ -881,6 +882,305 @@ abstract class SearchController extends Controller
                 'bach_display_list_basket'
             )
         );
+    }
+
+    /**
+     *  Basket export action
+     *
+     *  @return JsonResponse
+     */
+    public function basketExportAction()
+    {
+        $session = $this->getRequest()->getSession();
+        $export = $session->get('documents');
+
+        header('Content-disposition: attachment; filename=basket.json');
+        header('Content-type: application/json');
+
+        return new JsonResponse($export);
+    }
+
+    /**
+     *  Basket import action
+     *
+     *  @return void
+     */
+    public function basketImportAction()
+    {
+        $files = $this->getRequest()->files;
+        $flagExtension = null;
+        foreach ($files as $file) {
+            if ($file != null) {
+                $basket = file_get_contents($file->getPathName());
+                $flagExtension = (
+                    $file->getClientOriginalExtension() == 'json'
+                ) ? true : false;
+            } else {
+                $basket = null;
+            }
+        }
+        if ($flagExtension == true) {
+            $basket = get_object_vars(json_decode($basket));
+            $testFormat = $this->testBasketFormat($basket);
+            if ($testFormat) {
+                $this->getRequest()->getSession()->set('documents', $basket);
+                $this->getRequest()->getSession()->set(
+                    'resultAction',
+                    _('Your basket is now uploaded')
+                );
+            } else {
+                $this->getRequest()->getSession()->set(
+                    'resultAction',
+                    _('Wrong file format')
+                );
+            }
+        } else if ($basket == null || $flagExtension != true) {
+            $this->getRequest()->getSession()->set(
+                'resultAction',
+                _('You forget to put a file')
+            );
+        }
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_list_basket'
+            )
+        );
+    }
+
+    /**
+     * Test input json basket format
+     *
+     * @param array $inputArray array basket
+     *
+     * @return boolean
+     */
+    public function testBasketFormat($inputArray)
+    {
+        $flag = false;
+        foreach ($inputArray as $key => $basketFiles) {
+            if (($key == 'matricules' or $key == 'ead') and is_array($basketFiles)) {
+                foreach ($basketFiles as $basketFile) {
+                    if (is_string($basketFile)) {
+                        $flag = true;
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+        return $flag;
+    }
+
+    /**
+     *  Search historic list action
+     *
+     * @return void
+     */
+    public function searchhistoListAction()
+    {
+        $typeDocuments = array();
+        $typeDocuments['ead'] = $this->container->getParameter(
+            'feature.archives'
+        );
+        $typeDocuments['matricules'] = $this->container->getParameter(
+            'feature.matricules'
+        );
+
+        $resultAction = $this->getRequest()->getSession()->get('resultAction');
+        $this->getRequest()->getSession()->remove('resultAction');
+
+        $session = $this->getRequest()->getSession();
+        if ($typeDocuments['ead']
+            && isset($session->get('histosave')['ead'])
+            && !empty($session->get('histosave')['ead'])
+        ) {
+            $searchEad = $session->get('histosave')['ead'];
+        } else {
+            $searchEad = array();
+        }
+
+        if ($typeDocuments['matricules']
+            && isset($session->get('histosave')['matricules'])
+            && !empty($session->get('histosave')['matricules'])
+        ) {
+            $searchMat = $session->get('histosave')['matricules'];
+        } else {
+            $searchMat = array();
+        }
+
+        $all_facets_table = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:Facets')
+            ->findAll();
+
+        $all_facets = array(
+            'geoloc'                       => _('Map selection'),
+            'date_cDateBegin_min'          => _('Start date'),
+            'date_cDateBegin_max'          => _('End date'),
+            'date_classe_min'              => _('Start class date'),
+            'date_classe_max'              => _('End class date'),
+            'date_date_enregistrement_min' => _('Start record date'),
+            'date_date_enregistrement_max' => _('End record date'),
+            'date_annee_naissance_min'     => _('Start birth date'),
+            'date_annee_naissance_max'     => _('End birth date'),
+            'headerId'                     => _('Document')
+        );
+        foreach ( $all_facets_table as $field ) {
+            $all_facets[$field->getSolrFieldName()]
+                = $field->getLabel($this->getRequest()->getLocale());
+        }
+
+        $browse_fields = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:BrowseFields')
+            ->findAll();
+        foreach ( $browse_fields as $field ) {
+            $all_facets[$field->getSolrFieldName()]
+                = $field->getLabel($this->getRequest()->getLocale());
+        }
+
+        $arraytpl = array(
+            'searchEad'         => $searchEad,
+            'searchMatricules'  => $searchMat,
+            'typeDocuments'     => $typeDocuments,
+            'resultAction'      => $resultAction,
+            'facet_names'       => $all_facets,
+            'ead_dates'         => $session->get('histosaveDate')
+        );
+        if (isset($_COOKIE[$this->getCookieName()])) {
+            $arraytpl['cookie_param'] = true;
+        }
+
+        return $this->render(
+            'BachHomeBundle:Default:listsearch.html.twig',
+            $arraytpl
+        );
+    }
+
+    /**
+     *  Search historic deleteAll action
+     *
+     * @return void
+     */
+    public function searchHistoDeleteAllAction()
+    {
+        $session = $this->getRequest()->getSession();
+        $session->remove('histosave');
+        if ($session->has('histosave')) {
+            $deleteFlag = false;
+        } else {
+            $deleteFlag = true;
+        }
+
+        $session->set(
+            'resultAction',
+            _('All searches have sucessfully been removed.')
+        );
+        $resultAction = $this->getRequest()->getSession()->get('resultAction');
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_searchhisto'
+            )
+        );
+    }
+
+    /**
+     * Search historic import action
+     *
+     * @return void
+     */
+    public function searchhistoImportAction()
+    {
+        $files = $this->getRequest()->files;
+        $flagExtension = null;
+        foreach ($files as $file) {
+            if ($file != null) {
+                $searchHisto = file_get_contents($file->getPathName());
+                $flagExtension = (
+                    $file->getClientOriginalExtension() == 'json'
+                ) ? true : false;
+            } else {
+                $searchHisto = null;
+                $flagExtension = false;
+            }
+        }
+        if ($flagExtension == true) {
+            $searchHisto = json_decode($searchHisto, true);
+            $testFormat = $this->testHistoricFormat($searchHisto);
+
+            if ($testFormat) {
+                $this->getRequest()->getSession()->set('histosave', $searchHisto);
+                $this->getRequest()->getSession()->set(
+                    'resultAction',
+                    _('Your historic is now uploaded')
+                );
+            } else {
+                $this->getRequest()->getSession()->set(
+                    'resultAction',
+                    _('Wrong format file.')
+                );
+            }
+        } else if ($searchHisto == null || $flagExtension != true) {
+            $this->getRequest()->getSession()->set(
+                'resultAction',
+                _('You forget to put a json file')
+            );
+        }
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_searchhisto'
+            )
+        );
+    }
+
+    /**
+     * Search historic export action
+     *
+     * @return void
+     */
+    public function searchHistoExportAction()
+    {
+        $session = $this->getRequest()->getSession();
+        $export = $session->get('histosave');
+
+        header('Content-disposition: attachment; filename=historicBach.json');
+        header('Content-type: application/json');
+
+        return new JsonResponse($export);
+    }
+
+    /**
+     * Test input json historic search format
+     *
+     * @param array $inputArray array historic search
+     *
+     * @return boolean
+     */
+    public function testHistoricFormat($inputArray)
+    {
+        $flag = false;
+        $keySearchHisto = array(
+            'query',
+            'filters',
+            'nbResults'
+        );
+        foreach ($inputArray as $key => $search) {
+            if (is_array($search)) {
+                if ($key == 'matricules' or $key == 'ead') {
+                    foreach ($search as $infos ) {
+                        if (is_array($infos)) {
+                            $arraysAreEqual = (
+                                array_keys($infos) == $keySearchHisto
+                            );
+                            $flag = $arraysAreEqual;
+                        }
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        return $flag;
     }
 
 }

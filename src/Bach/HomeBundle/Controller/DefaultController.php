@@ -356,6 +356,7 @@ class DefaultController extends SearchController
             $resultCount = $searchResults->getNumFound();
 
             $session->set('highlight', $hlSearchResults);
+            $session->set('query_orig', $query_terms);
             $query_session = str_replace("AND", " ", $query_terms);
             $query_session = str_replace("OR", " ", $query_session);
             $query_session = str_replace("NOT", " ", $query_session);
@@ -402,6 +403,7 @@ class DefaultController extends SearchController
         $tpl_vars['form'] = $form->createView();
 
         $tpl_vars['view'] = $view_params->getView();
+        $tpl_vars['pdf_search'] = $this->container->getParameter('pdf_search');
         if ($session) {
         } else {
             $tpl_vars['results_order'] = $this->container->getParameter('display.ead.result_order');//$view_params->getOrder();
@@ -412,6 +414,9 @@ class DefaultController extends SearchController
         $tpl_vars['disable_select_daterange']
             = $this->container->getParameter('display.disable_select_daterange');
         $tpl_vars['current_date'] = 'cDateBegin';
+
+        $this->searchhistoAddAction($searchResults->getNumFound(), $all_facets);
+
         return $this->render(
             'BachHomeBundle:Default:index.html.twig',
             $tpl_vars
@@ -1426,7 +1431,6 @@ class DefaultController extends SearchController
             }
             $tpl_vars['resultEnd'] = $resultEnd;
         }
-
         $tpl_vars['form'] = $form->createView();
 
         $tpl_vars['view'] = $view_params->getView();
@@ -1508,6 +1512,155 @@ class DefaultController extends SearchController
         return $this->redirect(
             $this->generateUrl(
                 'bach_display_list_basket'
+            )
+        );
+    }
+
+    /**
+     *  Search historic add action
+     *
+     * @return void
+     */
+    public function searchhistoAddAction($nbResults = null)
+    {
+        $time = time();
+        $session = $this->getRequest()->getSession();
+
+        $query = $session->get('query_orig');
+        $filters = $session->get($this->getFiltersName());
+
+        $histoArray = $session->get('histosave');
+        if ($histoArray == null) {
+            $histoArray = array();
+        }
+        if (!isset($histoArray['ead'])) {
+            $histoArray['ead'] = array();
+        }
+        $filtersClone = unserialize(serialize($filters));
+        $arraySave = array(
+            'query'     => $query,
+            'filters'   => $filtersClone,
+            'nbResults' => $nbResults
+        );
+
+        if ($query != null
+            && $filters != null
+            && !in_array($arraySave, $histoArray['ead'])
+        ) {
+            $histoArray['ead'][$time] = $arraySave;
+            $session->set('histosave', $histoArray);
+            $AddFlag = true;
+        } else {
+            $AddFlag = false;
+        }
+    }
+
+    /**
+     * Delete one search historic action
+     *
+     * @param string $timedelete Search time to delete
+     *
+     * @return JsonResponse
+     */
+    public function searchHistoDeleteOneAction($timedelete)
+    {
+        $session = $this->getRequest()->getSession();
+        $searchhistoArray = $session->get('histosave');
+
+        if (isset($session->get('histosave')['ead'][$timedelete])) {
+            unset($searchhistoArray['ead'][$timedelete]);
+        }
+        $session->set('histosave', $searchhistoArray);
+        if (isset($session->get('histosave')['ead'][$timedelete])) {
+            $deleteFlag = false;
+        } else {
+            $deleteFlag = true;
+        }
+        return new JsonResponse(
+            array(
+                'deleteFlag' => $deleteFlag
+            )
+        );
+    }
+
+    /**
+     * Execute query
+     *
+     * @return void
+     */
+    public function searchHistoExecuteAction()
+    {
+        $request = $this->getRequest();
+        $newFilters = $request->get('filtersListSearchhisto');
+        $query_terms = $request->get('query_terms');
+        $filters = new Filters();
+        if (is_array($newFilters) || is_object($newFilters)) {
+            foreach ( $newFilters as $key => $values) {
+                if (is_array($values)) {
+                    foreach ($values as $value) {
+                        $filters->addFilter($key, $value, true);
+                    }
+                } else {
+                    $filters->addFilter($key, $values, true);
+                }
+            }
+        }
+
+        $request->getSession()->set($this->getFiltersName(), $filters);
+
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_archives',
+                array(
+                    'query_terms' => $query_terms
+                )
+            )
+        );
+    }
+
+    /**
+     * Delete ead search in historic
+     *
+     * @return void
+     */
+    public function searchhistoDeleteEadAction()
+    {
+        $searchToDelete = json_decode($this->getRequest()->get('deleteSearch'));
+        $session = $this->getRequest()->getSession();
+        $searchArray = $session->get('histosave');
+        foreach ($searchToDelete as $search) {
+            unset($searchArray['ead'][$search]);
+        }
+        $search = $session->set('histosave', $searchArray);
+
+        $session->set(
+            'resultAction',
+            _('Ead search have successfully been removed.')
+        );
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_searchhisto'
+            )
+        );
+    }
+
+    /**
+     * Delete ead search in historic
+     *
+     * @return void
+     */
+    public function searchhistoDeleteAllEadAction()
+    {
+        $session = $this->getRequest()->getSession();
+
+        $searchArray = $session->get('histosave');
+        unset($searchArray['ead']);
+        $docs = $session->set('histosave', $searchArray);
+
+        $session->set('resultAction', _('Ead search have successfully been removed.'));
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_searchhisto'
             )
         );
     }

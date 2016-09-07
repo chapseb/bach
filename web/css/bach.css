@@ -1664,7 +1664,7 @@ div.sonata-bc .btn-primary:hover {
     margin-bottom: .2em;
 }
 
-#keepFilters {
+#keepFilters, #pdfFilters {
     padding: 0.5em;
     text-align: right;
     float: right
@@ -2015,11 +2015,21 @@ video[poster] {
     text-align: right;
 }
 
-.fragmentIdBasket, .fragmentIdMatBasket {
+#searchhistoListBtn {
+    position: absolute;
+    top: 3em;
+    right: .5em;
+    font-size: .9em;
+    text-align: right;
+}
+
+.fragmentidbasket, .fragmentidmatbasket,
+.dateidsearchhisto, .dateidmatsearchhisto{
     display: none;
 }
 
-#manageListBasket, #manageListMatBasket {
+#manageListBasket, #manageListMatBasket,
+#manageListSearch, #manageListMatSearch {
     background-color: #d1c6c0;
     width: 100% !important;
 }
@@ -2038,13 +2048,24 @@ video[poster] {
     padding: 10px 5px;
 }
 
-.formBasket {
+.formBasket, .formSearch {
     display: inline-block;
 }
 
 #formBasketDeleteAll {
     padding-top: 1em;
     padding-left: 0.5em;
+}
+
+#exportBasket, #importBasket,
+#exportSearchHisto, #importSearchHisto{
+    background:none!important;
+    border:none;
+    padding:0!important;
+    font: inherit;
+    /*border is optional*/
+    border-bottom:1px solid #444; 
+    cursor: pointer;
 }
 
 .cMedia {

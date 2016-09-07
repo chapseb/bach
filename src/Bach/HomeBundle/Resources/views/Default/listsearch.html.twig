@@ -1,0 +1,329 @@
+{#
+Copyright (c) 2014, Anaphore
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    (1) Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+    (2) Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the
+    distribution.
+
+    (3)The name of the author may not be used to
+   endorse or promote products derived from this software without
+   specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+#}
+
+{% extends '::base.html.twig' %}
+
+{% block css %}
+    {{ parent() }}
+    <link href="{{ asset('css/datatable/datatables.min.css') }}" type="text/css" rel="stylesheet" media="screen" />
+    <link href="{{ asset('css/datatable/select.dataTables.min.css') }}" type="text/css" rel="stylesheet" media="screen" />
+{% endblock %}
+
+{% block js_calls %}
+    {{ parent() }}
+    <script src="{{ asset('js/datatable/datatables.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/datatable/dataTables.select.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/jquery-ui/jquery.ui.tabs.min.js') }}" type="text/javascript"></script>
+    <script src="{{ path('dynamic_js', {name: 'tabs'}) }}" type="text/javascript"></script>
+{% endblock %}
+
+{% block title_extend %} - {{ _('Search historic')}} {% endblock %}
+
+{% block container %}
+
+<h2>{{ _('Search historic') }}</h2>
+{% if resultAction is defined and resultAction is not empty %}
+    <div id="resultAction">{{ resultAction }}</div>
+{% endif %}
+<!-- Votre historique de requêtes est vide -->
+{#% if (documents is not defined or documents is empty) and (documentsMat is not defined or documentsMat is empty) %#}
+<!--{{ _('Your search historic is empty.') }}-->
+{#% else %#}
+<div id="allRequest">
+    <ul>
+        {% if typeDocuments['ead'] == true %}<li><a href="#ead">{{ _('Documents') }}</a></li>{% endif%}
+        {% if typeDocuments['matricules'] == true %}<li><a href="#matricules">{{ _('Matricules') }}</a></li>{% endif %}
+    </ul>
+    {% if typeDocuments['ead'] == true %}
+    <div id="ead">
+        <table class="listBasket" id="manageListSearch">
+            <thead>
+                <tr>
+                    <th>{{ _('Dates') }}</th>
+                    <th>{{ _('Request') }}</th>
+                    <th>{{ _('Filtres') }}</th>
+                    <th>{{ _('Results number') }}</th>
+                    <th>{{ _('Actions') }}</th>
+                    <th class="dateidsearchhisto"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for date, search in searchEad %}
+                <tr>
+                    <td>{{ date | date('d/m/y H:i:s')}}</td>
+                    <td>{{ search['query']}}</td>
+                    <td>
+                    {% for filter_name,values in search['filters'] %}
+                        {% if facet_names[filter_name] is defined %} {{ facet_names[filter_name] }}{% else %}{{ _('Unknown filter') }}{% endif %}
+                        {% if values is not iterable %}
+                            {% set values = []|merge([values]) %}
+                            {% endif %}
+                        {% for value in values %}
+                            {{ value | replace({'&amp;': '&'}) }}<br />
+                        {% endfor %}
+                    {% endfor %}
+                    </td>
+                    <td>{{search['nbResults']}}</td>
+                    <td>
+                        <input type="submit" class="deleteSearchInput" id="deleteSearch{{loop.index0}}" value="{{ _('Delete ') }}" />
+                        <form action="{{ path('searchhisto_execute', {'query_terms': search['query'], 'filtersListSearchhisto': search['filters'] })}}" method="post"><input type="submit" class="executeSearchInput" id="executeSearch{{loop.index0}}" value="{{ _('Execute') }}" /></form>
+                    </td>
+                    <td class="dateidsearchhisto">{{date}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% if not searchEad is empty %}
+        <form action="{{ path('search_histo_delete') }}" method="POST" class="formSearch">
+            <input type="submit" id="deleteSearchAction" value="{{ _('Delete those ead searches') }}"/>
+            <input type="hidden" id="deleteSearch" name="deleteSearch">
+        </form>
+        <form action="{{ path('search_histo_delete_all_ead') }}" method="POST" class="formSearch">
+            <input type="submit" id="deleteSearchEadAll" value="{{ _('Delete all ead search') }}"/>
+        </form>
+    {% endif %}
+    </div>
+    {% endif %}
+
+    {% if typeDocuments['matricules'] == true %}
+    <div id="matricules">
+        <table class="listBasket" id="manageListMatSearch">
+            <thead>
+                <tr>
+                    <th>{{ _('Dates') }}</th>
+                    <th>{{ _('Request') }}</th>
+                    <th>{{ _('Filtres') }}</th>
+                    <th>{{ _('Results number') }}</th>
+                    <th>{{ _('Actions') }}</th>
+                    <th class="dateidsearchhisto"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for date, search in searchMatricules %}
+                <tr>
+                    <td>{{ date | date('d/m/y H:i:s')}}</td>
+                    <td>{{ search['query']}}</td>
+                    <td>
+                    {% for filter_name,values in search['filters'] %}
+                        {% if facet_names[filter_name] is defined %} {{ facet_names[filter_name] }}{% else %}{{ _('Unknown filter') }}{% endif %}
+                        {% if values is not iterable %}
+                            {% set values = []|merge([values]) %}
+                            {% endif %}
+                        {% for value in values %}
+                            {{ value | replace({'&amp;': '&'}) }}<br />
+                        {% endfor %}
+                    {% endfor %}
+                    </td>
+                    <td>{{search['nbResults']}}</td>
+                    <td>
+                        <input type="submit" class="deleteSearchMatInput" id="deleteSearchMat{{loop.index0}}" value="{{ _('Delete ') }}" />
+                        <form action="{{ path('searchhistomat_execute', {'query_terms': search['query'], 'filtersListSearchhisto': search['filters'] })}}" method="post" class="formSearch"><input type="submit" class="executeSearchMatInput" id="executeSearchMat{{loop.index0}}" value="{{ _('Execute') }}" /></form>
+                    </td>
+                    <td class="dateidsearchhisto">{{date}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% if not searchMatricules is empty %}
+        <form action="{{ path('search_histo_delete_mat') }}" method="POST" class="formSearch">
+            <input type="submit" id="deleteSearchMatAction" value="{{ _('Delete those matricules searches') }}"/>
+            <input type="hidden" id="deleteSearchMat" name="deleteSearchMat">
+        </form>
+        <form action="{{ path('search_histo_delete_all_mat') }}" method="POST" class="formSearch">
+            <input type="submit" id="deleteSearchMatAll" value="{{ _('Delete all matricules search') }}"/>
+        </form>
+    {% endif %}
+
+    </div>
+    {% endif %}
+    <form style="padding-top:10px;padding-left: 0.5em;" action="{{ path('search_histo_delete_all') }}" method="POST">
+        <input type="submit" id="deleteSearchAll" value="{{ _('Truncate the historic search') }}" />
+    </form>
+</div>
+
+
+<h2>{{ _('Import/Export') }}</h2>
+<div>
+    <form style="padding-top:10px;padding-left: 0.5em;" action="{{ path('search_histo_export')}}" method="POST">
+        <input id="exportSearchHisto" type="submit" value="{{ _('Export your historic') }}"/>
+    </form>
+</div>
+<br />
+
+<div>
+    <form style="padding-top:10px;padding-left: 0.5em;" enctype="multipart/form-data" action="{{ path('search_histo_import') }}" method="POST">
+        <input type="file" name="uploadSearchHisto" /><br />
+        <input type="submit" id="importSearchHisto" value="{{ _('Import your historic') }}" />
+    </form>
+</div>
+{#% endif%#}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    $(document).ready(function() {
+        _doTabs("#allRequest");
+
+        var jsonLang = '';
+        {% if lang is defined and lang == 'fr'%}
+            jsonLang = '{{ asset('js/datatable/French.json') }}';
+        {% else %}
+            jsonLang = '{{ asset('js/datatable/English.json') }}';
+        {% endif %}
+        var table = $('#manageListSearch').DataTable( {
+            language: {
+                url: jsonLang
+            },
+            select: {
+                style:    'multi',
+            },
+            order: [[ 0, 'asc' ]]
+        } );
+
+        var table2 = $('#manageListMatSearch').DataTable( {
+            language: {
+                url: jsonLang
+            },
+            select: {
+                style:    'multi',
+            },
+            order: [[ 0, 'asc' ]]
+        } );
+
+
+        var listDeleteSearch = [];
+        $('#manageListSearch tbody').on('click', 'tr', function (){
+            if( $(this).hasClass("selected")) {
+                listDeleteSearch.push($(this).children('td.dateidsearchhisto').text());
+            } else {
+                var valueTD = $(this).children('td.dateidsearchhisto').text();
+                listDeleteSearch = jQuery.grep(listDeleteSearch, function(value) {
+                    return value != valueTD;
+                });
+            }
+        });
+        var listDeleteSearchMat = [];
+        $('#manageListMatSearch tbody').on('click', 'tr', function (){
+            if( $(this).hasClass("selected")) {
+                listDeleteSearchMat.push($(this).children('td.dateidsearchhisto').text());
+            } else {
+                var valueTD = $(this).children('td.fragmentIdMatBasket').text();
+                listDeleteSearchMat = jQuery.grep(listDeleteSearchMat, function(value) {
+                    return value != valueTD;
+                });
+            }
+        });
+
+        $(".deleteSearchInput").click(function(event){
+            event.stopImmediatePropagation();
+            event.preventDefault();
+
+            var url = '{{ path('searchhisto_deleteone', {'timedelete': 'timedelete'})}}';
+            var deletetime = String($(this).parent().siblings('.dateidsearchhisto').text());
+            url = url.replace('timedelete', deletetime);
+            var trRow = $(this);
+            $.ajax({
+                url: url,
+                method: 'POST',
+                success: function(data) {
+                    if (data.deleteFlag == true) {
+                        table.row(trRow.parents('tr')).remove().draw();
+                        alert("{{ _('This search has been deleted') }}");
+                    }
+                    else {
+                        alert("{{  _('Something goes wrong, your search may be not deleted') }}");
+                    }
+                }
+            });
+            $(this).blur();
+            return false;
+        });
+
+        $(".deleteSearchMatInput").click(function(event){
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            var url = '{{ path('searchhistomat_deleteone', {'timedelete': 'timedelete'})}}';
+            var deletetime = String($(this).parent().siblings('.dateidsearchhisto').text());
+            url = url.replace('timedelete', deletetime);
+            var trRow = $(this);
+            $.ajax({
+                url: url,
+                method: 'POST',
+                success: function(data) {
+                    if (data.deleteFlag == true) {
+                        table2.row(trRow.parents('tr')).remove().draw();
+                        alert("{{ _('This search has been deleted') }}");
+                    }
+                    else {
+                        alert("{{  _('Something goes wrong, your search may be not deleted') }}");
+                    }
+                }
+            });
+            $(this).blur();
+            return false;
+        });
+
+        $("#deleteSearchAction").click(function(event){
+            if ( listDeleteSearch.length == 0) {
+                alert("{{ _('No files selected') }}");
+                return false;
+            } else {
+                var popupDel = confirm("{{ _("Are you sure ?")}}");
+                if (popupDel != true) {
+                    return false;
+                }
+                $("#deleteSearch").val(JSON.stringify(listDeleteSearch));
+            }
+        });
+        $("#deleteSearchMatAction").click(function(event){
+            if ( listDeleteSearchMat.length == 0) {
+                alert("{{ _('No files selected') }}");
+                return false;
+            } else {
+                var popupDel = confirm("{{ _("Are you sure ?")}}");
+                if (popupDel != true) {
+                    return false;
+                }
+                $("#deleteSearchMat").val(JSON.stringify(listDeleteSearchMat));
+            }
+        });
+
+        $("#deleteFilesMatAll, #deleteSearchEadAll, #deleteSearchAll").click(function(){
+            var popupDel = confirm("{{ _("Are you sure ?")}}");
+            if (popupDel != true) {
+                return false;
+            }
+        });
+
+    } );
+{% endblock %}

@@ -117,15 +117,17 @@ class Filters extends \ArrayObject
      *
      * @return void
      */
-    public function addFilter($field, $value)
+    public function addFilter($field, $value, $fromListSearch = false)
     {
         if ( preg_match('/date_.*_(min|max)/', $field, $matches) ) {
             //only one start and end date allowed
-            $php_date = \DateTime::createFromFormat('Y', $value);
-            if ( $matches[1] === 'min' ) {
-                $value = $php_date->format('Y-01-01');
-            } else {
-                $value = $php_date->format('Y-12-31');
+            if ($fromListSearch == false) {
+                $php_date = \DateTime::createFromFormat('Y', $value);
+                if ( $matches[1] === 'min' ) {
+                    $value = $php_date->format('Y-01-01');
+                } else {
+                    $value = $php_date->format('Y-12-31');
+                }
             }
             $this->offsetSet($field, $value);
         } else {

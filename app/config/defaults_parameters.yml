@@ -66,6 +66,7 @@ parameters:
     ead_oai_path: null
     matricules_files_path: null
     html_intros_path: null
+    images_files_path: null
 
     ##Features activation
     #main features
@@ -179,6 +180,7 @@ parameters:
     weight.parents_titles: 1
     weight.fulltext: 0.1
     collapsecdc: false
+    pdf_search: false
     print:
        header:
             image: '%kernel.root_dir%/../web/img/smlogo.png'

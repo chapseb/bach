@@ -114,6 +114,20 @@ class EADDaos
     protected $eadfile;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $communicability_general;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $communicability_sallelecture;
+
+    /**
       * The constructor
       *
       * @param EADFileFormat $ead  EAD document referenced
@@ -130,6 +144,8 @@ class EADDaos
             case 'title':
             case 'role':
             case 'cMediaContent':
+            case 'communicability_general':
+            case 'communicability_sallelecture':
                 $this->$attr = $value;
                 break;
             }
@@ -295,6 +311,62 @@ class EADDaos
     public function getEadfile()
     {
         return $this->eadfile;
+    }
+
+    /**
+     * Get additional_informations
+     *
+     * @return string
+     */
+    public function getAdditionalInformations()
+    {
+        return $this->additional_informations;
+    }
+
+    /**
+     * Set communicability_general
+     *
+     * @param String $communicabilityGeneral Communicability text
+     *
+     * @return EADDaos
+     */
+    public function setCommunicabilityGeneral($communicabilityGeneral)
+    {
+        $this->communicability_general = $communicabilityGeneral;
+        return $this;
+    }
+
+    /**
+     * Get communicability_general
+     *
+     * @return String
+     */
+    public function getCommunicabilityGeneral()
+    {
+        return $this->communicability_general;
+    }
+
+    /**
+     * Set communicability_sallelecture
+     *
+     * @param String $communicabilityLecture Communicability string
+     *
+     * @return EADDaos
+     */
+    public function setCommunicabilitySallelecture($communicabilityLecture)
+    {
+        $this->communicability_sallelecture = $communicabilityLecture;
+        return $this;
+    }
+
+    /**
+     * Get communicability_sallelecture
+     *
+     * @return DateTime
+     */
+    public function getCommunicabilitySallelecture()
+    {
+        return $this->communicability_sallelecture;
     }
 
     /**

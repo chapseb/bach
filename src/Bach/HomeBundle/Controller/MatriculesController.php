@@ -660,7 +660,7 @@ class MatriculesController extends SearchController
         $query->setFields(
             'id, nom, txt_prenoms, classe, cote, date_enregistrement,
             lieu_enregistrement, prenoms, matricule, annee_naissance, lieu_naissance,
-            lieu_residence'
+            lieu_residence, communicability_general, communicability_sallelecture'
         );
         $query->setStart(0)->setRows(1);
 

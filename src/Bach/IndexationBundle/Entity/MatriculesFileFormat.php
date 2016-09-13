@@ -137,6 +137,16 @@ class MatriculesFileFormat extends FileFormat
     protected $additional_informations;
 
     /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    protected $communicability_general;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    protected $communicability_sallelecture;
+
+    /**
      * Extra fields not in database
      */
     public static $extra_fields = array(
@@ -158,6 +168,8 @@ class MatriculesFileFormat extends FileFormat
         'id',
         'cote',
         'date_enregistrement',
+        'communicability_general',
+        'communicability_sallelecture',
         'classe',
         'matricule',
         'annee_naissance',
@@ -198,6 +210,8 @@ class MatriculesFileFormat extends FileFormat
         'date_enregistrement'   => 'date',
         'annee_naissance'       => 'date',
         'classe'                => 'date',
+        'communicability_general' => 'date',
+        'communicability_sallelecture' => 'date',
         'txt_prenoms'           => 'text_names',
         'oNom'                  => 'alphaOnlySort',
         'oTxt_prenoms'          => 'alphaOnlySort',
@@ -321,6 +335,8 @@ class MatriculesFileFormat extends FileFormat
                     if ( $key === 'date_enregistrement'
                         || $key === 'annee_naissance'
                         || $key === 'classe'
+                        || $key === 'communicability_general'
+                        || $key === 'communicability_sallelecture'
                     ) {
                         if ( strlen($value) === 4 ) {
                             $value = new \DateTime(
@@ -702,6 +718,78 @@ class MatriculesFileFormat extends FileFormat
     public function getAdditionalInformations()
     {
         return $this->additional_informations;
+    }
+
+
+    /**
+     * Set communicability_general
+     *
+     * @param DateTime $communicabilityGeneral Communicability date
+     *
+     * @return MatriculesFileFormat
+     */
+    public function setCommunicabilityGeneral(\DateTime $communicabilityGeneral)
+    {
+        $old = null;
+        if ($this->communicability_general !== null) {
+            $old = $this->communicability_general->format('Y-m-d');
+        }
+        $new = $communicabilityGeneral->format('Y-m-d');
+        if ($old !== $new) {
+            $this->onPropertyChanged(
+                'communicability_general',
+                $this->communicability_general,
+                $communicabilityGeneral
+            );
+            $this->communicability_general = $communicabilityGeneral;
+        }
+        return $this;
+    }
+
+    /**
+     * Get communicability_general
+     *
+     * @return DateTime
+     */
+    public function getCommunicabilityGeneral()
+    {
+        return $this->communicability_general;
+    }
+
+
+    /**
+     * Set communicability_sallelecture
+     *
+     * @param DateTime $communicabilityLecture Communicability date
+     *
+     * @return MatriculesFileFormat
+     */
+    public function setCommunicabilitySallelecture(\DateTime $communicabilityLecture)
+    {
+        $old = null;
+        if ($this->communicability_sallelecture !== null) {
+            $old = $this->communicability_sallelecture->format('Y-m-d');
+        }
+        $new = $communicabilitylecture->format('Y-m-d');
+        if ($old !== $new) {
+            $this->onPropertyChanged(
+                'communicability_sallelecture',
+                $this->communicability_sallelecture,
+                $communicabilitylecture
+            );
+            $this->communicability_sallelecture = $communicabilitylecture;
+        }
+        return $this;
+    }
+
+    /**
+     * Get communicability_sallelecture
+     *
+     * @return DateTime
+     */
+    public function getCommunicabilitySallelecture()
+    {
+        return $this->communicability_sallelecture;
     }
 
 }

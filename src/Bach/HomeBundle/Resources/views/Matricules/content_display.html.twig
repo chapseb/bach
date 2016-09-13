@@ -91,7 +91,11 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% endset %}
                     {% if print is not defined or print != true %}
                     <a href="{{ viewer_uri ~ images_link }}" target="_blank" property="image">
+                        {% if document.communicability_sallelecture|date('Y') < "now"|date('Y') %}
+                        <img src="{{ asset('img/thumb_comm.png')}}" alt="{{ nomMatricule ~ ' ' ~ prenomsMatricules|join(' ') }}" title="{{ _('This picture is not communicable') }}" />
+                        {% else %}
                         <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/medium' }}" alt="{{ nomMatricule ~ ' ' ~ prenomsMatricules|join(' ') }}"/>
+                        {% endif %}
                     </a>
                     {% endif %}
                 </figure>

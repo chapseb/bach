@@ -51,7 +51,17 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% if show_pics %}
                     <figure class="result_pic{% if document.dao is not defined %} no-image{% endif %}">
                         {% if document.dao is defined %}
-                            {{ displayDao(document.dao)|raw }}
+                        {% set flagCommunicability = false%}
+                        {% for docdao in document.dao %}
+                            {% if docdao in listDaos %}
+                            {% set flagCommunicability = true%}
+                            {% endif%}
+                        {% endfor %}
+                        {% endif %}
+                        {% if document.dao is defined and flagCommunicability == true %}
+                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability)|raw }}
+                        {% elseif flagCommunicability is defined and flagCommunicability == false %}
+                            <img src="/img/thumb_comm.png" title="This picture is not communicable"/>
                         {% else %}
                             <img src="{% include '::images/noimage.html.twig' %}" alt=""/>
                         {% endif %}

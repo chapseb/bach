@@ -113,7 +113,7 @@ class DisplayDao extends \Twig_Extension
      *
      * @return string
      */
-    public function display($daos, $all = false, $format = 'thumb')
+    public function display($daos, $all = false, $format = 'thumb', $communicability)
     {
         if ( $all === false ) {
             return self::proceedDao(
@@ -126,7 +126,8 @@ class DisplayDao extends \Twig_Extension
                 $this->_covers_dir,
                 false,
                 false,
-                $this->_bach_default_theme
+                $this->_bach_default_theme,
+                $communicability
             );
         } else {
             $res = '';
@@ -161,7 +162,7 @@ class DisplayDao extends \Twig_Extension
      * @return DOMElement
      */
     public static function displayDaos($daogrps, $daos, $viewer, $format = 'thumb',
-        $ajax = false, $covers_dir = null
+        $ajax = false, $covers_dir = null, $communicability = false
     ) {
         //start root element
         $res = '<div>';
@@ -209,7 +210,11 @@ class DisplayDao extends \Twig_Extension
                             $format,
                             $ajax,
                             true,
-                            $covers_dir
+                            $covers_dir,
+                            true,
+                            false,
+                            'web',
+                            $communicability
                         );
                     }
                 }
@@ -321,7 +326,11 @@ class DisplayDao extends \Twig_Extension
                     $format,
                     $ajax,
                     true,
-                    $covers_dir
+                    $covers_dir,
+                    true,
+                    false,
+                    'web',
+                    $communicability
                 );
             }
 
@@ -459,7 +468,7 @@ class DisplayDao extends \Twig_Extension
      */
     public static function proceedDao($dao, $daotitle, $viewer, $format,
         $ajax = false, $standalone = true, $covers_dir = null, $all = true,
-        $linkDesc = false, $bach_default_theme = 'web'
+        $linkDesc = false, $bach_default_theme = 'web', $communicability = false
     ) {
         $ret = null;
 
@@ -483,6 +492,7 @@ class DisplayDao extends \Twig_Extension
             $viewer .= '/';
         }
 
+        $linkCommunicability = '<img src="/img/thumb_comm.png" title="'. _('This picture is not communicable') . '"/>';
         $title = str_replace(
             '%name%',
             ($daotitle) ? $daotitle : $dao,
@@ -491,8 +501,12 @@ class DisplayDao extends \Twig_Extension
         switch ( self::_getType($dao) ) {
         case self::SERIES:
             $ret = '<a href="' . $viewer . 'series/' . $dao . '" target="_blank" property="image">';
-            $ret .= '<img src="' . $viewer . 'ajax/representative/' .
-                rtrim($dao, '/') .  '/format/' . $format  . '" alt="' . $dao . '"/>';
+            if ($communicability == true ) {
+                $ret .= '<img src="' . $viewer . 'ajax/representative/' .
+                    rtrim($dao, '/') .  '/format/' . $format  . '" alt="' . $dao . '"/>';
+            } else {
+                $ret .= $linkCommunicability;
+            }
             if ( $daotitle !== null ) {
                 $ret .= '<span class="title">' . $daotitle . '</span>';
             }
@@ -500,8 +514,12 @@ class DisplayDao extends \Twig_Extension
             break;
         case self::IMAGE:
             $ret = '<a href="' . $viewer . 'viewer/' . $dao . '" target="_blank" property="image">';
-            $ret .= '<img src="' . $viewer . 'ajax/img/' . $dao .
-                '/format/' . $format . '" alt="' . $dao .'"/>';
+            if ($communicability == true ) {
+                $ret .= '<img src="' . $viewer . 'ajax/img/' . $dao .
+                    '/format/' . $format . '" alt="' . $dao .'"/>';
+            } else {
+                $ret .= $linkCommunicability;
+            }
             /*if ( $daotitle !== null ) {
                 $ret .= '<span class="title">' . $daotitle . '</span>';
             }*/

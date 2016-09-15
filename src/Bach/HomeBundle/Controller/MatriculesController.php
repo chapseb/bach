@@ -272,6 +272,8 @@ class MatriculesController extends SearchController
             = $this->container->getParameter('display.disable_select_daterange');
 
         $this->searchhistoMatAddAction($searchResults->getNumFound());
+
+        $tpl_vars['readingroomIp'] = $this->container->getParameter('readingroom');
         return $this->render(
             'BachHomeBundle:Matricules:search_form.html.twig',
             array_merge(
@@ -381,8 +383,25 @@ class MatriculesController extends SearchController
             $tplParams['matricules_searchparameters']
                 = $this->container->getParameter('matricules_searchparameters');
         }
-        if ($print == true){
+        if ($print == true) {
             $tplParams['print'] = $print;
+        }
+
+        $current_date = new \DateTime();
+        $tplParams['communicability'] = false;
+        if (strtotime($doc->communicability_general) <= $current_date->getTimestamp()) {
+            $tplParams['communicability'] = true;
+        }
+        if ($tplParams['communicability'] == false) {
+            $incomeIp = $this->container->get(
+                'request'
+            )->getClientIp();
+            $testIp = $this->container->getParameter('readingroom');
+            if ($testIp == $incomeIp
+                && strtotime($doc->communicability_sallelecture) <= $current_date->getTimestamp()
+            ) {
+                $tplParams['communicability'] = true;
+            }
         }
         return $this->render(
             $tpl,
@@ -655,8 +674,11 @@ class MatriculesController extends SearchController
         $client = $this->get($this->entryPoint());
         $query = $client->createSelect();
         $query->setQuery(
-            'start_dao:' . $qry_string . ' OR end_dao:' . $qry_string
+            'start_dao:' . $qry_string . ' OR end_dao:' . $qry_string . ' OR ' .
+            ' (+start_dao:[* TO ' . $qry_string . '] +end_dao:[' .
+            $qry_string . ' TO *])'
         );
+
         $query->setFields(
             'id, nom, txt_prenoms, classe, cote, date_enregistrement,
             lieu_enregistrement, prenoms, matricule, annee_naissance, lieu_naissance,

@@ -53,28 +53,39 @@ POSSIBILITY OF SUCH DAMAGE.
         <article id="result_{{ document.id }}" role="document" about="{{ document.id }}" class="thumbs">
             <figure class="result_pic{% if document.start_dao is not defined %} no-image{% endif %}">
                 {% if document.start_dao is defined %}
-                    {% set series_name %}
-                        {%- for i in document.start_dao|split('/') -%}
-                            {%- if not loop.last -%}
-                                /{{ i }}
-                            {%- endif -%}
-                        {%- endfor -%}
-                    {% endset %}
-                    {% set images_link %}
-                        {%- if viewer_uri[-1:1] != '/' -%}/{%- endif -%}
-                        {%- if document.end_dao is defined and document.start_dao != document.end_dao -%}
-                            series{{ series_name }}?s={{ document.start_dao|split('/')|slice(-1,1)[0] }}&e={{ document.end_dao|split('/')|slice(-1,1)[0] }}
-                        {%- else -%}
-                            viewer/{{ document.start_dao }}
-                        {%- endif -%}
-                    {% endset %}
-                    <a href="{{ viewer_uri ~ images_link }}" target="_blank" >
-                    {% if document.nom is defined or document.prenom is defined %}
-                        <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ document.nom ~ ' ' ~ document.prenoms|join(' ') }}"/>
-                    {% else %}
-                        <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ _('Scan') }}"/>
+                    {% set communicable = false %}
+                    {% if (document.communicability_general is not defined and document.communicability_sallelecture is not defined)
+                      or document.communicability_general < "now"|date('Ymd')
+                      or (app.request.server.get("REMOTE_ADDR") == readingroomIp
+                       and document.communicability_sallelecture < "now"|date('Ymd'))%}
+                        {% set communicable = true %}
                     {% endif %}
-                    </a>
+                    {% if communicable == true%}
+                        {% set series_name %}
+                            {%- for i in document.start_dao|split('/') -%}
+                                {%- if not loop.last -%}
+                                    /{{ i }}
+                                {%- endif -%}
+                            {%- endfor -%}
+                        {% endset %}
+                        {% set images_link %}
+                            {%- if viewer_uri[-1:1] != '/' -%}/{%- endif -%}
+                            {%- if document.end_dao is defined and document.start_dao != document.end_dao -%}
+                                series{{ series_name }}?s={{ document.start_dao|split('/')|slice(-1,1)[0] }}&e={{ document.end_dao|split('/')|slice(-1,1)[0] }}
+                            {%- else -%}
+                                viewer/{{ document.start_dao }}
+                            {%- endif -%}
+                        {% endset %}
+                        <a href="{{ viewer_uri ~ images_link }}" target="_blank" >
+                        {% if document.nom is defined or document.prenom is defined %}
+                        <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ document.nom ~ ' ' ~ document.prenoms|join(' ') }}"/>
+                        {% else %}
+                            <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ _('Scan') }}"/>
+                        {% endif %}
+                        </a>
+                    {% else %}
+                        <img src="{{ asset('img/thumb_comm.png')}}" alt="{{ document.nom ~ ' ' ~ document.prenoms|join(' ') }}" title="{{ _('This picture is not communicable') }}" />
+                    {%endif%}
                 {% else %}
                     <img src="{% include '::images/noimage.html.twig' %}" alt=""/>
                 {% endif %}

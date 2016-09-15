@@ -350,6 +350,64 @@ class DefaultController extends SearchController
 
         $tpl_vars['all_facets'] = $all_facets;
 
+        //////////////// get the daos communicable in a page result ////////////////
+        // get the list of daos in search results (10, 20, ...)
+        $arrayDaos = array();
+        foreach ($searchResults->getData() as $searchResult) {
+            if (isset($searchResult['docs'])) {
+                foreach ($searchResult['docs'] as $doc ) {
+                    if (isset($doc['dao'])) {
+                        foreach ($doc['dao'] as $dao) {
+                            array_push($arrayDaos, $dao);
+                        }
+                    }
+                }
+            }
+        }
+        if (!empty($arrayDaos)) {
+            // get current year for SQL query
+            $current_date = new \DateTime();
+            $current_year = $current_date->format("Y");
+
+            $tpl_vars['ipconnection'] = $this->container->get(
+                'request'
+            )->getClientIp();
+            $testIp = $this->container->getParameter('readingroom');
+            $flagReadroom = false;
+            if ($testIp == $tpl_vars['ipconnection']) {
+                $flagReadroom = true;
+            }
+            // get daos with readingroom communicability or general communicability
+            if ($flagReadroom == true) {
+                $query = $this->getDoctrine()->getManager()->createQuery(
+                    'SELECT e.href FROM BachIndexationBundle:EADDaos e ' .
+                    'WHERE e.href IN (:ids) AND ' .
+                    '(e.communicability_sallelecture IS NULL '.
+                    'OR e.communicability_sallelecture <= :year)'
+                )->setParameter('ids', $arrayDaos)
+                    ->setParameter('year', $current_year);
+            } else {
+                $query = $this->getDoctrine()->getManager()->createQuery(
+                    'SELECT e.href ' .
+                    'FROM BachIndexationBundle:EADDaos e ' .
+                    'WHERE e.href IN (:ids) AND (e.communicability_general IS NULL '.
+                    'OR e.communicability_general <= :year)'
+                )->setParameter('ids', $arrayDaos)->setParameter(
+                    'year',
+                    $current_year
+                );
+
+            }
+            // get an array with communicable daos search result linked
+            $arrayDaos = array();
+            foreach ($query->getResult() as $res) {
+                array_push($arrayDaos, $res['href']);
+            }
+
+            $tpl_vars['listDaos'] = array_values($arrayDaos);
+        }
+        ////////////////////////////////////////////////////////////////////////////////
+
         if ( !is_null($query_terms) ) {
             $hlSearchResults = $factory->getHighlighting();
             $scSearchResults = $factory->getSpellcheck();
@@ -763,6 +821,38 @@ class DefaultController extends SearchController
             }
         }
 
+        ////////////// Add communicability check /////////////////////////
+        $tpl_vars['ipconnection'] = $this->container->get('request')->getClientIp();
+        $testIp = $this->container->getParameter('readingroom');
+        $flagReadroom = false;
+        if ($testIp == $tpl_vars['ipconnection']) {
+            $flagReadroom = true;
+        }
+
+        $queryDaos = $this->getDoctrine()->getManager()->createQuery(
+            'SELECT h.href, h.communicability_general,' .
+            ' h.communicability_sallelecture ' .
+                'FROM BachIndexationBundle:EADFileFormat e ' .
+                'JOIN e.daos h WHERE e.fragmentid= :eadfile'
+        )->setParameter('eadfile', $docid);
+
+        $tpl_vars['communicability'] = false;
+        if (isset($queryDaos->getResult()[0])) {
+            $getResult = $queryDaos->getResult()[0];
+
+            $current_date = new \DateTime();
+            $current_year = $current_date->format("Y");
+
+            if ($getResult['communicability_general'] == null
+                || $current_year >= $getResult['communicability_general']
+                || ($flagReadroom == true
+                && $current_year >= $getResult['communicability_sallelecture'])
+            ) {
+                $tpl_vars['communicability'] = true;
+            }
+        }
+        //////////////////////////////////////////////////////////////////
+
         /* not display warning about cookies */
         if ( isset($_COOKIE[$this->getCookieName()]) ) {
             $tpl_vars['cookie_param'] = true;
@@ -1127,6 +1217,26 @@ class DefaultController extends SearchController
                 $doc['cUnittitle'] . '</a>';
             $response['ead']['doclink'] = '<a href="' . $doc_url .'">' .
                 $doc['cUnittitle'] . '</a>';
+
+            //////// Add communicability infos in remote //
+            if (substr($qry_string, -1) == '/') {
+                $qry_string = substr($qry_string, 0, -1);
+            }
+            $query = $this->getDoctrine()->getManager()->createQuery(
+                "SELECT e.href, e.communicability_general, " .
+                "e.communicability_sallelecture " .
+                "FROM BachIndexationBundle:EADDaos e " .
+                "WHERE (e.href = :imagelink OR e.href = :directorylink)"
+            )->setParameter('imagelink', $qry_string)
+                ->setParameter('directorylink', $path);
+
+            $response['ead']['communicability_general'] = null;
+            $response['ead']['communicability_sallelecture'] = null;
+            if (isset($query->getResult()[0]['communicability_general'])) {
+                $response['ead']['communicability_general'] = $query->getResult()[0]['communicability_general'];
+                $response['ead']['communicability_sallelecture'] = $query->getResult()[0]['communicability_sallelecture'];
+            }
+            ////////////////////////////////////////////////
         }
         if ( $this->container->getParameter('feature.matricules') ) {
             //we did not find any restuls in archives, try with matricules.

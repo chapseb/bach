@@ -165,7 +165,7 @@ class DisplayEADFragment extends \Twig_Extension
      */
     public function display($fragment, $docid, $form_name = 'default', $full = false,
         $hasChildren = false, $hasComments = false, $countSub = 0, $ajax = false,
-        $print = false, $highlight = false
+        $print = false, $highlight = false, $communicability = false
     ) {
         $proc = new \XsltProcessor();
         $proc->importStylesheet(
@@ -201,6 +201,7 @@ class DisplayEADFragment extends \Twig_Extension
         $comments_enabled = $this->_comms ? 'true' : 'false';
         $proc->setParameter('', 'comments_enabled', $comments_enabled);
         $proc->setParameter('', 'print', $print);
+        $proc->setParameter('', 'communicability', $communicability);
 
         if ( $hasChildren === true ) {
             $proc->setParameter('', 'children', 'true');

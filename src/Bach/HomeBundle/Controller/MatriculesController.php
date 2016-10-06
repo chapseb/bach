@@ -655,7 +655,7 @@ class MatriculesController extends SearchController
         $client = $this->get($this->entryPoint());
         $query = $client->createSelect();
         $query->setQuery(
-            'start_dao:' . $qry_string . ' or end_dao:' . $qry_string
+            'start_dao:' . $qry_string . ' OR end_dao:' . $qry_string
         );
         $query->setFields(
             'id, nom, txt_prenoms, classe, cote, date_enregistrement,

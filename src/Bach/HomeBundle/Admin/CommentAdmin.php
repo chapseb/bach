@@ -312,6 +312,7 @@ class CommentAdmin extends Admin
     {
         if ($this->statusComment == '0'
             && ($comment->getState() == '1' || $comment->getState() == '3')
+            && $comment->getOpenedBy() != null
         ) {
             $userTo  = $comment->getOpenedBy()->getEmail();
             if ($userTo != null && filter_var($userTo, FILTER_VALIDATE_EMAIL)) {

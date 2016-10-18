@@ -180,12 +180,16 @@ class EADIndexes
                 $this->$attr = $value;
                 break;
             case 'latitude' :
-                $ent->setLat($value);
-                $lat = $ent->getLat();
+                if ($type == 'cGeogname') {
+                    $ent->setLat($value);
+                    $lat = $ent->getLat();
+                }
                 break;
             case 'longitude' :
-                $ent->setLon($value);
-                $lon = $ent->getLon();
+                if ($type == 'cGeogname') {
+                    $ent->setLon($value);
+                    $lon = $ent->getLon();
+                }
                 break;
             default:
                 //attribute is not mapped, no action

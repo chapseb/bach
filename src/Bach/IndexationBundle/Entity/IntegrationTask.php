@@ -127,7 +127,11 @@ class IntegrationTask
      */
     public function getPath()
     {
-        return realpath($this->document->getAbsolutePath());
+        if (realpath($this->document->getAbsolutePath()) == null) {
+            return $this->document->getAbsolutePath();
+        } else {
+            return realpath($this->document->getAbsolutePath());
+        }
     }
 
     /**

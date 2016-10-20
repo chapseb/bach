@@ -57,6 +57,7 @@ use Bach\IndexationBundle\Entity\IntegrationTask;
 use Bach\AdministrationBundle\Entity\SolrCore\SolrCoreAdmin;
 use Bach\IndexationBundle\Service\ZendDb;
 use Zend\Db\ResultSet\ResultSet;
+use Aws\S3\S3Client;
 
 /**
  * Publication command
@@ -147,6 +148,7 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $container = $this->getContainer();
         $count = 0;
 
         $stats = $input->getOption('stats');
@@ -167,7 +169,6 @@ EOF
         }
 
         $type = null;
-        $container = $this->getContainer();
 
         $logger = $container->get('publication.logger');
         $known_types = $container->getParameter('bach.types');

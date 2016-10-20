@@ -143,9 +143,21 @@ class Document
     {
         $path = null;
         if ( $this->uploaded && $this->path !== null ) {
-            $path = $this->_upload_dir . '/' . $this->path;
+            if (substr($this->path, 0, 1) === '/'
+                || substr($this->uploaded, -1) === '/'
+            ) {
+                $path = $this->_upload_dir . $this->path;
+            } else {
+                $path = $this->_upload_dir . '/'. $this->path;
+            }
         } else if ( !$this->uploaded && $this->path !== null ) {
-            $path = $this->_store_dir . '/' . $this->path;
+            if (substr($this->path, 0, 1) === '/'
+                || substr($this->_store_dir, -1) === '/'
+            ) {
+                $path = $this->_store_dir . $this->path;
+            } else {
+                $path = $this->_store_dir . '/' . $this->path;
+            }
         }
         return $path;
     }

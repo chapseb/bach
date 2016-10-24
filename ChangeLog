@@ -1,3 +1,11 @@
+1.3.4 (2016-10-24)
+
+- Fix basket when document has not dates
+- Fix date display in image remote infos
+- Fix query infos remote matricules
+- Fix issue when comment is updated
+- Fix with geoloc attribute not in geogname tag
+
 1.3.3 (2016-09-07)
 
 - Add export and import basket and historic search

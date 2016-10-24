@@ -822,7 +822,7 @@ abstract class SearchController extends Controller
             $docs = $this->getDoctrine()->getManager()->createQuery(
                 'SELECT e.cUnittitle, e.fragmentid, e.cUnitid, d.date ' .
                 'FROM BachIndexationBundle:EADFileFormat e ' .
-                'JOIN e.dates d WHERE e.fragmentid IN (:ids)'
+                ' LEFT JOIN e.dates d WHERE e.fragmentid IN (:ids)'
             )->setParameter('ids', $session->get('documents')['ead'])->getResult();
         } else {
             $docs = array();

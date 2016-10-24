@@ -655,7 +655,7 @@ class MatriculesController extends SearchController
         $client = $this->get($this->entryPoint());
         $query = $client->createSelect();
         $query->setQuery(
-            'start_dao:' . $qry_string . ' or end_dao:' . $qry_string
+            'start_dao:' . $qry_string . ' OR end_dao:' . $qry_string
         );
         $query->setFields(
             'id, nom, txt_prenoms, classe, cote, date_enregistrement,
@@ -678,10 +678,16 @@ class MatriculesController extends SearchController
                 )
             );
 
-            $class = new \DateTime($doc['classe']);
+            if (isset($doc['classe'])) {
+                $annee = new \DateTime($doc['classe']);
+            } else if (isset($doc['date_enregistrement'])) {
+                $annee = new \DateTime($doc['date_enregistrement']);
+            } else {
+                $annee = new \DateTime($doc['annee_naissance']);
+            }
             $response['mat']['link_mat'] = '<a href="' . $doc_url . '">' .
                 $doc['nom'] . ' ' . $doc['txt_prenoms'] .
-                ' (' . $class->format('Y') . ')' . '</a>';
+                ' (' . $annee->format('Y') . ')' . '</a>';
             $response['mat']['record'] = $doc->getFields();
         }
 

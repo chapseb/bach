@@ -75,6 +75,7 @@ class DisplayDao extends \Twig_Extension
     const MISC = 6;
     const EXTERNAL = 7;
     const XML=8;
+    const SERIESBOUND = 9;
 
     /**
      * Main constructor
@@ -107,27 +108,39 @@ class DisplayDao extends \Twig_Extension
     /**
      * Displays numeric documents regarding to their type
      *
-     * @param string  $daos   Documents
-     * @param boolean $all    Displays all documents, default to false
-     * @param string  $format Format to display, defaults to thumb
+     * @param string  $daos       Documents
+     * @param boolean $all        Displays all documents, default to false
+     * @param string  $format     Format to display, defaults to thumb
+     * @param string  $testSeries Test if first images is a serie, defaults to null
      *
      * @return string
      */
-    public function display($daos, $all = false, $format = 'thumb')
+    public function display($daos, $all = false, $format = 'thumb', $testSeries = null)
     {
-        if ( $all === false ) {
-            return self::proceedDao(
-                $daos[0],
-                null,
-                $this->_viewer,
-                $format,
-                false,
-                true,
-                $this->_covers_dir,
-                false,
-                false,
-                $this->_bach_default_theme
-            );
+        if ($all === false) {
+            if ($testSeries == 'series') {
+                $directory = substr($daos[0], 0, strrpos($daos[0], '/'));
+                $imageBegin = substr($daos[0], strrpos($daos[0], '/') + 1);
+                $imageEnd = substr($daos[1], strrpos($daos[1], '/') + 1);
+                $retLink = '<a href="' . $this->_viewer . 'series/' . $directory .
+                    '?s=' . $imageBegin . '&e=' . $imageEnd .'" target="_blank">';
+                $retLink .= '<img src="' . $this->_viewer . 'ajax/img/' .
+                    rtrim($daos[0], '/') .  '/format/' . $format . '" alt="' . $daos[0] . '"/></a>';
+                return $retLink;
+            } else {
+                return self::proceedDao(
+                    $daos[0],
+                    null,
+                    $this->_viewer,
+                    $format,
+                    false,
+                    true,
+                    $this->_covers_dir,
+                    false,
+                    false,
+                    $this->_bach_default_theme
+                );
+            }
         } else {
             $res = '';
             foreach ( $daos as $dao ) {
@@ -181,19 +194,59 @@ class DisplayDao extends \Twig_Extension
                 }
 
                 $results = array(
-                    self::IMAGE     => array(),
-                    self::SERIES    => array(),
-                    self::VIDEO     => array(),
-                    self::FLASH     => array(),
-                    self::SOUND     => array(),
-                    self::FLA_SOUND => array(),
-                    self::MISC      => array(),
-                    self::XML       => array()
+                    self::IMAGE       => array(),
+                    self::SERIES      => array(),
+                    self::SERIESBOUND => array(),
+                    self::VIDEO       => array(),
+                    self::FLASH       => array(),
+                    self::SOUND       => array(),
+                    self::FLA_SOUND   => array(),
+                    self::MISC        => array(),
+                    self::XML         => array()
                 );
 
-                foreach ( $xml_dg->children() as $node_name => $xml_dao ) {
-                    if ( $node_name === 'dao' || $node_name === 'daoloc' ) {
-                        if( isset($xml_dao['role']) && (string)$xml_dao['role'] == 'thumbnails' ) {
+                if ($xml_dg->attributes()['role'] == 'series') {
+                    $retLink = '';
+                    $retImg = '';
+                    foreach ($xml_dg->children() as $node_name => $xml_dao) {
+                        if ($xml_dao['role'] == 'image:first') {
+                            $dao = (string)$xml_dao['href'];
+                            $daotitle = null;
+                            if ($xml_dao['title']) {
+                                $daotitle = $xml_dao['title'];
+                            }
+                            $directory = substr($dao, 0, strrpos($dao, '/'));
+                            $imageBegin = substr($dao, strrpos($dao, '/') + 1);
+                            $retLink = '<a href="' . $viewer . 'series/' . $directory .
+                                '?s=' . $imageBegin;
+                            $retImg .= '<img src="' . $viewer . 'ajax/img/' .
+                                rtrim($dao, '/') .  '/format/' . $format  . '" alt="' . $dao . '"/>';
+
+                        } else if ($xml_dao['role'] == 'image:last') {
+                            $dao = (string)$xml_dao['href'];
+                            $daotitle = null;
+                            if ($xml_dao['title']) {
+                                $daotitle = $xml_dao['title'];
+                            }
+                            $directory = substr($dao, 0, strrpos($dao, '/'));
+
+                            $imageEnd = substr($dao, strrpos($dao, '/') + 1);
+                            $retLink .= '&e='. $imageEnd . '" target="_blank">';
+                            $ret = $retLink. $retImg . '</a>';
+                            $results[self::SERIESBOUND][] = $ret;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+
+                foreach ($xml_dg->children() as $node_name => $xml_dao) {
+                    if ($node_name === 'dao' || $node_name === 'daoloc') {
+                        if (isset($xml_dao['role'])
+                            && ((string)$xml_dao['role'] == 'thumbnails'
+                            ||(string)$xml_dao['role'] == 'image:first'
+                            ||(string)$xml_dao['role'] == 'image:last')
+                        ) {
                             break;
                         }
                         $dao = (string)$xml_dao['href'];
@@ -236,6 +289,14 @@ class DisplayDao extends \Twig_Extension
                 if ( count($results[self::SERIES]) > 0 ) {
                     $res .= '<div>';
                     foreach ( $results[self::SERIES] as $series ) {
+                        $res .= $series;
+                    }
+                    $res .= '</div>';
+                }
+
+                if ( count($results[self::SERIESBOUND]) > 0 ) {
+                    $res .= '<div>';
+                    foreach ( $results[self::SERIESBOUND] as $series ) {
                         $res .= $series;
                     }
                     $res .= '</div>';
@@ -404,7 +465,7 @@ class DisplayDao extends \Twig_Extension
 
         //end root element
         $res .= '</div>';
-
+        $res = preg_replace('#&(?=[a-z_0-9]+=)#', '&amp;', $res);
         $sxml = simplexml_load_string($res);
         $doc = dom_import_simplexml($sxml);
         return $doc;

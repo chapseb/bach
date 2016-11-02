@@ -350,6 +350,25 @@ class DefaultController extends SearchController
 
         $tpl_vars['all_facets'] = $all_facets;
 
+        $daoSeries = array();
+        foreach ($searchResults as $searchResult) {
+            if (count($searchResult['dao']) > 1) {
+                $query = $this->getDoctrine()->getManager()
+                    ->createQuery(
+                        'SELECT e.role FROM BachIndexationBundle:EADDaos e
+                        WHERE e.href = :href'
+                    )->setParameters(
+                        array(
+                            'href' => $searchResult['dao'][0],
+                        )
+                    );
+                if ($query->getResult()[0]['role'] == 'image:first') {
+                    $daoSeries[$searchResult['fragmentid']] = 'series';
+                }
+            }
+            $tpl_vars['daoSeries'] = $daoSeries;
+        }
+
         if ( !is_null($query_terms) ) {
             $hlSearchResults = $factory->getHighlighting();
             $scSearchResults = $factory->getSpellcheck();

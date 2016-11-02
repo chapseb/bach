@@ -58,12 +58,16 @@ POSSIBILITY OF SUCH DAMAGE.
                             {% endif%}
                         {% endfor %}
                         {% endif %}
-                        {% if document.dao is defined and flagCommunicability == true %}
-                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability)|raw }}
-                        {% elseif flagCommunicability is defined and flagCommunicability == false %}
-                            <img src="/img/thumb_comm.png" title="This picture is not communicable"/>
+                        {% if daoSeries[document.fragmentid] is defined and daoSeries[document.fragmentid] == 'series' and flagCommunicability == true%}
+                            {{ displayDao(document.dao, false, 'thumb', 'series')|raw }}
                         {% else %}
+                          {% if document.dao is defined and flagCommunicability == true %}
+                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability)|raw }}
+                          {% elseif flagCommunicability is defined and flagCommunicability == false %}
+                            <img src="/img/thumb_comm.png" title="This picture is not communicable"/>
+                          {% else %}
                             <img src="{% include '::images/noimage.html.twig' %}" alt=""/>
+                          {% endif %}
                         {% endif %}
                     </figure>
                     {% endif %}

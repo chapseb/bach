@@ -51,7 +51,11 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% if show_pics %}
                     <figure class="result_pic{% if document.dao is not defined %} no-image{% endif %}">
                         {% if document.dao is defined %}
+                         {% if daoSeries[document.fragmentid] is defined and daoSeries[document.fragmentid] == 'series'%}
+                            {{ displayDao(document.dao, false, 'thumb', 'series')|raw }}
+                         {%else%}
                             {{ displayDao(document.dao)|raw }}
+                         {%endif%}
                         {% else %}
                             <img src="{% include '::images/noimage.html.twig' %}" alt=""/>
                         {% endif %}

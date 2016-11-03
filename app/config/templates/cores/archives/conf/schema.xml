@@ -678,7 +678,7 @@
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StandardFilterFactory"/>
-        <filter class="at.ac.univie.mminf.luceneSKOS.solr.SKOSFilterFactory" skosFile="skos/w.rdf" expansionType="LABEL" bufferSize="2" />
+        <!--<filter class="at.ac.univie.mminf.luceneSKOS.solr.SKOSFilterFactory" skosFile="skos/w.rdf" expansionType="LABEL" bufferSize="2" />-->
         <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
       <analyzer type="query">
@@ -691,7 +691,7 @@
     <fieldType name="skos_w_concept" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.KeywordTokenizerFactory"/>
-        <filter class="at.ac.univie.mminf.luceneSKOS.solr.SKOSFilterFactory" skosFile="skos/w.rdf" expansionType="URI"/>
+        <!--<filter class="at.ac.univie.mminf.luceneSKOS.solr.SKOSFilterFactory" skosFile="skos/w.rdf" expansionType="URI"/>-->
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.StandardTokenizerFactory"/>

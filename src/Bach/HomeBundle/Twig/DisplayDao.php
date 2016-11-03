@@ -115,8 +115,9 @@ class DisplayDao extends \Twig_Extension
      *
      * @return string
      */
-    public function display($daos, $all = false, $format = 'thumb', $testSeries = null)
-    {
+    public function display($daos, $all = false, $format = 'thumb',
+        $communicability = false, $testSeries = null
+    ) {
         if ($all === false) {
             if ($testSeries == 'series') {
                 $directory = substr($daos[0], 0, strrpos($daos[0], '/'));

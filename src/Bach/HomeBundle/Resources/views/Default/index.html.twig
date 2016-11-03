@@ -58,8 +58,8 @@ POSSIBILITY OF SUCH DAMAGE.
                             {% endif%}
                         {% endfor %}
                         {% endif %}
-                        {% if daoSeries[document.fragmentid] is defined and daoSeries[document.fragmentid] == 'series' and flagCommunicability == true%}
-                            {{ displayDao(document.dao, false, 'thumb', 'series')|raw }}
+                        {% if daoSeries[document.fragmentid] is defined and daoSeries[document.fragmentid] == 'series' and flagCommunicability == true %}
+                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability, 'series')|raw }}
                         {% else %}
                           {% if document.dao is defined and flagCommunicability == true %}
                             {{ displayDao(document.dao, false, 'thumb', flagCommunicability)|raw }}

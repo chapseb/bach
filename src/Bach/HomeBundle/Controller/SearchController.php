@@ -123,7 +123,7 @@ abstract class SearchController extends Controller
             'q'                 => ''
         );
 
-        if ( $this->search_form !== null ) {
+        if ($this->search_form !== null) {
             $tpl_vars['search_form'] = $this->search_form;
         } else {
             $tpl_vars['search_form'] = 'default';
@@ -168,7 +168,7 @@ abstract class SearchController extends Controller
     protected function handleGeoloc(SolariumQueryFactory $factory)
     {
         $show_maps = $this->container->getParameter('feature.maps');
-        if ( $show_maps ) {
+        if ($show_maps) {
             $request = $this->getRequest();
             $session = $request->getSession();
             $fields = $this->getGeolocFields();
@@ -229,14 +229,14 @@ abstract class SearchController extends Controller
 
             $values = array();
 
-            if ( $solr_field == 'headerId' ) {
+            if ($solr_field == 'headerId') {
                 //retrieve documents titles...
                 $ids = array();
                 foreach ( $field_facets as $key=>$value ) {
                     $ids[] = $key . '_description';
                 }
 
-                if ( count($ids) > 0 ) {
+                if (count($ids) > 0) {
                     $query = $this->getDoctrine()->getManager()->createQuery(
                         'SELECT h.headerId, h.headerTitle ' .
                         'FROM BachIndexationBundle:EADFileFormat e ' .
@@ -246,14 +246,14 @@ abstract class SearchController extends Controller
                 }
             }
 
-            if ( $field_facets !== null ) {
+            if ($field_facets !== null) {
                 foreach ( $field_facets as $item=>$count ) {
-                    if ( !$filters->offsetExists($solr_field)
+                    if (!$filters->offsetExists($solr_field)
                         || !$filters->hasValue($solr_field, $item)
                     ) {
-                        if ( $solr_field == 'headerId' && count($docs_titles) > 0 ) {
+                        if ($solr_field == 'headerId' && count($docs_titles) > 0) {
                             foreach ( $docs_titles as $title ) {
-                                if ( $title['headerId'] === $item ) {
+                                if ($title['headerId'] === $item) {
                                     $facet_labels[$solr_field][$item]
                                         = $title['headerTitle'];
                                     break;
@@ -265,21 +265,21 @@ abstract class SearchController extends Controller
                 }
             }
 
-            if ( count($values) > 0
+            if (count($values) > 0
                 || in_array($solr_field, $this->getFacetsDateFields())
             ) {
-                if ( $solr_field !== 'dao' ) {
+                if ($solr_field !== 'dao' ) {
                     //facet order
                     $facet_order = $request->get('facet_order');
-                    if ( $facet_name !== null ) {
+                    if ($facet_name !== null) {
                         $facet_order = 1;
                     }
-                    if ( !$facet_order || $facet_order == 0 ) {
+                    if (!$facet_order || $facet_order == 0) {
                         arsort($values);
                     } else {
-                        if ( defined('SORT_FLAG_CASE') ) {
+                        if (defined('SORT_FLAG_CASE')) {
                             //TODO: find a better way!
-                            if ( $this->getRequest()->getLocale() == 'fr_FR' ) {
+                            if ($this->getRequest()->getLocale() == 'fr_FR') {
                                 setlocale(LC_COLLATE, 'fr_FR.utf8');
                             }
                             ksort($values, SORT_LOCALE_STRING | SORT_FLAG_CASE);
@@ -291,7 +291,7 @@ abstract class SearchController extends Controller
                 }
 
                 $do = true;
-                if ( $facet->getSolrFieldName() === 'dao' ) {
+                if ($facet->getSolrFieldName() === 'dao') {
                     foreach ( $values as $v ) {
                         if ( $v == 0 ) {
                             $do = false;
@@ -299,7 +299,7 @@ abstract class SearchController extends Controller
                     }
                 }
 
-                if ( $do ) {
+                if ($do) {
                     //get original URL if any
                     $tpl_vars['orig_href'] = $request->get('orig_href');
                     $tpl_vars['facet_order'] = $request->get('facet_order');
@@ -320,25 +320,25 @@ abstract class SearchController extends Controller
                 array('position' => 'ASC')
             );
         foreach ( $browse_fields as $field ) {
-            if ( !isset($facet_names[$field->getSolrFieldName()]) ) {
+            if (!isset($facet_names[$field->getSolrFieldName()])) {
                 $facet_names[$field->getSolrFieldName()]
                     = $field->getLabel($request->getLocale());
             }
         }
 
-        if ( $show_maps ) {
+        if ($show_maps) {
             $geoloc = $this->getGeolocFields();
             foreach ( $geoloc as $field ) {
                 $map_facets[$field] = $facetset->getFacet($field);
             }
         }
 
-        if ( $filters->offsetExists('headerId') ) {
-            if ( !isset($facet_labels['headerId']) ) {
+        if ($filters->offsetExists('headerId')) {
+            if (!isset($facet_labels['headerId'])) {
                 $facet_labels['headerId'] = array();
             }
             $filtered_docs = $filters->offsetGet('headerId');
-            if ( count($docs_titles) === 0 ) {
+            if (count($docs_titles) === 0) {
                  //retrieve documents titles...
                 $ids = array();
                 foreach ( $filtered_docs as $filtered_doc ) {
@@ -354,9 +354,9 @@ abstract class SearchController extends Controller
 
             }
             foreach ( $filtered_docs as $filtered_doc ) {
-                if ( !isset($facet_labels['headerId'][$filtered_doc]) ) {
+                if (!isset($facet_labels['headerId'][$filtered_doc])) {
                     foreach ( $docs_titles as $title ) {
-                        if ( $title['headerId'] === $filtered_doc ) {
+                        if ($title['headerId'] === $filtered_doc) {
                             $facet_labels['headerId'][$filtered_doc]
                                 = $title['headerTitle'];
                             break;
@@ -366,22 +366,22 @@ abstract class SearchController extends Controller
             }
         }
 
-        if ( count($facet_labels) > 0 ) {
+        if (count($facet_labels) > 0) {
             $tpl_vars['facet_labels'] = $facet_labels;
         }
         $tpl_vars['facet_names'] = $facet_names;
 
         $tpl_vars['facets'] = $facets;
 
-        if ( $facet_name !== null ) {
+        if ($facet_name !== null) {
             $tpl_vars['facet_name'] = $facet_name;
             $active = array_search($facet_name, array_keys($facets));
-            if ( false !== $active ) {
+            if (false !== $active) {
                 $tpl_vars['active_facet'] = $active;
             }
         }
 
-        if ( $show_maps ) {
+        if ($show_maps) {
             $session->set(
                 $this->mapFacetsName(),
                 $map_facets
@@ -398,7 +398,7 @@ abstract class SearchController extends Controller
      */
     public function getGeoJsonAction($form_name = null)
     {
-        if ( $form_name !== 'default' ) {
+        if ($form_name !== 'default') {
             $this->search_form = $form_name;
         }
         $request = $this->getRequest();
@@ -521,7 +521,7 @@ abstract class SearchController extends Controller
      */
     public function fullFacetAction($form_name, $query_terms, $name)
     {
-        if ( $form_name !== 'default' ) {
+        if ($form_name !== 'default') {
             $this->search_form = $form_name;
         }
 
@@ -531,7 +531,7 @@ abstract class SearchController extends Controller
         $query_terms = urldecode($query_terms);
 
         $view_params = $session->get($this->getParamSessionName());
-        if ( !$view_params ) {
+        if (!$view_params) {
             $view_params = $this->get($this->getViewParamsServicename());
         }
         $view_params->bind($request, $this->getCookieName());
@@ -546,7 +546,7 @@ abstract class SearchController extends Controller
         $factory->setDateField($this->date_field);
 
         $filters = $session->get($this->getFiltersName());
-        if ( !$filters instanceof Filters ) {
+        if (!$filters instanceof Filters) {
             $filters = new Filters();
         }
 
@@ -573,7 +573,7 @@ abstract class SearchController extends Controller
         $facet = $conf_facets[0];
         $results = $current_facet->getValues();
 
-        if ( $name == 'headerId' ) {
+        if ($name == 'headerId') {
             //retrieve documents titles...
             $query = $this->getDoctrine()->getManager()->createQuery(
                 'SELECT h.headerId, h.headerTitle ' .
@@ -590,7 +590,7 @@ abstract class SearchController extends Controller
                 'count' => $count
             );
 
-            if ( isset($titles[$key]) ) {
+            if (isset($titles[$key])) {
                 $values[$titles[$key]['headerTitle']] = $value;
             } else {
                 $values[$key] = $value;
@@ -599,13 +599,13 @@ abstract class SearchController extends Controller
 
         //facet order
         $facet_order = $request->get('facet_order');
-        if ( $facet_order === null ) {
+        if ($facet_order === null) {
             $facet_order = 1;
         }
-        if ( $facet_order == 1 ) {
-            if ( defined('SORT_FLAG_CASE') ) {
+        if ($facet_order == 1) {
+            if (defined('SORT_FLAG_CASE')) {
                 //TODO: find a better way!
-                if ( $this->getRequest()->getLocale() == 'fr_FR' ) {
+                if ($this->getRequest()->getLocale() == 'fr_FR') {
                     setlocale(LC_COLLATE, 'fr_FR.utf8');
                 }
                 ksort($values, SORT_FLAG_CASE | SORT_LOCALE_STRING);
@@ -631,7 +631,7 @@ abstract class SearchController extends Controller
             'search_uri'    => $this->getSearchUri()
         );
 
-        if ( $this->search_form !== null ) {
+        if ($this->search_form !== null) {
             $tpl_vars['search_form'] = $this->search_form;
         } else {
             $tpl_vars['search_form'] = 'default';
@@ -653,7 +653,7 @@ abstract class SearchController extends Controller
      */
     private function _orderFacetsByOccurences($a, $b)
     {
-        if ( $a['count'] == $b['count'] ) {
+        if ($a['count'] == $b['count']) {
             return 0;
         }
         return ($a['count'] > $b['count']) ? -1 : 1;
@@ -704,7 +704,7 @@ abstract class SearchController extends Controller
     protected function getGeolocFields()
     {
         $show_maps = $this->container->getParameter('feature.maps');
-        if ( $show_maps && !isset($this->_geoloc) ) {
+        if ($show_maps && !isset($this->_geoloc)) {
             $class = $this->getGeolocClass();
             $gf = new $class;
             $gf = $gf->loadDefaults(
@@ -733,7 +733,7 @@ abstract class SearchController extends Controller
     protected function handleYearlyResults($factory, &$tpl_vars)
     {
         $by_year = $factory->getResultsByYear();
-        if ( count($by_year) > 0 ) {
+        if (count($by_year) > 0) {
             $tpl_vars['by_year'] = $by_year;
             $date_min = new \DateTime($by_year[0][0] . '-01-01');
             $date_max = new \DateTime($by_year[count($by_year)-1][0] . '-01-01');
@@ -754,7 +754,7 @@ abstract class SearchController extends Controller
 
         /* Manage view parameters */
         $view_params = $session->get($this->getParamSessionName());
-        if ( !$view_params ) {
+        if (!$view_params) {
             $view_params = $this->get($this->getViewParamsServicename());
         }
         //take care of user view params

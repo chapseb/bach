@@ -99,7 +99,7 @@ class DefaultController extends SearchController
     protected function mapFacetsName()
     {
         $name = 'map_facets';
-        if ( $this->search_form !== null ) {
+        if ($this->search_form !== null) {
             $name .= '_form_' . $this->search_form;
         }
         return $name;
@@ -141,11 +141,11 @@ class DefaultController extends SearchController
         $request = $this->getRequest();
         $session = $request->getSession();
 
-        if ( $query_terms !== null ) {
+        if ($query_terms !== null) {
             $query_terms = urldecode($query_terms);
         }
 
-        if ( $form_name !== 'default' ) {
+        if ($form_name !== 'default') {
             $this->search_form = $form_name;
         }
 
@@ -153,7 +153,7 @@ class DefaultController extends SearchController
         $view_params = $this->handleViewParams();
 
         $filters = $session->get($this->getFiltersName());
-        if ( !$filters instanceof Filters || $request->get('clear_filters') ) {
+        if (!$filters instanceof Filters || $request->get('clear_filters')) {
             $filters = new Filters();
             $session->set($this->getFiltersName(), null);
         }
@@ -161,7 +161,7 @@ class DefaultController extends SearchController
         $filters->bind($request);
         $session->set($this->getFiltersName(), $filters);
 
-        if ( ($request->get('filter_field') || $filters->count() > 0)
+        if (($request->get('filter_field') || $filters->count() > 0)
             && is_null($query_terms)
         ) {
             $query_terms = '*:*';
@@ -171,7 +171,7 @@ class DefaultController extends SearchController
         $tpl_vars['q'] = urlencode($query_terms);
 
         /* not display warning about cookies */
-        if ( isset($_COOKIE[$this->getCookieName()]) ) {
+        if (isset($_COOKIE[$this->getCookieName()])) {
             $tpl_vars['cookie_param'] = true;
         }
 
@@ -192,32 +192,32 @@ class DefaultController extends SearchController
         );
 
         $search_forms = null;
-        if ( $this->search_form !== null ) {
+        if ($this->search_form !== null) {
             $search_forms = $this->container->getParameter('search_forms');
         }
 
         $search_form_params = null;
-        if ( $search_forms !== null ) {
+        if ($search_forms !== null) {
             $search_form_params = $search_forms[$this->search_form];
         }
 
         $current_form = 'main';
-        if ( $search_form_params !== null ) {
+        if ($search_form_params !== null) {
             $current_form = $this->search_form;
         }
 
         $container = new SolariumQueryContainer();
 
-        if ( !is_null($query_terms) ) {
+        if (!is_null($query_terms)) {
             if ($request->get('results_order') !== null) {
                 $container->setOrder($request->get('results_order'));//$view_params->getOrder();
-            } else if ( $this->container->getParameter('display.ead.result_order') != null) {
+            } else if ($this->container->getParameter('display.ead.result_order') != null) {
                 $container->setOrder($this->container->getParameter('display.ead.result_order'));//$view_params->getOrder();
             } else {
                 $container->setOrder($view_params->getOrder());
             }
 
-            if ( $this->search_form !== null ) {
+            if ($this->search_form !== null) {
                 $container->setSearchForm($search_forms[$this->search_form]);
             }
 
@@ -239,9 +239,11 @@ class DefaultController extends SearchController
             $container->setFilters($filters);
 
             $weight = array(
-                "descriptors" => $this->container->getParameter('weight.descriptors'),
+                "descriptors" =>
+                    $this->container->getParameter('weight.descriptors'),
                 "cUnittitle" => $this->container->getParameter('weight.cUnittitle'),
-                "parents_titles" => $this->container->getParameter('weight.parents_titles'),
+                "parents_titles" =>
+                    $this->container->getParameter('weight.parents_titles'),
                 "fulltext" => $this->container->getParameter('weight.fulltext')
             );
             $cMediaContentQuery = array();
@@ -252,7 +254,7 @@ class DefaultController extends SearchController
             }
             $weight = array_merge($weight, $cMediaContentQuery);
             $container->setWeight($weight);
-            if ( $filters->count() > 0 ) {
+            if ($filters->count() > 0) {
                 $tpl_vars['filters'] = $filters;
             }
         } else {
@@ -261,7 +263,7 @@ class DefaultController extends SearchController
 
         $factory->prepareQuery($container);
 
-        if ( !is_null($query_terms) ) {
+        if (!is_null($query_terms)) {
             $conf_facets = $this->getDoctrine()
                 ->getRepository('BachHomeBundle:Facets')
                 ->findBy(
@@ -332,7 +334,7 @@ class DefaultController extends SearchController
 
         $all_facets = $tpl_vars['facet_names'];
         foreach ( $all_facets_table as $field ) {
-            if ( !isset($all_facets_table[$field->getSolrFieldName()]) ) {
+            if (!isset($all_facets_table[$field->getSolrFieldName()])) {
                 $all_facets[$field->getSolrFieldName()]
                     = $field->getLabel($request->getLocale());
             }
@@ -342,7 +344,7 @@ class DefaultController extends SearchController
             ->getRepository('BachHomeBundle:BrowseFields')
             ->findAll();
         foreach ( $browse_fields as $field ) {
-            if ( !isset($browse_fields[$field->getSolrFieldName()]) ) {
+            if (!isset($browse_fields[$field->getSolrFieldName()])) {
                 $all_facets[$field->getSolrFieldName()]
                     = $field->getLabel($request->getLocale());
             }
@@ -426,7 +428,7 @@ class DefaultController extends SearchController
         }
         ////////////////////////////////////////////////////////////////////////////////
 
-        if ( !is_null($query_terms) ) {
+        if (!is_null($query_terms)) {
             $hlSearchResults = $factory->getHighlighting();
             $scSearchResults = $factory->getSpellcheck();
             $resultCount = $searchResults->getNumFound();
@@ -454,19 +456,19 @@ class DefaultController extends SearchController
                 * $view_params->getResultsbyPage() + 1;
             $resultEnd = ($page - 1) * $view_params->getResultsbyPage()
                 + $view_params->getResultsbyPage();
-            if ( $resultEnd > $resultCount ) {
+            if ($resultEnd > $resultCount) {
                 $resultEnd = $resultCount;
             }
             $tpl_vars['resultEnd'] = $resultEnd;
         } else {
             $show_tagcloud = $this->container->getParameter('feature.tagcloud');
-            if ( $show_tagcloud ) {
+            if ($show_tagcloud) {
                 $tagcloud = $factory->getTagCloud(
                     $this->getDoctrine()->getManager(),
                     $search_form_params
                 );
 
-                if ( $tagcloud ) {
+                if ($tagcloud) {
                     $tpl_vars['tagcloud'] = $tagcloud;
                 }
             }
@@ -484,7 +486,7 @@ class DefaultController extends SearchController
         } else {
             $tpl_vars['results_order'] = $this->container->getParameter('display.ead.result_order');//$view_params->getOrder();
         }
-        if ( isset($suggestions) && $suggestions->count() > 0 ) {
+        if (isset($suggestions) && $suggestions->count() > 0) {
             $tpl_vars['suggestions'] = $suggestions;
         }
         $tpl_vars['disable_select_daterange']
@@ -510,14 +512,14 @@ class DefaultController extends SearchController
      */
     public function doSearchAction($form_name = null)
     {
-        if ( $form_name !== 'default' ) {
+        if ($form_name !== 'default') {
             $this->search_form = $form_name;
         }
         $query = new SearchQuery();
         $form = $this->createForm(new SearchQueryFormType(), $query);
 
         $redirectUrl = null;
-        if ( $this->search_form !== null ) {
+        if ($this->search_form !== null) {
             $redirectUrl = $this->get('router')->generate(
                 'bach_search_form_homepage',
                 array(
@@ -530,7 +532,7 @@ class DefaultController extends SearchController
 
         $request = $this->getRequest();
 
-        if ( $request->isMethod('POST') ) {
+        if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
                 $q = $query->getQuery();
@@ -546,13 +548,13 @@ class DefaultController extends SearchController
                 $session->set($this->getParamSessionName(), $view_params);
                 $url_vars['view'] = $view_params->getView();
                 //check for filtering informations
-                if ( $request->get('filter_field')
+                if ($request->get('filter_field')
                     && $request->get('filter_value')
                 ) {
                     $url_vars['filter_field'] = $request->get('filter_field');
                     $url_vars['filter_value'] = $request->get('filter_value');
                 }
-                if ( $form->getData()->keep_filters != 1 ) {
+                if ($form->getData()->keep_filters != 1) {
                     $session->set($this->getFiltersName(), null);
                 }
                 if ($form->getData()->pdf_filters == 1) {
@@ -561,7 +563,7 @@ class DefaultController extends SearchController
                     $session->set('pdf_filters', false);
                 }
                 $route = 'bach_archives';
-                if ( $this->search_form !== null ) {
+                if ($this->search_form !== null) {
                     $url_vars['form_name'] = $this->search_form;
                 }
                 $redirectUrl = $this->get('router')->generate(
@@ -591,12 +593,12 @@ class DefaultController extends SearchController
             );
 
         $field = null;
-        if ( $part === '' && count($fields) >0 ) {
+        if ($part === '' && count($fields) >0) {
             $field = $fields[0];
             $part = $field->getSolrFieldName();
-        } else if ( count($fields) > 0 ) {
+        } else if (count($fields) > 0) {
             foreach ( $fields as $f ) {
-                if ( $f->getSolrFieldName() === $part ) {
+                if ($f->getSolrFieldName() === $part) {
                     $field = $f;
                     break;
                 }
@@ -611,7 +613,7 @@ class DefaultController extends SearchController
 
         $lists = array();
 
-        if ( $part !== '' ) {
+        if ($part !== '') {
             $client = $this->get($this->entryPoint());
 
             $query = $client->createSelect();
@@ -637,9 +639,9 @@ class DefaultController extends SearchController
                 );
             }
 
-            if ( defined('SORT_FLAG_CASE') ) {
+            if (defined('SORT_FLAG_CASE')) {
                 //TODO: find a better way!
-                if ( $this->getRequest()->getLocale() == 'fr_FR' ) {
+                if ($this->getRequest()->getLocale() == 'fr_FR') {
                     setlocale(LC_COLLATE, 'fr_FR.utf8');
                 }
                 ksort($current_values, SORT_LOCALE_STRING | SORT_FLAG_CASE);
@@ -648,7 +650,7 @@ class DefaultController extends SearchController
                 ksort($current_values, SORT_LOCALE_STRING);
             }
 
-            if ( $part == 'headerId' ) {
+            if ($part == 'headerId') {
                 //retrieve documents titles...
                 $ids = array();
                 foreach ( $current_values as $v ) {
@@ -667,13 +669,13 @@ class DefaultController extends SearchController
         }
 
         /* not display warning about cookies */
-        if ( isset($_COOKIE[$this->getCookieName()]) ) {
+        if (isset($_COOKIE[$this->getCookieName()])) {
             $tpl_vars['cookie_param'] = true;
         }
 
         $tpl_vars['lists'] = $lists;
 
-        if ( $ajax === false ) {
+        if ($ajax === false) {
             $tpl_name = 'browse';
         } else {
             $tpl_name = 'browse_tab_contents';
@@ -695,11 +697,12 @@ class DefaultController extends SearchController
      *
      * @return void
      */
-    public function displayDocumentAction($docid, $page = 1, $ajax = false, $print = false)
-    {
+    public function displayDocumentAction($docid, $page = 1, $ajax = false, 
+        $print = false
+    ) {
         $with_context = true;
 
-        if ( $this->getRequest()->get('nocontext') ) {
+        if ($this->getRequest()->get('nocontext')) {
             $with_context = false;
         }
 
@@ -723,7 +726,7 @@ class DefaultController extends SearchController
 
         $rs = $client->select($query);
 
-        if ( $rs->getNumFound() !== 1 ) {
+        if ($rs->getNumFound() !== 1) {
             throw new \RuntimeException(
                 str_replace(
                     '%count%',
@@ -740,7 +743,7 @@ class DefaultController extends SearchController
         $tpl = '';
 
         $form_name = 'default';
-        if ( $this->getRequest()->get('search_form') ) {
+        if ($this->getRequest()->get('search_form')) {
             $form_name = $this->getRequest()->get('search_form');
         }
 
@@ -755,15 +758,15 @@ class DefaultController extends SearchController
             )
         );
 
-        if ( isset($doc['archDescUnitTitle']) ) {
+        if (isset($doc['archDescUnitTitle'])) {
             $tpl_vars['archdesc'] = $doc['archDescUnitTitle'];
         }
         $parents = explode('/', $doc['parents']);
-        if ( count($parents) > 0 ) {
+        if (count($parents) > 0) {
             $pquery = $client->createSelect();
             $query = null;
             foreach ( $parents as $p ) {
-                if ( $query !== null ) {
+                if ($query !== null) {
                     $query .= ' | ';
                 }
                 $query .= 'fragmentid:"' . $doc['headerId'] . '_' . $p . '"';
@@ -772,7 +775,7 @@ class DefaultController extends SearchController
             $pquery->setFields('fragmentid, cUnittitle');
             $rs = $client->select($pquery);
             $ariane  = $rs->getDocuments();
-            if ( count($ariane) > 0 ) {
+            if (count($ariane) > 0) {
                 $tpl_vars['ariane'] = $ariane;
             }
         }
@@ -782,10 +785,10 @@ class DefaultController extends SearchController
         $pid = substr($docid, strlen($doc['headerId']) + 1);
 
         $query = '+headerId:"' . $doc['headerId'] . '" +parents: ';
-        if ( $pid === 'description' ) {
+        if ($pid === 'description') {
             $query .= '""';
         } else {
-            if ( isset($doc['parents']) && trim($doc['parents'] !== '') ) {
+            if (isset($doc['parents']) && trim($doc['parents'] !== '')) {
                 $pid = $doc['parents'] . '/' . $pid;
             }
             $query .= $pid;
@@ -800,9 +803,9 @@ class DefaultController extends SearchController
 
         $tpl_vars['count_children'] = $count_children;
 
-        if ( count($children) > 0 ) {
+        if (count($children) > 0) {
             $tpl_vars['children'] = $children;
-            if ( count($children) < $count_children ) {
+            if (count($children) < $count_children) {
                 $tpl_vars['totalPages'] = ceil($count_children/$max_results);
                 $tpl_vars['page'] = $page;
             }
@@ -810,7 +813,7 @@ class DefaultController extends SearchController
             $tpl_vars['children'] = false;
         }
 
-        if ( $ajax === 'ajax' ) {
+        if ($ajax === 'ajax') {
             $tpl = 'BachHomeBundle:Default:content_display.html.twig';
             $tpl_vars['ajax'] = true;
         } else {
@@ -820,7 +823,7 @@ class DefaultController extends SearchController
 
         //retrieve comments
         $show_comments = $this->container->getParameter('feature.comments');
-        if ( $show_comments ) {
+        if ($show_comments) {
             $query = $this->getDoctrine()->getManager()
                 ->createQuery(
                     'SELECT c FROM BachHomeBundle:Comment c
@@ -834,7 +837,7 @@ class DefaultController extends SearchController
                     )
                 );
             $comments = $query->getResult();
-            if ( count($comments) > 0 ) {
+            if (count($comments) > 0) {
                 $tpl_vars['comments'] = $comments;
             }
         }
@@ -872,7 +875,7 @@ class DefaultController extends SearchController
         //////////////////////////////////////////////////////////////////
 
         /* not display warning about cookies */
-        if ( isset($_COOKIE[$this->getCookieName()]) ) {
+        if (isset($_COOKIE[$this->getCookieName()])) {
             $tpl_vars['cookie_param'] = true;
         }
 
@@ -917,7 +920,7 @@ class DefaultController extends SearchController
         $tpl_vars['cdc'] = true;
 
         /* not display warning about cookies */
-        if ( isset($_COOKIE[$this->getCookieName()]) ) {
+        if (isset($_COOKIE[$this->getCookieName()])) {
             $tpl_vars['cookie_param'] = true;
         }
 
@@ -942,7 +945,7 @@ class DefaultController extends SearchController
             ->getRepository('BachIndexationBundle:Document');
         $document = $repo->findOneByDocid($docid);
 
-        if ( $document === null ) {
+        if ($document === null) {
             throw new NotFoundHttpException(
                 str_replace(
                     '%docid',
@@ -951,7 +954,7 @@ class DefaultController extends SearchController
                 )
             );
         } else {
-            if ( $document->isUploaded() ) {
+            if ($document->isUploaded()) {
                 $document->setUploadDir(
                     $this->container->getParameter('upload_dir')
                 );
@@ -962,7 +965,7 @@ class DefaultController extends SearchController
             }
             $xml_file = $document->getAbsolutePath();
 
-            if ( !file_exists($xml_file) ) {
+            if (!file_exists($xml_file)) {
                 throw new NotFoundHttpException(
                     str_replace(
                         '%docid',
@@ -981,7 +984,7 @@ class DefaultController extends SearchController
                 $tpl_vars['form'] = $form->createView();
 
                 /* not display warning about cookies */
-                if ( isset($_COOKIE[$this->getCookieName()]) ) {
+                if (isset($_COOKIE[$this->getCookieName()])) {
                     $tpl_vars['cookie_param'] = true;
                 }
 
@@ -1042,7 +1045,7 @@ class DefaultController extends SearchController
     protected function getUniqueFacet($name)
     {
         $form_name = 'main';
-        if ( $this->search_form !== null ) {
+        if ($this->search_form !== null) {
             $form_name = $this->search_form;
         }
 
@@ -1075,7 +1078,7 @@ class DefaultController extends SearchController
     protected function getFiltersName()
     {
         $name = 'filters';
-        if ( $this->search_form !== null ) {
+        if ($this->search_form !== null) {
             $name .= '_form_' . $this->search_form;
         }
         return $name;
@@ -1139,7 +1142,7 @@ class DefaultController extends SearchController
     protected function getParamSessionName()
     {
         $name = 'view_params';
-        if ( $this->search_form !== null ) {
+        if ($this->search_form !== null) {
             $name .= '_form_' . $this->search_form;
         }
         return $name;
@@ -1157,10 +1160,10 @@ class DefaultController extends SearchController
     public function infosImageAction($path, $img, $ext)
     {
         $qry_string = null;
-        if ( $img !== null && $ext !== null ) {
+        if ($img !== null && $ext !== null) {
             $qry_string = $img . '.' . $ext;
         }
-        if ( $path !== null ) {
+        if ($path !== null) {
             $qry_string = $path . '/' . $qry_string;
         }
 
@@ -1169,7 +1172,8 @@ class DefaultController extends SearchController
             $query = $client->createSelect();
             $query->setQuery('dao:' . $qry_string);
             $query->setFields(
-                'headerId, fragmentid, parents, archDescUnitTitle, cUnittitle, cUnitid, cLegalstatus, cRepository'
+                'headerId, fragmentid, parents, archDescUnitTitle,
+                cUnittitle, cUnitid, cLegalstatus, cRepository'
             );
             $query->setStart(0)->setRows(1);
 
@@ -1180,14 +1184,14 @@ class DefaultController extends SearchController
 
         $response = array();
         $response_mat = array();
-        if ($this->container->getParameter('feature.archives') && count($docs) > 0 ) {
+        if ($this->container->getParameter('feature.archives') && count($docs) > 0) {
             $doc = $docs[0];
             $parents = explode('/', $doc['parents']);
-            if ( count($parents) > 0 ) {
+            if (count($parents) > 0) {
                 $pquery = $client->createSelect();
                 $query = null;
                 foreach ( $parents as $p ) {
-                    if ( $query !== null ) {
+                    if ($query !== null) {
                         $query .= ' | ';
                     }
                     $query .= 'fragmentid:"' . $doc['headerId'] . '_' . $p . '"';
@@ -1251,12 +1255,14 @@ class DefaultController extends SearchController
             $response['ead']['communicability_general'] = null;
             $response['ead']['communicability_sallelecture'] = null;
             if (isset($query->getResult()[0]['communicability_general'])) {
-                $response['ead']['communicability_general'] = $query->getResult()[0]['communicability_general'];
-                $response['ead']['communicability_sallelecture'] = $query->getResult()[0]['communicability_sallelecture'];
+                $response['ead']['communicability_general']
+                    = $query->getResult()[0]['communicability_general'];
+                $response['ead']['communicability_sallelecture']
+                    = $query->getResult()[0]['communicability_sallelecture'];
             }
             ////////////////////////////////////////////////
         }
-        if ( $this->container->getParameter('feature.matricules') ) {
+        if ($this->container->getParameter('feature.matricules')) {
             //we did not find any restuls in archives, try with matricules.
             $route = 'remote_matimage_infos';
             $params = array(
@@ -1264,11 +1270,11 @@ class DefaultController extends SearchController
                 'img'   => $img,
                 'ext'   => $ext
             );
-            if ( $path === null ) {
+            if ($path === null) {
                 $route = 'remote_matimage_infos_nopath';
                 unset($params['path']);
             }
-            if ( $img === null ) {
+            if ($img === null) {
                 $route = 'remote_matimage_infos_noimg';
                 unset($params['img']);
                 unset($params['ext']);
@@ -1362,7 +1368,10 @@ class DefaultController extends SearchController
     /**
      * Print a pdf with a list of result
      *
-     * @param string $docid id of document
+     * @param string $query_terms Term(s) we search for
+     * @param int    $page        Page
+     * @param string $facet_name  Display more terms in suggests
+     * @param string $form_name   Search form name
      *
      * @return void
      */
@@ -1401,11 +1410,11 @@ class DefaultController extends SearchController
         $request = $this->getRequest();
         $session = $request->getSession();
 
-        if ( $query_terms !== null ) {
+        if ($query_terms !== null) {
             $query_terms = urldecode($query_terms);
         }
 
-        if ( $form_name !== 'default' ) {
+        if ($form_name !== 'default') {
             $this->search_form = $form_name;
         }
 
@@ -1413,14 +1422,14 @@ class DefaultController extends SearchController
         $view_params = $this->handleViewParams();
 
         $filters = $session->get($this->getFiltersName());
-        if ( !$filters instanceof Filters || $request->get('clear_filters') ) {
+        if (!$filters instanceof Filters || $request->get('clear_filters')) {
             $filters = new Filters();
             $session->set($this->getFiltersName(), null);
         }
 
         $filters->bind($request);
         $session->set($this->getFiltersName(), $filters);
-        if ( ($request->get('filter_field') || $filters->count() > 0)
+        if (($request->get('filter_field') || $filters->count() > 0)
             && is_null($query_terms)
         ) {
             $query_terms = '*:*';
@@ -1447,26 +1456,26 @@ class DefaultController extends SearchController
         );
 
         $search_forms = null;
-        if ( $this->search_form !== null ) {
+        if ($this->search_form !== null) {
             $search_forms = $this->container->getParameter('search_forms');
         }
 
         $search_form_params = null;
-        if ( $search_forms !== null ) {
+        if ($search_forms !== null) {
             $search_form_params = $search_forms[$this->search_form];
         }
 
         $current_form = 'main';
-        if ( $search_form_params !== null ) {
+        if ($search_form_params !== null) {
             $current_form = $this->search_form;
         }
 
         $container = new SolariumQueryContainer();
 
-        if ( !is_null($query_terms) ) {
+        if (!is_null($query_terms)) {
             $container->setOrder($view_params->getOrder());
 
-            if ( $this->search_form !== null ) {
+            if ($this->search_form !== null) {
                 $container->setSearchForm($search_forms[$this->search_form]);
             }
 
@@ -1488,13 +1497,15 @@ class DefaultController extends SearchController
             $container->setFilters($filters);
 
             $weight = array(
-                "descriptors" => $this->container->getParameter('weight.descriptors'),
+                "descriptors" =>
+                    $this->container->getParameter('weight.descriptors'),
                 "cUnittitle" => $this->container->getParameter('weight.cUnittitle'),
-                "parents_titles" => $this->container->getParameter('weight.parents_titles'),
+                "parents_titles" =>
+                    $this->container->getParameter('weight.parents_titles'),
                 "fulltext" => $this->container->getParameter('weight.fulltext')
             );
             $container->setWeight($weight);
-            if ( $filters->count() > 0 ) {
+            if ($filters->count() > 0) {
                 $tpl_vars['filters'] = $filters;
             }
         } else {
@@ -1503,7 +1514,7 @@ class DefaultController extends SearchController
 
         $factory->prepareQuery($container);
 
-        if ( !is_null($query_terms) ) {
+        if (!is_null($query_terms)) {
             $conf_facets = $this->getDoctrine()
                 ->getRepository('BachHomeBundle:Facets')
                 ->findBy(
@@ -1541,7 +1552,7 @@ class DefaultController extends SearchController
             $tpl_vars
         );
 
-        if ( !is_null($query_terms) ) {
+        if (!is_null($query_terms)) {
             $resultCount = $searchResults->getNumFound();
 
             $tpl_vars['resultCount'] = $resultCount;
@@ -1554,7 +1565,7 @@ class DefaultController extends SearchController
                 * $view_params->getResultsbyPage() + 1;
             $resultEnd = ($page - 1) * $view_params->getResultsbyPage() +
                 $view_params->getResultsbyPage() * 2;
-            if ( $resultEnd > $resultCount ) {
+            if ($resultEnd > $resultCount) {
                 $resultEnd = $resultCount;
             }
             $tpl_vars['resultEnd'] = $resultEnd;
@@ -1646,6 +1657,8 @@ class DefaultController extends SearchController
 
     /**
      *  Search historic add action
+     *
+     * @param int $nbResults Number of results
      *
      * @return void
      */
@@ -1785,7 +1798,10 @@ class DefaultController extends SearchController
         unset($searchArray['ead']);
         $docs = $session->set('histosave', $searchArray);
 
-        $session->set('resultAction', _('Ead search have successfully been removed.'));
+        $session->set(
+            'resultAction',
+            _('Ead search have successfully been removed.')
+        );
         return $this->redirect(
             $this->generateUrl(
                 'bach_display_searchhisto'

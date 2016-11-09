@@ -93,19 +93,22 @@ class SolariumQueryFactory
 
     private $_date_field;
     private $_dates_fields;
+    private $_authorized;
+
     /**
      * Factory constructor
      *
      * @param \Solarium\Client $client Solarium client
      * @param string           $qf     Query fields
      */
-    public function __construct(\Solarium\Client $client, $qf = null)
+    public function __construct(\Solarium\Client $client, $qf = null, $authorized = null)
     {
         $this->_client = $client;
         if ( $qf !== null ) {
             $this->_query_fields = $qf;
         }
         $this->_searchQueryDecorators();
+        $this->_authorized = $authorized;
     }
 
     /**
@@ -189,6 +192,12 @@ class SolariumQueryFactory
     private function _buildQuery(SolariumQueryContainer $container)
     {
         $this->_query = $this->_client->createSelect();
+
+        if (!$this->_authorized->archivesRight()) {
+            $this->_query->createFilterQuery("audience")->setQuery(
+                '-cAudience:internal'
+            );
+        }
 
         $hl = $this->_query->getHighlighting();
         $hl_fields = '';

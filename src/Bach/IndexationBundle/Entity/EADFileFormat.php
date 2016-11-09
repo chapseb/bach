@@ -118,6 +118,11 @@ class EADFileFormat extends FileFormat
     protected $cRepository;
 
     /**
+     * @ORM\Column(type="string", nullable=true, length=200)
+     */
+    protected $cAudience;
+
+    /**
      * @ORM\Column(type="integer", length=10, nullable=true)
      */
     protected $elt_order;
@@ -268,7 +273,8 @@ class EADFileFormat extends FileFormat
         'next_id',
         'next_title',
         'cLegalstatus',
-        'cMediaContent'
+        'cMediaContent',
+        'audience'
     );
 
     /**
@@ -684,6 +690,29 @@ class EADFileFormat extends FileFormat
     public function getRepository()
     {
         return $this->repository;
+    }
+
+    /**
+     * Set CAudience
+     *
+     * @param string $audience audience
+     *
+     * @return EADFileFormat
+     */
+    public function setCAudience($audience)
+    {
+        $this->cAudience = $audience;
+        return $this;
+    }
+
+    /**
+     * Get CAudience
+     *
+     * @return string
+     */
+    public function getCAudience()
+    {
+        return $this->cAudience;
     }
 
     /**

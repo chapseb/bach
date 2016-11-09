@@ -31,11 +31,17 @@
 
 parameters:
    bach.home.solarium_query_factory.class: Bach\HomeBundle\Service\SolariumQueryFactory
+   bach.home.authorization.class: Bach\HomeBundle\Service\Authorization
 
 services:
     bach.home.solarium_query_factory:
         class: "%bach.home.solarium_query_factory.class%"
-        arguments: [ @solarium.client.default, '%solr_query_fields%' ]
+        arguments: [ @solarium.client.default, '%solr_query_fields%', @bach.home.authorization ]
+
+    bach.home.authorization:
+        class: "%bach.home.authorization.class%"
+        arguments:
+            - @security.context
 
     bach.matricules.solarium_query_factory:
         class: "%bach.home.solarium_query_factory.class%"

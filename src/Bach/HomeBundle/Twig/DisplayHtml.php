@@ -116,12 +116,13 @@ class DisplayHtml extends \Twig_Extension
     /**
      * Displays an EAD document as HTML with XSLT
      *
-     * @param string $docid    Document id
-     * @param string $xml_file Document
+     * @param string  $docid    Document id
+     * @param string  $xml_file Document
+     * @param boolean $audience Authorization audience
      *
      * @return string
      */
-    public function display($docid, $xml_file)
+    public function display($docid, $xml_file, $audience = false)
     {
         $cached_doc = null;
         //do not use cache when not in prod
@@ -159,7 +160,7 @@ class DisplayHtml extends \Twig_Extension
             $xml_doc = simplexml_load_file($xml_file);
 
             $archdesc_html = $this->_renderArchdesc($xml_doc, $docid);
-            $contents = $this->renderContents($xml_doc, $docid);
+            $contents = $this->renderContents($xml_doc, $docid, $audience);
 
             $proc = new \XsltProcessor();
             $proc->importStylesheet(
@@ -290,19 +291,23 @@ class DisplayHtml extends \Twig_Extension
     /**
      * Render contents
      *
-     * @param simple_xml $xml_doc XML document
-     * @param string     $docid   Document id
+     * @param simple_xml $xml_doc  XML document
+     * @param string     $docid    Document id
+     * @param boolean    $audience Authorization audience
      *
      * @return string
      */
-    protected function renderContents($xml_doc, $docid)
+    protected function renderContents($xml_doc, $docid, $audience = false)
     {
         $proc = new \XsltProcessor();
         $proc->importStylesheet(
             simplexml_load_file(__DIR__ . '/display_html_contents.xsl')
         );
 
+        //$authorizedArchives = $this->get('bach.home.authorization')->archivesRight();
         $proc->setParameter('', 'docid', $docid);
+        $audience = ($audience) ? 'true' : 'false';
+        $proc->setParameter('', 'audience', $audience);
         $proc->registerPHPFunctions();
 
         $up_nodes = $xml_doc->xpath('/ead/archdesc/dsc/c');
@@ -319,12 +324,13 @@ class DisplayHtml extends \Twig_Extension
     /**
      * Displays an EAD document scheme as HTML with XSLT
      *
-     * @param string $docid    Document id
-     * @param string $xml_file Document
+     * @param string  $docid    Document id
+     * @param string  $xml_file Document
+     * @param boolean $audience Authorization audience
      *
      * @return string
      */
-    public function scheme($docid, $xml_file)
+    public function scheme($docid, $xml_file, $audience = false)
     {
         $xml_doc = simplexml_load_file($xml_file);
 
@@ -334,6 +340,9 @@ class DisplayHtml extends \Twig_Extension
         );
 
         $proc->setParameter('', 'docid', $docid);
+        $audience = ($audience) ? 'true' : 'false';
+        $proc->setParameter('', 'audience', $audience);
+
         $proc->registerPHPFunctions();
 
         $up_nodes = $xml_doc->xpath('/ead/archdesc/dsc/c');

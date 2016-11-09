@@ -330,6 +330,11 @@ class EADArchDesc
             }
         }
         //remove ordering field as well
+
+        $audience = $this->_xpath->query('./@audience', $frag);
+        if ($audience->length > 0) {
+            $result['audience'] = $audience->item(0)->nodeValue;
+        }
         $order = $this->_xpath->query('did/unitid[@type="ordre_c"]', $frag);
         if ( $order->length > 0 ) {
             $result['order'] = $order->item(0)->nodeValue;

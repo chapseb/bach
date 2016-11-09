@@ -249,6 +249,10 @@ class EADDriverMapper implements DriverMapperInterface
             $mapped_data['next_title'] = $data['c']['next']['title'];
         }
 
+        if (isset($data['c']['audience'])) {
+            $mapped_data['cAudience'] = $data['c']['audience'];
+        }
+
         return $mapped_data;
     }
 }

@@ -418,13 +418,29 @@ class DefaultController extends SearchController
                 );
 
             }
+
             // get an array with communicable daos search result linked
-            $arrayDaos = array();
+            $arrayDaosComm = array();
             foreach ($query->getResult() as $res) {
-                array_push($arrayDaos, $res['href']);
+                array_push($arrayDaosComm, $res['href']);
             }
 
-            $tpl_vars['listDaos'] = array_values($arrayDaos);
+            $tpl_vars['listDaos'] = array_values($arrayDaosComm);
+
+            if (!$this->get('bach.home.authorization')->archivesRight()) {
+                $queryAudience = $this->getDoctrine()->getManager()->createQuery(
+                    "SELECT e.href FROM BachIndexationBundle:EADDaos e " .
+                    "WHERE e.href IN (:ids) AND " .
+                    "e.audience = 'internal'"
+                )->setParameter('ids', $arrayDaos);
+                // get an array with audience daos search result linked
+                $arrayDaosAudience = array();
+                foreach ($queryAudience->getResult() as $res) {
+                    array_push($arrayDaosAudience, $res['href']);
+                }
+                $tpl_vars['listDaosAudience'] = array_values($arrayDaosAudience);
+            }
+
         }
         ////////////////////////////////////////////////////////////////////////////////
 
@@ -697,7 +713,7 @@ class DefaultController extends SearchController
      *
      * @return void
      */
-    public function displayDocumentAction($docid, $page = 1, $ajax = false, 
+    public function displayDocumentAction($docid, $page = 1, $ajax = false,
         $print = false
     ) {
         $with_context = true;
@@ -852,12 +868,13 @@ class DefaultController extends SearchController
 
         $queryDaos = $this->getDoctrine()->getManager()->createQuery(
             'SELECT h.href, h.communicability_general,' .
-            ' h.communicability_sallelecture ' .
+            ' h.communicability_sallelecture, h.audience ' .
                 'FROM BachIndexationBundle:EADFileFormat e ' .
                 'JOIN e.daos h WHERE e.fragmentid= :eadfile'
         )->setParameter('eadfile', $docid);
 
         $tpl_vars['communicability'] = false;
+        $tpl_vars['audience'] = false;
         if (isset($queryDaos->getResult()[0])) {
             $getResult = $queryDaos->getResult()[0];
 
@@ -871,7 +888,19 @@ class DefaultController extends SearchController
             ) {
                 $tpl_vars['communicability'] = true;
             }
+
+            if ($getResult['audience'] == null
+                || $getResult['audience'] != 'internal'
+            ) {
+                $tpl_vars['audience'] = true;
+            }
         }
+        $authorizedArchives = $this->get('bach.home.authorization')
+            ->archivesRight();
+        if ($authorizedArchives) {
+            $tpl_vars['audience'] = true;
+        }
+
         //////////////////////////////////////////////////////////////////
 
         /* not display warning about cookies */
@@ -988,6 +1017,8 @@ class DefaultController extends SearchController
                     $tpl_vars['cookie_param'] = true;
                 }
 
+                $authorizedArchives = $this->get('bach.home.authorization')->archivesRight();
+                $tpl_vars['audience'] = $authorizedArchives;
                 return $this->render(
                     'BachHomeBundle:Default:html.html.twig',
                     $tpl_vars

@@ -47,6 +47,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
     <xsl:output method="html" omit-xml-declaration="yes"/>
     <xsl:param name="docid" select="''"/>
+    <xsl:param name="audience" select="''"/>
 
     <!-- ***** CONTENTS ***** -->
     <xsl:template match="c|c01|c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12">
@@ -64,53 +65,55 @@ POSSIBILITY OF SUCH DAMAGE.
             <xsl:value-of select="./did/unittitle/@type"/>
         </xsl:variable>
 
-        <xsl:choose>
-            <xsl:when test="count(parent::c) = 0">
-                <h3>
-                    <xsl:if test="$type='titre' and (count(child::c/c) = 0 or count(child::c/did/unittitle/@type)=0)">
-                        <xsl:attribute name="class">standalone</xsl:attribute>
-                    </xsl:if>
-                    <xsl:apply-templates select="did">
-                        <xsl:with-param name="fragid"><xsl:value-of select="$id"/></xsl:with-param>
-                    </xsl:apply-templates>
-                </h3>
-                <div>
-                    <xsl:if test="$type='titre' and count(child::c/c) &gt; 0 and count(child::c/did/unittitle/@type)!=0">
-                        <ul>
-                        <xsl:apply-templates select="./c|./c01|./c02|./c03|./c04|./c05|./c06|./c07|./c08|./c09|./c10|./c11|./c12"/>
-                        </ul>
-                    </xsl:if>
-                </div>
-            </xsl:when>
-            <xsl:otherwise>
-                <li>
-                    <xsl:choose>
-                        <xsl:when test="count(child::c/c) &gt; 0 and $type='titre' and count(child::c/did/unittitle/@type)!=0">
-                            <xsl:attribute name="class">accordion</xsl:attribute>
-                            <h3>
+        <xsl:if test="not(@audience = 'internal') or $audience != 'false'">
+            <xsl:choose>
+                <xsl:when test="count(parent::c) = 0">
+                    <h3>
+                        <xsl:if test="$type='titre' and (count(child::c/c) = 0 or count(child::c/did/unittitle/@type)=0)">
+                            <xsl:attribute name="class">standalone</xsl:attribute>
+                        </xsl:if>
+                        <xsl:apply-templates select="did">
+                            <xsl:with-param name="fragid"><xsl:value-of select="$id"/></xsl:with-param>
+                        </xsl:apply-templates>
+                    </h3>
+                    <div>
+                        <xsl:if test="$type='titre' and count(child::c/c) &gt; 0 and count(child::c/did/unittitle/@type)!=0">
+                            <ul>
+                            <xsl:apply-templates select="./c|./c01|./c02|./c03|./c04|./c05|./c06|./c07|./c08|./c09|./c10|./c11|./c12"/>
+                            </ul>
+                        </xsl:if>
+                    </div>
+                </xsl:when>
+                <xsl:otherwise>
+                    <li>
+                        <xsl:choose>
+                            <xsl:when test="count(child::c/c) &gt; 0 and $type='titre' and count(child::c/did/unittitle/@type)!=0">
+                                <xsl:attribute name="class">accordion</xsl:attribute>
+                                <h3>
+                                    <xsl:apply-templates select="did">
+                                        <xsl:with-param name="fragid"><xsl:value-of select="$id"/></xsl:with-param>
+                                    </xsl:apply-templates>
+                                </h3>
+                                <div>
+                                    <xsl:if test="count(child::c/c) &gt; 0 and $type='titre' and count(child::c/did/unittitle/@type)!=0">
+                                        <ul>
+                                            <xsl:apply-templates select="./c|./c01|./c02|./c03|./c04|./c05|./c06|./c07|./c08|./c09|./c10|./c11|./c12"/>
+                                        </ul>
+                                    </xsl:if>
+                                </div>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:if test="$type='titre'">
                                 <xsl:apply-templates select="did">
                                     <xsl:with-param name="fragid"><xsl:value-of select="$id"/></xsl:with-param>
                                 </xsl:apply-templates>
-                            </h3>
-                            <div>
-                                <xsl:if test="count(child::c/c) &gt; 0 and $type='titre' and count(child::c/did/unittitle/@type)!=0">
-                                    <ul>
-                                        <xsl:apply-templates select="./c|./c01|./c02|./c03|./c04|./c05|./c06|./c07|./c08|./c09|./c10|./c11|./c12"/>
-                                    </ul>
-                                </xsl:if>
-                            </div>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="$type='titre'">
-                            <xsl:apply-templates select="did">
-                                <xsl:with-param name="fragid"><xsl:value-of select="$id"/></xsl:with-param>
-                            </xsl:apply-templates>
-                        </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </li>
-            </xsl:otherwise>
-        </xsl:choose>
+                            </xsl:if>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </li>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="did">

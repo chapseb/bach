@@ -112,7 +112,7 @@ class DisplayCdc extends DisplayHtml
      *
      * @return string
      */
-    protected function renderContents($xml_doc, $docid)
+    protected function renderContents($xml_doc, $docid, $audience = false)
     {
         $proc = new \XsltProcessor();
 
@@ -184,7 +184,7 @@ class DisplayCdc extends DisplayHtml
      */
     public function cdcScheme($docid, $xml_file, $docs)
     {
-        $contents = parent::scheme($docid, $xml_file);
+        $contents = parent::scheme($docid, $xml_file, false);
 
         $this->_docs = $docs;
         if (count($this->_getNotMatched(simplexml_load_file($xml_file))) > 0 ) {

@@ -59,6 +59,7 @@ POSSIBILITY OF SUCH DAMAGE.
     <xsl:param name="cote_location" select="''"/>
     <xsl:param name="print" select="''"/>
     <xsl:param name="communicability" select="''"/>
+    <xsl:param name="audience" select="''"/>
 
     <xsl:template match="c|c01|c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12|archdesc">
         <xsl:variable name="id">
@@ -79,7 +80,7 @@ POSSIBILITY OF SUCH DAMAGE.
                         <xsl:if test="count(./*[not(local-name() = 'did')]) + count(./did/*[not(local-name() = 'unittitle')]) &gt; 0">
                             <li><a href="#{$id}"><xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Description')"/></a></li>
                         </xsl:if>
-                        <xsl:if test=".//dao|.//daoloc and $print= 'false'">
+                        <xsl:if test=".//dao|.//daoloc and $print= 'false' and $audience != 'false'">
                             <li><a href="#relative_documents"><xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Documents')"/></a></li>
                         </xsl:if>
                         <xsl:if test="not($children = '')">
@@ -115,7 +116,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     </div>
                 </xsl:if>
 
-                <xsl:if test=".//dao|.//daoloc and $print = 'false'">
+                <xsl:if test=".//dao|.//daoloc and $print = 'false' and $audience != 'false'">
                     <figure id="relative_documents">
                         <header>
                             <h3><xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Relative documents')"/></h3>
@@ -309,6 +310,7 @@ POSSIBILITY OF SUCH DAMAGE.
     <xsl:template name="section_content">
         <xsl:param name="title" select="'false'"/>
         <xsl:if test="local-name() != 'controlaccess' or count(./*[local-name() != 'head' and not(@source='liste-niveau') and not(@source='liste-typedocAC') and not(@type='typir')])">
+        <xsl:if test="not(@audience = 'internal') or $audience != 'false'">
             <section class="{local-name()}">
                 <xsl:if test="not(head) and $title = 'true'">
                     <xsl:variable name="count" select="count(ancestor::*/head)"/>
@@ -387,6 +389,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::showDescriptors', $nodes, $docid)"/>
                 </xsl:if>
             </section>
+        </xsl:if>
         </xsl:if>
     </xsl:template>
 

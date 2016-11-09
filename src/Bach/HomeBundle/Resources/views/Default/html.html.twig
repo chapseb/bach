@@ -189,7 +189,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 {% block container %}
     {% if cdc is not defined %}
-        {{ displayHtml(docid, xml_file)|raw }}
+        {{ displayHtml(docid, xml_file, audience)|raw }}
     {% else %}
         {{ displayCdc(docs)|raw }}
     {% endif %}
@@ -223,7 +223,7 @@ POSSIBILITY OF SUCH DAMAGE.
     <h2>{{ _('Inventory scheme') }}</h2>
     <div id="inventory_scheme">
     {% if cdc is not defined %}
-        {{ displayHtmlScheme(docid, xml_file)|raw }}
+        {{ displayHtmlScheme(docid, xml_file, audience)|raw }}
     {% else %}
         {{ displayCdcScheme(docid, xml_file, docs)|raw }}
     {% endif %}

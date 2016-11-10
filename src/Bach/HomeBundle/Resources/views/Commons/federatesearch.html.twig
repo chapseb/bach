@@ -118,17 +118,21 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
 
     <article class="tabs">
         <section id="ead">
-            <h1><a href="#ead">Ead</a></h1>
+            <h1><a href="#ead" id="headEad" >Ead</a></h1>
+            <div id="eadContent">
                 {% include 'BachHomeBundle:Default:ead_container.html.twig' with {'search_path': block('search_path')}%}
+            </div>
         </section>
         {% if from_doc_view is defined and from_doc_view is not null %}
         {% else %}
         <section id="matricules">
-            <h1><a href="#matricules">Matricules</a></h1>
+            <h1><a href="#matricules" id="headMatricules">Matricules</a></h1>
+            <div id="matContent">
                 {% if matriculesSearch['filters'] is not defined%}
                     {% set filters = null %}
                 {% endif%}
                 {% include 'BachHomeBundle:Matricules:mat_container.html.twig' with matriculesSearch %}
+            </div>
         </section>
         {% endif %}
     </article>
@@ -184,20 +188,31 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
 
 {% block javascripts %}
     $(function(){
-        if ($('#ead').height() > ($('#matricules').height())) {
+        /*if ($('#ead').height() > ($('#matricules').height())) {
             $('#matricules').height($('#ead').height());
             $('.menu').height($('#ead').height());
         }
         else {
             $('#ead').height($('#matricules').height());
             $('.menu').height($('#matricules').height());
-        }
+        }*/
 
         if (window.location.hash) {
             window.location.hash;
         } else {
             window.location.hash = '#ead';
         };
+    });
+
+
+    $('#headMatricules').click(function() {
+        $("#eadContent").hide();
+        $("#matContent").show();
+    });
+
+    $('#headEad').click(function() {
+        $("#matContent").hide();
+        $("#eadContent").show();
     });
 
     $.cookie.json = true;

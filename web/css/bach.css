@@ -312,67 +312,67 @@ p {
     width: 100%;
 }
 
-[id=menu].hidemenu {
+.menu.hidemenu {
     margin-left: -15em;
 }
 
-[id=menu] h2 {
+.menu h2 {
     background: url(../img/menu_sep.png) top left repeat-x;
     color: #bb4a46;
     font-size: 1.4em;
     padding-top: 1.5em;
 }
 
-[id=menu] a {
+.menu a {
     color: #222;
 }
 
-[id=menu] ol {
+.menu ol {
     list-style-type: decimal;
 }
 
-[id=menu] ol {
+.menu ol {
     padding-left: 1.5em;
 }
 
-[id=menu] .ui-accordion-content ol {
+.menu .ui-accordion-content ol {
     padding-left: 0;
 }
 
-[id=menu] li.active a {
+.menu li.active a {
   background-color: #d1c6c0;
   color: #4a4041;
 }
 
-[id=menu] div.ui-accordion-content {
+.menu div.ui-accordion-content {
     padding: 0 0 0 2.7em;
     background: none;
     border: none;
 }
 
-[id=menu] div.ui-accordion-content.range_date {
+.menu div.ui-accordion-content.range_date {
     padding: 0;
     overflow: visible;
 }
-[id=menu] div.ui-accordion-content.range_date .date_range {
+.menu div.ui-accordion-content.range_date .date_range {
     margin: .8em 1em .2em;
 }
-[id=menu] div.ui-accordion-content.range_date ol {
+.menu div.ui-accordion-content.range_date ol {
     margin-left: 2.7em;
 }
 
-[id=menu] li.show_more {
+.menu li.show_more {
     list-style-type: none;
 }
 
-[id=menu] a,
-[id=menu] div.ui-accordion-content a,
-[id=menu] li,
-[id=menu] p {
+.menu a,
+.menu div.ui-accordion-content a,
+.menu li,
+.menu p {
     color: #968c82;
 }
 
-[id=menu] h3, [id=menu] h3.ui-accordion-header {
+.menu h3, .menu h3.ui-accordion-header {
     padding: .1em 0;
     margin-top: 2px;
     background: none;
@@ -382,15 +382,15 @@ p {
     font-size: 1.4em;
 }
 
-[id=menu] h3.ui-accordion-header  {
+.menu h3.ui-accordion-header  {
     padding-left: 1.4em;
 }
 
-[id=menu] .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+.menu .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
     left: 0;
 }
 
-[id=menu] ul {
+.menu ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -400,8 +400,8 @@ p {
     display: block;
 }
 
-[id=menu] a:hover,
-[id=menu] div.ui-accordion-content a:hover {
+.menu a:hover,
+.menu div.ui-accordion-content a:hover {
     color: white;
     text-decoration: none;
 }

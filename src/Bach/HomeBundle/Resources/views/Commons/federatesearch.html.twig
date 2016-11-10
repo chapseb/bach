@@ -514,8 +514,10 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
 
         return (str+'').replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, "\\$1");
     }
+    {% include 'BachHomeBundle:Default:jsplayer.js.twig' %}
+    _initAudio();
+    _initVideo();
 
     {% block autocomplete %}{% endblock %}
     {% block player %}{% endblock %}
 {% endblock %}
-

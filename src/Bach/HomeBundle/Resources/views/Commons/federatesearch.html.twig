@@ -187,14 +187,14 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
 
 {% block javascripts %}
     $(function(){
-        /*if ($('#ead').height() > ($('#matricules').height())) {
+        if ($('#ead').height() > ($('#matricules').height())) {
             $('#matricules').height($('#ead').height());
             $('.menu').height($('#ead').height());
         }
         else {
             $('#ead').height($('#matricules').height());
             $('.menu').height($('#matricules').height());
-        }*/
+        }
 
         if (window.location.hash) {
             window.location.hash;

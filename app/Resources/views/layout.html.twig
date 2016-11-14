@@ -44,6 +44,10 @@ POSSIBILITY OF SUCH DAMAGE.
 
     {# Main content #}
     <div id="wrapper">
+        <div id="logo">
+            <img src="{% include '::images/logo.html.twig' %}" alt="Bach" style="width:80%;"/>
+        </div>
+
         <div id="container">
             {% block back2top %}
                 <a href="#container" id="back2top">{{ _('Back to top') }}</a>

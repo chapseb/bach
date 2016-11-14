@@ -65,15 +65,14 @@ POSSIBILITY OF SUCH DAMAGE.
 
     <form action="{{ path(block('do_search_path'), {'form_name': search_form}) }}" method="post" {{ form_enctype(form) }} name="search" id="search">
 
-    {% if by_year is defined or show_maps %}
+    {% if by_year is defined or matriculesSearch['by_year'] or show_maps %}
         <ul class="interactions">
 
        {% if show_maps -%}
             <li><a id="sh_map" href="?show_map={% if show_map == true %}off{% else %}on{% endif %}" title="{{ _('Shows or hides map') }}"{% if show_map == false %} class="disabled"{% endif %}><img src="{% include '::images/map.html.twig' %}" alt="{{ _('Show/Hide map') }}"/></a></li>
         {%- endif %}
 
-
-        {% if by_year is defined -%}
+        {% if by_year is defined or matriculesSearch['by_year'] is defined %}
             {% if current_date == 'date_enregistrement' %}
                 {% set display_date = _('record date') %}
             {% elseif current_date == 'classe' %}
@@ -151,7 +150,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
     %}
         <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
-    {% if by_year is defined %}
+    {% if by_year is defined or matriculesSearch['by_year']%}
         {% javascripts
             'js/flot/jquery.flot.min.js'
             'js/flot/jquery.flot.selection.min.js'
@@ -318,7 +317,6 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
     /**************/
     // plot dates //
     /**************/
-    {% if by_year is defined -%}
         var plot_options = {
             series: {
                 bars: {
@@ -347,9 +345,10 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
             shadowSize: 0
         };
 
-        var _dates_plot = $('#dates_plot');
-        var _dates_plot_mat = $('#dates_plot_mat');
         var plot;
+
+        {% if by_year is defined -%}
+        var _dates_plot = $('#dates_plot');
 
         var _initPlot = function() {
             plot = $.plot(_dates_plot, [{{ by_year|json_encode|raw }}], plot_options);
@@ -387,8 +386,9 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
             });
             {% endif %}
         }
-
+        {% endif %}
         {% if matriculesSearch['by_year'] is defined -%}
+            var _dates_plot_mat = $('#dates_plot_mat');
             var _initPlot2 = function() {
                 plot = $.plot(_dates_plot_mat, [{{ matriculesSearch['by_year']|json_encode|raw }}], plot_options);
 
@@ -428,15 +428,16 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
         {% endif %}
 
         if ( _view_params['daterange'] == true ) {
+            {% if by_year is defined -%}
             _dates_plot.removeClass('hidden');
-            _dates_plot_mat.removeClass('hidden');
             _initPlot();
-
+            {% endif %}
             {% if matriculesSearch['by_year'] is defined -%}
+            _dates_plot_mat.removeClass('hidden');
+
             _initPlot2();
             {% endif %}
         }
-    {% endif %}
 
     _setCookie = function() {
         $.cookie('{{ cookie_param_name }}', _view_params, { expires: 365, path: '/' });
@@ -447,7 +448,9 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
         $('#dates_plot').toggleClass('hidden');
         $('#dates_plot_mat').toggleClass('hidden');
         if ( !plot) {
+            {% if by_year is defined %}
             _initPlot();
+            {% endif %}
             {% if matriculesSearch['by_year'] is defined -%}
             _initPlot2();
             {% endif %}

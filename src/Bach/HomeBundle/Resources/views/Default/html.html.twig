@@ -188,6 +188,10 @@ POSSIBILITY OF SUCH DAMAGE.
 {% endblock %}
 
 {% block container %}
+<aside id="menu" class="menu" role="search">
+            {{ block('menu') }}
+        </aside>
+
     {% if cdc is not defined %}
         {{ displayHtml(docid, xml_file, audience)|raw }}
     {% else %}

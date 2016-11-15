@@ -277,16 +277,16 @@ p {
 
 [id=menu] {
     width: 15%;
-    /*height: 100%;*/
+    height: 96.5%;
     margin-right: 1em;
     margin-left: 5%;
-    position: absolute;
+    position: fixed;
     background-color: #332928;
     color: white;
     padding: 0 1em;
     overflow: auto;
-    top:0;
-    left: 0;
+    top: 0;
+    left: 4%;
     float: left;
 }
 

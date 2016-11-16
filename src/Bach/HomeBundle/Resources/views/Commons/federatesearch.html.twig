@@ -124,15 +124,17 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
         </section>
         {% if from_doc_view is defined and from_doc_view is not null %}
         {% else %}
-        <section id="matricules">
-            <h1><a href="#matricules" id="headMatricules">Matricules</a></h1>
-            <div id="matContent">
-                {% if matriculesSearch['filters'] is not defined%}
-                    {% set filters = null %}
-                {% endif%}
-                {% include 'BachHomeBundle:Matricules:mat_container.html.twig' with matriculesSearch %}
-            </div>
-        </section>
+          {% if matfeature %}
+            <section id="matricules">
+                <h1><a href="#matricules" id="headMatricules">Matricules</a></h1>
+                <div id="matContent">
+                    {% if matriculesSearch['filters'] is not defined%}
+                        {% set filters = null %}
+                    {% endif%}
+                    {% include 'BachHomeBundle:Matricules:mat_container.html.twig' with matriculesSearch %}
+                </div>
+            </section>
+            {% endif %}
         {% endif %}
     </article>
 {% endblock %}

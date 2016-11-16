@@ -85,6 +85,8 @@ class FederateController extends Controller
     public function searchAction($query_terms = null, $page = 1, $page_mat = 1,
         $facet_name = null, $form_name = null
     ) {
+
+        $featureMat = $this->container->getParameter('feature.matricules');
         if ($page == 0) {
             $page = 1;
         }
@@ -97,8 +99,7 @@ class FederateController extends Controller
             $this->getRequest()->getSession()->set('clear_filters_mat', true);
         }
         if ($query_terms != null) {
-            $queryEad = $query_terms;
-            $queryMat = $query_terms;
+            $queryEad = $queryMat = $query_terms;
         } else {
             $queryMat = $queryEad = '*:*';
         }
@@ -115,7 +116,7 @@ class FederateController extends Controller
                 )
             );
 
-            if ($this->getRequest()->get('from_doc_view') == null ) {
+            if ($featureMat && $this->getRequest()->get('from_doc_view') == null ) {
                 $this->forward(
                     'BachHomeBundle:Matricules:search',
                     array(
@@ -137,7 +138,7 @@ class FederateController extends Controller
                     'facet_name'  => $facet_name
                 )
             );
-            if ($this->getRequest()->get('from_doc_view') == null ) {
+            if ($featureMat && $this->getRequest()->get('from_doc_view') == null ) {
                 $this->forward(
                     'BachHomeBundle:Matricules:search',
                     array(
@@ -160,7 +161,7 @@ class FederateController extends Controller
                     'facet_name'  => $facet_name
                 )
             );
-            if ($this->getRequest()->get('from_doc_view') == null ) {
+            if ($featureMat && $this->getRequest()->get('from_doc_view') == null ) {
                 $this->forward(
                     'BachHomeBundle:Matricules:search',
                     array(
@@ -183,6 +184,7 @@ class FederateController extends Controller
             $eadTplVars['form'] = $matriculesTplVars['form'];
         }
         $eadTplVars['matriculesSearch'] = $matriculesTplVars;
+        $eadTplVars['matfeature']       = $featureMat;
         return $this->render(
             'BachHomeBundle:Default:index.html.twig',
             $eadTplVars

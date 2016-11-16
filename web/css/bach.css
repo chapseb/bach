@@ -199,7 +199,7 @@ p {
 
 [id=container] {
     padding: 2em 5% .5em 5%;
-    position: relative;
+    /*position: relative;*/
     /*max-width: 1024px;*/
 }
 
@@ -1434,7 +1434,7 @@ form > footer {
 [id=user_login] {
     position: absolute;
     top: 0;
-    right: .5em;
+    right: 1em;
     font-size: .9em;
     text-align: right;
 }
@@ -2202,7 +2202,7 @@ video[poster] {
 #basketListBtn {
     position: absolute;
     top: 2em;
-    right: .5em;
+    right: 1em;
     font-size: .9em;
     text-align: right;
 }
@@ -2210,7 +2210,7 @@ video[poster] {
 #searchhistoListBtn {
     position: absolute;
     top: 3em;
-    right: .5em;
+    right: 1em;
     font-size: .9em;
     text-align: right;
 }

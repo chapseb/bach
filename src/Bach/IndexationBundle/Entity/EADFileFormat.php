@@ -1009,7 +1009,9 @@ class EADFileFormat extends FileFormat
 
                 if ($pdfFlag == true && $dao['attributes']['href']) {
                     $daolink = $dao['attributes']['href'];
-                    if (file_exists(BACH_FILES_MISC . $daolink)) {
+                    if (defined(BACH_FILES_MISC)
+                        && file_exists(BACH_FILES_MISC . $daolink)
+                    ) {
                         $parser = new \Smalot\PdfParser\Parser();
                         try {
                             $pdf = $parser->parseFile(BACH_FILES_MISC . $daolink);

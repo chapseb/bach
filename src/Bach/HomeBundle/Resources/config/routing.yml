@@ -419,7 +419,7 @@ searchhisto_execute:
     pattern: /searchhistoexecute
     defaults: { _controller: BachHomeBundle:Default:searchHistoExecute}
     requirements:
-        _method: POST
+        _method: POST|GET
 
 searchhistomat_execute:
     pattern: /searchhistomatexecute

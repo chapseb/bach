@@ -1049,6 +1049,7 @@ abstract class SearchController extends Controller
             $arraytpl['cookie_param'] = true;
         }
 
+        $arraytpl['serverName'] = $this->getRequest()->getHost();
         return $this->render(
             'BachHomeBundle:Default:listsearch.html.twig',
             $arraytpl

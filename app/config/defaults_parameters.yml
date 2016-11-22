@@ -49,7 +49,7 @@ parameters:
     #Solr parameters
     solr_ssl: false
     solr_host: localhost
-    solr_port: 8080
+    solr_port: 8983
     solr_path: /solr
     #Core names for each type
     ead_corename: ead

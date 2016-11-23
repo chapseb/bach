@@ -142,7 +142,7 @@ class DefaultController extends SearchController
         $session = $request->getSession();
 
         if ( $query_terms !== null ) {
-            $query_terms = urldecode($query_terms);
+            $query_terms = urldecode(str_replace("*:*", "", $query_terms));
         }
 
         if ( $form_name !== 'default' ) {

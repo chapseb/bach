@@ -141,8 +141,8 @@ class DefaultController extends SearchController
         $request = $this->getRequest();
         $session = $request->getSession();
 
-        if ($query_terms !== null) {
-            $query_terms = urldecode($query_terms);
+        if ( $query_terms !== null && $query_terms != '*:*') {
+            $query_terms = urldecode(str_replace("*:*", "", $query_terms));
         }
 
         if ($form_name !== 'default') {

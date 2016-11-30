@@ -152,6 +152,9 @@ POSSIBILITY OF SUCH DAMAGE.
                     <td>
                         <input type="submit" class="deleteSearchMatInput" id="deleteSearchMat{{loop.index0}}" value="{{ _('Delete ') }}" />
                         <form action="{{ path('searchhistomat_execute', {'query_terms': search['query'], 'filtersListSearchhisto': search['filters'] })}}" method="post" class="formSearch"><input type="submit" class="executeSearchMatInput" id="executeSearchMat{{loop.index0}}" value="{{ _('Execute') }}" /></form>
+                        <button class="btnClip" alt="{{ _('Copy in clipboard')}}" title="{{ _('Copy in clipboard')}}" data-clipboard-text="{{ serverName ~ path('searchhistomat_execute', {'query_terms': search['query'], 'filtersListSearchhisto': search['filters'] }) }}">
+                            {{ _('Copy to clipboard') }}
+                        </button>
                     </td>
                     <td class="dateidsearchhisto">{{date}}</td>
                 </tr>

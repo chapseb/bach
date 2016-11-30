@@ -425,7 +425,7 @@ searchhistomat_execute:
     pattern: /searchhistomatexecute
     defaults: { _controller: BachHomeBundle:Matricules:searchHistomatExecute}
     requirements:
-        _method: POST
+        _method: POST|GET
 
 search_histo_delete:
     pattern: /searchhistoDeleteEad

@@ -188,6 +188,7 @@ POSSIBILITY OF SUCH DAMAGE.
 {% endblock %}
 
 {% block container %}
+<div id="cdcWrapper">
 <aside id="menu" class="menu" role="search">
             {{ block('menu') }}
         </aside>
@@ -197,6 +198,7 @@ POSSIBILITY OF SUCH DAMAGE.
     {% else %}
         {{ displayCdc(docs)|raw }}
     {% endif %}
+</div>
 {% endblock %}
 
 {% block menu %}

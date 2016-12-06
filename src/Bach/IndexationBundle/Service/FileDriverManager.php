@@ -536,6 +536,22 @@ class FileDriverManager
             );
         }
         $fragid = $this->_zdb->getAutoIncrement($table);
+        // Highest node has no parent, so had archdesc_id for incorporate this node
+        if ($data['archdesc_id'] == null) {
+            $updateObject = array();
+            $updateObject['archdesc_id']  = $fragid;
+            $update = $this->_zdb->update('ead_file_format')
+                ->set($updateObject)
+                ->where(
+                    array('uniqid' => ':uniqid'
+                    )
+                );
+                $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                    $update
+                );
+            $updateObject['where1'] = $fragid;
+            $stmt->execute($updateObject);
+        }
         return $fragid;
     }
 

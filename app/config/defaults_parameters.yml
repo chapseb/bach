@@ -120,12 +120,6 @@ parameters:
         - b
         - c
 
-    aws.s3.key: null
-    aws.s3.secret: null
-    aws.s3.region: null
-    aws.s3.version: null
-    aws.s3.folderead: null
-
     #social networks parameters
     #twitter  https://dev.twitter.com/docs/tweet-button
     social.twitter: true
@@ -188,6 +182,12 @@ parameters:
     weight.fulltext: 0.1
     collapsecdc: false
     pdf_search: false
+    aws.s3.ead_files_path: null
+    aws.s3.matricules_files_path: null
+    aws.s3.cdc_files_path: null
+    aws.s3.bucket: null
+    aws.s3: false
+    cloudfront: null
     print:
        header:
             image: '%kernel.root_dir%/../web/img/smlogo.png'

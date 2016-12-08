@@ -72,6 +72,8 @@ class FilesController extends Controller
     public function getFileAction($type, $name)
     {
         $path = null;
+        $container = $this->container;
+
         switch ( $type ) {
         case 'video':
             if ( !defined('BACH_FILES_VIDEOS') ) {
@@ -101,9 +103,18 @@ class FilesController extends Controller
             }
             break;
         }
-        $path .= '/' . $name;
 
-        if ( !file_exists($path) ) {
+        if (substr($name, 0, 1) === '/'
+            || substr($path, -1) === '/'
+        ) {
+            $path .=$name;
+        } else {
+            $path .= '/' . $name;
+        }
+
+        if (!file_exists($path)
+            && !file_exists($container->getParameter('cloudfront').$name)
+        ) {
             $msg_file = $name;
             if ( $this->container->get('kernel')->getEnvironment() === 'DEBUG' ) {
                 $msg_file = $path;
@@ -117,19 +128,23 @@ class FilesController extends Controller
             );
         }
 
-        $file = fopen($path, 'rb');
-        $out = fopen('php://output', 'wb');
+        if ($container->getParameter('aws.s3') == true) {
+            return $this->redirect($container->getParameter('cloudfront').$name);
+        } else {
+            $file = fopen($path, 'rb');
+            $out = fopen('php://output', 'wb');
 
-        $mime = mime_content_type($path);
-        header('Cache-Control: public');
-        header('Content-type: ' . $mime);
-        header('Content-Length:' . filesize($path));
-        stream_copy_to_stream($file, $out);
+            $mime = mime_content_type($path);
+            header('Cache-Control: public');
+            header('Content-type: ' . $mime);
+            header('Content-Length:' . filesize($path));
+            stream_copy_to_stream($file, $out);
 
-        fclose($out);
-        fclose($file);
+            fclose($out);
+            fclose($file);
 
-        return new Response();
+            return new Response();
+        }
     }
 
     /**

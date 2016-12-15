@@ -317,11 +317,11 @@ class CommentAdmin extends Admin
             $userTo  = $comment->getOpenedBy()->getEmail();
             if ($userTo != null && filter_var($userTo, FILTER_VALIDATE_EMAIL)) {
                 $container  = $this->getConfigurationPool()->getContainer();
-                $user       = $container ->getParameter('mailer_user');
-                $password   = $container ->getParameter('mailer_password');
-                $port       = $container ->getParameter('mailer_port');
-                $host       = $container ->getParameter('mailer_host');
-                $encryption = $container ->getParameter('mailer_encryption');
+                $user       = $container->getParameter('mailer_user');
+                $password   = $container->getParameter('mailer_password');
+                $port       = $container->getParameter('mailer_port');
+                $host       = $container->getParameter('mailer_host');
+                $encryption = $container->getParameter('mailer_encryption');
 
                 $transport  = \Swift_SmtpTransport::newInstance(
                     $host,
@@ -334,7 +334,11 @@ class CommentAdmin extends Admin
                 $message = \Swift_Message::newInstance();
                 //FIXME Manage english and translation
                 $message->setSubject('Bach - Traitement commentaire');
-                $message->setFrom($user);
+                if ('aws.sender' != null ) {
+                    $message->setFrom($container->getParameter('aws.sender'));
+                } else {
+                    $message->setFrom($user);
+                }
                 $message->setTo($userTo);
                 //FIXME Add a way to call here a template with the content
                 $message->setBody(

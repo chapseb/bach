@@ -51,6 +51,13 @@ use Symfony\Component\Finder\SplFileInfo;
 use Bach\IndexationBundle\Entity\IntegrationTask;
 use Bach\AdministrationBundle\Entity\SolrCore\SolrCoreAdmin;
 use Solarium\Exception\HttpException;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\HttpFoundation\Response;
+use Bach\IndexationBundle\Command\PublishCommand;
+use Bach\IndexationBundle\Command\UnpublishCommand;
+use Bach\IndexationBundle\Entity\BachToken;
 
 /**
  * Default indexation controller
@@ -590,5 +597,136 @@ class DefaultController extends Controller
                 'BachIndexationBundle:Indexation:validation.html.twig'
             );
         }
+    }
+
+    /**
+     * Publish document command
+     *
+     * @return Response
+     */
+    public function publishCommandAction()
+    {
+        $request = $this->getRequest();
+        $query = $this->getDoctrine()->getManager()
+            ->createQuery(
+                'SELECT t FROM BachIndexationBundle:BachToken t
+                    WHERE t.bach_token = :token
+                    AND t.filename = :filename'
+            )->setParameters(
+                array(
+                    'token' => $request->get('bach_token'),
+                    'filename'   => $request->get('document')
+                )
+            );
+        if ($query->getResult() != null) {
+            $result = $query->getResult()[0];
+            if ($result->getBachToken() == $request->get('bach_token')
+                && $result->getFilename() == $request->get('document')
+            ) {
+                $kernel = $this->get('kernel');
+                $application = new Application($kernel);
+
+                $command = new PublishCommand();
+                $command->setContainer($this->container);
+
+                if ($request->get('pdf-indexation') == true) {
+                    $arguments = array(
+                        'command'   => 'bach:publish',
+                        'type'      => $request->get('type'),
+                        '--assume-yes',
+                        '--pdf-indexation',
+                        'document'  => $request->get('document')
+                    );
+                } else {
+                    $arguments = array(
+                        'command'   => $request->get('command'),
+                        'type'      => $request->get('type'),
+                        '--assume-yes',
+                        'document'  => $request->get('document')
+                    );
+                }
+
+                $input = new ArgvInput($arguments);
+                $output = new ConsoleOutput();
+
+                $returnCode = $command->run($input, $output);
+
+                if ($returnCode == 0) {
+                    $this->getDoctrine()->getManager()->remove($result);
+                    $this->getDoctrine()->getManager()->flush();
+                    return new Response(
+                        "Unpublish launch for " . $request->get('document')
+                    );
+                }
+            }
+        }
+        $reponse = new Response("Mismatch send token/file and database token/file");
+        $response->setStatusCode(500);
+        return $response;
+    }
+
+    /**
+     * Unpublish document command
+     *
+     * @return Response
+     */
+    public function unpublishCommandAction()
+    {
+        $request = $this->getRequest();
+        $query = $this->getDoctrine()->getManager()
+            ->createQuery(
+                'SELECT t FROM BachIndexationBundle:BachToken t
+                    WHERE t.bach_token = :token
+                    AND t.filename = :filename'
+            )->setParameters(
+                array(
+                    'token' => $request->get('bach_token'),
+                    'filename'   => $request->get('document')
+                )
+            );
+        if ($query->getResult() != null) {
+            $result = $query->getResult()[0];
+            if ($result->getBachToken() == $request->get('bach_token')
+                && $result->getFilename() == $request->get('document')
+            ) {
+                $kernel = $this->get('kernel');
+                $application = new Application($kernel);
+
+                $command = new UnpublishCommand();
+                $command->setContainer($this->container);
+
+                if ($request->get('not-delete-file') == true) {
+                    $arguments = array(
+                        'command'   => 'bach:unpublish',
+                        'type'      => $request->get('type'),
+                        '--assume-yes',
+                        '--not-delete-file',
+                        'document'  => $request->get('document')
+                    );
+                } else {
+                    $arguments = array(
+                        'command'   => $request->get('command'),
+                        'type'      => $request->get('type'),
+                        '--assume-yes',
+                        'document'  => $request->get('document')
+                    );
+
+                }
+                $input = new ArgvInput($arguments);
+                $output = new ConsoleOutput();
+
+                $returnCode = $command->run($input, $output);
+                if ($returnCode == 0) {
+                    $this->getDoctrine()->getManager()->remove($result);
+                    $this->getDoctrine()->getManager()->flush();
+                    return new Response(
+                        "Unpublish launch for " . $request->get('document')
+                    );
+                }
+            }
+        }
+        $reponse = new Response("Mismatch send token/file and database token/file");
+        $response->setStatusCode(500);
+        return $response;
     }
 }

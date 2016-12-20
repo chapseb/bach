@@ -145,7 +145,7 @@ class ArchFileIntegration
      *
      * @return void
      */
-    public function integrateAll($tasks, ProgressHelper $progress, &$geonames, $debug, $pdfFlag = false)
+    public function integrateAll($tasks, $progress, &$geonames, $debug, $pdfFlag = false)
     {
         $count = 0;
         $cleared = false;
@@ -157,7 +157,9 @@ class ArchFileIntegration
                     $doc = $this->_entityManager->merge($doc);
                     $task->setDocument($doc);
                 }
-                $progress->advance();
+                if ($progress != null) {
+                    $progress->advance();
+                }
                 if ($debug == true) {
                     print_r($task->getDocument()->getName());
                 }

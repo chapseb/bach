@@ -238,8 +238,11 @@ EOF
                 $steps+=2;
             }
 
-            $progress = $this->getHelperSet()->get('progress');
-            $progress->start($output, $steps);
+            $flagAws = $container->getParameter('aws.s3');
+            if (!$flagAws) {
+                $progress = $this->getHelperSet()->get('progress');
+                $progress->start($output, $steps);
+            }
 
             if ( !$input->getOption('solr-only') ) {
                 $integrationService = $this->getContainer()
@@ -268,7 +271,9 @@ EOF
                             $change_date->setTimestamp($last_file_change);
 
                             if ( $exists->getUpdated() > $change_date ) {
-                                $progress->advance();
+                                if (!$flagAws) {
+                                    $progress->advance();
+                                }
                                 $logger->info(
                                     str_replace(
                                         '%doc',
@@ -301,7 +306,9 @@ EOF
                     }
 
                     if ( $type !== 'matricules' ) {
-                        $progress->advance();
+                        if (!$flagAws) {
+                            $progress->advance();
+                        }
                         if ( $dry === false ) {
                             $zdb = $this->getContainer()->get('zend_db');
                             try {
@@ -417,12 +424,18 @@ EOF
                 if ($debug != true) {
                     $debug = false;
                 }
-                $integrationService->integrateAll($tasks, $progress, $geonames, $debug);
+                $integrationService->integrateAll($tasks, null, $geonames, $debug);
             }
 
-            $this->_solrFullImport($output, $type, $progress, $dry);
+            if ($flagAws) {
+                $this->_solrFullImport($output, $type, null, $dry);
+            } else {
+                $this->_solrFullImport($output, $type, $progress, $dry);
+            }
 
-            $progress->finish();
+            if (!$flagAws) {
+                $progress->finish();
+            }
         } else {
             $output->writeln(
                 '<fg=red;options=bold>' .
@@ -583,7 +596,9 @@ EOF
      */
     private function _solrFullImport($output, $type, $progress, $dry)
     {
-        $progress->advance();
+        if ($progress != null) {
+            $progress->advance();
+        }
         $configreader = $this->getContainer()
             ->get('bach.administration.configreader');
         $corename = $this->getContainer()->getParameter($type . '_corename');
@@ -598,7 +613,9 @@ EOF
             sleep(2);
             $response = $sca->getImportStatus($corename);
             if ( $response->getImportStatus() === 'idle' ) {
-                $progress->advance();
+                if ($progress != null) {
+                    $progress->advance();
+                }
                 $done = true;
                 $messages = $response->getImportMessages();
                 $messages = \simplexml_import_dom($messages);

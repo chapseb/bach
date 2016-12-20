@@ -469,3 +469,14 @@ search_histo_import:
     requirements:
         _method: POST
 
+api_publish_command:
+    pattern: /publishCommand
+    defaults: { _controller: BachIndexationBundle:Default:publishCommand }
+    requirements:
+        _method: POST|GET
+
+api_unpublish_command:
+    pattern: /unpublishCommand
+    defaults: { _controller: BachIndexationBundle:Default:unpublishCommand }
+    requirements:
+        _method: POST|GET

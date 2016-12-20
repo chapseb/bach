@@ -223,7 +223,10 @@ EOF
             );
 
             $steps = 1;
-            $progress = $this->getHelperSet()->get('progress');
+            $flagAws = $container->getParameter('aws.s3');
+            if (!$flagAws) {
+                $progress = $this->getHelperSet()->get('progress');
+            }
 
             $flagDocIds = $input->getOption('docids');
             if ( !$flagDocIds ) {
@@ -290,9 +293,13 @@ EOF
 
             $cpt=0;
             $steps += count($docs);
-            $progress->start($output, $steps);
+            if (!$flagAws) {
+                $progress->start($output, $steps);
+            }
             foreach ($docs as $doc) {
-                $progress->advance();
+                if (!$flagAws) {
+                    $progress->advance();
+                }
                 $cpt++;
                 if ( !isset($updates[$doc['corename']]) ) {
                     $client = $this->getContainer()->get('solarium.client.' . $doc['extension']);
@@ -374,7 +381,9 @@ EOF
 
             }
 
-            $progress->advance();
+            if (!$flagAws) {
+                $progress->advance();
+            }
             foreach ( $updates as $key=>$update ) {
                 $client = $clients[$key];
                 $update->addCommit(null, null, true);
@@ -398,7 +407,9 @@ EOF
                 }
             }
 
-            $progress->finish();
+            if (!$flagAws) {
+                $progress->finish();
+            }
             if ($stats === true) {
                 $peak = $this->formatBytes(memory_get_peak_usage());
 

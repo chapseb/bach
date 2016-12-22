@@ -274,6 +274,11 @@ class MatriculesController extends SearchController
         $this->searchhistoMatAddAction($searchResults->getNumFound());
 
         $tpl_vars['readingroomIp'] = $this->container->getParameter('readingroom');
+
+        if ($this->container->getParameter('aws.s3') == true) {
+            $tpl_vars['cloudfront'] = $this->container->getParameter('cloudfront').'prepared_images';
+        }
+
         return $this->render(
             'BachHomeBundle:Matricules:search_form.html.twig',
             array_merge(
@@ -405,6 +410,10 @@ class MatriculesController extends SearchController
             ) {
                 $tplParams['communicability'] = true;
             }
+        }
+        if ($this->container->getParameter('aws.s3') == true) {
+            $cloudfront = $this->container->getParameter('cloudfront').'prepared_images';
+            $tplParams['awsThumbImage'] = $cloudfront . '/medium/'.$doc['start_dao'];
         }
         return $this->render(
             $tpl,

@@ -122,7 +122,7 @@ POSSIBILITY OF SUCH DAMAGE.
             {% set printTest = 'false' %}
         {% endif %}
         <div class="content frag">
-        {{ displayFragment(document.fragment, docid, search_form, true, hasChildren, hasComments, count_children, ajax, printTest, highlight, communicability, audience)|raw }}
+        {{ displayFragment(document.fragment, docid, search_form, true, hasChildren, hasComments, count_children, ajax, printTest, highlight, communicability, audience, cloudfront, aws)|raw }}
         {% if not children == false %}
             <section id="children_documents">
                 <header>

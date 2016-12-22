@@ -509,6 +509,10 @@ class DefaultController extends SearchController
             = $this->container->getParameter('display.disable_select_daterange');
         $tpl_vars['current_date'] = 'cDateBegin';
 
+        $tpl_vars['aws'] = $this->container->getParameter('aws.s3');
+        if ($this->container->getParameter('aws.s3') == true) {
+            $tpl_vars['cloudfront'] = $this->container->getParameter('cloudfront').'prepared_images';
+        }
         $this->searchhistoAddAction($searchResults->getNumFound(), $all_facets);
 
         return $this->render(
@@ -908,6 +912,10 @@ class DefaultController extends SearchController
             $tpl_vars['cookie_param'] = true;
         }
 
+        $tpl_vars['aws'] = $this->container->getParameter('aws.s3');
+        if ($this->container->getParameter('aws.s3') == true) {
+            $tpl_vars['cloudfront'] = $this->container->getParameter('cloudfront').'prepared_images';
+        }
         $tpl_vars['print'] = $print;
         $tpl_vars['highlight']= $highlight;
         return $this->render(

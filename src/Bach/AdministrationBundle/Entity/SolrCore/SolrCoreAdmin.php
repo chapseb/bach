@@ -216,6 +216,8 @@ class SolrCoreAdmin
         } else {
             //a temporary core has been created. User has to copy it the right
             //place, and only then tell Bach/Solr to register it
+
+            $this->_createCoreProperties($coreInstanceDirPath, $coreName);
             $solr_url = $this->_reader->getCoresURL() . '/admin/cores?';
             foreach ( $create_params as $key=>$param ) {
                 $solr_url .=  $key . '=' . $param . '&';
@@ -487,6 +489,28 @@ class SolrCoreAdmin
             return $status == 0 ? true : false;
         }
         return false;
+    }
+
+
+    /**
+     * Create core properties file
+     *
+     * @param string $coreInstanceDirPath Core instance dir
+     * @param string $coreName            Core name
+     *
+     * @return void
+     */
+    private function _createCoreProperties(
+        $coreInstanceDirPath,
+        $coreName
+    ) {
+         $corePropertiesFilePath = $coreInstanceDirPath . '/' .
+            'core.properties';
+         $content = "name=".$coreName."\n";
+         $content .= "config=".$this->_reader->getDefaultConfigFileName() . "\n";
+         $content .= "schema=" .$this->_reader->getDefaultSchemaFileName(). "\n";
+         $content .= "dataDir=" . $this->_reader->getDefaultDataDir();
+         file_put_contents($corePropertiesFilePath, $content);
     }
 
     /**

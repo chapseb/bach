@@ -315,6 +315,27 @@ class FileDriverManager
                             true,
                             $pdfFlag
                         );
+
+                        // record dao for image prepared in daos_prepared table
+                        if ($record->getStartDao() != '') {
+                            if ($record->getEndDao() == '') {
+                                $endDao = '';
+                            } else {
+                                $endDao = $record->getEndDao();
+                            }
+                            $insert = $this->_zdb->insert('daos_prepared')
+                                ->values(
+                                    array(
+                                        'href'    => $record->getStartDao(),
+                                        'end_dao' => $endDao
+                                    )
+                                );
+                            $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                                $insert
+                            );
+                            $stmt->execute();
+                        }
+
                         $record = $record->toArray();
 
                         //record does not exists yet. Store it.
@@ -421,6 +442,30 @@ class FileDriverManager
                 $pdfFlag
             );
             $fragment = $obj->toArray();
+            foreach ($fragment['daos'] as $dao) {
+                $authorizedExtensions = array(
+                    'png', 'jpg', 'jpeg', 'tiff',
+                    'PNG', 'JPG', 'JPEG', 'TIFF'
+                );
+                $testExtension = substr(
+                    $dao['href'],
+                    strrpos($dao['href'], '.') + 1
+                );
+
+                if (in_array($testExtension, $authorizedExtensions) || strrpos($dao['href'], '.') == '') {
+                    $insert = $this->_zdb->insert('daos_prepared')
+                        ->values(
+                            array(
+                                'href' => $dao['href'],
+                                'end_dao' => ''
+                            )
+                        );
+                    $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                        $insert
+                    );
+                    $stmt->execute();
+                }
+            }
             //EAD archdesc does not exists yet. Store it.
             $id = $this->_storeEadFragment(
                 $fragment,
@@ -585,6 +630,7 @@ class FileDriverManager
             );
 
         }
+
         $obj = new Entity\MatriculesFileFormat(
             $converted_data,
             false

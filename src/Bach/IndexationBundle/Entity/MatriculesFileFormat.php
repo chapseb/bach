@@ -792,4 +792,25 @@ class MatriculesFileFormat extends FileFormat
         return $this->communicability_sallelecture;
     }
 
+    /**
+     * Get start dao
+     *
+     * @return String
+     */
+    public function getStartDao()
+    {
+        return $this->start_dao;
+    }
+
+    /**
+     * Get end dao
+     *
+     * @return String
+     */
+    public function getEndDao()
+    {
+        return $this->end_dao;
+    }
+
+
 }

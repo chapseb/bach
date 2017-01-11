@@ -77,6 +77,14 @@ class BachToken
     protected $bach_token;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="action", type="boolean")
+     */
+    protected $action;
+
+
+    /**
      * Get id
      *
      * @return integer
@@ -104,5 +112,28 @@ class BachToken
     public function getBachToken()
     {
         return $this->bach_token;
+    }
+
+    /**
+     * Set action
+     *
+     * @param boolean $action Action
+     *
+     * @return BachToken
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return boolean
+     */
+    public function getAction()
+    {
+        return $this->action;
     }
 }

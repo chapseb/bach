@@ -135,6 +135,12 @@ EOF
                 null,
                 InputOption::VALUE_NONE,
                 _('Print last integration file')
+            )->addOption(
+                'token',
+                'token',
+                InputOption::VALUE_REQUIRED,
+                'Which token for publish file in bach_token table ?',
+                1
             );
     }
 
@@ -431,6 +437,25 @@ EOF
                 $this->_solrFullImport($output, $type, null, $dry);
             } else {
                 $this->_solrFullImport($output, $type, $progress, $dry);
+            }
+
+            if ($input->getOption('token') != 1) {
+                $query = $em->createQuery(
+                    'SELECT t FROM BachIndexationBundle:BachToken t
+                        WHERE t.bach_token = :token
+                        AND t.filename = :filename'
+                )->setParameters(
+                    array(
+                        'token' => $input->getOption('token'),
+                        'filename'   => $input->getArgument('document')
+                    )
+                );
+
+                if ($query->getResult()[0]) {
+                    $result = $query->getResult()[0];
+                    $em->remove($result);
+                    $em->flush();
+                }
             }
 
             if (!$flagAws) {

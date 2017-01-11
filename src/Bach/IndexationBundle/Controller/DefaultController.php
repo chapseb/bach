@@ -623,44 +623,23 @@ class DefaultController extends Controller
             if ($result->getBachToken() == $request->get('bach_token')
                 && $result->getFilename() == $request->get('document')
             ) {
-                $kernel = $this->get('kernel');
-                $application = new Application($kernel);
-
-                $command = new PublishCommand();
-                $command->setContainer($this->container);
+                $cmd = "php -d date.timezone=UTC ../app/console bach:publish " .
+                    $request->get('type') . " " . $request->get('document') .
+                    " --assume-yes --token=".$request->get('bach_token')." ";
 
                 if ($request->get('pdf-indexation') == true) {
-                    $arguments = array(
-                        'command'   => 'bach:publish',
-                        'type'      => $request->get('type'),
-                        '--assume-yes',
-                        '--pdf-indexation',
-                        'document'  => $request->get('document')
-                    );
-                } else {
-                    $arguments = array(
-                        'command'   => $request->get('command'),
-                        'type'      => $request->get('type'),
-                        '--assume-yes',
-                        'document'  => $request->get('document')
-                    );
+                    $cmd .= " --pdf-indexation";
                 }
 
-                $input = new ArgvInput($arguments);
-                $output = new ConsoleOutput();
-
-                $returnCode = $command->run($input, $output);
-
-                if ($returnCode == 0) {
-                    $this->getDoctrine()->getManager()->remove($result);
-                    $this->getDoctrine()->getManager()->flush();
-                    return new Response(
-                        "Unpublish launch for " . $request->get('document')
-                    );
-                }
+                $cmd .= " > /dev/null 2>/dev/null &";
+                exec($cmd);
+                $result->setAction(true);
+                return new Response(
+                    "Publish launch for " . $request->get('document')
+                );
             }
         }
-        $reponse = new Response("Mismatch send token/file and database token/file");
+        $response = new Response("Mismatch send token/file and database token/file");
         $response->setStatusCode(500);
         return $response;
     }
@@ -690,42 +669,24 @@ class DefaultController extends Controller
                 && $result->getFilename() == $request->get('document')
             ) {
                 $kernel = $this->get('kernel');
-                $application = new Application($kernel);
 
-                $command = new UnpublishCommand();
-                $command->setContainer($this->container);
-
+                $cmd = "php -d date.timezone=UTC ../app/console bach:unpublish " .
+                    $request->get('type') . " " . $request->get('document') .
+                    " --assume-yes --token=".$request->get('bach_token')." ";
                 if ($request->get('not-delete-file') == true) {
-                    $arguments = array(
-                        'command'   => 'bach:unpublish',
-                        'type'      => $request->get('type'),
-                        '--assume-yes',
-                        '--not-delete-file',
-                        'document'  => $request->get('document')
-                    );
-                } else {
-                    $arguments = array(
-                        'command'   => $request->get('command'),
-                        'type'      => $request->get('type'),
-                        '--assume-yes',
-                        'document'  => $request->get('document')
-                    );
-
+                    $cmd .= " --not-delete-file";
                 }
-                $input = new ArgvInput($arguments);
-                $output = new ConsoleOutput();
 
-                $returnCode = $command->run($input, $output);
-                if ($returnCode == 0) {
-                    $this->getDoctrine()->getManager()->remove($result);
-                    $this->getDoctrine()->getManager()->flush();
-                    return new Response(
-                        "Unpublish launch for " . $request->get('document')
-                    );
-                }
+                $cmd .= " > /dev/null 2>/dev/null &";
+
+                exec($cmd);
+                $result->setAction(true);
+                return new Response(
+                    "Unpublish launch for " . $request->get('document')
+                );
             }
         }
-        $reponse = new Response("Mismatch send token/file and database token/file");
+        $response = new Response("Mismatch send token/file and database token/file");
         $response->setStatusCode(500);
         return $response;
     }

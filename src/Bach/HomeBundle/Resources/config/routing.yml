@@ -480,3 +480,15 @@ api_unpublish_command:
     defaults: { _controller: BachIndexationBundle:Default:unpublishCommand }
     requirements:
         _method: POST|GET
+
+api_launch_generate_image:
+    pattern: /generateImage
+    defaults: { _controller: BachIndexationBundle:Default:generateImage }
+    requirements:
+        _method: POST|GET
+
+api_delete_generate_image:
+    pattern: /deleteImage
+    defaults: { _controller: BachIndexationBundle:Default:deleteImage }
+    requirements:
+        _method: POST|GET

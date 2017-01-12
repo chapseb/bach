@@ -470,8 +470,6 @@ EOF
 
         }
 
-        $this->_createPreparedImages();
-
         if ( $stats === true ) {
             $peak = $this->formatBytes(memory_get_peak_usage());
 
@@ -681,66 +679,5 @@ EOF
         $fmt = @round($bytes/pow(1024, ($i=floor(log($bytes, 1024)))), 2)
             * $multiplicator . ' ' . $unit[$i];
         return $fmt;
-    }
-
-    /**
-     * Create prepared images
-     *
-     * @return void
-     */
-    private function _createPreparedImages()
-    {
-        $zdb = $this->getContainer()->get('zend_db');
-
-        try {
-            $zdb->connection->beginTransaction();
-            $select = $zdb->select('daos_prepared');
-            $stmt = $zdb->sql->prepareStatementForSqlObject(
-                $select
-            );
-            $result = $stmt->execute();
-
-            $results = new ResultSet();
-            $rows = $results->initialize($result)->toArray();
-            $urlViewer = $this->getContainer()->getParameter('viewer_uri');
-            $this->httpPost($urlViewer . 'ajax/generateimages', $rows);
-            // truncate table daos_prepared after launch image generation command
-            try {
-                $deleteHeader = $zdb->delete('daos_prepared');
-
-                $stmt = $zdb->sql->prepareStatementForSqlObject(
-                    $deleteHeader
-                );
-                $stmt->execute();
-            } catch ( \Exception $e ) {
-                $zdb->connection->rollBack();
-                throw $e;
-            }
-            $zdb->connection->commit();
-        } catch ( \Exception $e ) {
-            $zdb->connection->rollBack();
-            throw $e;
-        }
-
-    }
-
-    /**
-     * Make http call to viewer
-     *
-     * @param string $url    Contains viewer route to call
-     * @param array  $params Post values to send
-     *
-     * @return void
-     */
-    function httpPost($url,$params)
-    {
-        $jsonData = json_encode($params);
-
-        $cmd = "curl -X POST -H 'Content-Type: application/json'";
-        $cmd.= " -d '" . $jsonData . "' " . "'" . $url . "'";
-
-        $cmd .= " > /dev/null 2>/dev/null &";
-
-        exec($cmd, $output);
     }
 }

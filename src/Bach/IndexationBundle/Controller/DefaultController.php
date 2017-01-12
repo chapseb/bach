@@ -38,6 +38,7 @@
  * @category Indexation
  * @package  Bach
  * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
@@ -67,6 +68,7 @@ use Bach\IndexationBundle\Entity\BachToken;
  * @category Indexation
  * @package  Bach
  * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
@@ -690,4 +692,58 @@ class DefaultController extends Controller
         $response->setStatusCode(500);
         return $response;
     }
+
+    /**
+     * Launch generate image
+     *
+     * @return Response
+     */
+    public function generateImageAction()
+    {
+        $query = $this->getDoctrine()->getManager()
+            ->createQuery(
+                'SELECT t FROM BachIndexationBundle:DaosPrepared t'
+            )->setMaxResults(1);
+        if ($query->getResult() != null) {
+            $result = $query->getResult()[0];
+            $params[0] = $result->toArray();
+            $urlViewer = $this->container->getParameter('viewer_uri');
+
+            $url = $urlViewer . 'ajax/generateimages';
+            $jsonData = json_encode($params);
+            $cmd = "curl -X POST -H 'Content-Type: application/json'";
+            $cmd.= " -d '" . $jsonData . "' " . "'" . $url . "'";
+
+            $cmd .= " > /dev/null 2>/dev/null &";
+            exec($cmd, $output);
+        }
+
+        return new Response("Image generation launch");
+    }
+
+    /**
+     * Delete image in database
+     *
+     * @return Response
+     */
+    public function deleteImageAction()
+    {
+        $json = $this->getRequest()->getContent();
+        $data = json_decode($json, true);
+        foreach ($data as $row) {
+
+            $em = $this->getDoctrine()->getManager();
+            $repository = $em->getRepository('BachIndexationBundle:DaosPrepared');
+
+            $dao = $repository->findOneBy(
+                array(
+                    'id'=>$row['id']
+                )
+            );
+            $em->remove($dao);
+            $em->flush();
+        }
+        return new Response("Images prepared deleted from database.");
+    }
+
 }

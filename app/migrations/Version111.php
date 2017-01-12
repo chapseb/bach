@@ -88,7 +88,7 @@ class Version111 extends BachMigration implements ContainerAwareInterface
         $this->checkDbPlatform();
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
         $this->addSql('CREATE TABLE bach_token (id INT AUTO_INCREMENT NOT NULL, filename VARCHAR(255) NOT NULL, bach_token VARCHAR(32) NOT NULL, action TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE daos_prepared (id INT AUTO_INCREMENT NOT NULL, href VARCHAR(1000) NOT NULL, end_dao VARCHAR(1000) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE daos_prepared (id INT AUTO_INCREMENT NOT NULL, href VARCHAR(1000) NOT NULL, end_dao VARCHAR(1000) NOT NULL, action TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
     }
 
     /**

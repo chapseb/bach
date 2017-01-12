@@ -700,25 +700,34 @@ class DefaultController extends Controller
      */
     public function generateImageAction()
     {
-        $query = $this->getDoctrine()->getManager()
+        $testTreatment = $this->getDoctrine()->getManager()
             ->createQuery(
-                'SELECT t FROM BachIndexationBundle:DaosPrepared t'
-            )->setMaxResults(1);
-        if ($query->getResult() != null) {
-            $result = $query->getResult()[0];
-            $params[0] = $result->toArray();
-            $urlViewer = $this->container->getParameter('viewer_uri');
+                'SELECT t FROM BachIndexationBundle:DaosPrepared t
+                WHERE t.action = 1'
+            );
+        if ($testTreatment->getResult() == null) {
+            $query = $this->getDoctrine()->getManager()
+                ->createQuery(
+                    'SELECT t FROM BachIndexationBundle:DaosPrepared t'
+                )->setMaxResults(1);
+            if ($query->getResult()[0] != null) {
+                $result = $query->getResult()[0];
+                $result->setAction(1);
+                $params[0] = $result->toArray();
+                $urlViewer = $this->container->getParameter('viewer_uri');
 
-            $url = $urlViewer . 'ajax/generateimages';
-            $jsonData = json_encode($params);
-            $cmd = "curl -X POST -H 'Content-Type: application/json'";
-            $cmd.= " -d '" . $jsonData . "' " . "'" . $url . "'";
+                $url = $urlViewer . 'ajax/generateimages';
+                $jsonData = json_encode($params);
+                $cmd = "curl -X POST -H 'Content-Type: application/json'";
+                $cmd.= " -d '" . $jsonData . "' " . "'" . $url . "'";
 
-            $cmd .= " > /dev/null 2>/dev/null &";
-            exec($cmd, $output);
+                $cmd .= " > /dev/null 2>/dev/null &";
+                exec($cmd, $output);
+            }
+
+            return new Response("Image generation launch");
         }
-
-        return new Response("Image generation launch");
+        return new Response("Already a treatment");
     }
 
     /**

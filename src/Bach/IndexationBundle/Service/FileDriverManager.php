@@ -327,7 +327,8 @@ class FileDriverManager
                                 ->values(
                                     array(
                                         'href'    => $record->getStartDao(),
-                                        'end_dao' => $endDao
+                                        'end_dao' => $endDao,
+                                        'action'  => false
                                     )
                                 );
                             $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
@@ -457,7 +458,8 @@ class FileDriverManager
                         ->values(
                             array(
                                 'href' => $dao['href'],
-                                'end_dao' => ''
+                                'end_dao' => '',
+                                'action'  => false
                             )
                         );
                     $stmt = $this->_zdb->sql->prepareStatementForSqlObject(

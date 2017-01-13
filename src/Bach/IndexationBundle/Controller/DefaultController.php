@@ -622,6 +622,8 @@ class DefaultController extends Controller
             );
         if ($query->getResult() != null) {
             $result = $query->getResult()[0];
+            $result->setAction(1);
+            $this->getDoctrine()->getManager()->flush();
             if ($result->getBachToken() == $request->get('bach_token')
                 && $result->getFilename() == $request->get('document')
             ) {
@@ -635,7 +637,6 @@ class DefaultController extends Controller
 
                 $cmd .= " > /dev/null 2>/dev/null &";
                 exec($cmd);
-                $result->setAction(true);
                 return new Response(
                     "Publish launch for " . $request->get('document')
                 );
@@ -671,6 +672,8 @@ class DefaultController extends Controller
                 && $result->getFilename() == $request->get('document')
             ) {
                 $kernel = $this->get('kernel');
+                $result->setAction(1);
+                $this->getDoctrine()->getManager()->flush();
 
                 $cmd = "php -d date.timezone=UTC ../app/console bach:unpublish " .
                     $request->get('type') . " " . $request->get('document') .
@@ -682,7 +685,6 @@ class DefaultController extends Controller
                 $cmd .= " > /dev/null 2>/dev/null &";
 
                 exec($cmd);
-                $result->setAction(true);
                 return new Response(
                     "Unpublish launch for " . $request->get('document')
                 );

@@ -69,17 +69,19 @@ class AppKernel extends Kernel
         parent::boot();
 
         $container = $this->getContainer();
-        $s3 = new S3Client(
-            [
-                'version' => $container->getParameter('aws.version'),
-                'region'  => $container->getParameter('aws.region'),
-                'credentials' => array(
-                    'key' => $container->getParameter('aws.credentials.key'),
-                    'secret' => $container->getParameter('aws.credentials.secret')
-                    )
-            ]
-        );
-        $s3->registerStreamWrapper('s3');
+        if ($container->getParameter('aws.s3') == true) {
+            $s3 = new S3Client(
+                [
+                    'version' => $container->getParameter('aws.version'),
+                    'region'  => $container->getParameter('aws.region'),
+                    'credentials' => array(
+                        'key' => $container->getParameter('aws.credentials.key'),
+                        'secret' => $container->getParameter('aws.credentials.secret')
+                        )
+                ]
+            );
+            $s3->registerStreamWrapper('s3');
+        }
     }
 
     /**

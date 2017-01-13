@@ -78,17 +78,9 @@ POSSIBILITY OF SUCH DAMAGE.
                         {% endset %}
                         <a href="{{ viewer_uri ~ images_link }}" target="_blank" >
                         {% if document.nom is defined or document.prenom is defined %}
-                            {% if cloudfront is defined %}
-                                <img src="{{ cloudfront ~ '/thumb/' ~ document.start_dao }}" alt="{{ _('Scan') }}"/>
-                            {% else %}
-                                <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ document.nom ~ ' ' ~ document.prenoms|join(' ') }}"/>
-                            {% endif %}
+                        <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ document.nom ~ ' ' ~ document.prenoms|join(' ') }}"/>
                         {% else %}
-                            {% if cloudfront is defined %}
-                                <img src="{{ cloudfront ~ '/thumb/' ~ document.start_dao }}" alt="{{ _('Scan') }}"/>
-                            {% else %}
-                                <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ _('Scan') }}"/>
-                            {% endif %}
+                            <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ _('Scan') }}"/>
                         {% endif %}
                         </a>
                     {% else %}

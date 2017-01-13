@@ -60,8 +60,6 @@ POSSIBILITY OF SUCH DAMAGE.
     <xsl:param name="print" select="''"/>
     <xsl:param name="communicability" select="''"/>
     <xsl:param name="audience" select="''"/>
-    <xsl:param name="cloudfront" select="''"/>
-    <xsl:param name="aws" select="''"/>
 
     <xsl:template match="c|c01|c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12|archdesc">
         <xsl:variable name="id">
@@ -125,7 +123,7 @@ POSSIBILITY OF SUCH DAMAGE.
                         </header>
                         <xsl:variable name="daogrps" select=".//daogrp"/>
                         <xsl:variable name="daos" select=".//dao[not(parent::daogrp)]|.//daoloc[not(parent::daogrp)]"/>
-                        <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayDao::displayDaos', $daogrps, $daos, $viewer_uri, 'medium', $ajax, $covers_dir, $communicability, $aws, $cloudfront)"/>
+                        <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayDao::displayDaos', $daogrps, $daos, $viewer_uri, 'medium', $ajax, $covers_dir, $communicability)"/>
                     </figure>
                 </xsl:if>
             </xsl:when>

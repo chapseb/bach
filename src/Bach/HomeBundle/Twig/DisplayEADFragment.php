@@ -165,8 +165,7 @@ class DisplayEADFragment extends \Twig_Extension
      */
     public function display($fragment, $docid, $form_name = 'default', $full = false,
         $hasChildren = false, $hasComments = false, $countSub = 0, $ajax = false,
-        $print = false, $highlight = false, $communicability = false, 
-        $audience = false, $cloudfront = null, $aws = false
+        $print = false, $highlight = false, $communicability = false, $audience = false
     ) {
         $proc = new \XsltProcessor();
         $proc->importStylesheet(
@@ -205,8 +204,6 @@ class DisplayEADFragment extends \Twig_Extension
         $proc->setParameter('', 'communicability', $communicability);
         $audience = ($audience) ? 'true' : 'false';
         $proc->setParameter('', 'audience', $audience);
-        $proc->setParameter('', 'cloudfront', $cloudfront);
-        $proc->setParameter('', 'aws', $aws);
 
         if ( $hasChildren === true ) {
             $proc->setParameter('', 'children', 'true');

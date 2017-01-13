@@ -94,11 +94,7 @@ POSSIBILITY OF SUCH DAMAGE.
                         {% if communicability is defined and communicability == false %}
                         <img src="{{ asset('img/thumb_comm.png')}}" alt="{{ nomMatricule ~ ' ' ~ prenomsMatricules|join(' ') }}" title="{{ _('This picture is not communicable') }}" />
                         {% else %}
-                            {% if awsThumbImage is defined %}
-                                <img src="{{ awsThumbImage }}" alt="{{ nomMatricule ~ ' ' ~ prenomsMatricules|join(' ') }}"/>
-                            {% else %}
-                                <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/medium' }}" alt="{{ nomMatricule ~ ' ' ~ prenomsMatricules|join(' ') }}"/>
-                            {% endif %}
+                        <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/medium' }}" alt="{{ nomMatricule ~ ' ' ~ prenomsMatricules|join(' ') }}"/>
                         {% endif %}
                     </a>
                     {% endif %}

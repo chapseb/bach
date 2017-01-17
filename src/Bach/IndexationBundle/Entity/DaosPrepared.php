@@ -92,16 +92,24 @@ class DaosPrepared
     protected $action;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="last_file", type="string", length=1000)
+     */
+    protected $last_file = '';
+
+    /**
      * Constructor
      *
      * @param string $href    Href image
      * @param string $end_dao End dao
      */
-    public function __construct($href, $end_dao, $action)
+    public function __construct($href, $end_dao, $action, $lastFile = '')
     {
         $this->href = $href;
         $this->end_dao = $end_dao;
         $this->action = $action;
+        $this->last_file = $lastFile;
     }
 
 
@@ -158,7 +166,7 @@ class DaosPrepared
      *
      * @return DaosPrepared
      */
-    public function setLink($end_dao)
+    public function setEndDao($end_dao)
     {
         $this->end_dao = $end_dao;
         return $this;
@@ -195,6 +203,29 @@ class DaosPrepared
     public function getAction()
     {
         return $this->action;
+    }
+
+    /**
+     * Get last file
+     *
+     * @return string
+     */
+    public function getLastFile()
+    {
+        return $this->last_file;
+    }
+
+    /**
+     * Set last file
+     *
+     * @param string $last_file last file
+     *
+     * @return DaosPrepared
+     */
+    public function setLastFile($last_file)
+    {
+        $this->last_file = $last_file;
+        return $this;
     }
 
     /**

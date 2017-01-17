@@ -742,7 +742,6 @@ class DefaultController extends Controller
         $json = $this->getRequest()->getContent();
         $data = json_decode($json, true);
         foreach ($data as $row) {
-
             $em = $this->getDoctrine()->getManager();
             $repository = $em->getRepository('BachIndexationBundle:DaosPrepared');
 
@@ -751,7 +750,15 @@ class DefaultController extends Controller
                     'id'=>$row['id']
                 )
             );
-            $em->remove($dao);
+            if ($this->getRequest()->get('flag') == 'finish') {
+                $dao->setAction(0);
+                print_r($this->getRequest());
+                $dao->setLastFile($this->getRequest()->get('lastfile'));
+                $this->getDoctrine()->getManager()->flush();
+                return new Response("Images prepared deleted but other's comming");
+            } else {
+                $em->remove($dao);
+            }
             $em->flush();
         }
         return new Response("Images prepared deleted from database.");

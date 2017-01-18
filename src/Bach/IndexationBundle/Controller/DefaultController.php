@@ -712,7 +712,7 @@ class DefaultController extends Controller
                 ->createQuery(
                     'SELECT t FROM BachIndexationBundle:DaosPrepared t'
                 )->setMaxResults(1);
-            if ($query->getResult()[0] != null) {
+            if (!empty($query->getResult())) {
                 $result = $query->getResult()[0];
                 $result->setAction(1);
                 $params[0] = $result->toArray();

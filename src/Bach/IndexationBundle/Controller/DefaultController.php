@@ -620,7 +620,7 @@ class DefaultController extends Controller
                     'filename'   => $request->get('document')
                 )
             );
-        if ($query->getResult() != null) {
+        if (!empty($query->getResult())) {
             $result = $query->getResult()[0];
             $result->setAction(1);
             $this->getDoctrine()->getManager()->flush();
@@ -666,7 +666,7 @@ class DefaultController extends Controller
                     'filename'   => $request->get('document')
                 )
             );
-        if ($query->getResult() != null) {
+        if (!empty($query->getResult())) {
             $result = $query->getResult()[0];
             if ($result->getBachToken() == $request->get('bach_token')
                 && $result->getFilename() == $request->get('document')

@@ -112,11 +112,19 @@ class FilesController extends Controller
             $path .= '/' . $name;
         }
 
+        $existsAws = false;
+        if ($container->getParameter('aws.s3') == true) {
+            $file = BACH_FILES_MISC . $name;
+            $file_headers = @get_headers($file);
+            if ($file_headers[0] == 'HTTP/1.1 200 OK') {
+                $exists = true;
+            }
+        }
         if (!file_exists($path)
-            && !file_exists($container->getParameter('cloudfront').$name)
+            && !$exists
         ) {
             $msg_file = $name;
-            if ( $this->container->get('kernel')->getEnvironment() === 'DEBUG' ) {
+            if ($this->container->get('kernel')->getEnvironment() === 'DEBUG') {
                 $msg_file = $path;
             }
             throw new NotFoundHttpException(
@@ -129,7 +137,7 @@ class FilesController extends Controller
         }
 
         if ($container->getParameter('aws.s3') == true) {
-            return $this->redirect($container->getParameter('cloudfront').$name);
+            return $this->redirect(BACH_FILES_MISC . $name);
         } else {
             $file = fopen($path, 'rb');
             $out = fopen('php://output', 'wb');

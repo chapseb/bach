@@ -77,10 +77,18 @@ POSSIBILITY OF SUCH DAMAGE.
                             {%- endif -%}
                         {% endset %}
                         <a href="{{ viewer_uri ~ images_link }}" target="_blank" >
-                        {% if document.nom is defined or document.prenom is defined %}
-                        <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ document.nom ~ ' ' ~ document.prenoms|join(' ') }}"/>
-                        {% else %}
+                        {% if listImgAws is not defined %}
+                            {% if document.nom is defined or document.prenom is defined %}
+                            <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ document.nom ~ ' ' ~ document.prenoms|join(' ') }}"/>
+                            {% else %}
                             <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ _('Scan') }}"/>
+                            {% endif %}
+                        {% else %}
+                            {% if document.nom is defined or document.prenom is defined %}
+                            <img src="{{ listImgAws[loop.index0] }}" alt="{{ document.nom ~ ' ' ~ document.prenoms|join(' ') }}"/>
+                            {% else %}
+                            <img src="{{ listImgAws[loop.index0] }}" alt="{{ _('Scan') }}"/>
+                            {% endif %}
                         {% endif %}
                         </a>
                     {% else %}

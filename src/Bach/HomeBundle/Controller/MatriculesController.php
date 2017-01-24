@@ -243,6 +243,21 @@ class MatriculesController extends SearchController
 
         }
 
+        if ($this->container->getParameter('aws.s3') == true) {
+            $arrayImgAws = array();
+            foreach ($searchResults as $doc) {
+                $srcImage = $this->container->getParameter('viewer_uri')
+                . 'ajax/imgAws/'.
+                $doc->start_dao. '/format/thumb';
+                $srcImage = @file_get_contents($srcImage);
+                array_push(
+                    $arrayImgAws,
+                    $srcImage
+                );
+            }
+            $tpl_vars['listImgAws'] = $arrayImgAws;
+        }
+
         $tpl_vars['stats'] = $factory->getStats();
         $this->handleYearlyResults($factory, $tpl_vars);
         $this->handleGeoloc($factory);
@@ -373,6 +388,15 @@ class MatriculesController extends SearchController
             $tplParams['ajax'] = false;
         }
 
+        if ($this->container->getParameter('aws.s3') == true) {
+            //$tplParams['mediumAwsImage']
+            $srcImage = $this->container->getParameter('viewer_uri')
+                . 'ajax/imgAws/'.
+                $doc->start_dao. '/format/medium';
+
+            $srcImage = @file_get_contents($srcImage);
+            $tplParams['awsSourceImage'] = $srcImage;
+        }
         /* not display warning about cookies */
         if (isset($_COOKIE[$this->getCookieName()])) {
             $tplParams['cookie_param'] = true;

@@ -63,10 +63,10 @@ POSSIBILITY OF SUCH DAMAGE.
                         {% endfor %}
                         {% endif %}
                         {% if daoSeries[document.fragmentid] is defined and daoSeries[document.fragmentid] == 'series' and flagCommunicability == true and flagAudience != true%}
-                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability, 'series')|raw }}
+                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability, 'series', aws, cloudfront)|raw }}
                         {% else %}
                           {% if document.dao is defined and flagCommunicability == true and flagAudience != true%}
-                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability)|raw }}
+                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability, null, aws, cloudfront)|raw }}
                           {% elseif flagCommunicability is defined and flagCommunicability == false and flagAudience != true%}
                             <img src="/img/thumb_comm.png" title="This picture is not communicable"/>
                           {% else %}

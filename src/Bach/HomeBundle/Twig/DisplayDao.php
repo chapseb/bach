@@ -118,7 +118,8 @@ class DisplayDao extends \Twig_Extension
      * @return string
      */
     public function display($daos, $all = false, $format = 'thumb',
-        $communicability = false, $testSeries = null
+        $communicability = false, $testSeries = null,
+        $aws = false, $cloudfront = null
     ) {
         if ($all === false) {
             if ($testSeries == 'series') {
@@ -143,7 +144,9 @@ class DisplayDao extends \Twig_Extension
                     false,
                     false,
                     $this->_bach_default_theme,
-                    $communicability
+                    $communicability,
+                    $aws,
+                    $cloudfront
                 );
             }
         } else {
@@ -180,7 +183,8 @@ class DisplayDao extends \Twig_Extension
      * @return DOMElement
      */
     public static function displayDaos($daogrps, $daos, $viewer, $format = 'thumb',
-        $ajax = false, $covers_dir = null, $communicability = false
+        $ajax = false, $covers_dir = null, $communicability = false,
+        $aws = false, $cloudfront = null
     ) {
         //start root element
         $res = '<div>';
@@ -272,7 +276,9 @@ class DisplayDao extends \Twig_Extension
                             true,
                             false,
                             'web',
-                            $communicability
+                            $communicability,
+                            $aws,
+                            $cloudfront
                         );
                     }
                 }
@@ -396,7 +402,9 @@ class DisplayDao extends \Twig_Extension
                     true,
                     false,
                     'web',
-                    $communicability
+                    $communicability,
+                    $aws,
+                    $cloudfront
                 );
             }
 
@@ -498,7 +506,7 @@ class DisplayDao extends \Twig_Extension
      * @return DOMElement
      */
     public static function getDao($dao, $title, $viewer, $format = 'thumb',
-        $covers_dir = null, $linkDesc = false
+        $covers_dir = null, $linkDesc = false, $aws = false, $cloudfront = null
     ) {
         $str = self::proceedDao(
             $dao,
@@ -509,7 +517,10 @@ class DisplayDao extends \Twig_Extension
             true,
             $covers_dir,
             true,
-            $linkDesc
+            $linkDesc,
+            'web',
+            $aws,
+            $cloudfront
         );
         $sxml = simplexml_load_string(
             str_replace('&', '&amp;', $str)
@@ -537,7 +548,8 @@ class DisplayDao extends \Twig_Extension
      */
     public static function proceedDao($dao, $daotitle, $viewer, $format,
         $ajax = false, $standalone = true, $covers_dir = null, $all = true,
-        $linkDesc = false, $bach_default_theme = 'web', $communicability = false
+        $linkDesc = false, $bach_default_theme = 'web', $communicability = false,
+        $aws = false, $cloudfront = null
     ) {
         $ret = null;
 
@@ -572,12 +584,26 @@ class DisplayDao extends \Twig_Extension
         );
         switch ( self::_getType($dao) ) {
         case self::SERIES:
-            $ret = '<a href="' . $viewer . 'series/' .
-                $dao . '" target="_blank" property="image">';
             if ($communicability == true ) {
-                $ret .= '<img src="' . $viewer . 'ajax/representative/' .
-                    rtrim($dao, '/') .  '/format/' . $format
-                    . '" alt="' . $dao . '"/>';
+                if ($aws == true) {
+                    if (substr($dao, -1) != '/'){
+                        $dao .= '/';
+                    }
+                    $ret = '<a href="' . $viewer . 'series/' .
+                    $dao . '" target="_blank" property="image">';
+                    $srcImage = @file_get_contents(
+                        $viewer.'ajax/representativeAws/'.
+                        rtrim($dao, '/') . '/format/' . $format
+                    );
+                    $ret .= '<img src="' . $srcImage
+                        . '" alt="' . $dao . '"/>';
+                } else {
+                    $ret = '<a href="' . $viewer . 'series/' .
+                    $dao . '" target="_blank" property="image">';
+                    $ret .= '<img src="' . $viewer . 'ajax/representative/' .
+                        rtrim($dao, '/') .  '/format/' . $format
+                        . '" alt="' . $dao . '"/>';
+                }
             } else {
                 $ret .= $linkCommunicability;
             }
@@ -590,8 +616,17 @@ class DisplayDao extends \Twig_Extension
             $ret = '<a href="' . $viewer . 'viewer/' .
                 $dao . '" target="_blank" property="image">';
             if ($communicability == true ) {
-                $ret .= '<img src="' . $viewer . 'ajax/img/' . $dao .
-                    '/format/' . $format . '" alt="' . $dao .'"/>';
+                if ($aws == true) {
+                    $srcImage = @file_get_contents(
+                        $viewer.'ajax/representativeAws/'.
+                        rtrim($dao, '/') . '/format/' . $format
+                    );
+                    $ret .= '<img src="' . $srcImage
+                        . '" alt="' . $dao . '"/>';
+                } else {
+                    $ret .= '<img src="' . $viewer . 'ajax/img/' . $dao .
+                        '/format/' . $format . '" alt="' . $dao .'"/>';
+                }
             } else {
                 $ret .= $linkCommunicability;
             }

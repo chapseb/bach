@@ -510,6 +510,8 @@ class DefaultController extends SearchController
         $tpl_vars['current_date'] = 'cDateBegin';
 
         $this->searchhistoAddAction($searchResults->getNumFound(), $all_facets);
+        $tpl_vars['cloudfront'] = $this->container->getParameter('cloudfront');
+        $tpl_vars['aws'] = $this->container->getParameter('aws.s3');
 
         return $this->render(
             'BachHomeBundle:Default:index.html.twig',
@@ -910,6 +912,8 @@ class DefaultController extends SearchController
 
         $tpl_vars['print'] = $print;
         $tpl_vars['highlight']= $highlight;
+        $tpl_vars['cloudfront'] = $this->container->getParameter('cloudfront');
+        $tpl_vars['aws'] = $this->container->getParameter('aws.s3');
         return $this->render(
             $tpl,
             $tpl_vars

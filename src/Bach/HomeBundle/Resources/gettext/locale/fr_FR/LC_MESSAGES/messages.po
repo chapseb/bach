@@ -546,7 +546,7 @@ msgstr "Dates"
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:146
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:322
 msgid "Request"
-msgstr "Requête"
+msgstr "Recherche"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:150
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:326
@@ -1099,11 +1099,11 @@ msgstr "Afficher/Masquer la sélection de date"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5650
 msgid "Active filters"
-msgstr "Filtres actifs"
+msgstr "Filtres sélectionnés"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5654
 msgid "Clear refined query"
-msgstr "Effacer la requête affinée"
+msgstr "Effacer la recherche affinée"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5656
 msgid "Clear"
@@ -1115,7 +1115,7 @@ msgstr "Supprimer le filtre sur « %value% »"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5792
 msgid "Refine Query"
-msgstr "Affiner la requête"
+msgstr "Affiner votre recherche"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5906
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5970

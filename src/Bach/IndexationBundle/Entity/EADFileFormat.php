@@ -73,7 +73,7 @@ class EADFileFormat extends FileFormat
     protected $parents;
 
     /**
-     * @ORM\Column(type="string", nullable=true, length=500)
+     * @ORM\Column(type="string", nullable=true, length=1000)
      */
     protected $cUnitid;
 
@@ -98,12 +98,12 @@ class EADFileFormat extends FileFormat
     protected $cScopcontent;
 
     /**
-     * @ORM\Column(type="string", nullable=true, length=100)
+     * @ORM\Column(type="string", nullable=true, length=200)
      */
     protected $cControlacces;
 
     /**
-     * @ORM\Column(type="string", nullable=true, length=100)
+     * @ORM\Column(type="string", nullable=true, length=200)
      */
     protected $cLegalstatus;
 

@@ -128,9 +128,17 @@ class DisplayDao extends \Twig_Extension
                 $imageEnd = substr($daos[1], strrpos($daos[1], '/') + 1);
                 $retLink = '<a href="' . $this->_viewer . 'series/' . $directory .
                     '?s=' . $imageBegin . '&e=' . $imageEnd .'" target="_blank">';
-                $retLink .= '<img src="' . $this->_viewer . 'ajax/img/' .
-                    rtrim($daos[0], '/') .  '/format/' . $format .
-                    '" alt="' . $daos[0] . '"/></a>';
+                if ($aws == true) {
+                    $srcImage = @file_get_contents(
+                        $this->_viewer.'ajax/representativeAws/'.
+                            rtrim($daos[0], '/') . '/format/' . $format
+                        );
+                    $retLink .= '<img src="'.$srcImage.'" alt="'.$daos[0].'"/></a>';
+                } else {
+                    $retLink .= '<img src="' . $this->_viewer . 'ajax/img/' .
+                        rtrim($daos[0], '/') .  '/format/' . $format .
+                        '" alt="' . $daos[0] . '"/></a>';
+                }
                 return $retLink;
             } else {
                 return self::proceedDao(
@@ -229,9 +237,17 @@ class DisplayDao extends \Twig_Extension
                             $imageBegin = substr($dao, strrpos($dao, '/') + 1);
                             $retLink = '<a href="' . $viewer . 'series/' .
                                 $directory . '?s=' . $imageBegin;
-                            $retImg .= '<img src="' . $viewer . 'ajax/img/' .
-                                rtrim($dao, '/') . '/format/' . $format .
-                                '" alt="' . $dao . '"/>';
+                            if ($aws == true) {
+                                $srcImage = @file_get_contents(
+                                    $viewer.'ajax/representativeAws/'.
+                                    rtrim($dao, '/') . '/format/' . $format
+                                );
+                                $retImg .= '<img src="'.$srcImage.'" alt="' . $dao . '"/>';
+                            } else {
+                                $retImg .= '<img src="' . $viewer . 'ajax/img/' .
+                                    rtrim($dao, '/') . '/format/' . $format .
+                                    '" alt="' . $dao . '"/>';
+                            }
                         } else if ($xml_dao['role'] == 'image:last') {
                             $dao = (string)$xml_dao['href'];
                             $daotitle = null;

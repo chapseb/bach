@@ -289,6 +289,11 @@ class MatriculesController extends SearchController
         $this->searchhistoMatAddAction($searchResults->getNumFound());
 
         $tpl_vars['readingroomIp'] = $this->container->getParameter('readingroom');
+        if ($this->get('bach.home.authorization')->readerRight()) {
+            $tpl_vars['readerRight'] = true;
+        } else {
+            $tpl_vars['readerRight'] = false;
+        }
         return $this->render(
             'BachHomeBundle:Matricules:search_form.html.twig',
             array_merge(
@@ -425,6 +430,7 @@ class MatriculesController extends SearchController
             )->getClientIp();
             $testIp = $this->container->getParameter('readingroom');
             if ($testIp == $incomeIp
+                && $this->get('bach.home.authorization')->readerRight()
                 && strtotime($doc->communicability_sallelecture) <= $current_date->getTimestamp()
             ) {
                 $tplParams['communicability'] = true;

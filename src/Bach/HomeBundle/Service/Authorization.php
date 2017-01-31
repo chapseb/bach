@@ -85,4 +85,14 @@ class Authorization
         return $this->context->isGranted('ROLE_ARCHIVIST');
     }
 
+    /**
+     * Find if user has rights with context
+     *
+     * @return boolean
+     */
+    public function readerRight()
+    {
+        return $this->context->isGranted('ROLE_READER');
+    }
+
 }

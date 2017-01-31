@@ -57,7 +57,8 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% if (document.communicability_general is not defined and document.communicability_sallelecture is not defined)
                       or document.communicability_general < "now"|date('Ymd')
                       or (app.request.server.get("REMOTE_ADDR") == readingroomIp
-                       and document.communicability_sallelecture < "now"|date('Ymd'))%}
+                        and readerRight == true
+                        and document.communicability_sallelecture < "now"|date('Ymd'))%}
                         {% set communicable = true %}
                     {% endif %}
                     {% if communicable == true%}

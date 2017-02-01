@@ -1,6 +1,6 @@
 <?php
 /**
- * Bach Document Token
+ * Bach 1.1.4 migration file
  *
  * PHP version 5
  *
@@ -35,119 +35,78 @@
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @category Indexation
+ * @category Migrations
  * @package  Bach
  * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
-namespace Bach\IndexationBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+namespace Bach\Migrations;
+
+require_once 'BachMigration.php';
+
+use Doctrine\DBAL\Schema\Schema;
+use Bach\HomeBundle\Entity\Comment;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Bach Matricules File Format entity
+ * Bach 1.1.4 migration file
  *
- * @category Indexation
+ * @category Migrations
  * @package  Bach
  * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
- *
- * @ORM\Entity
- * @ORM\Table(name="bach_token")
  */
-class BachToken
+class Version114 extends BachMigration implements ContainerAwareInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer", length=10)
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    private $_container;
 
     /**
-     * @ORM\Column(type="string", nullable=false, length=255)
-     */
-    protected $filename;
-
-    /**
-     * @ORM\Column(type="string", nullable=false, length=32)
-     */
-    protected $bach_token;
-
-    /**
-     * @var boolean
+     * Sets container
      *
-     * @ORM\Column(name="action", type="boolean")
-     */
-    protected $action;
-
-    /**
-     * @var string
+     * @param ContainerInterface $container Container
      *
-     * @ORM\Column(name="action_type", type="string", length=255)
+     * @return void
      */
-    protected $action_type;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="pdf_indexation", type="boolean")
-     */
-    protected $pdf_indexation;
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function setContainer(ContainerInterface $container = null)
     {
-        return $this->id;
+        $this->_container = $container;
     }
 
     /**
-     * Get filename
+     * Ups database schema
      *
-     * @return string
+     * @param Schema $schema Database schema
+     *
+     * @return void
      */
-    public function getFilename()
+    public function up(Schema $schema)
     {
-        return $this->filename;
+        $this->checkDbPlatform();
+
+        $table = $schema->getTable('bach_token');
+        $table->addColumn(
+            'pdf_indexation',
+            'boolean',
+            array('notnull' => false)
+        );
     }
 
     /**
-     * Get bach_token
+     * Downs database schema
      *
-     * @return string
+     * @param Schema $schema Database Schema
+     *
+     * @return void
      */
-    public function getBachToken()
+    public function down(Schema $schema)
     {
-        return $this->bach_token;
-    }
+        $this->checkDbPlatform();
 
-    /**
-     * Set action
-     *
-     * @param boolean $action Action
-     *
-     * @return BachToken
-     */
-    public function setAction($action)
-    {
-        $this->action = $action;
-        return $this;
-    }
-
-    /**
-     * Get action
-     *
-     * @return boolean
-     */
-    public function getAction()
-    {
-        return $this->action;
+        $table = $schema->getTable('bach_token');
+        $table->dropColumn('pdf_indexation');
     }
 }

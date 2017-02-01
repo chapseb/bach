@@ -112,8 +112,9 @@ class DisplayCdc extends DisplayHtml
      *
      * @return string
      */
-    protected function renderContents($xml_doc, $docid, $audience = false)
-    {
+    protected function renderContents($xml_doc, $docid, $audience = false,
+        $daodetector = null
+    ) {
         $proc = new \XsltProcessor();
 
         $proc->importStylesheet(

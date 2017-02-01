@@ -1027,6 +1027,7 @@ class DefaultController extends SearchController
 
                 $authorizedArchives = $this->get('bach.home.authorization')->archivesRight();
                 $tpl_vars['audience'] = $authorizedArchives;
+                $tpl_vars['daodetector'] = $this->container->getParameter('daodetector');
                 return $this->render(
                     'BachHomeBundle:Default:html.html.twig',
                     $tpl_vars

@@ -189,7 +189,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 {% block container %}
     {% if cdc is not defined %}
-        {{ displayHtml(docid, xml_file, audience)|raw }}
+        {{ displayHtml(docid, xml_file, audience, daodetector)|raw }}
     {% else %}
         {{ displayCdc(docs)|raw }}
     {% endif %}

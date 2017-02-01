@@ -122,8 +122,9 @@ class DisplayHtml extends \Twig_Extension
      *
      * @return string
      */
-    public function display($docid, $xml_file, $audience = false)
-    {
+    public function display($docid, $xml_file, $audience = false,
+        $daodetector = null
+    ) {
         $cached_doc = null;
         //do not use cache when not in prod
         if ( $this->prod === true ) {
@@ -160,7 +161,7 @@ class DisplayHtml extends \Twig_Extension
             $xml_doc = simplexml_load_file($xml_file);
 
             $archdesc_html = $this->_renderArchdesc($xml_doc, $docid);
-            $contents = $this->renderContents($xml_doc, $docid, $audience);
+            $contents = $this->renderContents($xml_doc, $docid, $audience, $daodetector);
 
             $proc = new \XsltProcessor();
             $proc->importStylesheet(
@@ -297,7 +298,7 @@ class DisplayHtml extends \Twig_Extension
      *
      * @return string
      */
-    protected function renderContents($xml_doc, $docid, $audience = false)
+    protected function renderContents($xml_doc, $docid, $audience = false, $daodetector = null)
     {
         $proc = new \XsltProcessor();
         $proc->importStylesheet(
@@ -308,6 +309,7 @@ class DisplayHtml extends \Twig_Extension
         $proc->setParameter('', 'docid', $docid);
         $audience = ($audience) ? 'true' : 'false';
         $proc->setParameter('', 'audience', $audience);
+        $proc->setParameter('', 'daodetector', $daodetector);
         $proc->registerPHPFunctions();
 
         $up_nodes = $xml_doc->xpath('/ead/archdesc/dsc/c');

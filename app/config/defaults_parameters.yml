@@ -167,6 +167,7 @@ parameters:
     label.matricules: null
     label.expos: null
     label.browse: null
+    daodetector: null
 
     #mail parameters
     mailer_transport: smtp

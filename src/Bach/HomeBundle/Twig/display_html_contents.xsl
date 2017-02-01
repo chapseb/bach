@@ -47,6 +47,7 @@ POSSIBILITY OF SUCH DAMAGE.
     <xsl:output method="html" omit-xml-declaration="yes"/>
     <xsl:param name="docid" select="''"/>
     <xsl:param name="audience" select="''"/>
+    <xsl:param name="daodetector" select="''"/>
 
     <!-- ***** CONTENTS ***** -->
     <xsl:template match="c|c01|c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12">
@@ -124,7 +125,9 @@ POSSIBILITY OF SUCH DAMAGE.
             </xsl:if>
             <xsl:if test="../../dao or ../../daogrp or ../../daoloc">
                 <xsl:if test="$audience != 'false' or (../../dao and not(../../dao/@audience = 'internal')) or (../../daogrp and not(../../daogrp/@audience = 'internal')) or (../../daoloc and not(../../daoloc/@audience = 'internal')) ">
-                    <span class="media_informations"></span>
+                    <xsl:if test="$daodetector = '' or not(contains(../../dao/@href,$daodetector))">
+                        <span class="media_informations"></span>
+                    </xsl:if>
                 </xsl:if>
             </xsl:if>
             <xsl:if test="../../otherfindaid/list/item/archref or ../../relatedmaterial/list/item/extref">

@@ -83,20 +83,6 @@ class BachToken
      */
     protected $action;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="action_type", type="string", length=255)
-     */
-    protected $action_type;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="pdf_indexation", type="boolean")
-     */
-    protected $pdf_indexation;
-
 
     /**
      * Get id

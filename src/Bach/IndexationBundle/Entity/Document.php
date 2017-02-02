@@ -118,6 +118,11 @@ class Document
      */
     protected $updated;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $pdf_indexation = false;
+
     private $_store_dir;
     private $_upload_dir;
     private $_upload_done;

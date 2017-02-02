@@ -514,6 +514,9 @@ class DefaultController extends SearchController
         $this->searchhistoAddAction($searchResults->getNumFound(), $all_facets);
         $tpl_vars['cloudfront'] = $this->container->getParameter('cloudfront');
         $tpl_vars['aws'] = $this->container->getParameter('aws.s3');
+        if ($this->container->getParameter('specialeads') != null) {
+            $tpl_vars['specialeads'] = $this->container->getParameter('specialeads');
+        }
 
         return $this->render(
             'BachHomeBundle:Default:index.html.twig',

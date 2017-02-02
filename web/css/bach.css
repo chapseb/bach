@@ -502,6 +502,11 @@ input[type=number] {
     margin-top: 1em;
 }
 
+.special_result {
+    color: #DAA520 !important;
+}
+
+
 /** View switcher */
 [id=change_view] {
     position: absolute;

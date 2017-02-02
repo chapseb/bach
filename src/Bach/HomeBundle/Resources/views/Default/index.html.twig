@@ -47,6 +47,14 @@ POSSIBILITY OF SUCH DAMAGE.
 
 {% block show_results %}
             {% for document in searchResults %}
+                {% set specialflag = false %}
+                {% if specialeads is defined %}
+                {% for specialead in specialeads%}
+                    {% if specialead in document.fragmentid %}
+                        {% set specialflag = true %}
+                    {% endif%}
+                {% endfor %}
+                {% endif%}
                 <article id="result_{{ document.fragmentid }}" role="document" about="{{ document.fragmentid }}"{% if view == 'thumbs' %} class="thumbs"{% endif %}>
                     {% if show_pics %}
                     <figure class="result_pic{% if document.dao is not defined %} no-image{% endif %}">
@@ -111,8 +119,8 @@ POSSIBILITY OF SUCH DAMAGE.
                     {%- endif -%}
 
                     <header>
-                        <h3 property="dc:title">
-                            <a href="{{ path('bach_display_document', {docid: document.fragmentid}) }}" class="display_doc">
+                        <h3 property="dc:title"{%if specialflag == true%} class="special_result"{%endif%}>
+                            <a href="{{ path('bach_display_document', {docid: document.fragmentid}) }}" class="{%if specialflag == true%}special_result {%else%}display_doc{%endif%}">
                             {%- if hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')|length > 0 -%}
                                 {{ hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')[0]|raw }}
                             {%- elseif document.cUnittitle is defined -%}

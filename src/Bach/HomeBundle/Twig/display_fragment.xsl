@@ -556,6 +556,29 @@ POSSIBILITY OF SUCH DAMAGE.
         </xsl:element>
     </xsl:template>
 
+    <xsl:template match="relatedmaterial/ref" mode="full">
+        <xsl:choose>
+            <xsl:when test="@target != ''">
+                <a>
+                    <xsl:attribute name="href">
+                        <xsl:variable name="basename">
+                        <xsl:call-template name="substring-before-last">
+                            <xsl:with-param name="string1" select="$docid" />
+                            <xsl:with-param name="string2" select="'_'" />
+                        </xsl:call-template>
+                        </xsl:variable>
+                        <xsl:value-of select="concat('/archives/show/',$basename,'_',@target)" />
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="text()"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="target">_blank</xsl:attribute>
+                    <xsl:value-of select="text()"/>
+                </a>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+
     <xsl:template match="extref|archref" mode="full">
         <xsl:choose>
             <xsl:when test="@href">
@@ -675,6 +698,41 @@ POSSIBILITY OF SUCH DAMAGE.
     <xsl:template match="controlaccess" mode="resume">
         <xsl:variable name="nodes" select="subject|geogname|persname|corpname|name|function|genreform[not(@source='liste-niveau') and not(@source='liste-typedocAC') and not(@type='typir')]"/>
         <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::showDescriptors', $nodes, $docid)"/>
+    </xsl:template>
+
+    <xsl:template name="substring-after-last">
+        <xsl:param name="string" />
+        <xsl:param name="delimiter" />
+        <xsl:choose>
+            <xsl:when test="contains($string, $delimiter)">
+                <xsl:call-template name="substring-after-last">
+                    <xsl:with-param name="string"
+                        select="substring-after($string, $delimiter)" />
+                    <xsl:with-param name="delimiter" select="$delimiter" />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$string" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="substring-before-last">
+        <xsl:param name="string1" select="''" />
+        <xsl:param name="string2" select="''" />
+
+        <xsl:if test="$string1 != '' and $string2 != ''">
+            <xsl:variable name="head" select="substring-before($string1, $string2)" />
+            <xsl:variable name="tail" select="substring-after($string1, $string2)" />
+            <xsl:value-of select="$head" />
+            <xsl:if test="contains($tail, $string2)">
+                <xsl:value-of select="$string2" />
+                <xsl:call-template name="substring-before-last">
+                    <xsl:with-param name="string1" select="$tail" />
+                    <xsl:with-param name="string2" select="$string2" />
+                </xsl:call-template>
+            </xsl:if>
+        </xsl:if>
     </xsl:template>
 
     <!-- Per default, display nothing -->

@@ -83,6 +83,12 @@ class BachToken
      */
     protected $action;
 
+    /**
+    * @var string
+    *
+    * @ORM\Column(name="action_type", type="string", length=255)
+    */
+    protected $action_type;
 
     /**
      * Get id

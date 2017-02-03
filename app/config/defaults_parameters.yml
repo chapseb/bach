@@ -169,6 +169,7 @@ parameters:
     label.browse: null
     daodetector: null
     specialeads: null
+    cdcdocuments: null
 
     #mail parameters
     mailer_transport: smtp

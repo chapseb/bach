@@ -236,6 +236,8 @@ EOF
                 '</fg=green;options=bold>'
             );
 
+            $cdc_documents = $container->getParameter('cdcdocuments');
+
             if ( $input->getOption('solr-only') ) {
                 $steps = 2;
             } else {
@@ -253,8 +255,6 @@ EOF
             if ( !$input->getOption('solr-only') ) {
                 $integrationService = $this->getContainer()
                     ->get('bach.indexation.process.arch_file_integration');
-
-
                 $no_check_changes = $input->getOption('no-change-check');
 
                 $docs = array();
@@ -266,17 +266,21 @@ EOF
                     $document->setFile($f);
                     $document->setExtension($type);
                     $document->generateDocId();
+                    $flagCdcDocument = false;
+                    if (in_array($document->getDocId(), $cdc_documents)) {
+                        $flagCdcDocument = true;
+                    }
 
                     //check if doc exists
                     $repo = $em->getRepository('BachIndexationBundle:Document');
                     $exists = $repo->findOneByDocid($document->getDocId());
-                    if ( $exists ) {
-                        if ( !$no_check_changes ) {
+                    if ($exists) {
+                        if (!$no_check_changes) {
                             $change_date = new \DateTime();
                             $last_file_change = $f->getMTime();
                             $change_date->setTimestamp($last_file_change);
 
-                            if ( $exists->getUpdated() > $change_date ) {
+                            if ($exists->getUpdated() > $change_date) {
                                 if (!$flagAws) {
                                     $progress->advance();
                                 }
@@ -290,7 +294,6 @@ EOF
                                 continue;
                             }
                         }
-
                         $document = $exists;
                         $exists->setFile($f);
                         $exists->setUpdated(new \DateTime());
@@ -327,77 +330,77 @@ EOF
                             }
                         }
 
-                        //create a new task
-                        $task = new IntegrationTask($document);
-
-                        if ( $dry === false ) {
-                            $integrationService->integrate($task, $geonames, $pdfFlag);
-                            $logger->info(
-                                str_replace(
-                                    '%doc',
-                                    $ftp,
-                                    _('Document %doc has been successfully published.')
-                                )
-                            );
-
-                        }
-                        if ( !empty($geonames) ) {
-                            $zdb = $this->getContainer()->get('zend_db');
-
-                            try {
-                                $zdb->connection->beginTransaction();
-                                /* get geoloc in database
-                                 * and treatment to match with geodata in ead
-                                 */
-                                $select = $zdb->select('geoloc');
-                                $stmt = $zdb->sql->prepareStatementForSqlObject(
-                                    $select
-                                );
-                                $result = $stmt->execute();
-
-                                $results = new ResultSet();
-                                $rows = $results->initialize($result)->toArray();
-                                $zdb->connection->commit();
-                            } catch ( \Exception $e ) {
-                                $zdb->connection->rollBack();
-                                throw $e;
-                            }
-
-                            $resultsSelect = array();
-                            foreach ( $rows as $key => $row ) {
-                                $resultSelect                 = array();
-                                $resultSelect['indexed_name'] = $row['indexed_name'];
-                                $resultSelect['lon']          = $row['lon'];
-                                $resultSelect['lat']          = $row['lat'];
-                                $resultSelect['id']           = $row['id'];
-                                $resultsSelect[$resultSelect['indexed_name']]
-                                    = $resultSelect;
-                            }
-                            /***************************************************/
+                        if (!$flagCdcDocument) {
+                            //create a new task
+                            $task = new IntegrationTask($document);
 
                             if ( $dry === false ) {
+                                $integrationService->integrate($task, $geonames, $pdfFlag);
+                                $logger->info(
+                                    str_replace(
+                                        '%doc',
+                                        $ftp,
+                                        _('Document %doc has been successfully published.')
+                                    )
+                                );
+
+                            }
+                            if ( !empty($geonames) ) {
+                                $zdb = $this->getContainer()->get('zend_db');
+
                                 try {
                                     $zdb->connection->beginTransaction();
-                                    $this->_storeGeodata(
-                                        $zdb,
-                                        $geonames,
-                                        $resultsSelect
+                                    /* get geoloc in database
+                                    * and treatment to match with geodata in ead
+                                    */
+                                    $select = $zdb->select('geoloc');
+                                    $stmt = $zdb->sql->prepareStatementForSqlObject(
+                                        $select
                                     );
+                                    $result = $stmt->execute();
+
+                                    $results = new ResultSet();
+                                    $rows = $results->initialize($result)->toArray();
                                     $zdb->connection->commit();
                                 } catch ( \Exception $e ) {
                                     $zdb->connection->rollBack();
                                     throw $e;
                                 }
-                            }
-                        }
 
-                        unset($task);
+                                $resultsSelect = array();
+                                foreach ( $rows as $key => $row ) {
+                                    $resultSelect                 = array();
+                                    $resultSelect['indexed_name'] = $row['indexed_name'];
+                                    $resultSelect['lon']          = $row['lon'];
+                                    $resultSelect['lat']          = $row['lat'];
+                                    $resultSelect['id']           = $row['id'];
+                                    $resultsSelect[$resultSelect['indexed_name']]
+                                        = $resultSelect;
+                                }
+                                /***************************************************/
+
+                                if ( $dry === false ) {
+                                    try {
+                                        $zdb->connection->beginTransaction();
+                                        $this->_storeGeodata(
+                                            $zdb,
+                                            $geonames,
+                                            $resultsSelect
+                                        );
+                                        $zdb->connection->commit();
+                                    } catch ( \Exception $e ) {
+                                        $zdb->connection->rollBack();
+                                        throw $e;
+                                    }
+                                }
+                            }
+                            unset($task);
+                        }
                     } else {
                         $docs[] = $document;
                     }
                     unset($document, $exists);
                 }
-
             }
 
             if ( $type === 'matricules' && count($docs) > 0 ) {
@@ -433,10 +436,12 @@ EOF
                 $integrationService->integrateAll($tasks, null, $geonames, $debug);
             }
 
-            if ($flagAws) {
-                $this->_solrFullImport($output, $type, null, $dry);
-            } else {
-                $this->_solrFullImport($output, $type, $progress, $dry);
+            if (!$flagCdcDocument) {
+                if ($flagAws) {
+                    $this->_solrFullImport($output, $type, null, $dry);
+                } else {
+                    $this->_solrFullImport($output, $type, $progress, $dry);
+                }
             }
 
             if ($input->getOption('token') != 1) {

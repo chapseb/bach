@@ -62,6 +62,7 @@ class DisplayCdc extends DisplayHtml
 {
     private $_cdc_uri;
     private $_docs;
+    private $_cdcDocuments;
     protected $cache_key_prefix = 'cdc';
 
     /**
@@ -94,12 +95,18 @@ class DisplayCdc extends DisplayHtml
     /**
      * Displays classification scheme from EAD in HTML with XSLT
      *
-     * @param SimpleXMLElement $docs Published documents
+     * @param SimpleXMLElement $docs         Published documents
+     * @param String           $otherXml     Other doc if not cdc
+     * @param boolean          $cdcDocuments Do not display unlinked doc
      *
      * @return string
      */
-    public function displayCdc(\SimpleXMLElement $docs)
+    public function displayCdc(\SimpleXMLElement $docs, $otherXml = null, $cdcDocuments = false)
     {
+        $this->_cdcDocuments = $cdcDocuments;
+        if ( $otherXml != null ) {
+            $this->_cdc_uri = $otherXml;
+        }
         $this->_docs = $docs;
         return $this->display('', $this->_cdc_uri);
     }
@@ -122,6 +129,8 @@ class DisplayCdc extends DisplayHtml
         );
 
         $proc->setParameter('', 'docid', $docid);
+        $cdcDocuments = ($this->_cdcDocuments) ? 'true' : 'false';
+        $proc->setParameter('', 'cdcdocuments', $cdcDocuments);
         $proc->registerPHPFunctions();
 
         $dadocs = $xml_doc->addChild('dadocs');

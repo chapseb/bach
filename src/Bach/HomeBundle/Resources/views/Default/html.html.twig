@@ -33,7 +33,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 {% extends '::base.html.twig' %}
 
-{% block title_extend %} - {% if cdc is not defined %}{{ _('View document %doc')|replace({'%doc': docid}) }}{% else %}{{ _('Classification scheme') }}{% endif %}{% endblock %}
+{% block title_extend %} - {% if cdc is defined and cdcdocuments is not defined %}{{ _('Classification scheme') }}{% else %}{% if docname is defined %}{{ _('View document %doc')|replace({'%doc': docname}) }}{% else %}{{ _('View document %doc')|replace({'%doc': docid}) }}{% endif %}{% endif %}{% endblock %}
 
 {% block css %}
     <link href="{{ asset('css/treeview.css') }}" type="text/css" rel="stylesheet" media="screen" />
@@ -188,10 +188,14 @@ POSSIBILITY OF SUCH DAMAGE.
 {% endblock %}
 
 {% block container %}
-    {% if cdc is not defined %}
-        {{ displayHtml(docid, xml_file, audience, daodetector)|raw }}
+    {% if cdc is defined %}
+        {% if cdcdocuments is defined %}
+            {{ displayCdc(docs, docid, cdcdocuments)|raw }}
+        {% else %}
+            {{ displayCdc(docs, docid)|raw }}
+        {% endif %}
     {% else %}
-        {{ displayCdc(docs)|raw }}
+        {{ displayHtml(docid, xml_file, audience, daodetector)|raw }}
     {% endif %}
 {% endblock %}
 
@@ -222,10 +226,10 @@ POSSIBILITY OF SUCH DAMAGE.
     </ul>
     <h2>{{ _('Inventory scheme') }}</h2>
     <div id="inventory_scheme">
-    {% if cdc is not defined %}
-        {{ displayHtmlScheme(docid, xml_file, audience)|raw }}
-    {% else %}
+    {% if cdc is defined and cdcdocuments is not defined %}
         {{ displayCdcScheme(docid, xml_file, docs)|raw }}
+    {% else %}
+        {{ displayHtmlScheme(docid, xml_file, audience)|raw }}
     {% endif %}
     </div>
 {% endblock %}

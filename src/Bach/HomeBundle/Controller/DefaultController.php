@@ -981,6 +981,10 @@ class DefaultController extends SearchController
     {
         $tpl_vars = $this->commonTemplateVariables();
 
+        //test if docid is in cdcdocuments parameter
+        $cdcDocuments = $this->container->getParameter("cdcdocuments");
+        $flagCdcDocuments = false;
+
         $repo = $this->getDoctrine()
             ->getRepository('BachIndexationBundle:Document');
         $document = $repo->findOneByDocid($docid);
@@ -994,6 +998,10 @@ class DefaultController extends SearchController
                 )
             );
         } else {
+            if (in_array($document->getDocId(), $cdcDocuments)) {
+                $flagCdcDocuments = true;
+            }
+
             if ($document->isUploaded()) {
                 $document->setUploadDir(
                     $this->container->getParameter('upload_dir')
@@ -1014,27 +1022,71 @@ class DefaultController extends SearchController
                     )
                 );
             } else {
-                $tpl_vars['docid'] = $docid;
-                $tpl_vars['xml_file'] = $xml_file;
+                // display like a cdc
+                if ( $flagCdcDocuments) {
+                    $cdc_path = $document->getAbsolutePath();
 
-                $form = $this->createForm(
-                    new SearchQueryFormType(),
-                    new SearchQuery()
-                );
-                $tpl_vars['form'] = $form->createView();
+                    $tpl_vars = $this->commonTemplateVariables();
 
-                /* not display warning about cookies */
-                if (isset($_COOKIE[$this->getCookieName()])) {
-                    $tpl_vars['cookie_param'] = true;
+                    $client = $this->get($this->entryPoint());
+                    $query = $client->createSelect();
+                    $query->setQuery('fragmentid:*_description');
+                    $query->setFields('cUnittitle, headerId, fragmentid');
+                    $query->setStart(0)->setRows(1000);
+
+                    $results = $client->select($query);
+
+                    $published = new \SimpleXMLElement(
+                        '<docs></docs>'
+                    );
+
+                    foreach ( $results as $doc ) {
+                        $published->addChild($doc->headerId, $doc->cUnittitle);
+                    }
+
+                    $tpl_vars['docs'] = $published;
+                    $tpl_vars['docid'] = $document->getAbsolutePath();
+                    $tpl_vars['docname'] = $document->getDocId();
+                    $tpl_vars['xml_file'] = $cdc_path;
+                    $tpl_vars['cdc'] = true;
+                    $tpl_vars['cdcdocuments'] = true;
+
+                    /* not display warning about cookies */
+                    if (isset($_COOKIE[$this->getCookieName()])) {
+                        $tpl_vars['cookie_param'] = true;
+                    }
+                    $authorizedArchives = $this->get('bach.home.authorization')->archivesRight();
+                    $tpl_vars['audience'] = $authorizedArchives;
+                    $tpl_vars['daodetector'] = $this->container->getParameter('daodetector');
+
+                    return $this->render(
+                        'BachHomeBundle:Default:html.html.twig',
+                        $tpl_vars
+                    );
+
+                } else {
+                    $tpl_vars['docid'] = $docid;
+                    $tpl_vars['xml_file'] = $xml_file;
+
+                    $form = $this->createForm(
+                        new SearchQueryFormType(),
+                        new SearchQuery()
+                    );
+                    $tpl_vars['form'] = $form->createView();
+
+                    /* not display warning about cookies */
+                    if (isset($_COOKIE[$this->getCookieName()])) {
+                        $tpl_vars['cookie_param'] = true;
+                    }
+
+                    $authorizedArchives = $this->get('bach.home.authorization')->archivesRight();
+                    $tpl_vars['audience'] = $authorizedArchives;
+                    $tpl_vars['daodetector'] = $this->container->getParameter('daodetector');
+                    return $this->render(
+                        'BachHomeBundle:Default:html.html.twig',
+                        $tpl_vars
+                    );
                 }
-
-                $authorizedArchives = $this->get('bach.home.authorization')->archivesRight();
-                $tpl_vars['audience'] = $authorizedArchives;
-                $tpl_vars['daodetector'] = $this->container->getParameter('daodetector');
-                return $this->render(
-                    'BachHomeBundle:Default:html.html.twig',
-                    $tpl_vars
-                );
             }
         }
     }

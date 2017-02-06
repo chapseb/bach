@@ -348,7 +348,10 @@ class DisplayEADFragment extends \Twig_Extension
             );
         }
 
-        return $text;
+        if ($full == false) {
+            return $text;
+        }
+        return html_entity_decode($text);
     }
 
     /**

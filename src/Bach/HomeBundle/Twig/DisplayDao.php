@@ -132,7 +132,7 @@ class DisplayDao extends \Twig_Extension
                     $srcImage = @file_get_contents(
                         $this->_viewer.'ajax/representativeAws/'.
                             rtrim($daos[0], '/') . '/format/' . $format
-                        );
+                    );
                     $retLink .= '<img src="'.$srcImage.'" alt="'.$daos[0].'"/></a>';
                 } else {
                     $retLink .= '<img src="' . $this->_viewer . 'ajax/img/' .
@@ -602,7 +602,7 @@ class DisplayDao extends \Twig_Extension
         case self::SERIES:
             if ($communicability == true ) {
                 if ($aws == true) {
-                    if (substr($dao, -1) != '/'){
+                    if (substr($dao, -1) != '/') {
                         $dao .= '/';
                     }
                     $ret = '<a href="' . $viewer . 'series/' .
@@ -612,13 +612,13 @@ class DisplayDao extends \Twig_Extension
                         rtrim($dao, '/') . '/format/' . $format
                     );
                     $ret .= '<img src="' . $srcImage
-                        . '" alt="' . $dao . '"/>';
+                        . '" alt="' . $dao . '" title="'. $daotitle .'" />';
                 } else {
                     $ret = '<a href="' . $viewer . 'series/' .
                     $dao . '" target="_blank" property="image">';
                     $ret .= '<img src="' . $viewer . 'ajax/representative/' .
                         rtrim($dao, '/') .  '/format/' . $format
-                        . '" alt="' . $dao . '"/>';
+                        . '" alt="' . $dao . '" title="'. $daotitle .'" />';
                 }
             } else {
                 $ret .= $linkCommunicability;
@@ -638,10 +638,10 @@ class DisplayDao extends \Twig_Extension
                         rtrim($dao, '/') . '/format/' . $format
                     );
                     $ret .= '<img src="' . $srcImage
-                        . '" alt="' . $dao . '"/>';
+                        . '" alt="' . $dao . '" title="'. $daotitle .'" />';
                 } else {
                     $ret .= '<img src="' . $viewer . 'ajax/img/' . $dao .
-                        '/format/' . $format . '" alt="' . $dao .'"/>';
+                        '/format/' . $format . '" alt="' . $dao .'"  title="'. $daotitle .'" />';
                 }
             } else {
                 $ret .= $linkCommunicability;

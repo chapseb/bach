@@ -119,7 +119,7 @@ class DisplayDao extends \Twig_Extension
      */
     public function display($daos, $all = false, $format = 'thumb',
         $communicability = false, $testSeries = null,
-        $aws = false, $cloudfront = null
+        $aws = false, $cloudfront = null, $daotitle = null
     ) {
         if ($all === false) {
             if ($testSeries == 'series') {
@@ -143,7 +143,7 @@ class DisplayDao extends \Twig_Extension
             } else {
                 return self::proceedDao(
                     $daos[0],
-                    null,
+                    $daotitle,
                     $this->_viewer,
                     $format,
                     false,
@@ -623,7 +623,7 @@ class DisplayDao extends \Twig_Extension
             } else {
                 $ret .= $linkCommunicability;
             }
-            if ($daotitle !== null) {
+            if ($daotitle !== null && $all == true) {
                 $ret .= '<span class="title">' . $daotitle . '</span>';
             }
             $ret .= '</a>';
@@ -646,9 +646,9 @@ class DisplayDao extends \Twig_Extension
             } else {
                 $ret .= $linkCommunicability;
             }
-            /*if ( $daotitle !== null ) {
+            if ( $daotitle !== null && $all == true) {
                 $ret .= '<span class="title">' . $daotitle . '</span>';
-            }*/
+            }
             $ret .= '</a>';
             break;
         case self::XML:

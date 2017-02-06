@@ -402,7 +402,7 @@ class DefaultController extends SearchController
                 && $this->get('bach.home.authorization')->readerRight()
             ) {
                 $query = $this->getDoctrine()->getManager()->createQuery(
-                    'SELECT e.href FROM BachIndexationBundle:EADDaos e ' .
+                    'SELECT e.href, e.title FROM BachIndexationBundle:EADDaos e ' .
                     'WHERE e.href IN (:ids) AND ' .
                     '(e.communicability_sallelecture IS NULL '.
                     'OR e.communicability_sallelecture <= :year)'
@@ -410,7 +410,7 @@ class DefaultController extends SearchController
                     ->setParameter('year', $current_year);
             } else {
                 $query = $this->getDoctrine()->getManager()->createQuery(
-                    'SELECT e.href ' .
+                    'SELECT e.href, e.title' .
                     'FROM BachIndexationBundle:EADDaos e ' .
                     'WHERE e.href IN (:ids) AND (e.communicability_general IS NULL '.
                     'OR e.communicability_general <= :year)'
@@ -423,11 +423,14 @@ class DefaultController extends SearchController
 
             // get an array with communicable daos search result linked
             $arrayDaosComm = array();
+            $arrayDaosTitle = array();
             foreach ($query->getResult() as $res) {
                 array_push($arrayDaosComm, $res['href']);
+                $arrayDaosTitle[$res['href']] = $res['title'];
             }
 
             $tpl_vars['listDaos'] = array_values($arrayDaosComm);
+            $tpl_vars['listDaosTitle'] = $arrayDaosTitle;
 
             if (!$this->get('bach.home.authorization')->archivesRight()) {
                 $queryAudience = $this->getDoctrine()->getManager()->createQuery(

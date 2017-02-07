@@ -410,7 +410,7 @@ class DefaultController extends SearchController
                     ->setParameter('year', $current_year);
             } else {
                 $query = $this->getDoctrine()->getManager()->createQuery(
-                    'SELECT e.href, e.title' .
+                    'SELECT e.href, e.title ' .
                     'FROM BachIndexationBundle:EADDaos e ' .
                     'WHERE e.href IN (:ids) AND (e.communicability_general IS NULL '.
                     'OR e.communicability_general <= :year)'

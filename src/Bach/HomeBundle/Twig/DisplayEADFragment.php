@@ -280,6 +280,13 @@ class DisplayEADFragment extends \Twig_Extension
                 $text,
                 $matches
             );
+
+            $getSectionImage = preg_match(
+                '@<section id="images"[^>]*?>.*?</section>@si',
+                $text,
+                $sectionImage
+            );
+
             // need to rebuild the link because link has the search word
             foreach ($allWord as $wordHigh) {
                 foreach ($matches[1] as $key => $link) {
@@ -306,6 +313,20 @@ class DisplayEADFragment extends \Twig_Extension
                         }
                     }
                 }
+            }
+
+            $getSectionBadImage = preg_match(
+                '@<section id="images"[^>]*?>.*?</section>@si',
+                $text,
+                $sectionBadImage
+            );
+
+            if ($sectionBadImage != null && $sectionImage != null) {
+                $text = str_replace(
+                    $sectionBadImage[0],
+                    $sectionImage[0],
+                    $text
+                );
             }
 
             $text = htmlspecialchars_decode($text);

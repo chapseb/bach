@@ -323,18 +323,31 @@ class FileDriverManager
                             } else {
                                 $endDao = $record->getEndDao();
                             }
-                            $insert = $this->_zdb->insert('daos_prepared')
-                                ->values(
-                                    array(
-                                        'href'    => $record->getStartDao(),
-                                        'end_dao' => $endDao,
-                                        'action'  => false
-                                    )
-                                );
-                            $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
-                                $insert
+                            $select = $this->_zdb->select('daos_prepared')->where(
+                                array(
+                                    'href'    => $record->getStartDao(),
+                                    'end_dao' => $endDao
+                                )
                             );
-                            $stmt->execute();
+                            $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                                $select
+                            );
+                            $res = $stmt->execute()->current();
+
+                            if ($res == null) {
+                                $insert = $this->_zdb->insert('daos_prepared')
+                                    ->values(
+                                        array(
+                                            'href'    => $record->getStartDao(),
+                                            'end_dao' => $endDao,
+                                            'action'  => false
+                                        )
+                                    );
+                                $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                                    $insert
+                                );
+                                $stmt->execute();
+                            }
                         }
 
                         $record = $record->toArray();
@@ -454,18 +467,31 @@ class FileDriverManager
                 );
 
                 if (in_array($testExtension, $authorizedExtensions) || strrpos($dao['href'], '.') == '') {
-                    $insert = $this->_zdb->insert('daos_prepared')
-                        ->values(
-                            array(
-                                'href' => $dao['href'],
-                                'end_dao' => '',
-                                'action'  => false
-                            )
-                        );
-                    $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
-                        $insert
+                    $select = $this->_zdb->select('daos_prepared')->where(
+                        array(
+                            'href'    => $dao['href'],
+                            'end_dao' => ''
+                        )
                     );
-                    $stmt->execute();
+                    $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                        $select
+                    );
+                    $res = $stmt->execute()->current();
+
+                    if ($res == null) {
+                        $insert = $this->_zdb->insert('daos_prepared')
+                            ->values(
+                                array(
+                                    'href' => $dao['href'],
+                                    'end_dao' => '',
+                                    'action'  => false
+                                )
+                            );
+                        $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                            $insert
+                        );
+                        $stmt->execute();
+                    }
                 }
             }
             //EAD archdesc does not exists yet. Store it.

@@ -71,7 +71,7 @@ class MainDecorator extends SolariumQueryDecoratorAbstract
             foreach ( $this->getWeight() as $key => $simpleWeight ) {
                 $requestWeight .= $key . '^' . $simpleWeight .' ';
             }
-            return $requestWeight.'archDescUnitTitle^0.0000000000000000001';
+            return $requestWeight.'archDescUnitTitle^0.0000000000000000001 cMediaContent^0.1';
         } else {
             return 'descriptors^2 cUnittitle^1 parents_titles^1 fulltext^0.1 cMediaContent^0.1';
         }

@@ -71,7 +71,7 @@ POSSIBILITY OF SUCH DAMAGE.
                         {% endfor %}
                         {% endif %}
                         {% set documentTitle = null%}
-                        {% if document.dao is not null and listDaosTitle[document.dao[0]] is defined and listDaosTitle[document.dao[0]] is not empty%}
+                        {% if document.dao is defined and document.dao is not null and listDaosTitle[document.dao[0]] is defined and listDaosTitle[document.dao[0]] is not empty%}
                             {% set documentTitle = listDaosTitle[document.dao[0]]%}
                         {% endif %}
                         {% if daoSeries[document.fragmentid] is defined and daoSeries[document.fragmentid] == 'series' and flagCommunicability == true and flagAudience != true%}

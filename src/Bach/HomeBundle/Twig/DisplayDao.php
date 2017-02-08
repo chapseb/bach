@@ -626,7 +626,9 @@ class DisplayDao extends \Twig_Extension
             if ($daotitle !== null && $all == true) {
                 $ret .= '<span class="title">' . $daotitle . '</span>';
             }
-            $ret .= '</a>';
+            if ($communicability == true ) {
+                $ret .= '</a>';
+            }
             break;
         case self::IMAGE:
             $ret = '<a href="' . $viewer . 'viewer/' .
@@ -649,7 +651,9 @@ class DisplayDao extends \Twig_Extension
             if ( $daotitle !== null && $all == true) {
                 $ret .= '<span class="title">' . $daotitle . '</span>';
             }
-            $ret .= '</a>';
+            if ($communicability == true ) {
+                $ret .= '</a>';
+            }
             break;
         case self::XML:
             $ret = '<a href="/document/' . str_replace('.xml', '', $dao) .

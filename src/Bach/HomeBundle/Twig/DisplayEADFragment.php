@@ -597,26 +597,34 @@ class DisplayEADFragment extends \Twig_Extension
         }
 
         $ret = '<div>';
+        $excludeFacets = array(
+            'dyndescr_cSubject_liste-grandDomaine',
+            'dyndescr_cSubject_liste-domaine',
+            'dyndescr_cSubject_liste-sousDomaine'
+        );
+
         foreach ( $output as $elt=>$out) {
-            $ret .= '<div>';
-            $ret .= '<strong>' . $out['label'] . '</strong> ';
-            $count = 0;
-            foreach ( $out['values'] as $value ) {
-                $count++;
-                $ret .= '<a link="%%%' . $elt . '::' . str_replace('"', '|quot|', $value) . '%%%"';
-                $ret .= ' about="' . $docid . '"';
+            if (!in_array($elt, $excludeFacets)) {
+                $ret .= '<div>';
+                $ret .= '<strong>' . $out['label'] . '</strong> ';
+                $count = 0;
+                foreach ( $out['values'] as $value ) {
+                    $count++;
+                    $ret .= '<a link="%%%' . $elt . '::' . str_replace('"', '|quot|', $value) . '%%%"';
+                    $ret .= ' about="' . $docid . '"';
 
-                if ( isset($out['property']) ) {
-                    $ret .= ' property="' . $out['property'] .
-                        '" content="' . htmlspecialchars($value) . '"';
-                }
-                $ret .= '>' . $value . '</a>';
+                    if ( isset($out['property']) ) {
+                        $ret .= ' property="' . $out['property'] .
+                            '" content="' . htmlspecialchars($value) . '"';
+                    }
+                    $ret .= '>' . $value . '</a>';
 
-                if ( $count < count($out['values']) ) {
-                    $ret .= ' • ';
+                    if ( $count < count($out['values']) ) {
+                        $ret .= ' • ';
+                    }
                 }
+                $ret .='</div>';
             }
-            $ret .='</div>';
         }
         $ret .='</div>';
 

@@ -131,12 +131,57 @@ POSSIBILITY OF SUCH DAMAGE.
                 </xsl:if>
             </xsl:if>
             <xsl:if test="../../otherfindaid/list/item/archref or ../../relatedmaterial/list/item/extref">
-                <span class="related_informations"></span>
+                <xsl:choose>
+                    <xsl:when test="count(../../otherfindaid/list/item/archref) = 1 and contains(../../otherfindaid/list/item/archref/@href, '.xml')">
+                        <xsl:element name="a">
+                            <xsl:attribute name="href">
+                                <xsl:variable name="varhref" select="../../otherfindaid/list/item/archref/@href"/>
+                                <xsl:call-template name="replace-string">
+                                    <xsl:with-param name="text" select="$varhref"/>
+                                    <xsl:with-param name="replace" select="'.xml'" />
+                                    <xsl:with-param name="with" select="''"/>
+                                </xsl:call-template>
+                            </xsl:attribute>
+                            <xsl:attribute name="class">related_informations</xsl:attribute>
+                            <xsl:attribute name="title">
+                                <xsl:value-of select="../../otherfindaid/list/item/archref/@title"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="target">_blank</xsl:attribute>
+                        </xsl:element>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <span class="related_informations"></span>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:if>
 
         </a>
     </xsl:template>
     <!-- ***** END CONTENTS ***** -->
+
+
+
+    <xsl:template name="replace-string">
+        <xsl:param name="text"/>
+        <xsl:param name="replace"/>
+        <xsl:param name="with"/>
+        <xsl:choose>
+        <xsl:when test="contains($text,$replace)">
+            <xsl:value-of select="substring-before($text,$replace)"/>
+            <xsl:value-of select="$with"/>
+            <xsl:call-template name="replace-string">
+            <xsl:with-param name="text"
+    select="substring-after($text,$replace)"/>
+            <xsl:with-param name="replace" select="$replace"/>
+            <xsl:with-param name="with" select="$with"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$text"/>
+        </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
 
     <!-- ***** GENERIC TAGS ***** -->
     <xsl:template match="date|language">

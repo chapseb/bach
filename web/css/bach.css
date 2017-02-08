@@ -1702,17 +1702,18 @@ div.sonata-bc .btn-primary:hover {
 
 .css-treeview .related_informations {
     background-image: url(../img/link.png);
+    background-size: 20px;
     background-repeat: no-repeat;
-    padding: 1px 0.6em 0.5em;
+    padding: 1px 1em 0.5em;
     margin-left: 5px;
-    width: 14px;
-    height: 14px;
-    line-height: 14px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
 }
 
 .css-treeview .media_informations {
     background-image: url(../img/glyphicons-halflings.png);
-    background-position: -96px -120px;
+    background-position: -95px -118px;
     background-repeat: no-repeat;
     padding: 1px 0.6em 0.5em;
     margin-left: 5px;

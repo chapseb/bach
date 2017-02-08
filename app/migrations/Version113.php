@@ -86,7 +86,7 @@ class Version113 extends BachMigration implements ContainerAwareInterface
     public function up(Schema $schema)
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-        $this->addSql('ALTER TABLE ead_file_format CHANGE cUnitid cUnitid VARCHAR(1000) DEFAULT NULL, CHANGE cControlacces cControlacces VARCHAR(200) DEFAULT NULL, CHANGE cLegalstatus cLegalstatus VARCHAR(200) DEFAULT NULL');
+        $this->addSql('ALTER TABLE ead_file_format CHANGE cUnitid cUnitid TEXT DEFAULT NULL, CHANGE cControlacces cControlacces VARCHAR(200) DEFAULT NULL, CHANGE cLegalstatus cLegalstatus VARCHAR(200) DEFAULT NULL');
     }
 
     /**

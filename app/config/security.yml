@@ -235,6 +235,7 @@ security:
                     - namePerson/last
                     - contact/email
             form_login:
+                success_handler: bach.administration.success_handler
                 provider: fos_userbundle
                 csrf_provider: form.csrf_provider
             logout: true
@@ -250,6 +251,7 @@ security:
                 use_forward:    false
                 check_path:     /admin/login_check
                 failure_path:   null
+                success_handler: bach.administration.success_handler
             logout:
                 path:           /admin/logout
             anonymous:          true

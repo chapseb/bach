@@ -1387,6 +1387,8 @@ class DefaultController extends SearchController
             $response_mat = (array)json_decode($response_mat);
         }
         $total_response = array_merge($response, $response_mat);
+        $total_response['cookie'] = $this->getCookieName();
+
         $jsonResponse = new JsonResponse();
         $jsonResponse->setData($total_response);
         return $jsonResponse;

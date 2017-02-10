@@ -88,7 +88,11 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
-        if (in_array('ROLE_READER', $token->getUser()->getRoles())) {
+        if (in_array('ROLE_READER', $token->getUser()->getRoles())
+            || in_array('ROLE_ARCHIVIST', $token->getUser()->getRoles())
+            || in_array('ROLE_ADMIN', $token->getUser()->getRoles())
+            || in_array('ROLE_SUPER_ADMIN', $token->getUser()->getRoles())
+        ) {
             $_cook = new \stdClass();
             $_cook->reader = true;
             $expire = 20 * 3600;

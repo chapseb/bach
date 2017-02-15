@@ -662,8 +662,9 @@ EOF
                         '<fg=green>' . $str . '</fg=green>'
                     );
                 }
+                $logger->info('import solr status: '. $response->getImportStatus());
             } else {
-                $logger->error('import solr status: '. $response->getImportStatus());
+                $logger->error('import solr status error: '. $response->getImportStatus());
             }
         }
     }

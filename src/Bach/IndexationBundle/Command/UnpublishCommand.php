@@ -390,10 +390,17 @@ EOF
             if (!$flagAws) {
                 $progress->advance();
             }
+
+            $logger->info('Before delete solr');
+
             foreach ( $updates as $key=>$update ) {
+                $logger->info('début boucle for');
                 $client = $clients[$key];
                 $update->addCommit(null, null, true);
+                $logger->info('apres add commit');
                 $result = $client->update($update);
+                sleep(10);
+                $logger->info('after update launch - status: '.$result->getStatus());
                 if ( $result->getStatus() === 0 ) {
                     $logger->info(
                         str_replace(
@@ -403,7 +410,7 @@ EOF
                         )
                     );
                 } else {
-                    $logger->err(
+                    $logger->info(
                         str_replace(
                             '%doc',
                             $doc['docid'],
@@ -412,26 +419,36 @@ EOF
                     );
                 }
             }
+            $logger->info('After delete solr');
 
+            $logger->info('Before delete table');
             if ($input->getOption('token') != 1) {
-                $em = $this->getContainer()->get('doctrine')->getManager();
-                $query = $em->createQuery(
-                    'SELECT t FROM BachIndexationBundle:BachToken t
+                try {
+                    $em = $this->getContainer()->get('doctrine')->getManager();
+                    $query = $em->createQuery(
+                        'SELECT t FROM BachIndexationBundle:BachToken t
                         WHERE t.bach_token = :token
                         AND t.filename = :filename'
-                )->setParameters(
-                    array(
-                        'token' => $input->getOption('token'),
-                        'filename'   => $input->getArgument('document')
-                    )
-                );
+                    )->setParameters(
+                        array(
+                            'token' => $input->getOption('token'),
+                            'filename'   => $input->getArgument('document')
+                        )
+                    );
 
-                if ($query->getResult()[0]) {
-                    $result = $query->getResult()[0];
-                    $em->remove($result);
-                    $em->flush();
+                    if (!empty($query->getResult())) {
+                        $result = $query->getResult()[0];
+                        $em->remove($result);
+                        $em->flush();
+                    }
+                } catch ( \Exception $e ) {
+                    $logger->info('Exception : '.  $e->getMessage(). "\n");
+                        throw $e;
                 }
+            } else {
+                $logger->info('Not token ' . $input->getOption('token'));
             }
+            $logger->info('After delete table');
             if (!$flagAws) {
                 $progress->finish();
             }
@@ -485,3 +502,4 @@ EOF
         return $fmt;
     }
 }
+

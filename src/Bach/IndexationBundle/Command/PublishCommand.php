@@ -436,14 +436,17 @@ EOF
                 $integrationService->integrateAll($tasks, null, $geonames, $debug);
             }
 
+            $logger->info('Before solr full import');
             if (!$flagCdcDocument) {
                 if ($flagAws) {
-                    $this->_solrFullImport($output, $type, null, $dry);
+                    $this->_solrFullImport($output, $type, null, $dry, $logger);
                 } else {
-                    $this->_solrFullImport($output, $type, $progress, $dry);
+                    $this->_solrFullImport($output, $type, $progress, $dry, $logger);
                 }
             }
+            $logger->info('After solr full import');
 
+            $logger->error('Before delete doc query');
             if ($input->getOption('token') != 1) {
                 $query = $em->createQuery(
                     'SELECT t FROM BachIndexationBundle:BachToken t
@@ -462,6 +465,7 @@ EOF
                     $em->flush();
                 }
             }
+            $logger->error('After delete doc query');
 
             if (!$flagAws) {
                 $progress->finish();
@@ -624,7 +628,7 @@ EOF
      *
      * @return void
      */
-    private function _solrFullImport($output, $type, $progress, $dry)
+    private function _solrFullImport($output, $type, $progress, $dry, $logger)
     {
         if ($progress != null) {
             $progress->advance();
@@ -634,15 +638,17 @@ EOF
         $corename = $this->getContainer()->getParameter($type . '_corename');
         $sca = new SolrCoreAdmin($configreader);
         if ( $dry === false ) {
-            $sca->fullImport($corename);
+            $toto = $sca->fullImport($corename);
+            $logger->error(print_r($toto, true));
         }
 
         $done = false;
 
         while ( !$done ) {
-            sleep(2);
+            sleep(5);
             $response = $sca->getImportStatus($corename);
             if ( $response->getImportStatus() === 'idle' ) {
+                $logger->info('status = idle');
                 if ($progress != null) {
                     $progress->advance();
                 }
@@ -662,6 +668,8 @@ EOF
                     );
                 }
 
+            } else {
+                $logger->error('import solr status: '. $response->getImportStatus());
             }
         }
     }

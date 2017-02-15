@@ -638,8 +638,7 @@ EOF
         $corename = $this->getContainer()->getParameter($type . '_corename');
         $sca = new SolrCoreAdmin($configreader);
         if ( $dry === false ) {
-            $toto = $sca->fullImport($corename);
-            $logger->error(print_r($toto, true));
+            $sca->fullImport($corename);
         }
 
         $done = false;

@@ -140,7 +140,7 @@ EOF
                 'token',
                 InputOption::VALUE_REQUIRED,
                 'Which token for publish file in bach_token table ?',
-                1
+                '-1'
             );
     }
 
@@ -436,7 +436,6 @@ EOF
                 $integrationService->integrateAll($tasks, null, $geonames, $debug);
             }
 
-            $logger->info('Before solr full import');
             if (!$flagCdcDocument) {
                 if ($flagAws) {
                     $this->_solrFullImport($output, $type, null, $dry, $logger);
@@ -444,10 +443,8 @@ EOF
                     $this->_solrFullImport($output, $type, $progress, $dry, $logger);
                 }
             }
-            $logger->info('After solr full import');
 
-            $logger->error('Before delete doc query');
-            if ($input->getOption('token') != 1) {
+            if ($input->getOption('token') != '-1') {
                 $query = $em->createQuery(
                     'SELECT t FROM BachIndexationBundle:BachToken t
                         WHERE t.bach_token = :token
@@ -464,8 +461,9 @@ EOF
                     $em->remove($result);
                     $em->flush();
                 }
+            } else {
+                $logger->error('Not token ' . $input->getOption('token'));
             }
-            $logger->error('After delete doc query');
 
             if (!$flagAws) {
                 $progress->finish();
@@ -625,6 +623,7 @@ EOF
      * @param string          $type     Documents type
      * @param Helper          $progress Progress bar instance
      * @param boolean         $dry      Dry run mode
+     * @param Logger          $logger   Logger
      *
      * @return void
      */
@@ -637,17 +636,15 @@ EOF
             ->get('bach.administration.configreader');
         $corename = $this->getContainer()->getParameter($type . '_corename');
         $sca = new SolrCoreAdmin($configreader);
-        if ( $dry === false ) {
+        if ($dry === false) {
             $sca->fullImport($corename);
         }
 
         $done = false;
-
         while ( !$done ) {
             sleep(5);
             $response = $sca->getImportStatus($corename);
-            if ( $response->getImportStatus() === 'idle' ) {
-                $logger->info('status = idle');
+            if ($response->getImportStatus() === 'idle') {
                 if ($progress != null) {
                     $progress->advance();
                 }
@@ -656,17 +653,15 @@ EOF
                 $messages = \simplexml_import_dom($messages);
                 $output->writeln('');
                 $output->writeln('');
-                foreach ( $messages as $message ) {
+                foreach ($messages as $message) {
                     $str = (string)$message;
-                    if ( isset($message['name']) && trim($message['name']) !== '' ) {
+                    if (isset($message['name']) && trim($message['name']) !== '') {
                         $str = $message['name'] . ': ' . $str;
                     }
-
                     $output->writeln(
                         '<fg=green>' . $str . '</fg=green>'
                     );
                 }
-
             } else {
                 $logger->error('import solr status: '. $response->getImportStatus());
             }

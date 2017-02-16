@@ -330,7 +330,7 @@ class FileDriverManager
                             );
                             $select = $this->_zdb->select('daos_prepared')->where(
                                 array(
-                                    'href'    => $fullDirectory.'/'
+                                    'href' => $fullDirectory.'/'
                                 )
                             );
                             $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
@@ -339,18 +339,18 @@ class FileDriverManager
                             $res = $stmt->execute()->current();
 
                             if ($res == null) {
-                                $select2 = $this->_zdb->select('daos_prepared')->where(
+                                $select = $this->_zdb->select('daos_prepared')->where(
                                     array(
                                         'href'    => $record->getStartDao(),
                                         'end_dao' => $endDao
                                     )
                                 );
-                                $stmt2 = $this->_zdb->sql->prepareStatementForSqlObject(
-                                    $select2
+                                $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                                    $select
                                 );
-                                $res2 = $stmt->execute()->current();
+                                $res = $stmt->execute()->current();
 
-                                if ($res2 == null) {
+                                if ($res == null) {
                                     $insert = $this->_zdb->insert('daos_prepared')
                                         ->values(
                                             array(
@@ -502,18 +502,17 @@ class FileDriverManager
                     $res = $stmt->execute()->current();
 
                     if ($res == null) {
-                        $select2 = $this->_zdb->select('daos_prepared')->where(
+                        $select = $this->_zdb->select('daos_prepared')->where(
                             array(
                                 'href'    => $dao['href'],
                                 'end_dao' => ''
                             )
                         );
-                        $stmt2 = $this->_zdb->sql->prepareStatementForSqlObject(
-                            $select2
+                        $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                            $select
                         );
-                        $res2 = $stmt->execute()->current();
-                        if ($res2 == null) {
-                            print_r($select2);
+                        $res = $stmt->execute()->current();
+                        if ($res == null) {
                             $insert = $this->_zdb->insert('daos_prepared')
                                 ->values(
                                     array(

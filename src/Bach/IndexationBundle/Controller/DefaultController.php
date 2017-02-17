@@ -707,15 +707,20 @@ class DefaultController extends Controller
                 'SELECT t FROM BachIndexationBundle:DaosPrepared t
                 WHERE t.action = 1'
             );
+        $nbRowToTreat = $this->container->getParameter('nbrowgenerateimage');
         if ($testTreatment->getResult() == null) {
             $query = $this->getDoctrine()->getManager()
                 ->createQuery(
                     'SELECT t FROM BachIndexationBundle:DaosPrepared t'
-                )->setMaxResults(1);
+                )->setMaxResults($nbRowToTreat);
             if (!empty($query->getResult())) {
-                $result = $query->getResult()[0];
-                $result->setAction(1);
-                $params[0] = $result->toArray();
+                $results = $query->getResult();
+                $params = array();
+                foreach ($results as $result) {
+                    $result->setAction(1);
+                    array_push($params, $result->toArray());
+                }
+                $this->getDoctrine()->getManager()->flush();
                 $urlViewer = $this->container->getParameter('viewer_uri');
 
                 $url = $urlViewer . 'ajax/generateimages';
@@ -741,6 +746,7 @@ class DefaultController extends Controller
     {
         $json = $this->getRequest()->getContent();
         $data = json_decode($json, true);
+        $cptSend = 0;
         foreach ($data as $row) {
             $em = $this->getDoctrine()->getManager();
             $repository = $em->getRepository('BachIndexationBundle:DaosPrepared');
@@ -750,16 +756,18 @@ class DefaultController extends Controller
                     'id'=>$row['id']
                 )
             );
-            if ($this->getRequest()->get('flag') == 'finish') {
+            if (!empty(stripslashes($row['lastfile']))) {
                 $dao->setAction(0);
-                print_r($this->getRequest());
-                $dao->setLastFile($this->getRequest()->get('lastfile'));
+                $dao->setLastFile(stripslashes($row['lastfile']));
                 $this->getDoctrine()->getManager()->flush();
-                return new Response("Images prepared deleted but other's comming");
+            } else if ($row['action'] == '1') {
+                $dao->setAction(0);
+                $this->getDoctrine()->getManager()->flush();
             } else {
                 $em->remove($dao);
             }
             $em->flush();
+            $cptSend++;
         }
         return new Response("Images prepared deleted from database.");
     }

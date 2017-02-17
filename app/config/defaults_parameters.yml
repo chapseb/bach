@@ -170,6 +170,7 @@ parameters:
     daodetector: null
     specialeads: null
     cdcdocuments: null
+    nbrowgenerateimage: 10
 
     #mail parameters
     mailer_transport: smtp

@@ -635,6 +635,10 @@ class DefaultController extends Controller
                     $cmd .= " --pdf-indexation";
                 }
 
+                if ($request->get('generate-image') == true) {
+                    $cmd .= " --generate-image";
+                }
+
                 $cmd .= " > /dev/null 2>/dev/null &";
                 exec($cmd);
                 return new Response(

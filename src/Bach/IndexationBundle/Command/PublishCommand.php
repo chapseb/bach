@@ -126,6 +126,11 @@ EOF
                 InputOption::VALUE_NONE,
                 _('Pdf indexation.')
             )->addOption(
+                'generate-image',
+                null,
+                InputOption::VALUE_NONE,
+                _('Generate prepared images.')
+            )->addOption(
                 'stats',
                 null,
                 InputOption::VALUE_NONE,
@@ -165,6 +170,7 @@ EOF
         $dry = $input->getOption('dry-run');
 
         $pdfFlag = $input->getOption('pdf-indexation');
+        $generateImageFlag = $input->getOption('generate-image');
 
         if ( $dry === true ) {
             $output->writeln(
@@ -247,6 +253,9 @@ EOF
             }
 
             $flagAws = $container->getParameter('aws.s3');
+            if ($flagAws != true) {
+                $generateImageFlag = false;
+            }
             if (!$flagAws) {
                 $progress = $this->getHelperSet()->get('progress');
                 $progress->start($output, $steps);
@@ -335,7 +344,12 @@ EOF
                             $task = new IntegrationTask($document);
 
                             if ( $dry === false ) {
-                                $integrationService->integrate($task, $geonames, $pdfFlag);
+                                $integrationService->integrate(
+                                    $task,
+                                    $geonames,
+                                    $pdfFlag,
+                                    $generateImageFlag
+                                );
                                 $logger->info(
                                     str_replace(
                                         '%doc',

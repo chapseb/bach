@@ -112,14 +112,17 @@ class ArchFileIntegration
     /**
      * Proceed task database integration
      *
-     * @param IntegrationTask $task        Task to proceed
-     * @param array           $geonames Geoloc data
-     * @param boolean         $transaction Wether to flush
+     * @param IntegrationTask $task              Task to proceed
+     * @param array           $geonames          Geoloc data
+     * @param boolean         $pdfFlag           Flag to index pdf
+     * @param boolean         $generateImageFlag Flag to generate thumb
+     * @param boolean         $transaction       Wether to flush
      *
      * @return void
      */
-    public function integrate(IntegrationTask $task, &$geonames, $pdfFlag, $transaction = true)
-    {
+    public function integrate(IntegrationTask $task, &$geonames, $pdfFlag,
+        $generateImageFlag, $transaction = true
+    ) {
         $spl = new \SplFileInfo($task->getPath());
         $doc = $task->getDocument();
         $format = $task->getFormat();
@@ -132,21 +135,31 @@ class ArchFileIntegration
             $transaction,
             $preprocessor,
             $geonames,
-            $pdfFlag
+            $pdfFlag,
+            $generateImageFlag
         );
     }
 
     /**
      * Integrate multiple tasks at once
      *
-     * @param array          $tasks    Tasks to integrate
-     * @param ProgressHelper $progress Progress bar
-     * @param array          $geonames Geoloc data
+     * @param array          $tasks             Tasks to integrate
+     * @param ProgressHelper $progress          Progress bar
+     * @param array          $geonames          Geoloc data
+     * @param boolean        $debug             Flag to display an issue
+     * @param boolean        $pdfFlag           Flag to index pdf
+     * @param boolean        $generateImageFlag Flag to generate thumb
      *
      * @return void
      */
-    public function integrateAll($tasks, $progress, &$geonames, $debug, $pdfFlag = false)
-    {
+    public function integrateAll(
+        $tasks,
+        $progress,
+        &$geonames,
+        $debug,
+        $pdfFlag = false,
+        $generateImageFlag = false
+    ) {
         $count = 0;
         $cleared = false;
         try {
@@ -163,7 +176,13 @@ class ArchFileIntegration
                 if ($debug == true) {
                     print_r($task->getDocument()->getName());
                 }
-                $this->integrate($task, $geonames, $pdfFlag, false);
+                $this->integrate(
+                    $task,
+                    $geonames,
+                    $pdfFlag,
+                    $generateImageFlag,
+                    false
+                );
                 $count++;
             }
             $this->_zdb->connection->commit();

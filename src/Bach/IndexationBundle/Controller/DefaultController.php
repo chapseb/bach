@@ -631,18 +631,18 @@ class DefaultController extends Controller
                     $request->get('type') . " " . $request->get('document') .
                     " --assume-yes --token=".$request->get('bach_token')." ";
 
-                if ($request->get('pdf-indexation') == true) {
+                if (strcmp($request->get('pdf-indexation'), 'true') == 0) {
                     $cmd .= " --pdf-indexation";
                 }
 
-                if ($request->get('generate-image') == true) {
+                if (strcmp($request->get('generate-image'), 'true') == 0) {
                     $cmd .= " --generate-image";
                 }
 
                 $cmd .= " > /dev/null 2>/dev/null &";
                 exec($cmd);
                 return new Response(
-                    "Publish launch for " . $request->get('document')
+                    "Publish launch for " . $request->get('document') . ' :::::: '. $cmd
                 );
             }
         }

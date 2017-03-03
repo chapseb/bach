@@ -132,7 +132,8 @@ class AppKernel extends Kernel
             new Liip\DoctrineCacheBundle\LiipDoctrineCacheBundle(),
             new Liip\ThemeBundle\LiipThemeBundle(),
             new Jns\Bundle\XhprofBundle\JnsXhprofBundle(),
-            new Aws\Symfony\AwsBundle()
+            new Aws\Symfony\AwsBundle(),
+            new Snc\RedisBundle\SncRedisBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test', 'console'))) {

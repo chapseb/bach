@@ -44,7 +44,8 @@
         "tecnickcom/tcpdf": "6.2.*",
         "smalot/pdfparser": "0.9.25",
         "aws/aws-sdk-php-symfony": "^1.2",
-        "snc/redis-bundle": "1.1.*"
+        "snc/redis-bundle": "1.1.*",
+        "predis/predis": "^1.0"
     },
     "require-dev": {
         "atoum/atoum": "1.0.x",

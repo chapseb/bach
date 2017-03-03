@@ -262,6 +262,22 @@ sonata_user:
 #            hosts:
 #              - { dsn: localhost, port: 11211 }
 
+snc_redis:
+    clients:
+        default:
+            type: predis
+            alias: default
+            dsn: redis://localhost
+            logging: %kernel.debug%
+        session:
+            type: predis
+            alias: session
+            dsn: redis://localhost/2
+            logging: true
+    session:
+        client: session
+        prefix: bach_session_
+
 stof_doctrine_extensions:
     default_locale: en_US
     orm:

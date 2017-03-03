@@ -180,6 +180,7 @@ class DefaultController extends SearchController
         //FIXME: try to avoid those 2 calls
         $factory->setGeolocFields($this->getGeolocFields());
         $factory->setDateField($this->date_field);
+        $factory->setDatesFields(array('cDateEnd'));
 
         // On effectue une recherche
         $form = $this->createForm(

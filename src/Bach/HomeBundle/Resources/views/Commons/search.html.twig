@@ -167,10 +167,21 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                         <ul>
                             <li>
                                 <label for="{{ facet_field }}_range_date_min">{{ _('From:') }}</label>
-                                <input type="text" name="{{ facet_field }}_range_date_min" id="{{ facet_field }}_range_date_min" value="{{ stats[facet_field].min|date('Y') }}"/>
+                                {% if filters['date_cDateBegin_min'] is defined%}
+                                <input type="text" name="{{ facet_field }}_range_date_min" id="{{ facet_field }}_range_date_min" value="{{filters['date_cDateBegin_min']|date('Y') }}"/>
+                                {% else%}
+                                    <input type="text" name="{{ facet_field }}_range_date_min" id="{{ facet_field }}_range_date_min" value="{{ stats[facet_field].min|date('Y') }}"/>
+                                {% endif%}
                                 <label for="{{ facet_field }}_range_date_max"> {{ _('to:') }}</label>
+                                {% if filters['date_cDateBegin_max'] is defined %}
+                                <input type="text" name="{{ facet_field }}_range_date_max" id="{{ facet_field }}_range_date_max" value="{{ filters['date_cDateBegin_max']|date('Y') }}"/>
+                                {% else%}
                                 <input type="text" name="{{ facet_field }}_range_date_max" id="{{ facet_field }}_range_date_max" value="{{ stats[facet_field].max|date('Y') }}"/>
+                                {% endif%}
+
+                                {% if facet_field != 'cDateBegin' %}
                                 <div id="{{ facet_field }}_range" class="date_range"></div>
+                                {% endif %}
                                 <span class="buttons_container"><input type="submit" id="{{ facet_field }}_range_date_set" value="{{ _('Go') }}"/></span>
                             </li>
                         </ul>
@@ -180,6 +191,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                             var _{{ facet_field }}_valid_min = {{ stats[facet_field].min|date('Y') }};
                             var _{{ facet_field }}_valid_max = {{ stats[facet_field].max|date('Y') }};
 
+                            {% if facet_field != 'cDateBegin' %}
                             $('#{{ facet_field }}_range_date_min,#{{ facet_field }}_range_date_max').spinner({
                                 min: _{{ facet_field }}_valid_min,
                                 max: _{{ facet_field }}_valid_max,
@@ -188,6 +200,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                                 change: updateSlider,
                                 stop: updateSlider
                             });
+                            {% endif %}
 
                             $('#{{ facet_field }}_range_date_set').button();
                             $('#{{ facet_field }}_change').on('submit', function(){
@@ -199,22 +212,27 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                                 if ( isNaN(_min) || _min % 1 != 0 ) {
                                     alert('{{ _('Please enter an integer as start date!')|escape('js') }}');
                                     _valid = false;
-                                } else if (_min < _{{ facet_field }}_valid_min)  {
+                                } /*else if (_min < _{{ facet_field }}_valid_min)  {
                                     alert('{{ _('Start date must be greater than %date')|escape('js') }}'.replace('%date', _{{ facet_field }}_valid_min));
                                     _valid = false;
-                                }
+                                }*/
 
                                 if ( isNaN(_max) || _max % 1 != 0 ) {
                                     alert('{{ _('Please enter an integer as end date!')|escape('js') }}');
                                     _valid = false;
-                                } else if (_max > _{{ facet_field }}_valid_max)  {
+                                } /*else if (_max > _{{ facet_field }}_valid_max)  {
                                     alert('{{ _('End date must be earlier than %date')|escape('js') }}'.replace('%date', _{{ facet_field }}_valid_max));
+                                    _valid = false;
+                                }*/
+                                if (_valid == true && _max < _min) {
+                                     alert('{{ _('Begin date must be ealier or equal than end date!')|escape('js') }}');
                                     _valid = false;
                                 }
 
                                 return _valid;
                             });
 
+                            {% if facet_field != 'cDateBegin' %}
                             var {{ facet_field }}_slider = $('#{{ facet_field }}_range').slider({
                                 range: true,
                                 min: {{ stats[facet_field].min|date('Y') }},
@@ -232,6 +250,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                                     [$('#{{ facet_field }}_range_date_min').val(), $('#{{ facet_field }}_range_date_max').val()]
                                 );
                             }
+                            {% endif %}
                         });
                     </script>
                 {% endif %}

@@ -72,8 +72,11 @@ POSSIBILITY OF SUCH DAMAGE.
             {% else %}
                 {% set display_date =  _('Date')|lower %}
             {%endif%}
-            <li><a id="sh_daterange" href="?show_daterange={% if show_daterange == true %}off{% else %}on{% endif %}"  {% if disable_select_daterange == true %}
+
+            {% if current_date != 'cDateBegin'%}
+                <li><a id="sh_daterange" href="?show_daterange={% if show_daterange == true %}off{% else %}on{% endif %}"  {% if disable_select_daterange == true %}
 title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%datetype%':display_date}) }}" {% else %} title="{{ _('Shows or hides date range graph') }}" {% endif %} {% if show_daterange == false %} class="disabled"{% endif %}><img src="{% include '::images/calendar.html.twig' %}" alt="{{ _('Show/Hide date range') }}"/></a></li>
+            {% endif %}
         {%- endif %}
         </ul>
     {% endif %}
@@ -374,7 +377,9 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
             {% set display_date =  _('Date')|lower %}
         {%endif%}
 
+        {% if current_date != 'cDateBegin'%}
         <div id="dates_plot" class="hidden" title="{% if disable_select_daterange is not defined or disable_select_daterange == false %}{{ _('Please adjust the period to narrow the search by %datetype%')|replace({'%datetype%':display_date}) }}{% else %}{{ _('Number of records by %datetype%')|replace({'%datetype%': display_date}) }}{% endif %}"></div>
+        {% endif %}
     {% endif %}
     {% if show_maps -%}
     <div id="map" class="hidden"></div>
@@ -583,7 +588,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
             {% endif %}
 
 
-            {% if by_year is defined -%}
+            {% if by_year is defined and current_date != 'cDateBegin'-%}
             var plot_options = {
                 series: {
                     bars: {

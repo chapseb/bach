@@ -334,7 +334,7 @@ class CommentAdmin extends Admin
                 $message = \Swift_Message::newInstance();
                 //FIXME Manage english and translation
                 $message->setSubject('Bach - Traitement commentaire');
-                if ('aws.sender' != null ) {
+                if ($container->getParameter('aws.sender') != null ) {
                     $message->setFrom($container->getParameter('aws.sender'));
                 } else {
                     $message->setFrom($user);

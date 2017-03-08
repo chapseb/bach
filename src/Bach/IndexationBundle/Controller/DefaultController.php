@@ -627,7 +627,7 @@ class DefaultController extends Controller
             if ($result->getBachToken() == $request->get('bach_token')
                 && $result->getFilename() == $request->get('document')
             ) {
-                $cmd = "php -d date.timezone=UTC ../app/console bach:publish " .
+                $cmd = "php -d date.timezone=UTC -d memory_limit=3G ../app/console bach:publish " .
                     $request->get('type') . " " . $request->get('document') .
                     " --assume-yes --token=".$request->get('bach_token')." ";
 

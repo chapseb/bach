@@ -267,16 +267,16 @@ snc_redis:
         default:
             type: predis
             alias: default
-            dsn: redis://localhost
-            logging: %kernel.debug%
+            dsn: '%redis_dsn%'
+            logging: '%kernel.debug%'
         session:
             type: predis
-            alias: session
-            dsn: redis://localhost/2
+            alias: '%redis_session_alias%'
+            dsn: '%redis_dsn%'
             logging: true
     session:
-        client: session
-        prefix: bach_session_
+        client: '%redis_session_alias%'
+        prefix: '%redis_prefix_session%'
 
 stof_doctrine_extensions:
     default_locale: en_US

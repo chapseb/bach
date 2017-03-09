@@ -203,6 +203,10 @@ parameters:
     aws.sqs_nbimages: 10
     cloudfront: null
     pdfname: 'bach-print.pdf'
+    redis_session_alias: 'session'
+    redis_prefix_session: 'bach_session_'
+    redis_dsn: 'redis://localhost:6379'
+
     print:
         header:
             image: '%kernel.root_dir%/../web/img/logored.png'

@@ -134,11 +134,14 @@ POSSIBILITY OF SUCH DAMAGE.
                         {% if print == false %}
                         <a href="{{ path('bach_display_document', {docid: child.fragmentid}) }}" property="dc:hasPart">
                         {% endif %}
-                        {%- if child.cUnittitle is defined -%}
+                        {% if child.cUnittitle is defined %}
                             {{ child.cUnittitle }}
-                        {%- else -%}
+                        {% else %}
                             {{ _('Untitled unit') }}
-                        {%- endif -%}
+                        {% endif %}
+                        {% if child.cDate is defined %}
+                           <span class="date"> • {{ child.cDate }}</span>
+                        {% endif %}
                         {% if print == false %}
                         </a>
                         {% endif %}

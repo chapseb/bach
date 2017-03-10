@@ -823,7 +823,7 @@ class DefaultController extends SearchController
         $cquery->setQuery($query);
         $cquery->setStart(($page - 1) * $max_results);
         $cquery->setRows($max_results);
-        $cquery->setFields('fragmentid, cUnittitle');
+        $cquery->setFields('fragmentid, cUnittitle, cDate');
         $rs = $client->select($cquery);
         $children  = $rs->getDocuments();
         $count_children = $rs->getNumFound();

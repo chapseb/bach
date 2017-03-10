@@ -123,8 +123,8 @@ POSSIBILITY OF SUCH DAMAGE.
                     {%- endif -%}
 
                     <header>
-                        <h3 property="dc:title"{%if specialflag == true%} class="special_result"{%endif%}>
-                            <a href="{{ path('bach_display_document', {docid: document.fragmentid}) }}" class="{%if specialflag == true%}special_result {%else%}display_doc{%endif%}">
+                        <h3 property="dc:title">
+                            <a href="{{ path('bach_display_document', {docid: document.fragmentid}) }}" class="{%if specialflag == true%}special_result {%endif%}display_doc">
                             {%- if hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')|length > 0 -%}
                                 {{ hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')[0]|raw }}
                             {%- elseif document.cUnittitle is defined -%}

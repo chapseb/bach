@@ -91,6 +91,7 @@ POSSIBILITY OF SUCH DAMAGE.
     </xsl:template>
 
     <xsl:template match="unittitle">
+    <xsl:variable name="count" select="count(ancestor::c)"/>
         <a class="display_doc">
             <!-- URL cannot ben generated from here. Let's build a specific value to be replaced -->
             <xsl:attribute name="link">
@@ -104,6 +105,7 @@ POSSIBILITY OF SUCH DAMAGE.
                 </xsl:choose>
             </xsl:attribute>
 
+            <span class="sizeTitle{$count + 1}">
             <strong property="dc:title">
                 <xsl:apply-templates />
             </strong>
@@ -114,7 +116,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     <strong><xsl:value-of select="concat(' • ', ../unitdate)"/></strong>
                 </span>
             </xsl:if>
-
+            </span>
             <xsl:value-of select="../otherfindaid"/>
 
             <xsl:if test="../unitid[not(@type='ordre_c')]">

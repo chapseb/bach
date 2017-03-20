@@ -631,9 +631,9 @@ class DisplayDao extends \Twig_Extension
             }
             break;
         case self::IMAGE:
-            $ret = '<a href="' . $viewer . 'viewer/' .
-                $dao . '" target="_blank" property="image">';
             if ($communicability == true ) {
+                $ret = '<a href="' . $viewer . 'viewer/' .
+                    $dao . '" target="_blank" property="image">';
                 if ($aws == true) {
                     $srcImage = @file_get_contents(
                         $viewer.'ajax/representativeAws/'.

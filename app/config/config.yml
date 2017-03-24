@@ -277,6 +277,7 @@ snc_redis:
     session:
         client: '%redis_session_alias%'
         prefix: '%redis_prefix_session%'
+        ttl: 3600
 
 stof_doctrine_extensions:
     default_locale: en_US

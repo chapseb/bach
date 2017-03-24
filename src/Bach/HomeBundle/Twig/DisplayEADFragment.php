@@ -286,6 +286,11 @@ class DisplayEADFragment extends \Twig_Extension
                 $text,
                 $sectionImage
             );
+            $getSectionSerie = preg_match(
+                '@<section id="series"[^>]*?>.*?</section>@si',
+                $text,
+                $sectionSerie
+            );
 
             // need to rebuild the link because link has the search word
             foreach ($allWord as $wordHigh) {
@@ -325,6 +330,20 @@ class DisplayEADFragment extends \Twig_Extension
                 $text = str_replace(
                     $sectionBadImage[0],
                     $sectionImage[0],
+                    $text
+                );
+            }
+
+            $getSectionBadSerie = preg_match(
+                '@<section id="series"[^>]*?>.*?</section>@si',
+                $text,
+                $sectionBadSerie
+            );
+
+            if ($sectionBadSerie != null && $sectionSerie != null) {
+                $text = str_replace(
+                    $sectionBadSerie[0],
+                    $sectionSerie[0],
                     $text
                 );
             }

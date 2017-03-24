@@ -342,7 +342,7 @@ class CommentAdmin extends Admin
                 $message->setTo($userTo);
                 //FIXME Add a way to call here a template with the content
                 $message->setBody(
-                    "Bonjour, <br><br>Vote message " . $comment->getSubject() . " a été " . strtolower($this->getStateLabel($comment->getState())) .".<br><br>Cordialement.",
+                    "Bonjour, <br><br>Votre message " . $comment->getSubject() . " a été " . strtolower($this->getStateLabel($comment->getState())) .".<br><br>Cordialement.",
                     'text/html'
                 );
                 $mailer->send($message);

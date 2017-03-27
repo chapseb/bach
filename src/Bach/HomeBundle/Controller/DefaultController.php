@@ -390,9 +390,13 @@ class DefaultController extends SearchController
             $current_date = new \DateTime();
             $current_year = $current_date->format("Y");
 
-            $tpl_vars['ipconnection'] = $this->container->get(
-                'request'
-            )->getClientIp();
+            if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $tpl_vars['ipconnection'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            } else {
+                $tpl_vars['ipconnection'] = $this->container->get(
+                    'request'
+                )->getClientIp();
+            }
             $testIp = $this->container->getParameter('readingroom');
             $flagReadroom = false;
             if (strpos($tpl_vars['ipconnection'], $testIp) !== false) {
@@ -875,7 +879,11 @@ class DefaultController extends SearchController
         }
 
         ////////////// Add communicability check /////////////////////////
-        $tpl_vars['ipconnection'] = $this->container->get('request')->getClientIp();
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $tpl_vars['ipconnection'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $tpl_vars['ipconnection'] = $this->container->get('request')->getClientIp();
+        }
         $testIp = $this->container->getParameter('readingroom');
         $flagReadroom = false;
         if (strpos($tpl_vars['ipconnection'], $testIp) !== false

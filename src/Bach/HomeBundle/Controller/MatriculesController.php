@@ -436,9 +436,13 @@ class MatriculesController extends SearchController
             $tplParams['communicability'] = true;
         }
         if ($tplParams['communicability'] == false) {
-            $incomeIp = $this->container->get(
-                'request'
-            )->getClientIp();
+            if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $incomeIp = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            } else {
+                $incomeIp = $this->container->get(
+                    'request'
+                )->getClientIp();
+            }
             $testIp = $this->container->getParameter('readingroom');
             if (strpos($incomeIp, $testIp) !== false
                 && ($this->container->getParameter('ip_internal')

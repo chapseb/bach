@@ -395,7 +395,7 @@ class DefaultController extends SearchController
             )->getClientIp();
             $testIp = $this->container->getParameter('readingroom');
             $flagReadroom = false;
-            if ($testIp == $tpl_vars['ipconnection']) {
+            if (strpos($tpl_vars['ipconnection'], $testIp) !== false) {
                 $flagReadroom = true;
             }
             // get daos with readingroom communicability or general communicability

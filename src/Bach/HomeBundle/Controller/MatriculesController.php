@@ -429,7 +429,7 @@ class MatriculesController extends SearchController
                 'request'
             )->getClientIp();
             $testIp = $this->container->getParameter('readingroom');
-            if ($testIp == $incomeIp
+            if (strpos($incomeIp, $testIp) !== false
                 && $this->get('bach.home.authorization')->readerRight()
                 && strtotime($doc->communicability_sallelecture) <= $current_date->getTimestamp()
             ) {

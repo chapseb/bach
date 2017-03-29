@@ -873,7 +873,7 @@ class DefaultController extends SearchController
         $tpl_vars['ipconnection'] = $this->container->get('request')->getClientIp();
         $testIp = $this->container->getParameter('readingroom');
         $flagReadroom = false;
-        if ($testIp == $tpl_vars['ipconnection']
+        if (strpos($tpl_vars['ipconnection'], $testIp) !== false
             && $this->get('bach.home.authorization')->readerRight()
         ) {
             $flagReadroom = true;

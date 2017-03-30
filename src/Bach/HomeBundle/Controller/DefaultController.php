@@ -570,10 +570,14 @@ class DefaultController extends SearchController
                 if ($request->get('results_order') !== null) {
                     $view_params->setOrder((int)$request->get('results_order'));//$view_params->getOrder();
                 } else {
-                    $view_params->setOrder((int)$this->container->getParameter('display.ead.result_order'));//$view_params->getOrder();
+                    if (!is_null($view_params)) {
+                        $view_params->setOrder((int)$this->container->getParameter('display.ead.result_order'));//$view_params->getOrder();
+                    }
                 }
                 $session->set($this->getParamSessionName(), $view_params);
-                $url_vars['view'] = $view_params->getView();
+                if (!is_null($view_params)) {
+                    $url_vars['view'] = $view_params->getView();
+                }
                 //check for filtering informations
                 if ($request->get('filter_field')
                     && $request->get('filter_value')

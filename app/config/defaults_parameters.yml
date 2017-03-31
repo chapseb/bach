@@ -105,6 +105,7 @@ parameters:
     feature.heritage: true
     feature.minify: false
     readingroom: null
+    ip_internal: false
     matricules_histogram: 'annee_naissance'
     matricules_listparameters: ['cote', 'date_enregistrement', 'lieu_enregistrement', 'classe', 'nom', 'prenoms', 'matricule', 'annee_naissance', 'lieu_naissance', 'lieu_residence', 'comment']
     matricules_searchparameters: ['cote', 'date_enregistrement', 'lieu_enregistrement', 'classe', 'nom', 'prenoms', 'matricule', 'annee_naissance', 'lieu_naissance', 'lieu_residence', 'comment']

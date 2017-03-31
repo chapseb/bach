@@ -288,12 +288,18 @@ class MatriculesController extends SearchController
 
         $this->searchhistoMatAddAction($searchResults->getNumFound());
 
-        $tpl_vars['readingroomIp'] = $this->container->getParameter('readingroom');
-        if ($this->get('bach.home.authorization')->readerRight()) {
-            $tpl_vars['readerRight'] = true;
-        } else {
-            $tpl_vars['readerRight'] = false;
+        $incomeIp = $this->container->get(
+            'request'
+        )->getClientIp();
+        $testIp = $this->container->getParameter('readingroom');
+        $tpl_vars['rights'] = false;
+        if (strpos($incomeIp, $testIp) !== false
+            && ($this->container->getParameter('ip_internal')
+            || $this->get('bach.home.authorization')->readerRight())
+        ) {
+            $tpl_vars['rights'] = true;
         }
+
         return $this->render(
             'BachHomeBundle:Matricules:search_form.html.twig',
             array_merge(
@@ -430,7 +436,8 @@ class MatriculesController extends SearchController
             )->getClientIp();
             $testIp = $this->container->getParameter('readingroom');
             if (strpos($incomeIp, $testIp) !== false
-                && $this->get('bach.home.authorization')->readerRight()
+                && ($this->container->getParameter('ip_internal')
+                || $this->get('bach.home.authorization')->readerRight())
                 && strtotime($doc->communicability_sallelecture) <= $current_date->getTimestamp()
             ) {
                 $tplParams['communicability'] = true;

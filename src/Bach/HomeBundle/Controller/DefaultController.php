@@ -399,8 +399,9 @@ class DefaultController extends SearchController
                 $flagReadroom = true;
             }
             // get daos with readingroom communicability or general communicability
-            if ($flagReadroom == true 
-                && $this->get('bach.home.authorization')->readerRight()
+            if ($flagReadroom == true
+                && ($this->container->getParameter('ip_internal')
+                || $this->get('bach.home.authorization')->readerRight())
             ) {
                 $query = $this->getDoctrine()->getManager()->createQuery(
                     'SELECT e.href, e.title FROM BachIndexationBundle:EADDaos e ' .
@@ -878,7 +879,8 @@ class DefaultController extends SearchController
         $testIp = $this->container->getParameter('readingroom');
         $flagReadroom = false;
         if (strpos($tpl_vars['ipconnection'], $testIp) !== false
-            && $this->get('bach.home.authorization')->readerRight()
+            && ($this->container->getParameter('ip_internal')
+            || $this->get('bach.home.authorization')->readerRight())
         ) {
             $flagReadroom = true;
         }

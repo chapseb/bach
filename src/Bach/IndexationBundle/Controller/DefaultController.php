@@ -609,6 +609,19 @@ class DefaultController extends Controller
     public function publishCommandAction()
     {
         $request = $this->getRequest();
+
+        $queryTest = $this->getDoctrine()->getManager()
+            ->createQuery(
+                'SELECT t FROM BachIndexationBundle:BachToken t
+                WHERE t.action = 1'
+            );
+
+        if (!empty($queryTest->getResult())) {
+            $response = new Response("alreadyBusy");
+            $response->setStatusCode(500);
+            return $response;
+        }
+
         $query = $this->getDoctrine()->getManager()
             ->createQuery(
                 'SELECT t FROM BachIndexationBundle:BachToken t
@@ -646,7 +659,7 @@ class DefaultController extends Controller
                 );
             }
         }
-        $response = new Response("Mismatch send token/file and database token/file");
+        $response = new Response("mismatchTokenFile");
         $response->setStatusCode(500);
         return $response;
     }
@@ -659,6 +672,19 @@ class DefaultController extends Controller
     public function unpublishCommandAction()
     {
         $request = $this->getRequest();
+
+        $queryTest = $this->getDoctrine()->getManager()
+            ->createQuery(
+                'SELECT t FROM BachIndexationBundle:BachToken t
+                WHERE t.action = 1'
+            );
+
+        if (!empty($queryTest->getResult())) {
+            $response = new Response("alreadyBusy");
+            $response->setStatusCode(500);
+            return $response;
+        }
+
         $query = $this->getDoctrine()->getManager()
             ->createQuery(
                 'SELECT t FROM BachIndexationBundle:BachToken t
@@ -694,7 +720,7 @@ class DefaultController extends Controller
                 );
             }
         }
-        $response = new Response("Mismatch send token/file and database token/file");
+        $response = new Response("mismatchTokenFile");
         $response->setStatusCode(500);
         return $response;
     }

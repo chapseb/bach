@@ -60,7 +60,10 @@ class DisplayDao extends \Twig_Extension
 {
     private $_viewer;
 
-    private static $_images_extensions = array('jpeg', 'jpg', 'png', 'gif');
+    private static $_images_extensions = array(
+        'jpeg', 'jpg', 'png',
+        'gif', 'tif', 'tiff'
+    );
     private static $_sounds_extensions = array('ogg', 'wav');
     private static $_videos_extensions = array('ogv', 'mp4', 'webm', 'mov');
     private static $_flash_sounds_extensions = array('mp3');

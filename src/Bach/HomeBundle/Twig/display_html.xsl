@@ -118,7 +118,7 @@ POSSIBILITY OF SUCH DAMAGE.
                             <xsl:when test="local-name() = 'unitdate'">
                                 <xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayHtml::i18nFromXsl', 'Date')"/>
                             </xsl:when>
-                            <xsl:when test="local-name() = 'unitid'">
+                            <xsl:when test="local-name() = 'unitid' and @type !='ordre_c'">
                                 <xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayHtml::i18nFromXsl', 'Class number')"/>
                             </xsl:when>
                         </xsl:choose>
@@ -127,7 +127,13 @@ POSSIBILITY OF SUCH DAMAGE.
             </h2>
         </dt>
         <dd>
-            <xsl:value-of select="."/>
+            <xsl:choose>
+            <xsl:when test="local-name() = 'unitid' and @type='ordre_c'">
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="."/>
+            </xsl:otherwise>
+        </xsl:choose>
         </dd>
     </xsl:template>
 

@@ -288,9 +288,14 @@ class MatriculesController extends SearchController
 
         $this->searchhistoMatAddAction($searchResults->getNumFound());
 
-        $incomeIp = $this->container->get(
-            'request'
-        )->getClientIp();
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $incomeIp = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+        } else {
+            $incomeIp = $this->container->get(
+                'request'
+            )->getClientIp();
+        }
+
         $testIp = $this->container->getParameter('readingroom');
         $tpl_vars['rights'] = false;
         if (strpos($incomeIp, $testIp) !== false

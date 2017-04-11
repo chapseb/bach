@@ -528,6 +528,7 @@ class MatriculesController extends SearchController
             $form->bind($this->getRequest());
             if ($form->isValid()) {
                 $q = $query->getQuery();
+                $wordsQuery = explode(' ', $q);
                 $redirectUrl = $this->get('router')->generate(
                     'bach_matricules',
                     array('query_terms' => $q)
@@ -538,9 +539,18 @@ class MatriculesController extends SearchController
                     $session->set($this->getFiltersName(), null);
                 }
                 $view_params = $session->get($this->getParamSessionName());
-                $view_params->setOrder(
-                    (int)$this->getRequest()->get('results_order')
-                );
+                if ($this->container->getParameter('matricules_order') != null
+                    && count($wordsQuery) < 2
+                ) {
+                    $view_params->setOrder(
+                        (int)$this->container->getParameter('matricules_order')
+                    );
+                }
+                if ($this->getRequest()->get('results_order')) {
+                    $view_params->setOrder(
+                        (int)$this->getRequest()->get('results_order')
+                    );
+                }
                 $session->set($this->getParamSessionName(), $view_params);
 
             }

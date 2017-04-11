@@ -97,6 +97,7 @@ parameters:
     display.disable_searchmap: true
     display.ead.result_order: null
     display.disable_connectbutton: false
+    matricules_order: null
     cote_location: 'bottom' #either top or bottom
     #other
     feature.openid: false

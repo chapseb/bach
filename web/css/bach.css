@@ -328,6 +328,14 @@ p {
     list-style-type: none;
 }
 
+[id=menu] li.show_more a {
+    color: #b73a34 !important;
+}
+
+[id=menu] li.show_more a:hover {
+    text-decoration: underline !important;
+}
+
 [id=menu] a,
 [id=menu] div.ui-accordion-content a,
 [id=menu] li,

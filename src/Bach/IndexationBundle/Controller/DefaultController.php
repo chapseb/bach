@@ -754,10 +754,10 @@ class DefaultController extends Controller
                 $urlViewer = $this->container->getParameter('viewer_uri');
 
                 $url = $urlViewer . 'ajax/generateimages';
+                $params['urlSender'] = $_SERVER['SERVER_NAME'];
                 $jsonData = json_encode($params);
                 $cmd = "curl -X POST -H 'Content-Type: application/json'";
                 $cmd.= " -d '" . $jsonData . "' " . "'" . $url . "'";
-
                 $cmd .= " > /dev/null 2>/dev/null &";
                 exec($cmd, $output);
             }

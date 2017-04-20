@@ -89,10 +89,8 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% endif %}
 
                     <div{% if not show_pics %} class="nopic"{% endif %}>
-
                     <header>
                         <h3 property="dc:title">
-
                         <ul class="breadcrumb">
                         {%- if document.archDescUnitTitle is defined -%}
                             <li>
@@ -122,7 +120,6 @@ POSSIBILITY OF SUCH DAMAGE.
                                 </li>
                             {% endfor %}
                             {%- endif -%}
-
                             <li><a href="{{ path('bach_display_document', {docid: document.fragmentid}) }}" class="{%if specialflag == true%}special_result {%endif%}display_doc">
                             {%- if hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')|length > 0 -%}
                                 {{ hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')[0]|raw }}
@@ -133,11 +130,10 @@ POSSIBILITY OF SUCH DAMAGE.
                             {%- endif -%}
                             </a></li>
                         </ul>
+                     {% if view == 'list' or view == 'txtlist' %}
                         {%- if document.cDate is defined and document.cDate != '' and document.cDate != document.cUnittitle -%}
                             <span class="date" property="dc:date">{{ document.cDate }}</span>
                         {%- endif -%}
-
-                     {% if view == 'list' or view == 'txtlist' %}
                         {% set subid = document.fragmentid|replace({(document.headerId ~ '_'): ''}) %}
                         <a href="{{ path('bach_ead_html', {'docid': document.headerId}) }}#{{ subid }}" class="treeLinkResults" title="{{ _('Locate in document tree') }}" >{{ _('Locate in document tree') }}</a>{% if cMediaContent is defined and cMediaContent[loop.index0] == 1 %}<span class="cMedia"></span>{% endif %}<a class="addBasket" title="{{ _('Add to basket')}}" href="{{ path('basket_add',{'docid': document.fragmentid})}}">{{ _('Add to basket')}}</a>
                         </h3>

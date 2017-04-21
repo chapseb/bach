@@ -92,7 +92,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     <header>
                         <h3 property="dc:title">
                         <ul class="breadcrumb">
-                        {%- if document.archDescUnitTitle is defined -%}
+                        {%- if document.archDescUnitTitle is defined and document.archDescUnitTitle != document.cUnittitle%}
                             <li>
                                 <a href="{{ path('bach_display_document', {docid: document.headerId ~ '_description'}) }}" property="dc:isPartOf">{{ document.archDescUnitTitle }}</a>
                             </li>

@@ -65,6 +65,7 @@ class DisplayHtml extends \Twig_Extension
     protected $router;
     protected $request;
     protected $cote_location;
+    protected $viewer_uri;
     protected $prod;
     protected $kernel_root_dir;
     protected $cache_key_prefix = 'html';
@@ -72,11 +73,12 @@ class DisplayHtml extends \Twig_Extension
     /**
      * Main constructor
      *
-     * @param UrlGeneratorInterface $router   Router
-     * @param Kernel                $kernel   App kernel
-     * @param string                $cote_loc Cote location
+     * @param UrlGeneratorInterface $router     Router
+     * @param Kernel                $kernel     App kernel
+     * @param string                $cote_loc   Cote location
+     * @param string                $viewer_uri Viewer Url
      */
-    public function __construct(Router $router, Kernel $kernel, $cote_loc)
+    public function __construct(Router $router, Kernel $kernel, $cote_loc, $viewer_uri)
     {
         $this->router = $router;
         $this->kernel_root_dir = $kernel->getRootDir();
@@ -86,6 +88,7 @@ class DisplayHtml extends \Twig_Extension
             $this->prod = false;
         }
         $this->cote_location = $cote_loc;
+        $this->viewer_uri = $viewer_uri;
     }
 
     /**
@@ -310,6 +313,7 @@ class DisplayHtml extends \Twig_Extension
         $audience = ($audience) ? 'true' : 'false';
         $proc->setParameter('', 'audience', $audience);
         $proc->setParameter('', 'daodetector', $daodetector);
+        $proc->setParameter('', 'viewer_uri', $this->viewer_uri);
         $proc->registerPHPFunctions();
 
         $up_nodes = $xml_doc->xpath('/ead/archdesc/dsc/c');

@@ -48,6 +48,7 @@ POSSIBILITY OF SUCH DAMAGE.
     <xsl:param name="docid" select="''"/>
     <xsl:param name="audience" select="''"/>
     <xsl:param name="daodetector" select="''"/>
+    <xsl:param name="viewer_uri" select="''"/>
 
     <!-- ***** CONTENTS ***** -->
     <xsl:template match="c|c01|c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12">
@@ -128,7 +129,95 @@ POSSIBILITY OF SUCH DAMAGE.
             <xsl:if test="../../dao or ../../daogrp or ../../daoloc">
                 <xsl:if test="$audience != 'false' or (../../dao and not(../../dao/@audience = 'internal')) or (../../daogrp and not(../../daogrp/@audience = 'internal')) or (../../daoloc and not(../../daoloc/@audience = 'internal')) ">
                     <xsl:if test="$daodetector = '' or not(contains(../../dao/@href,$daodetector))">
-                        <span class="media_informations"></span>
+                        <xsl:variable name="a" select="count(../../dao)"/>
+                        <xsl:variable name="b" select="count(../../daogrp)"/>
+                        <xsl:choose>
+                            <xsl:when test="$a + $b &lt; 2">
+                                <xsl:choose>
+                                    <xsl:when test="../../dao and ../../dao/@role = 'image'">
+                                        <xsl:variable name="linkalone" select="concat($viewer_uri, 'viewer/', ../../dao/@href)"/>
+                                        <xsl:element name="a">
+                                            <xsl:attribute name="href">
+                                                <xsl:value-of select="$linkalone"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="class">gomedia_informations</xsl:attribute>
+                                            <xsl:attribute name="target">_blank</xsl:attribute>
+                                        </xsl:element>
+                                    </xsl:when>
+                                    <xsl:when test="../../dao and ../../dao/@role = 'series'">
+                                        <xsl:variable name="linkseries" select="concat($viewer_uri, 'series/', ../../dao/@href)"/>
+                                        <xsl:variable name="lastcharacterSeries" select="substring(../../dao/@href, string-length(../../dao/@href), 1)" />
+                                        <xsl:choose>
+                                            <xsl:when test="not(lastcharacterSeries = '/')">
+                                                <xsl:variable name="finalAdd" select="concat($linkseries, '/')"/>
+                                                <xsl:element name="a">
+                                                    <xsl:attribute name="href">
+                                                        <xsl:value-of select="$finalAdd"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="class">gomedia_informations</xsl:attribute>
+                                                    <xsl:attribute name="target">_blank</xsl:attribute>
+                                                </xsl:element>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:variable name="finalWithoutAdd" select="concat($viewer_uri, 'series/', ../../dao/@href)"/>
+                                                <xsl:element name="a">
+                                                    <xsl:attribute name="href">
+                                                        <xsl:value-of select="$finalWithoutAdd"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="class">gomedia_informations</xsl:attribute>
+                                                    <xsl:attribute name="target">_blank</xsl:attribute>
+                                                </xsl:element>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:when>
+                                    <xsl:when test="../../daogrp and ../../daogrp/@role = 'series'">
+                                        <xsl:variable name="brutbeginlink" select="../../daogrp/daoloc[@role='image:first']/@href"/>
+                                        <xsl:variable name="brutendlink" select="../../daogrp/daoloc[@role='image:last']/@href"/>
+
+                                        <xsl:variable name="basename">
+                                            <xsl:call-template name="substring-before-last">
+                                                <xsl:with-param name="string1" select="$brutbeginlink" />
+                                                <xsl:with-param name="string2" select="'/'" />
+                                            </xsl:call-template>
+                                        </xsl:variable>
+
+                                        <xsl:variable name="beginlink">
+                                            <xsl:call-template name="substring-after-last">
+                                                <xsl:with-param name="string" select="$brutbeginlink" />
+                                                <xsl:with-param name="delimiter" select="'/'" />
+                                            </xsl:call-template>
+                                        </xsl:variable>
+                                        <xsl:variable name="endlink">
+                                            <xsl:call-template name="substring-after-last">
+                                                <xsl:with-param name="string" select="$brutendlink" />
+                                                <xsl:with-param name="delimiter" select="'/'" />
+                                            </xsl:call-template>
+                                        </xsl:variable>
+
+                                        <xsl:variable name="linkseriesBeginend" select="concat(
+                                            $viewer_uri,
+                                            'series/',
+                                            $basename,
+                                            '?s=',
+                                            $beginlink,
+                                            '&amp;e=',
+                                            $endlink
+                                            )"/>
+                                        <xsl:element name="a">
+                                            <xsl:attribute name="href">
+                                                <xsl:value-of select="$linkseriesBeginend"/>
+                                            </xsl:attribute>
+                                            <xsl:attribute name="class">gomedia_informations</xsl:attribute>
+                                            <xsl:attribute name="target">_blank</xsl:attribute>
+                                        </xsl:element>
+                                    </xsl:when>
+                                    <xsl:otherwise></xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <span class="media_informations"></span>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:if>
                 </xsl:if>
             </xsl:if>
@@ -231,6 +320,41 @@ POSSIBILITY OF SUCH DAMAGE.
         </xsl:if>
     </xsl:template>
     <!-- ***** END GENERIC TAGS ***** -->
+
+    <xsl:template name="substring-after-last">
+        <xsl:param name="string" />
+        <xsl:param name="delimiter" />
+        <xsl:choose>
+            <xsl:when test="contains($string, $delimiter)">
+                <xsl:call-template name="substring-after-last">
+                    <xsl:with-param name="string"
+                        select="substring-after($string, $delimiter)" />
+                    <xsl:with-param name="delimiter" select="$delimiter" />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$string" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="substring-before-last">
+        <xsl:param name="string1" select="''" />
+        <xsl:param name="string2" select="''" />
+
+        <xsl:if test="$string1 != '' and $string2 != ''">
+            <xsl:variable name="head" select="substring-before($string1, $string2)" />
+            <xsl:variable name="tail" select="substring-after($string1, $string2)" />
+            <xsl:value-of select="$head" />
+            <xsl:if test="contains($tail, $string2)">
+                <xsl:value-of select="$string2" />
+                <xsl:call-template name="substring-before-last">
+                    <xsl:with-param name="string1" select="$tail" />
+                    <xsl:with-param name="string2" select="$string2" />
+                </xsl:call-template>
+            </xsl:if>
+        </xsl:if>
+    </xsl:template>
 
     <!-- Per default, display nothing -->
     <xsl:template match="*|@*|node()"/>

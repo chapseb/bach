@@ -68,14 +68,15 @@ class DisplayCdc extends DisplayHtml
     /**
      * Main constructor
      *
-     * @param UrlGeneratorInterface $router   Router
-     * @param Kernel                $kernel   App kernel
-     * @param string                $cote_loc Cote location
-     * @param string                $path     Classification scheme URL
+     * @param UrlGeneratorInterface $router     Router
+     * @param Kernel                $kernel     App kernel
+     * @param string                $cote_loc   Cote location
+     * @param string                $path       Classification scheme URL
+     * @param string                $viewer_uri Viewer Url
      */
-    public function __construct(Router $router, Kernel $kernel, $cote_loc, $path)
+    public function __construct(Router $router, Kernel $kernel, $cote_loc, $path, $viewer_uri)
     {
-        parent::__construct($router, $kernel, $cote_loc);
+        parent::__construct($router, $kernel, $cote_loc, $viewer_uri);
         $this->_cdc_uri = $path;
     }
 

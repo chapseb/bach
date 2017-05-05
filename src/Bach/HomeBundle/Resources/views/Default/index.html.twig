@@ -120,7 +120,7 @@ POSSIBILITY OF SUCH DAMAGE.
                                 </li>
                             {% endfor %}
                             {%- endif -%}
-                            <li><a href="{{ path('bach_display_document', {docid: document.fragmentid}) }}" class="{%if specialflag == true%}special_result {%endif%}display_doc">
+                            <li class="last_title"><a href="{{ path('bach_display_document', {docid: document.fragmentid}) }}" class="{%if specialflag == true%}special_result {%endif%}display_doc">
                             {%- if hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')|length > 0 -%}
                                 {{ hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')[0]|raw }}
                             {%- elseif document.cUnittitle is defined -%}

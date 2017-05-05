@@ -514,7 +514,6 @@ input[type=number] {
     color: #DAA520 !important;
 }
 
-
 /** View switcher */
 [id=change_view] {
     position: absolute;
@@ -861,13 +860,13 @@ h2.back a:hover {
 }
 
 .breadcrumb {
-    background: #d1c6c0;
+    /*background: #d1c6c0;*/
     padding: 0.5em 1.5em 0.5em 0.5em;
     list-style-type: none;
 }
 
 [id=search_results] .breadcrumb {
-    padding: .1em .5em;
+    padding: .1em .5em .1em 0.0em;
     margin-bottom: .2em;
 }
 
@@ -882,11 +881,19 @@ h2.back a:hover {
 }
 
 .breadcrumb li a:before {
-    content: "» ";
+    content: "› ";
 }
 
 .breadcrumb li:first-child a:before {
     content: "";
+}
+
+.last_title {
+    display: block !important;
+}
+
+.date {
+    font-size: 14px;
 }
 
 [id=display_facets] li {

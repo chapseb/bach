@@ -161,12 +161,12 @@ POSSIBILITY OF SUCH DAMAGE.
                         {% endif %}
                         {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_CONTENT_ADMIN') %}
                     <li{% if app.request.attributes.get('_route') == 'sonata_admin_dashboard' %} class="active"{% endif %}>
-                        <a href="{{ url('sonata_admin_dashboard') }}">{{ _('Manage') }}</a>
+                        <a href="{{ path('sonata_admin_dashboard') }}">{{ _('Manage') }}</a>
                     </li>
                         {% endif %}
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
                     <li{% if app.request.attributes.get('_route') == 'administration_dashboard' %} class="active"{% endif %}>
-                        <a href="{{ url('administration_dashboard') }}">{{ _('Manage Solr') }}</a>
+                        <a href="{{ path('administration_dashboard') }}">{{ _('Manage Solr') }}</a>
                     </li>
                         {% endif %}
                     {% endif %}

@@ -94,14 +94,14 @@ POSSIBILITY OF SUCH DAMAGE.
                         <ul class="breadcrumb">
                         {%- if document.archDescUnitTitle is defined and document.archDescUnitTitle != document.cUnittitle%}
                             <li>
-                                <a href="{{ path('bach_display_document', {docid: document.headerId ~ '_description'}) }}" property="dc:isPartOf">{{ document.archDescUnitTitle }}</a>
+                                <a class="display_doc" href="{{ path('bach_display_document', {docid: document.headerId ~ '_description'}) }}" property="dc:isPartOf">{{ document.archDescUnitTitle }}</a>
                             </li>
                         {%- endif -%}
                         {%- if document.parents_titles is defined -%}
                             {% set parents_ids = document.parents|split('/') %}
                             {% for ptitle in document.parents_titles %}
                                 <li>
-                                    <a href="{{ path('bach_display_document', {docid: document.headerId ~ '_' ~ parents_ids[loop.index0]}) }}" property="dc:isPartOf">
+                                    <a class="display_doc" href="{{ path('bach_display_document', {docid: document.headerId ~ '_' ~ parents_ids[loop.index0]}) }}" property="dc:isPartOf">
                                         {% set testHighlight = 0 %}
                                     {% if hlSearchResults.getResult(document.fragmentid).getField('parents_titles') %}
                                         {% for ptitleHighlight in hlSearchResults.getResult(document.fragmentid).getField('parents_titles') if testHighlight == 0 %}

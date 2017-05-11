@@ -528,6 +528,8 @@ class DefaultController extends SearchController
             $tpl_vars['specialeads'] = $this->container->getParameter('specialeads');
         }
 
+        $tpl_vars['display_breadcrumb']
+            = $this->container->getParameter('display.breadcrumb');
         return $this->render(
             'BachHomeBundle:Default:index.html.twig',
             $tpl_vars

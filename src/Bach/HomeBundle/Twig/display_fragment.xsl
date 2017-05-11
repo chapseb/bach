@@ -588,7 +588,7 @@ POSSIBILITY OF SUCH DAMAGE.
         <xsl:choose>
             <xsl:when test="@href">
                 <xsl:choose>
-                    <xsl:when test="not(substring(@href, 1, 8) = 'http://')">
+                    <xsl:when test="not(substring(@href, 1, 7) = 'http://') and not(substring(@href, 1, 8) = 'https://' )">
                         <xsl:variable name="titleFrag">
                             <xsl:choose>
                             <xsl:when test="text() != ''">
@@ -608,11 +608,11 @@ POSSIBILITY OF SUCH DAMAGE.
                                     <xsl:value-of select="@title"/>
                                 </xsl:attribute>
                             </xsl:if>
+                            <xsl:attribute name="target">_blank</xsl:attribute>
                             <xsl:if test="@title and . = ''">
                                 <xsl:value-of select="@title"/>
                             </xsl:if>
                             <xsl:apply-templates mode="full"/>
-                            <xsl:attribute name="target">_blank</xsl:attribute>
                         </a>
                     </xsl:otherwise>
                 </xsl:choose>

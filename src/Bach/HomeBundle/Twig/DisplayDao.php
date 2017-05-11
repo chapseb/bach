@@ -806,7 +806,7 @@ class DisplayDao extends \Twig_Extension
         case self::MISC:
             $title = str_replace(
                 '%name%',
-                $dao,
+                $daotitle,
                 _("Display '%name%'")
             );
 

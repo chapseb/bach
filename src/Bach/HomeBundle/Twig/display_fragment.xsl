@@ -556,7 +556,7 @@ POSSIBILITY OF SUCH DAMAGE.
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="relatedmaterial/ref" mode="full">
+    <xsl:template match="relatedmaterial/ref|ref" mode="full">
         <xsl:choose>
             <xsl:when test="@target != ''">
                 <a>
@@ -569,9 +569,14 @@ POSSIBILITY OF SUCH DAMAGE.
                         </xsl:variable>
                         <xsl:value-of select="concat('/archives/show/',$basename,'_',@target)" />
                     </xsl:attribute>
-                    <xsl:attribute name="title">
-                        <xsl:value-of select="text()"/>
-                    </xsl:attribute>
+                    <xsl:if test="@title and . != ''">
+                        <xsl:attribute name="title">
+                            <xsl:value-of select="@title"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:if test="@title and . = ''">
+                        <xsl:value-of select="@title"/>
+                    </xsl:if>
                     <xsl:attribute name="target">_blank</xsl:attribute>
                     <xsl:value-of select="text()"/>
                 </a>
@@ -586,7 +591,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     <xsl:when test="not(substring(@href, 1, 8) = 'http://')">
                         <xsl:variable name="titleFrag">
                             <xsl:choose>
-                            <xsl:when test="@title = ''">
+                            <xsl:when test="text() != ''">
                                 <xsl:value-of select="text()"/>
                             </xsl:when>
                             <xsl:otherwise>
@@ -607,6 +612,7 @@ POSSIBILITY OF SUCH DAMAGE.
                                 <xsl:value-of select="@title"/>
                             </xsl:if>
                             <xsl:apply-templates mode="full"/>
+                            <xsl:attribute name="target">_blank</xsl:attribute>
                         </a>
                     </xsl:otherwise>
                 </xsl:choose>

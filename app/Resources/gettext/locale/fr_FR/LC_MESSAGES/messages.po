@@ -267,11 +267,11 @@ msgstr "Outil de recherche archivistique Bach"
 
 #: app/Resources/gettext/twig.cache.php:23344
 msgid "Go to basket"
-msgstr "Voir mon panier"
+msgstr "Panier"
 
 #: app/Resources/gettext/twig.cache.php:23359
 msgid "Go to historic search"
-msgstr "Voir mon historique de recherche"
+msgstr "Historique"
 
 #: app/Resources/gettext/twig.cache.php:23379
 msgid "My profile"

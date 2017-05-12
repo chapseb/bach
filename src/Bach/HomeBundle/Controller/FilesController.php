@@ -115,13 +115,18 @@ class FilesController extends Controller
         $existsAws = false;
         if ($container->getParameter('aws.s3') == true) {
             $file = BACH_FILES_MISC . $name;
-            $file_headers = @get_headers($file);
-            if ($file_headers[0] == 'HTTP/1.1 200 OK') {
-                $exists = true;
+            $ch = curl_init($file);
+            curl_setopt($ch, CURLOPT_NOBODY, true);
+            curl_exec($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if ($code == 200) {
+                $existsAws = true;
             }
+            curl_close($ch);
         }
         if (!file_exists($path)
-            && !$exists
+            && !$existsAws
         ) {
             $msg_file = $name;
             if ($this->container->get('kernel')->getEnvironment() === 'DEBUG') {

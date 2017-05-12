@@ -139,9 +139,9 @@ POSSIBILITY OF SUCH DAMAGE.
                     <li{% if app.request.attributes.get('_route') == 'bach_browse' %} class="active"{% endif %}>
                         <a href="{{ path('bach_browse') }}">
                         {% if label.browse is null %}
-                            {{ _('Consult index') }}
+                            {{ _('Index') }}
                         {% else %}
-                            {{ label.browse}}
+                            {{ label.browse }}
                         {% endif %}
                         </a>
                     </li>

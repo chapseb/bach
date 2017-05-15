@@ -484,7 +484,8 @@ class FileDriverManager
             );
             $fragment = $obj->toArray();
             if ($generateImageFlag == true) {
-                foreach ($fragment['daos'] as $dao) {
+                $daosCopy = $fragment['daos'];
+                foreach ($daosCopy as $key=>&$dao) {
                     $authorizedExtensions = array(
                         'png', 'jpg', 'jpeg', 'tiff',
                         'PNG', 'JPG', 'JPEG', 'TIFF'
@@ -514,10 +515,21 @@ class FileDriverManager
                         $res = $stmt->execute()->current();
 
                         if ($res == null) {
+                            $end = '';
+                            if ($dao['role'] == 'image:first') {
+                                $testKey = $key + 1;
+                                if (isset($testKey, $daosCopy)
+                                    && $daosCopy[$testKey]['role'] == 'image:last'
+                                ) {
+                                    $end = $daosCopy[$testKey]['href'];
+                                    unset($daosCopy[$testKey]);
+                                }
+                            }
+
                             $select = $this->_zdb->select('daos_prepared')->where(
                                 array(
                                     'href'    => $dao['href'],
-                                    'end_dao' => ''
+                                    'end_dao' => $end
                                 )
                             );
                             $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
@@ -529,7 +541,7 @@ class FileDriverManager
                                     ->values(
                                         array(
                                             'href' => $dao['href'],
-                                            'end_dao' => '',
+                                            'end_dao' => $end,
                                             'action'  => false
                                         )
                                     );

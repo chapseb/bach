@@ -117,6 +117,9 @@ class DisplayDao extends \Twig_Extension
      * @param string  $format          Format to display, defaults to thumb
      * @param boolean $communicability Flag for communicability defaults to false
      * @param string  $testSeries      Test if first is a serie, defaults to null
+     * @param boolean $aws             Aws environment or not
+     * @param string  $cloudfront      Cloudfront adress for direct link to image
+     * @param string  $daotitle        Make title for dao hover
      *
      * @return string
      */
@@ -144,6 +147,10 @@ class DisplayDao extends \Twig_Extension
                 }
                 return $retLink;
             } else {
+                $daorep = null;
+                if (isset($daos[1])) {
+                    $daorep = $daos[1];
+                }
                 return self::proceedDao(
                     $daos[0],
                     $daotitle,
@@ -157,7 +164,8 @@ class DisplayDao extends \Twig_Extension
                     $this->_bach_default_theme,
                     $communicability,
                     $aws,
-                    $cloudfront
+                    $cloudfront,
+                    $daorep
                 );
             }
         } else {
@@ -273,6 +281,7 @@ class DisplayDao extends \Twig_Extension
                     if ($node_name === 'dao' || $node_name === 'daoloc') {
                         if (isset($xml_dao['role'])
                             && ((string)$xml_dao['role'] == 'thumbnails'
+                            ||(string)$xml_dao['role'] == 'thumbnail'
                             ||(string)$xml_dao['role'] == 'image:first'
                             ||(string)$xml_dao['role'] == 'image:last')
                         ) {
@@ -282,6 +291,17 @@ class DisplayDao extends \Twig_Extension
                         $daotitle = null;
                         if ($xml_dao['title']) {
                             $daotitle = $xml_dao['title'];
+                        }
+
+                        $daorepHref = null;
+                        foreach ($xml_dg->children() as $node_name => $daorep) {
+                            if (($node_name === 'dao' || $node_name === 'daoloc')
+                                && isset($daorep['role'])
+                                && ((string)$daorep['role'] == 'thumbnail'
+                                || (string)$daorep['role'] == 'thumbnails')
+                            ) {
+                                $daorepHref = $daorep['href'];
+                            }
                         }
 
                         $results[self::_getType($dao)][] = self::proceedDao(
@@ -297,7 +317,8 @@ class DisplayDao extends \Twig_Extension
                             'web',
                             $communicability,
                             $aws,
-                            $cloudfront
+                            $cloudfront,
+                            $daorepHref
                         );
                     }
                 }
@@ -562,13 +583,16 @@ class DisplayDao extends \Twig_Extension
      * @param boolean $linkDesc           If in description
      * @param string  $bach_default_theme Bach default theme name
      * @param boolean $communicability    Flag for communicability defaults to false
+     * @param boolean $aws                Aws environment or not
+     * @param string  $cloudfront         Cloudfront adress for direct link to image
+     * @param string  $daorep             Link to representative image for series
      *
      * @return string
      */
     public static function proceedDao($dao, $daotitle, $viewer, $format,
         $ajax = false, $standalone = true, $covers_dir = null, $all = true,
         $linkDesc = false, $bach_default_theme = 'web', $communicability = false,
-        $aws = false, $cloudfront = null
+        $aws = false, $cloudfront = null, $daorep = null
     ) {
         $ret = null;
 
@@ -614,14 +638,26 @@ class DisplayDao extends \Twig_Extension
                         $viewer.'ajax/representativeAws/'.
                         rtrim($dao, '/') . '/format/' . $format
                     );
+                    if ($daorep != null) {
+                        $srcImage = @file_get_contents(
+                            $viewer.'ajax/representativeAws/'.
+                            rtrim($daorep, '/') . '/format/' . $format
+                        );
+                    }
                     $ret .= '<img src="' . $srcImage
                         . '" alt="' . $dao . '" title="'. $daotitle .'" />';
                 } else {
                     $ret = '<a href="' . $viewer . 'series/' .
                     $dao . '" target="_blank" property="image">';
-                    $ret .= '<img src="' . $viewer . 'ajax/representative/' .
+                    if ($daorep != null) {
+                        $ret .= '<img src="' . $viewer . 'ajax/representative/' .
+                        rtrim($daorep, '/') .  '/format/' . $format
+                        . '" alt="' . $dao . '" title="'. $daotitle .'" />';
+                    } else {
+                        $ret .= '<img src="' . $viewer . 'ajax/representative/' .
                         rtrim($dao, '/') .  '/format/' . $format
                         . '" alt="' . $dao . '" title="'. $daotitle .'" />';
+                    }
                 }
             } else {
                 $ret .= $linkCommunicability;

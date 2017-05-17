@@ -405,9 +405,10 @@ class DefaultController extends SearchController
                 $flagReadroom = true;
             }
             // get daos with readingroom communicability or general communicability
-            if ($flagReadroom == true
+            if (($flagReadroom == true
                 && ($this->container->getParameter('ip_internal')
-                || $this->get('bach.home.authorization')->readerRight())
+                || $this->get('bach.home.authorization')->readerRight()))
+                || $this->get('bach.home.authorization')->archivesRight()
             ) {
                 $query = $this->getDoctrine()->getManager()->createQuery(
                     'SELECT e.href, e.title FROM BachIndexationBundle:EADDaos e ' .
@@ -898,6 +899,11 @@ class DefaultController extends SearchController
         ) {
             $flagReadroom = true;
         }
+        if ($flagReadroom == false
+            && $this->get('bach.home.authorization')->archivesRight()
+        ) {
+            $flagReadroom = true;
+        }
 
         $queryDaos = $this->getDoctrine()->getManager()->createQuery(
             'SELECT h.href, h.communicability_general,' .
@@ -932,6 +938,7 @@ class DefaultController extends SearchController
             ->archivesRight();
         if ($authorizedArchives) {
             $tpl_vars['audience'] = true;
+            $tpl_vars['communicability'] = true;
         }
 
         //////////////////////////////////////////////////////////////////

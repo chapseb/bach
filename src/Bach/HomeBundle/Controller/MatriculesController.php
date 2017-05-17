@@ -304,6 +304,11 @@ class MatriculesController extends SearchController
         ) {
             $tpl_vars['rights'] = true;
         }
+        if ($tpl_vars['rights'] == false
+            && $this->get('bach.home.authorization')->archivesRight()
+        ) {
+            $tplParams['communicability'] = true;
+        }
 
         return $this->render(
             'BachHomeBundle:Matricules:search_form.html.twig',
@@ -448,6 +453,11 @@ class MatriculesController extends SearchController
                 && ($this->container->getParameter('ip_internal')
                 || $this->get('bach.home.authorization')->readerRight())
                 && strtotime($doc->communicability_sallelecture) <= $current_date->getTimestamp()
+            ) {
+                $tplParams['communicability'] = true;
+            }
+            if ($tplParams['communicability'] == false
+                && $this->get('bach.home.authorization')->archivesRight()
             ) {
                 $tplParams['communicability'] = true;
             }

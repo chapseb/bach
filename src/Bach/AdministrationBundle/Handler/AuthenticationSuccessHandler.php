@@ -88,11 +88,11 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
-        if (in_array('ROLE_READER', $token->getUser()->getRoles())
-            || in_array('ROLE_ARCHIVIST', $token->getUser()->getRoles())
-            || in_array('ROLE_ADMIN', $token->getUser()->getRoles())
-            || in_array('ROLE_SUPER_ADMIN', $token->getUser()->getRoles())
-        ) {
+
+        $host_names = explode(".", $_SERVER['HTTP_HOST']);
+        $domain = $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
+
+        if (in_array('ROLE_READER', $token->getUser()->getRoles())) {
             $_cook = new \stdClass();
             $_cook->reader = true;
             $expire = 20 * 3600;
@@ -101,7 +101,24 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
                 $host.'_bach_cookie_reader',
                 json_encode($_cook),
                 time()+$expire,
-                '/'
+                '/',
+                $domain
+            );
+        }
+        if (in_array('ROLE_ARCHIVIST', $token->getUser()->getRoles())
+            || in_array('ROLE_ADMIN', $token->getUser()->getRoles())
+            || in_array('ROLE_SUPER_ADMIN', $token->getUser()->getRoles())
+        ) {
+            $_cook = new \stdClass();
+            $_cook->archivist = true;
+            $expire = 20 * 3600;
+            $host = str_replace('.', '_', $request->getHost());
+            setcookie(
+                $host.'_bach_cookie_reader',
+                json_encode($_cook),
+                time()+$expire,
+                '/',
+                $domain
             );
         }
         return $this->HttpUtils->createRedirectResponse(

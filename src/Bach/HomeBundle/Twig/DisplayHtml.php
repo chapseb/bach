@@ -70,6 +70,7 @@ class DisplayHtml extends \Twig_Extension
     protected $readingroomip;
     protected $kernel_root_dir;
     protected $cache_key_prefix = 'html';
+    protected $aws = false;
 
     /**
      * Main constructor
@@ -92,6 +93,7 @@ class DisplayHtml extends \Twig_Extension
         }
         $this->cote_location = $cote_loc;
         $this->viewer_uri = $viewer_uri;
+        $this->aws = $kernel->getContainer()->getParameter('aws.s3');
     }
 
     /**
@@ -133,7 +135,7 @@ class DisplayHtml extends \Twig_Extension
     ) {
         $cached_doc = null;
         //do not use cache when not in prod
-        if ( $this->prod === true ) {
+        if ( $this->prod === true && $this->aws != true) {
             $cache = new \Doctrine\Common\Cache\ApcCache();
             $cached_doc = null;
             $cached_doc_date = $cache->fetch(
@@ -233,7 +235,7 @@ class DisplayHtml extends \Twig_Extension
                 $html
             );
 
-            if ( $this->prod === true ) {
+            if ( $this->prod === true && $this->aws != true ) {
                 $cache->save(
                     $this->getCacheKeyName($docid),
                     $html

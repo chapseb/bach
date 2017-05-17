@@ -245,7 +245,8 @@ class DefaultController extends SearchController
                 "cUnittitle" => $this->container->getParameter('weight.cUnittitle'),
                 "parents_titles" =>
                     $this->container->getParameter('weight.parents_titles'),
-                "fulltext" => $this->container->getParameter('weight.fulltext')
+                "fulltext" => $this->container->getParameter('weight.fulltext'),
+                "cUnitid" => $this->container->getParameter('weight.cUnitid')
             );
             $cMediaContentQuery = array();
             if ($session->get('pdf_filters') == true) {

@@ -98,6 +98,10 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
                 time()-3600
             );
         }
+
+        $host_names = explode(".", $_SERVER['HTTP_HOST']);
+        $domain = $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
+        setcookie($host.'_bach_cookie_reader', '', -1, '/', $domain);
         return $this->httpUtils->createRedirectResponse($request, $this->targetUrl);
     }
 }

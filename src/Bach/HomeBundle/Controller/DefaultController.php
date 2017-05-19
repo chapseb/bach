@@ -1299,7 +1299,7 @@ class DefaultController extends SearchController
             $query->setQuery('dao:' . $qry_string);
             $query->setFields(
                 'headerId, fragmentid, parents, archDescUnitTitle,
-                cUnittitle, cUnitid, cLegalstatus, cRepository'
+                cUnittitle, cUnitid, cLegalstatus, cRepository, cAudience'
             );
             $query->setStart(0)->setRows(1);
 
@@ -1339,6 +1339,7 @@ class DefaultController extends SearchController
             $response['ead']['unitid'] = $docs[0]['cUnitid'];
             $response['ead']['cUnittitle'] = $docs[0]['cUnittitle'];
             $response['ead']['cLegalstatus'] = $docs[0]['cLegalstatus'];
+            $response['ead']['cAudience'] = $docs[0]['cAudience'];
             $response['ead']['link'] = '<a href="' . $doc_url . '">' .
                 $doc['archDescUnitTitle'] . '</a>';
 

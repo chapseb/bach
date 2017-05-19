@@ -1373,7 +1373,7 @@ class DefaultController extends SearchController
             }
             $query = $this->getDoctrine()->getManager()->createQuery(
                 "SELECT e.href, e.communicability_general, " .
-                "e.communicability_sallelecture " .
+                "e.communicability_sallelecture, e.audience " .
                 "FROM BachIndexationBundle:EADDaos e " .
                 "WHERE (e.href = :imagelink OR e.href = :directorylink)"
             )->setParameter('imagelink', $qry_string)
@@ -1381,11 +1381,16 @@ class DefaultController extends SearchController
 
             $response['ead']['communicability_general'] = null;
             $response['ead']['communicability_sallelecture'] = null;
+            $response['ead']['audience'] = null;
             if (isset($query->getResult()[0]['communicability_general'])) {
                 $response['ead']['communicability_general']
                     = $query->getResult()[0]['communicability_general'];
                 $response['ead']['communicability_sallelecture']
                     = $query->getResult()[0]['communicability_sallelecture'];
+            }
+            if (isset($query->getResult()[0]['audience'])) {
+                $response['ead']['audience']
+                    = $query->getResult()[0]['audience'];
             }
             ////////////////////////////////////////////////
         }

@@ -276,7 +276,9 @@ EOF
                     $document->setExtension($type);
                     $document->generateDocId();
                     $flagCdcDocument = false;
-                    if (in_array($document->getDocId(), $cdc_documents)) {
+                    if (is_array($cdc_documents)
+                        && in_array($document->getDocId(), $cdc_documents)
+                    ) {
                         $flagCdcDocument = true;
                     }
 

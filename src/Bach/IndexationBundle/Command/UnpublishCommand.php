@@ -236,28 +236,29 @@ EOF
 
             $flagDocIds = $input->getOption('docids');
             if ( !$flagDocIds ) {
+            $getXML = true;
                 // recuperation de l'id des documents
                 $ids = array();
                 $documents = $documents[$type];
                 foreach ( $documents as $document) {
                     $extension = $type;
                     $getXML = simplexml_load_file($document);
-                    if ($type == 'ead') {
-                        $id = strip_tags($getXML->eadheader->eadid->asXml());
-                    } else {
-                        $id = strip_tags($getXML->id);
+                    if ($getXML !== false) {
+                        if ($type == 'ead') {
+                            $id = strip_tags($getXML->eadheader->eadid->asXml());
+                        } else {
+                            $id = strip_tags($getXML->id);
+                        }
+                        if (!isset($extensions[$extension])) {
+                            $extensions[$extension] = array();
+                        }
+                        $extensions[$extension][] = $id;
+                        $ids[] = $id;
                     }
-
-                    if ( !isset($extensions[$extension]) ) {
-                        $extensions[$extension] = array();
-                    }
-                    $extensions[$extension][] = $id;
-                    $ids[] = $id;
 
                     if ($flagDeleteFile != true) {
                         unlink($document);
                     }
-
                 }
             } else {
                 $ids = $to_publish;
@@ -278,6 +279,15 @@ EOF
                         )
                     );
 
+                if ($getXML === false) {
+                    $select = $zdb->select('documents')
+                        ->where(
+                            array(
+                                'extension' => $type,
+                                'path'      => $to_publish
+                            )
+                        );
+                }
                 $stmt = $zdb->sql->prepareStatementForSqlObject(
                     $select
                 );

@@ -149,14 +149,14 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $stats = $input->getOption('stats');
-        if ( $stats === true ) {
+        if ($stats === true) {
             $start_time = new \DateTime();
         }
 
         $flagDeleteFile = $input->getOption('not-delete-file');
 
         $dry = $input->getOption('dry-run');
-        if ( $dry === true ) {
+        if ($dry === true) {
             $output->writeln(
                 '<fg=green;options=bold>' .
                 _('Running in dry mode') .
@@ -170,10 +170,10 @@ EOF
         $logger = $container->get('publication.logger');
         $known_types = $container->getParameter('bach.types');
 
-        if ( $input->getArgument('type')) {
+        if ($input->getArgument('type')) {
             $type = $input->getArgument('type');
 
-            if ( !in_array($type, $known_types) ) {
+            if (!in_array($type, $known_types)) {
                 $msg = _('Unknown type! Please choose one of:');
                 throw new \UnexpectedValueException(
                     $msg . "\n -" .
@@ -235,12 +235,12 @@ EOF
             }
 
             $flagDocIds = $input->getOption('docids');
-            if ( !$flagDocIds ) {
             $getXML = true;
+            if (!$flagDocIds) {
                 // recuperation de l'id des documents
                 $ids = array();
                 $documents = $documents[$type];
-                foreach ( $documents as $document) {
+                foreach ($documents as $document) {
                     $extension = $type;
                     $getXML = simplexml_load_file($document);
                     if ($getXML !== false) {
@@ -317,19 +317,20 @@ EOF
                     $progress->advance();
                 }
                 $cpt++;
-                if ( !isset($updates[$doc['corename']]) ) {
-                    $client = $this->getContainer()->get('solarium.client.' . $doc['extension']);
+                if (!isset($updates[$doc['corename']]) ) {
+                    $client = $this->getContainer()
+                        ->get('solarium.client.' . $doc['extension']);
                     $clients[$doc['corename']] = $client;
                     $updates[$doc['corename']] = $client->createUpdate();
                 }
                 $update = $updates[$doc['corename']];
-                if ( $doc['extension'] === 'matricules' ) {
+                if ($doc['extension'] === 'matricules') {
                     $update->addDeleteQuery('id:' . $doc['docid']);
                 } else {
                     $update->addDeleteQuery('headerId:' . $doc['docid']);
                 }
 
-                if ( $doc['extension'] == 'ead' ) {
+                if ($doc['extension'] == 'ead') {
                     ////////////////////////////////////////////////////////
                     // Suppression des header des ead
                     try {
@@ -493,7 +494,7 @@ EOF
     public function formatBytes($bytes)
     {
         $multiplicator = 1;
-        if ( $bytes < 0 ) {
+        if ($bytes < 0) {
             $multiplicator = -1;
             $bytes = $bytes * $multiplicator;
         }

@@ -163,7 +163,7 @@ EOF
         $count = 0;
 
         $stats = $input->getOption('stats');
-        if ( $stats === true ) {
+        if ($stats === true) {
             $start_time = new \DateTime();
         }
 
@@ -172,7 +172,7 @@ EOF
         $pdfFlag = $input->getOption('pdf-indexation');
         $generateImageFlag = $input->getOption('generate-image');
 
-        if ( $dry === true ) {
+        if ($dry === true) {
             $output->writeln(
                 '<fg=green;options=bold>' .
                 _('Running in dry mode') .
@@ -185,10 +185,10 @@ EOF
         $logger = $container->get('publication.logger');
         $known_types = $container->getParameter('bach.types');
 
-        if ( $input->getArgument('type')) {
+        if ($input->getArgument('type')) {
             $type = $input->getArgument('type');
 
-            if ( !in_array($type, $known_types) ) {
+            if (!in_array($type, $known_types)) {
                 $msg = _('Unknown type! Please choose one of:');
                 throw new \UnexpectedValueException(
                     $msg . "\n -" .
@@ -220,7 +220,7 @@ EOF
         );
 
         $confirm = null;
-        if ( $input->getOption('assume-yes') ) {
+        if ($input->getOption('assume-yes')) {
             $confirm = 'yes';
         } else {
             $choices = array(_('yes'), _('no'));
@@ -233,7 +233,7 @@ EOF
             );
         }
 
-        if ( $confirm === 'yes' || $confirm === 'y' ) {
+        if ($confirm === 'yes' || $confirm === 'y') {
             $em = $this->getContainer()->get('doctrine')->getManager();
 
             $output->writeln(
@@ -244,7 +244,7 @@ EOF
 
             $cdc_documents = $container->getParameter('cdcdocuments');
 
-            if ( $input->getOption('solr-only') ) {
+            if ($input->getOption('solr-only')) {
                 $steps = 2;
             } else {
                 $steps = count($files_to_publish[$type]);
@@ -261,7 +261,7 @@ EOF
                 $progress->start($output, $steps);
             }
 
-            if ( !$input->getOption('solr-only') ) {
+            if (!$input->getOption('solr-only')) {
                 $integrationService = $this->getContainer()
                     ->get('bach.indexation.process.arch_file_integration');
                 $no_check_changes = $input->getOption('no-change-check');
@@ -325,11 +325,11 @@ EOF
                         );
                     }
 
-                    if ( $type !== 'matricules' ) {
+                    if ($type !== 'matricules') {
                         if (!$flagAws) {
                             $progress->advance();
                         }
-                        if ( $dry === false ) {
+                        if ($dry === false) {
                             $zdb = $this->getContainer()->get('zend_db');
                             try {
                                 $zdb->connection->beginTransaction();
@@ -345,7 +345,7 @@ EOF
                             //create a new task
                             $task = new IntegrationTask($document);
 
-                            if ( $dry === false ) {
+                            if ($dry === false) {
                                 $integrationService->integrate(
                                     $task,
                                     $geonames,
@@ -361,7 +361,7 @@ EOF
                                 );
 
                             }
-                            if ( !empty($geonames) ) {
+                            if (!empty($geonames)) {
                                 $zdb = $this->getContainer()->get('zend_db');
 
                                 try {
@@ -386,7 +386,8 @@ EOF
                                 $resultsSelect = array();
                                 foreach ( $rows as $key => $row ) {
                                     $resultSelect                 = array();
-                                    $resultSelect['indexed_name'] = $row['indexed_name'];
+                                    $resultSelect['indexed_name']
+                                        = $row['indexed_name'];
                                     $resultSelect['lon']          = $row['lon'];
                                     $resultSelect['lat']          = $row['lat'];
                                     $resultSelect['id']           = $row['id'];
@@ -395,7 +396,7 @@ EOF
                                 }
                                 /***************************************************/
 
-                                if ( $dry === false ) {
+                                if ($dry === false) {
                                     try {
                                         $zdb->connection->beginTransaction();
                                         $this->_storeGeodata(
@@ -419,7 +420,7 @@ EOF
                 }
             }
 
-            if ( $type === 'matricules' && count($docs) > 0 ) {
+            if ($type === 'matricules' && count($docs) > 0) {
                 $tasks = array();
                 $count = 0;
 
@@ -493,7 +494,7 @@ EOF
 
         }
 
-        if ( $stats === true ) {
+        if ($stats === true) {
             $peak = $this->formatBytes(memory_get_peak_usage());
 
             $end_time = new \DateTime();
@@ -531,8 +532,9 @@ EOF
      *
      * @return void
      */
-    private function _storeGeodata(ZendDb $zdb, array $geonames, array $resultsSelect)
-    {
+    private function _storeGeodata(ZendDb $zdb, array $geonames,
+        array $resultsSelect
+    ) {
         $geonamesUpdate = array_intersect_key($resultsSelect, $geonames);
         $geonamesInsert = array_diff_key($geonames, $geonamesUpdate);
         $stmt = null;
@@ -543,7 +545,7 @@ EOF
             $insertObject['indexed_name'] = $geonames[$key]['value'];
             $insertObject['found']  = '1';
 
-            if ( $this->_insert_geo_stmt === null ) {
+            if ($this->_insert_geo_stmt === null) {
                 $insert = $zdb->insert('geoloc')
                     ->values($insertObject);
                 $stmt = $zdb->sql->prepareStatementForSqlObject($insert);
@@ -562,7 +564,7 @@ EOF
             $updateObject['id']     = $geonameUpdate['id'];
             $updateObject['found']  = '1';
 
-            if ( $this->_update_geo_stmt === null ) {
+            if ($this->_update_geo_stmt === null) {
                 $update = $zdb->update('geoloc')
                     ->set($updateObject)
                     ->where(
@@ -598,8 +600,8 @@ EOF
         }
 
         $stmt = null;
-        if ( $document->getId() === null ) {
-            if ( $this->_insert_doc_stmt === null ) {
+        if ($document->getId() === null) {
+            if ($this->_insert_doc_stmt === null) {
                 $insert = $zdb->insert('documents')
                     ->values($fields);
                 $stmt = $zdb->sql->prepareStatementForSqlObject(
@@ -610,7 +612,7 @@ EOF
                 $stmt = $this->_insert_doc_stmt;
             }
         } else {
-            if ( $this->_update_doc_stmt === null ) {
+            if ($this->_update_doc_stmt === null) {
                 $update = $zdb->update('documents')
                     ->set($fields)
                     ->where(
@@ -680,7 +682,9 @@ EOF
                 }
                 $logger->info('import solr status: '. $response->getImportStatus());
             } else {
-                $logger->error('import solr status error: '. $response->getImportStatus());
+                $logger->error(
+                    'import solr status error: '. $response->getImportStatus()
+                );
             }
         }
     }
@@ -695,7 +699,7 @@ EOF
     public function formatBytes($bytes)
     {
         $multiplicator = 1;
-        if ( $bytes < 0 ) {
+        if ($bytes < 0) {
             $multiplicator = -1;
             $bytes = $bytes * $multiplicator;
         }

@@ -1029,7 +1029,9 @@ class DefaultController extends SearchController
                 )
             );
         } else {
-            if (in_array($document->getDocId(), $cdcDocuments)) {
+            if (is_array($cdcDocuments)
+                && in_array($document->getDocId(), $cdcDocuments)
+            ) {
                 $flagCdcDocuments = true;
             }
 

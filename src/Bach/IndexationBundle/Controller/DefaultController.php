@@ -208,7 +208,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Displays indexation queue and form
+     * Display indexation queue and form
      * with publication new version (upload4anaphore)
      *
      * @return void
@@ -238,6 +238,9 @@ class DefaultController extends Controller
                 'action_type' => $entity->getActionType()
             );
         }
+        if (!isset($tokens)) {
+            $tokens = array();
+        }
         return $this->render(
             'BachIndexationBundle:Indexation:queue.html.twig',
             array(
@@ -245,6 +248,38 @@ class DefaultController extends Controller
             )
         );
     }
+
+    /**
+     * Delete current token in database
+     * can unblock token publication if problem
+     *
+     * @return void
+     */
+    public function unblockAction()
+    {
+        $logger = $this->get('logger');
+        try {
+            $em = $this->get('doctrine')->getManager();
+            $query = $em->createQuery(
+                'SELECT t FROM BachIndexationBundle:BachToken t
+                WHERE t.action = 1'
+            );
+
+            if (!empty($query->getResult())) {
+                $result = $query->getResult()[0];
+                $em->remove($result);
+                $em->flush();
+            }
+        } catch ( \Exception $e ) {
+            $logger->error('Exception : '.  $e->getMessage(). "\n");
+            throw $e;
+        }
+        return new RedirectResponse(
+            $this->get("router")->generate("bach_indexation_queue")
+        );
+    }
+
+
 
     /**
      * Purge controller

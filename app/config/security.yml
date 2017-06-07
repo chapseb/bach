@@ -271,5 +271,5 @@ security:
         # Secured part of the site
         - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_CONTENT_ADMIN] }
         - { path: ^/admin/sonata, roles: [ROLE_ADMIN, ROLE_SUPER_ADMIN] }
-        - { path : ^/indexation, roles: ROLE_ARCHIVIST }
+        - { path : ^/indexation, roles: ROLE_SUPER_ADMIN }
 

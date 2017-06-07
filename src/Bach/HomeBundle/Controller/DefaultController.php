@@ -989,6 +989,8 @@ class DefaultController extends SearchController
         $tpl_vars['docid'] = '';
         $tpl_vars['xml_file'] = $cdc_path;
         $tpl_vars['cdc'] = true;
+        $tpl_vars['unlistedfiles']
+            = $this->container->getParameter('cdcunlistedfiles');
 
         /* not display warning about cookies */
         if (isset($_COOKIE[$this->getCookieName()])) {

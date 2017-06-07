@@ -191,9 +191,9 @@ POSSIBILITY OF SUCH DAMAGE.
 {% block container %}
     {% if cdc is defined %}
         {% if cdcdocuments is defined %}
-            {{ displayCdc(docs, docid, cdcdocuments)|raw }}
+            {{ displayCdc(docs, docid, cdcdocuments, unlistedfiles)|raw }}
         {% else %}
-            {{ displayCdc(docs, docid)|raw }}
+            {{ displayCdc(docs, docid, false, unlistedfiles)|raw }}
         {% endif %}
     {% else %}
         {{ displayHtml(docid, xml_file, audience, daodetector)|raw }}
@@ -228,7 +228,7 @@ POSSIBILITY OF SUCH DAMAGE.
     <h2>{{ _('Inventory scheme') }}</h2>
     <div id="inventory_scheme">
     {% if cdc is defined and cdcdocuments is not defined %}
-        {{ displayCdcScheme(docid, xml_file, docs)|raw }}
+        {{ displayCdcScheme(docid, xml_file, docs, unlistedfiles)|raw }}
     {% else %}
         {{ displayHtmlScheme(docid, xml_file, audience)|raw }}
     {% endif %}

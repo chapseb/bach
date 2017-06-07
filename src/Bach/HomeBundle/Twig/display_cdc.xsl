@@ -46,6 +46,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
     <xsl:output method="html" omit-xml-declaration="yes"/>
     <xsl:param name="cdcdocuments" select="''"/>
+    <xsl:param name="unlistedfiles" select="''"/>
     <xsl:template match="ead">
         <xsl:apply-templates/>
     </xsl:template>
@@ -57,7 +58,7 @@ POSSIBILITY OF SUCH DAMAGE.
     <xsl:template match="dsc">
         <ul>
             <xsl:apply-templates select="./c|./c01|./c02|./c03|./c04|./c05|./c06|./c07|./c08|./c09|./c10|./c11|./c12" mode="lvl"/>
-            <xsl:if test="count(//not_matched/*) &gt; 0 and $cdcdocuments = 'false'">
+            <xsl:if test="count(//not_matched/*) &gt; 0 and $cdcdocuments = 'false' and $unlistedfiles = 'true'">
                 <li id="not-classified">
                     <input type="checkbox" id="item-nc" checked="checked"/>
                     <label for="item-nc">

@@ -63,6 +63,7 @@ class DisplayCdc extends DisplayHtml
     private $_cdc_uri;
     private $_docs;
     private $_cdcDocuments;
+    private $_unlistedFiles;
     protected $cache_key_prefix = 'cdc';
 
     /**
@@ -102,9 +103,11 @@ class DisplayCdc extends DisplayHtml
      *
      * @return string
      */
-    public function displayCdc(\SimpleXMLElement $docs, $otherXml = null, $cdcDocuments = false)
-    {
-        $this->_cdcDocuments = $cdcDocuments;
+    public function displayCdc(\SimpleXMLElement $docs, $otherXml = null,
+        $cdcDocuments = false, $unlistedFiles = true
+    ) {
+        $this->_cdcDocuments  = $cdcDocuments;
+        $this->_unlistedFiles = $unlistedFiles;
         if ( $otherXml != null ) {
             $this->_cdc_uri = $otherXml;
         }
@@ -130,8 +133,10 @@ class DisplayCdc extends DisplayHtml
         );
 
         $proc->setParameter('', 'docid', $docid);
-        $cdcDocuments = ($this->_cdcDocuments) ? 'true' : 'false';
+        $cdcDocuments  = ($this->_cdcDocuments) ? 'true' : 'false';
+        $unlistedFiles = ($this->_unlistedFiles) ? 'true' : 'false';
         $proc->setParameter('', 'cdcdocuments', $cdcDocuments);
+        $proc->setParameter('', 'unlistedfiles', $unlistedFiles);
         $proc->registerPHPFunctions();
 
         $dadocs = $xml_doc->addChild('dadocs');
@@ -193,12 +198,14 @@ class DisplayCdc extends DisplayHtml
      *
      * @return string
      */
-    public function cdcScheme($docid, $xml_file, $docs)
+    public function cdcScheme($docid, $xml_file, $docs, $unlistedFiles)
     {
         $contents = parent::scheme($docid, $xml_file, false);
 
         $this->_docs = $docs;
-        if (count($this->_getNotMatched(simplexml_load_file($xml_file))) > 0 ) {
+        if ($unlistedFiles
+            && count($this->_getNotMatched(simplexml_load_file($xml_file))) > 0
+        ) {
             $contents .= '<h3 class="no-accordion"><a href="#not-classified">' .
                 _('Not classified') . '</a></h3>';
         }

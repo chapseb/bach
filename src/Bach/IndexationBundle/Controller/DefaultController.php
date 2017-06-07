@@ -209,54 +209,39 @@ class DefaultController extends Controller
 
     /**
      * Displays indexation queue and form
+     * with publication new version (upload4anaphore)
      *
      * @return void
      */
     public function queueAction()
     {
-        $em2 = $this->getDoctrine()->getManager();
-
-        $repository = $em2
-            ->getRepository('BachIndexationBundle:IntegrationTask');
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em
+            ->getRepository('BachIndexationBundle:BachToken');
 
         $entities = $repository
             ->createQueryBuilder('t')
-            ->orderBy('t.taskId', 'DESC')
+            ->orderBy('t.id', 'ASC')
             ->getQuery()
             ->getResult();
-        $tasks = array();
 
         foreach ($entities as $entity) {
-            $entity->getDocument()->setUploadDir(
-                $this->container->getParameter('upload_dir')
-            );
-            $spl = new \SplFileInfo($entity->getPath());
-            $tasks[] = array(
-                'filename'  => $entity->getFilename(),
-                'format'    => $entity->getFormat(),
-                'size'      => $spl->getSize()
-            );
-
-            switch ( (int)$entity->getStatus() ) {
-            default:
-            case IntegrationTask::STATUS_NONE:
-                $status = "";
-                break;
-            case IntegrationTask::STATUS_OK:
-                $status = "success";
-                break;
-            case IntegrationTask::STATUS_KO:
-            default:
-                $status = "error";
-                break;
+            $action = 1;
+            if ($entity->getAction() == 0) {
+                $action = 0;
             }
-            $tasks[count($tasks)-1]['status'] = $status;
+            $tokens[] = array(
+                'id'          => $entity->getId(),
+                'filename'    => $entity->getFilename(),
+                'bach_token'  => $entity->getBachToken(),
+                'action'      => $action,
+                'action_type' => $entity->getActionType()
+            );
         }
-
         return $this->render(
             'BachIndexationBundle:Indexation:queue.html.twig',
             array(
-                'tasks'         => $tasks
+                'tokens'         => $tokens
             )
         );
     }

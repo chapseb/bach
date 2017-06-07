@@ -46,18 +46,22 @@ POSSIBILITY OF SUCH DAMAGE.
         <table>
             <thead>
                 <tr>
+                    <th>{{ _('Id') }}</th>
                     <th>{{ _('File name') }}</th>
-                    <th>{{ _('Format') }}</th>
-                    <th>{{ _('Size') }}</th>
+                    <th>{{ _('Token') }}</th>
+                    <th>{{ _('Action') }}</th>
+                    <th>{{ _('Type') }}</th>
                 </tr>
             </thead>
             <tbody>
-                {% if tasks|length > 0 %}
-                {% for task in tasks %}
-                <tr class="task_{{ task.status }}">
-                    <td>{{ task.filename }}</td>
-                    <td>{{ task.format }}</td>
-                    <td>{{ task.size }}</td>
+                {% if tokens|length > 0 %}
+                {% for token in tokens %}
+                <tr>
+                    <td>{{ token.id }}</td>
+                    <td>{{ token.filename }}</td>
+                    <td>{{ token.bach_token }}</td>
+                    <td>{{ token.action }}</td>
+                    <td>{{ token.action_type }}</td>
                 </tr>
                 {% endfor %}
                 {% else %}

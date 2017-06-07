@@ -142,4 +142,15 @@ class BachToken
     {
         return $this->action;
     }
+
+    /**
+     * Get action type
+     *
+     * @return string
+     */
+    public function getActionType()
+    {
+        return $this->action_type;
+    }
+
 }

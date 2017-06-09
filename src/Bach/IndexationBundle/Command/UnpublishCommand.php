@@ -305,7 +305,6 @@ EOF
             //remove solr indexed documents per core
             $updates = array();
             $clients = array();
-            $clients = array();
 
             $cpt=0;
             $steps += count($docs);
@@ -434,7 +433,6 @@ EOF
                 $client = $clients[$key];
                 $update->addCommit(null, null, true);
                 $result = $client->update($update);
-                sleep(8);
                 if ($result->getStatus() === 0) {
                     $logger->info(
                         str_replace(

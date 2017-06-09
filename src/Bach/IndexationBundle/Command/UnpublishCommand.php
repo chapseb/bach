@@ -402,31 +402,9 @@ EOF
                 $progress->advance();
             }
 
-            foreach ($updates as $key=>$update) {
-                $client = $clients[$key];
-                $update->addCommit(null, null, true);
-                $result = $client->update($update);
-                sleep(8);
-                if ($result->getStatus() === 0) {
-                    $logger->info(
-                        str_replace(
-                            array('%doc', '%time'),
-                            array($doc['docid'], $result->getQueryTime()),
-                            _('Document %doc successfully deleted from Solr in %time')
-                        )
-                    );
-                } else {
-                    $logger->info(
-                        str_replace(
-                            '%doc',
-                            $doc['docid'],
-                            _('Solr failed to remove document %doc!')
-                        )
-                    );
-                }
-            }
             if ($input->getOption('token') != '-1') {
                 try {
+                    $logger->info("Destroy token for ".$doc['docid']);
                     $em = $this->getContainer()->get('doctrine')->getManager();
                     $query = $em->createQuery(
                         'SELECT t FROM BachIndexationBundle:BachToken t
@@ -451,6 +429,31 @@ EOF
             } else {
                 $logger->error('Not token ' . $input->getOption('token'));
             }
+
+            foreach ($updates as $key=>$update) {
+                $client = $clients[$key];
+                $update->addCommit(null, null, true);
+                $result = $client->update($update);
+                sleep(8);
+                if ($result->getStatus() === 0) {
+                    $logger->info(
+                        str_replace(
+                            array('%doc', '%time'),
+                            array($doc['docid'], $result->getQueryTime()),
+                            _('Document %doc successfully deleted from Solr in %time')
+                        )
+                    );
+                } else {
+                    $logger->info(
+                        str_replace(
+                            '%doc',
+                            $doc['docid'],
+                            _('Solr failed to remove document %doc!')
+                        )
+                    );
+                }
+            }
+
             if (!$flagAws) {
                 $progress->finish();
             }

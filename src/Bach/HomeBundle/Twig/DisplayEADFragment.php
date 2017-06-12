@@ -298,6 +298,7 @@ class DisplayEADFragment extends \Twig_Extension
                     if (preg_match("/\b".$wordHigh."\b/i", $matches[2][$key])
                         && strpos($link, $wordHigh) != false
                         && !strpos('<em class="hl">', $wordHigh)
+                        && !strpos($link, '.pdf')
                     ) {
                         $result = str_replace(
                             $wordHigh,

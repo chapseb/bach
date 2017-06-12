@@ -596,6 +596,7 @@ class DisplayDao extends \Twig_Extension
     ) {
         $ret = null;
 
+        $daotitle = str_replace('"', '&quot;', $daotitle);
         if ($linkDesc == true) {
             $ret = '<span/>';
             switch ( self::_getType($dao) ) {

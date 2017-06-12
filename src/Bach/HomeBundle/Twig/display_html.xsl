@@ -335,7 +335,7 @@ POSSIBILITY OF SUCH DAMAGE.
         <xsl:choose>
             <xsl:when test="@href">
                 <xsl:choose>
-                    <xsl:when test="substring(@href, 1, 7) = 'http://'">
+                    <xsl:when test="substring(@href, 1, 7) = 'http://' or substring(@href, 1, 8) = 'https://' ">
                         <a href="{@href}">
                             <xsl:if test="@title and . != ''">
                                 <xsl:attribute name="title">
@@ -389,7 +389,7 @@ POSSIBILITY OF SUCH DAMAGE.
         <xsl:choose>
             <xsl:when test="@href">
                 <xsl:choose>
-                    <xsl:when test="substring(@href, 1, 7) = 'http://'">
+                    <xsl:when test="substring(@href, 1, 7) = 'http://' or substring(@href, 1, 8) = 'https://'">
                         <a href="{@href}">
                             <xsl:if test="@title and . != ''">
                                 <xsl:attribute name="title">
@@ -420,7 +420,7 @@ POSSIBILITY OF SUCH DAMAGE.
                             </xsl:if>
                             <xsl:choose>
                                 <xsl:when test="@title and not(. = '')">
-                                    <xsl:value-of select="@title"/>
+                                    <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayDao::getDao', string(@href), string(@title), '')"/>
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:variable name="varhref" select="@href"/>
@@ -440,6 +440,27 @@ POSSIBILITY OF SUCH DAMAGE.
         </xsl:choose>
     </xsl:template>
 
+    <xsl:template match="relatedmaterial/ref|ref" mode="contents">
+        <xsl:choose>
+            <xsl:when test="@target != ''">
+                <a>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="concat('/archives/show/',$docid,'_',@target)" />
+                    </xsl:attribute>
+                    <xsl:if test="@title and . != ''">
+                        <xsl:attribute name="title">
+                            <xsl:value-of select="@title"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:if test="@title and . = ''">
+                        <xsl:value-of select="@title"/>
+                    </xsl:if>
+                    <xsl:attribute name="target">_blank</xsl:attribute>
+                    <xsl:value-of select="text()"/>
+                </a>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
 
 <xsl:template name="replace-string">
     <xsl:param name="text"/>

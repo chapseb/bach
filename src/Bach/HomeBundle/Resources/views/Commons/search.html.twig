@@ -227,7 +227,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                                     alert('{{ _('End date must be earlier than %date')|escape('js') }}'.replace('%date', _{{ facet_field }}_valid_max));
                                     _valid = false;
                                 }*/
-                                if (_valid == true && _max < _min) {
+                                if (_valid == true && parseInt(_max) < parseInt(_min)) {
                                      alert('{{ _('Begin date must be ealier or equal than end date!')|escape('js') }}');
                                     _valid = false;
                                 }

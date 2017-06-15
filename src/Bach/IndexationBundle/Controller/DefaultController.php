@@ -837,15 +837,15 @@ class DefaultController extends Controller
         $date->sub(new \DateInterval('P1D'));
         $dateSql = $date->format('Y-m-d');
         $query = $em->createQuery(
-            'SELECT c FROM BachHomeBundle:Comment c WHERE c.creation_date = :yesterday'
+            'SELECT c FROM BachHomeBundle:Comment c WHERE c.creation_date = :yesterday AND c.state = 0'
         )->setParameter('yesterday', $dateSql);
         $commentResults = $query->getResult();
 
         $dateShow = $date->format('d/m/Y');
         if (!empty($commentResults)
-	    && $mailReport != null
+            && $mailReport != null
             && filter_var($mailReport, FILTER_VALIDATE_EMAIL)
-	) {
+        ) {
             $container  = $this->container;
             $user       = $container->getParameter('mailer_user');
             $password   = $container->getParameter('mailer_password');

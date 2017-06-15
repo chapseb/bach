@@ -59,6 +59,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Bach\IndexationBundle\Command\PublishCommand;
 use Bach\IndexationBundle\Command\UnpublishCommand;
 use Bach\IndexationBundle\Entity\BachToken;
+use Bach\HomeBundle\Entity\Comment;
 
 /**
  * Default indexation controller
@@ -815,5 +816,76 @@ class DefaultController extends Controller
             $em->flush();
         }
         return new Response("Images prepared deleted from database.");
+    }
+
+    /**
+     * Daily comments report
+     *
+     * @return Response
+     */
+    public function sendReportCommentAction()
+    {
+        $mailReport  = $this->container->getParameter('report_mail');
+        $getDailyComment = $this->getDoctrine()->getManager()
+            ->createQuery(
+                'SELECT t FROM BachHomeBundle:Comment t
+                WHERE t.state = 0'
+            );
+
+        $em = $this->getDoctrine()->getManager();
+        $date = new \DateTime();
+        $date->sub(new \DateInterval('P1D'));
+        $dateSql = $date->format('Y-m-d');
+        $query = $em->createQuery(
+            'SELECT c FROM BachHomeBundle:Comment c WHERE c.creation_date = :yesterday'
+        )->setParameter('yesterday', $dateSql);
+        $commentResults = $query->getResult();
+
+        $dateShow = $date->format('d/m/Y');
+        if (!empty($commentResults)
+	    && $mailReport != null
+            && filter_var($mailReport, FILTER_VALIDATE_EMAIL)
+	) {
+            $container  = $this->container;
+            $user       = $container->getParameter('mailer_user');
+            $password   = $container->getParameter('mailer_password');
+            $port       = $container->getParameter('mailer_port');
+            $host       = $container->getParameter('mailer_host');
+            $encryption = $container->getParameter('mailer_encryption');
+
+            $transport  = \Swift_SmtpTransport::newInstance(
+                $host,
+                $port,
+                $encryption
+            );
+            $transport->setUserName($user);
+            $transport->setPassword($password);
+            $mailer  = \Swift_Mailer::newInstance($transport);
+            $message = \Swift_Message::newInstance();
+            //FIXME Manage english and translation
+            $message->setSubject('Bach - CR commentaires du ' . $dateShow);
+            if ($container->getParameter('aws.sender') != null ) {
+                $message->setFrom($container->getParameter('aws.sender'));
+            } else {
+                $message->setFrom($user);
+            }
+            $message->setTo($mailReport);
+            //FIXME Add a way to call here a template with the content
+            $headerMessage = 'Bonjour,<br><br>Compte rendu des commentaires du ' . $dateShow;
+            $thead = "<table border='1'><thead><tr><th>Sujet</th><th>Message</th><th>Type</th></tr></thead>";
+            $tbody = '<tbody>';
+            foreach ($commentResults as $comment) {
+                $tbody .= '<tr><td>'.$comment->getSubject().'</td><td>'.$comment->getMessage().'</td><td>'.Comment::getKnownPriorities()[$comment->getPriority()].'</td></tr>';
+            }
+
+            $tbody .= "</tbody></table>";
+            $message->setBody(
+                $headerMessage.$thead.$tbody,
+                'text/html'
+            );
+            $mailer->send($message);
+        }
+
+        return new Response();
     }
 }

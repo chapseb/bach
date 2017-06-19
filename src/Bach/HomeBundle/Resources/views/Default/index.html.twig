@@ -80,7 +80,7 @@ POSSIBILITY OF SUCH DAMAGE.
                           {% if document.dao is defined and flagCommunicability == true and flagAudience != true%}
                             {{ displayDao(document.dao, false, 'thumb', flagCommunicability, null, aws, cloudfront, documentTitle)|raw }}
                           {% elseif flagCommunicability is defined and flagCommunicability == false and flagAudience != true%}
-                            <img src="/img/thumb_comm.png" title="{{ _('This picture is not communicable') }}"/>
+                            <img src="/img/thumb_comm.png" class="nonCommPic" title="{{ _('This picture is not communicable') }}"/>
                           {% else %}
                             <img src="{% include '::images/noimage.html.twig' %}" alt=""/>
                           {% endif %}

@@ -658,6 +658,11 @@ input[type=number] {
     margin-top: 0;
 }
 
+.nonCommPic {
+    left: -45px;
+    position: relative;
+}
+
 [id=search_results] a.flashmusicplayer h2 {
     display: block;
 }

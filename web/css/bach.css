@@ -1395,6 +1395,11 @@ form > footer {
     margin-left: 1em;
 }
 
+[id=browse_tabs] section .listNav {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
 /**
  * ===== Buttons =====
  */

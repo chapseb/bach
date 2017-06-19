@@ -36,7 +36,7 @@ POSSIBILITY OF SUCH DAMAGE.
         <h4>{{ current_field.getLabel(lang) }}{% if lists[field_name] is defined %} ({{ lists[field_name] | length }}){% endif %}</h4>
         <section id="list_{{ field_name }}">
         {% if lists[field_name] is defined %}
-            <ul>
+            <ul id="ul_{{ field_name }}">
             {% for field in lists[field_name] %}
                 <li>
                 {% if field_name == 'headerId' %}
@@ -47,6 +47,17 @@ POSSIBILITY OF SUCH DAMAGE.
                 </li>
             {% endfor %}
             </ul>
+{% block javascripts %}
+    <script type="text/javascript">
+        $(function() {
+            $('#ul_{{field_name}}').listnav({
+                noMatchText: "il n'y a pas d'entrées pour cette lettre.",
+                includeAll: false,
+                removeDisabled: true
+            });
+        });
+    </script>
+{% endblock %}
         {% endif %}
         </section>
     </div>

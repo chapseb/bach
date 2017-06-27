@@ -452,7 +452,6 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
         'js/jquery-ui/jquery.ui.autocomplete.min.js'
         'js/jquery-ui/jquery.ui.spinner.min.js'
         'js/jquery-ui/jquery.ui.tabs.min.js'
-        'js/jquery-ui/jquery.ui.slider.min.js'
         output='assetic/js/compiled/search_jquery-ui.js'
     %}
         <script src="{{ asset_url }}" type="text/javascript"></script>
@@ -468,6 +467,7 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
     {% endjavascripts %}
     {% endif %}
     <script src="{{ asset('js/jquery.cookie.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/jquery-ui/jquery.ui.slider.min.js') }}" type="text/javascript"></script>
     {% if show_maps %}
     <script src="{{ asset('js/leaflet/leaflet.js') }}" type="text/javascript"></script>
     {% javascripts

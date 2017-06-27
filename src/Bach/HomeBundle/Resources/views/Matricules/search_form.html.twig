@@ -304,17 +304,35 @@ POSSIBILITY OF SUCH DAMAGE.
 {% endblock %}
 
 {% block autocomplete %}
+    function split(val) {
+        return val.split(/ +/);
+    }
+    function extractLast(term) {
+        return split(term).pop();
+    }
+
     $('#searchQuery_query').autocomplete({
         source: function(request, response) {
             $.getJSON(
                 '{{ path('bach_matricules_suggest') }}', {
-                    q: request.term
+                    q: extractLast(request.term)
                 }, response
             );
+        },
+        focus: function() {
+            return false
+        },
+        select: function(event, ui) {
+            var terms = split(this.value);
+            terms.pop();
+            terms.push(ui.item.value);
+            terms.push('');
+            this.value = terms.join(' ');
+            return false;
         }
     }).data('uiAutocomplete')._renderItem = function( ul, item ) {
         var newText = String(item.value).replace(
-            new RegExp(preg_quote(this.term), "gi"),
+            new RegExp(preg_quote(extractLast(this.term)), "gi"),
             "<span class='ui-state-highlight'>$&</span>"
         );
 

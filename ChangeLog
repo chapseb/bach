@@ -1,3 +1,78 @@
+1.4 (2017-06-28)
+- Fix autocomplete
+- Fix display non communicability image in result search
+- List index with alphabet
+- Change "non communicable" image
+- Can send report comments mail every day
+- Fix js test in facet date
+- Disable highlight in pdf link
+- Fix fragment display issue when title in image has quote
+- Add "delete place in geoloc" with admin level rights in admin
+- Add parameter to hide unlinkeddoc in cdc
+- Display bach_token content in indexation route and unlock publication queue for emergency
+- Limit indexation route to super admin
+- Fix unpublished command when xml is not well-formed
+- Fix some display issues
+- Differenciate audience for c element and for dao element
+- Add cAudience in ead image infos for viewer
+- Cookie reader and archvist for domain and not subdomain
+- Add cUnitId in search ead
+- Display representative thumb in serie 
+- Fix aws test file for pdfs
+- Add target blank for logo click when outside url
+- Add different breadcrumb display in ead search result
+- Fix http test for link (external or internal) in xsl and add https test
+- Add ref tag treatment in all file and fix text for archref/extref
+- Fix route for admin 'cause reverse proxy
+- Add link to viewer in document view
+- Don't display archdesc title when equals to cUnititle
+- Not display date in thumb search view
+- Change color for 'show more' link in display facets
+- Add param order for matricule results
+- Fix ip http forwarded
+- Update translations
+- Add tiff extension to authorized image extensions
+- Separation of ip and account for communicability
+- Add ip plage for communicability
+- Fix typos
+- Add date in subunits
+- Add memory_limit in publication command in http call
+- Fix mail send for comments
+- Fix dates_plot for ead dates
+- Fix search query in interval dates 
+- Fix test for generate-image and pdf-indexation request
+- Add reader right to archivist and admin
+- Delete cookie reader when log out
+- Add a cookie for reader account log in
+- Add link in document view for a fragment with only link
+- Fix pdf search with return cMediaContent
+- Fix highlight in images link and title
+- Fix display encodage link issue
+- Add title in search view and document view for images and series
+- Make some documents unpublishable and display like cdc
+- Take care of ref tag and target attribute in display fragment 
+- Make special results color for some ead files
+- Add parameter to detect image not displaying in document view
+- Add role reader in search results and display docs
+- Take care of display for start and end series images with prepared images
+- Fix "Cote 1" display in cdc presentation and document view
+- Update translations
+- Fix pdf call in search ead results
+- Fix aws thumbnails image in document view and search view (matricules & ead)
+- Fix s3 missing in kernel
+- Move prepared image launch from publish command to http call
+- Asynchronious call for publication feature
+- Add prepared images treatment
+- Add solr file core.properties in core
+- Show cloufront url for images
+- Make publication/depublication callable by http
+- Add mailer in aws
+- Add aws sdk and first test publication
+- Fix publish matricules from elt_order side effect
+- Fix elt_order 1 and display it in logical_order result
+- Add clipboard function in historic matricules
+- Add missing english stopwords in solr 6 core generation
+
 1.3.4.3 (2016-11-23)
 
 - Add test *:* works

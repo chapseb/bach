@@ -71,6 +71,9 @@ msgstr "Administrateur"
 msgid "Archivist"
 msgstr "Archiviste"
 
+msgid "Reader"
+msgstr "Lecteur"
+
 msgid "User"
 msgstr "Utilisateur"
 

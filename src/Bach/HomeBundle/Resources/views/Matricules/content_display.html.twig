@@ -90,9 +90,17 @@ POSSIBILITY OF SUCH DAMAGE.
                         {%- endif -%}
                     {% endset %}
                     {% if print is not defined or print != true %}
-                    <a href="{{ viewer_uri ~ images_link }}" target="_blank" property="image">
-                        <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/medium' }}" alt="{{ nomMatricule ~ ' ' ~ prenomsMatricules|join(' ') }}"/>
-                    </a>
+                        {% if communicability is defined and communicability == false %}
+                        <img src="{{ asset('img/thumb_comm.png')}}" alt="{{ nomMatricule ~ ' ' ~ prenomsMatricules|join(' ') }}" title="{{ _('This picture is not communicable') }}" />
+                        {% else %}
+                        <a href="{{ viewer_uri ~ images_link }}" target="_blank" property="image">
+                            {% if awsSourceImage is defined %}
+                            <img src="{{ awsSourceImage }}" alt="{{ nomMatricule ~ ' ' ~ prenomsMatricules|join(' ') }}"/>
+                            {% else %}
+                            <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/medium' }}" alt="{{ nomMatricule ~ ' ' ~ prenomsMatricules|join(' ') }}"/>
+                            {%endif%}
+                        </a>
+                        {% endif %}
                     {% endif %}
                 </figure>
             {% endif %}

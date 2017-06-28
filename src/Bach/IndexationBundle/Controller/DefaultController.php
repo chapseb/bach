@@ -38,6 +38,7 @@
  * @category Indexation
  * @package  Bach
  * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
@@ -51,6 +52,14 @@ use Symfony\Component\Finder\SplFileInfo;
 use Bach\IndexationBundle\Entity\IntegrationTask;
 use Bach\AdministrationBundle\Entity\SolrCore\SolrCoreAdmin;
 use Solarium\Exception\HttpException;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\HttpFoundation\Response;
+use Bach\IndexationBundle\Command\PublishCommand;
+use Bach\IndexationBundle\Command\UnpublishCommand;
+use Bach\IndexationBundle\Entity\BachToken;
+use Bach\HomeBundle\Entity\Comment;
 
 /**
  * Default indexation controller
@@ -60,6 +69,7 @@ use Solarium\Exception\HttpException;
  * @category Indexation
  * @package  Bach
  * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
@@ -199,58 +209,78 @@ class DefaultController extends Controller
     }
 
     /**
-     * Displays indexation queue and form
+     * Display indexation queue and form
+     * with publication new version (upload4anaphore)
      *
      * @return void
      */
     public function queueAction()
     {
-        $em2 = $this->getDoctrine()->getManager();
-
-        $repository = $em2
-            ->getRepository('BachIndexationBundle:IntegrationTask');
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em
+            ->getRepository('BachIndexationBundle:BachToken');
 
         $entities = $repository
             ->createQueryBuilder('t')
-            ->orderBy('t.taskId', 'DESC')
+            ->orderBy('t.id', 'ASC')
             ->getQuery()
             ->getResult();
-        $tasks = array();
 
         foreach ($entities as $entity) {
-            $entity->getDocument()->setUploadDir(
-                $this->container->getParameter('upload_dir')
-            );
-            $spl = new \SplFileInfo($entity->getPath());
-            $tasks[] = array(
-                'filename'  => $entity->getFilename(),
-                'format'    => $entity->getFormat(),
-                'size'      => $spl->getSize()
-            );
-
-            switch ( (int)$entity->getStatus() ) {
-            default:
-            case IntegrationTask::STATUS_NONE:
-                $status = "";
-                break;
-            case IntegrationTask::STATUS_OK:
-                $status = "success";
-                break;
-            case IntegrationTask::STATUS_KO:
-            default:
-                $status = "error";
-                break;
+            $action = 1;
+            if ($entity->getAction() == 0) {
+                $action = 0;
             }
-            $tasks[count($tasks)-1]['status'] = $status;
+            $tokens[] = array(
+                'id'          => $entity->getId(),
+                'filename'    => $entity->getFilename(),
+                'bach_token'  => $entity->getBachToken(),
+                'action'      => $action,
+                'action_type' => $entity->getActionType()
+            );
         }
-
+        if (!isset($tokens)) {
+            $tokens = array();
+        }
         return $this->render(
             'BachIndexationBundle:Indexation:queue.html.twig',
             array(
-                'tasks'         => $tasks
+                'tokens'         => $tokens
             )
         );
     }
+
+    /**
+     * Delete current token in database
+     * can unblock token publication if problem
+     *
+     * @return void
+     */
+    public function unblockAction()
+    {
+        $logger = $this->get('logger');
+        try {
+            $em = $this->get('doctrine')->getManager();
+            $query = $em->createQuery(
+                'SELECT t FROM BachIndexationBundle:BachToken t
+                WHERE t.action = 1'
+            );
+
+            if (!empty($query->getResult())) {
+                $result = $query->getResult()[0];
+                $em->remove($result);
+                $em->flush();
+            }
+        } catch ( \Exception $e ) {
+            $logger->error('Exception : '.  $e->getMessage(). "\n");
+            throw $e;
+        }
+        return new RedirectResponse(
+            $this->get("router")->generate("bach_indexation_queue")
+        );
+    }
+
+
 
     /**
      * Purge controller
@@ -590,5 +620,272 @@ class DefaultController extends Controller
                 'BachIndexationBundle:Indexation:validation.html.twig'
             );
         }
+    }
+
+    /**
+     * Publish document command
+     *
+     * @return Response
+     */
+    public function publishCommandAction()
+    {
+        $request = $this->getRequest();
+
+        $queryTest = $this->getDoctrine()->getManager()
+            ->createQuery(
+                'SELECT t FROM BachIndexationBundle:BachToken t
+                WHERE t.action = 1'
+            );
+
+        if (!empty($queryTest->getResult())) {
+            $response = new Response("alreadyBusy");
+            $response->setStatusCode(500);
+            return $response;
+        }
+
+        $query = $this->getDoctrine()->getManager()
+            ->createQuery(
+                'SELECT t FROM BachIndexationBundle:BachToken t
+                    WHERE t.bach_token = :token
+                    AND t.filename = :filename'
+            )->setParameters(
+                array(
+                    'token' => $request->get('bach_token'),
+                    'filename'   => $request->get('document')
+                )
+            );
+        if (!empty($query->getResult())) {
+            $result = $query->getResult()[0];
+            $result->setAction(1);
+            $this->getDoctrine()->getManager()->flush();
+            if ($result->getBachToken() == $request->get('bach_token')
+                && $result->getFilename() == $request->get('document')
+            ) {
+                $cmd = "php -d date.timezone=UTC -d memory_limit=3G ../app/console bach:publish " .
+                    $request->get('type') . " " . $request->get('document') .
+                    " --assume-yes --token=".$request->get('bach_token')." ";
+
+                if (strcmp($request->get('pdf-indexation'), 'true') == 0) {
+                    $cmd .= " --pdf-indexation";
+                }
+
+                if (strcmp($request->get('generate-image'), 'true') == 0) {
+                    $cmd .= " --generate-image";
+                }
+
+                $cmd .= " > /dev/null 2>/dev/null &";
+                exec($cmd);
+                return new Response(
+                    "Publish launch for " . $request->get('document') . ' :::::: '. $cmd
+                );
+            }
+        }
+        $response = new Response("mismatchTokenFile");
+        $response->setStatusCode(500);
+        return $response;
+    }
+
+    /**
+     * Unpublish document command
+     *
+     * @return Response
+     */
+    public function unpublishCommandAction()
+    {
+        $request = $this->getRequest();
+
+        $queryTest = $this->getDoctrine()->getManager()
+            ->createQuery(
+                'SELECT t FROM BachIndexationBundle:BachToken t
+                WHERE t.action = 1'
+            );
+
+        if (!empty($queryTest->getResult())) {
+            $response = new Response("alreadyBusy");
+            $response->setStatusCode(500);
+            return $response;
+        }
+
+        $query = $this->getDoctrine()->getManager()
+            ->createQuery(
+                'SELECT t FROM BachIndexationBundle:BachToken t
+                    WHERE t.bach_token = :token
+                    AND t.filename = :filename'
+            )->setParameters(
+                array(
+                    'token' => $request->get('bach_token'),
+                    'filename'   => $request->get('document')
+                )
+            );
+        if (!empty($query->getResult())) {
+            $result = $query->getResult()[0];
+            if ($result->getBachToken() == $request->get('bach_token')
+                && $result->getFilename() == $request->get('document')
+            ) {
+                $kernel = $this->get('kernel');
+                $result->setAction(1);
+                $this->getDoctrine()->getManager()->flush();
+
+                $cmd = "php -d date.timezone=UTC ../app/console bach:unpublish " .
+                    $request->get('type') . " " . $request->get('document') .
+                    " --assume-yes --token=".$request->get('bach_token')." ";
+                if ($request->get('not-delete-file') == true) {
+                    $cmd .= " --not-delete-file";
+                }
+
+                $cmd .= " > /dev/null 2>/dev/null &";
+
+                exec($cmd);
+                return new Response(
+                    "Unpublish launch for " . $request->get('document')
+                );
+            }
+        }
+        $response = new Response("mismatchTokenFile");
+        $response->setStatusCode(500);
+        return $response;
+    }
+
+    /**
+     * Launch generate image
+     *
+     * @return Response
+     */
+    public function generateImageAction()
+    {
+        $testTreatment = $this->getDoctrine()->getManager()
+            ->createQuery(
+                'SELECT t FROM BachIndexationBundle:DaosPrepared t
+                WHERE t.action = 1'
+            );
+        if ($testTreatment->getResult() == null) {
+            $nbRowToTreat = $this->container->getParameter('nbrowgenerateimage');
+            $query = $this->getDoctrine()->getManager()
+                ->createQuery(
+                    'SELECT t FROM BachIndexationBundle:DaosPrepared t'
+                )->setMaxResults($nbRowToTreat);
+            if (!empty($query->getResult())) {
+                $results = $query->getResult();
+                $params = array();
+                foreach ($results as $result) {
+                    $result->setAction(1);
+                    array_push($params, $result->toArray());
+                }
+                $this->getDoctrine()->getManager()->flush();
+                $urlViewer = $this->container->getParameter('viewer_uri');
+
+                $url = $urlViewer . 'ajax/generateimages';
+                // add its url 'cause viewer can send response to this bach instance
+                $params['urlSender'] = $_SERVER['SERVER_NAME'];
+                $jsonData = json_encode($params);
+                $cmd = "curl -X POST -H 'Content-Type: application/json'";
+                $cmd.= " -d '" . $jsonData . "' " . "'" . $url . "'";
+                $cmd .= " > /dev/null 2>/dev/null &";
+                exec($cmd, $output);
+            }
+            return new Response("Image generation launch");
+        }
+        return new Response("Already a treatment");
+    }
+
+    /**
+     * Delete image in database
+     *
+     * @return Response
+     */
+    public function deleteImageAction()
+    {
+        $json = $this->getRequest()->getContent();
+        $data = json_decode($json, true);
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository('BachIndexationBundle:DaosPrepared');
+        foreach ($data as $row) {
+            $dao = $repository->findOneBy(
+                array(
+                    'id'=>$row['id']
+                )
+            );
+            if (!empty(stripslashes($row['lastfile']))) {
+                $dao->setAction(0);
+                $dao->setLastFile(stripslashes($row['lastfile']));
+            } else if ($row['action'] == '1') {
+                $dao->setAction(0);
+            } else {
+                $em->remove($dao);
+            }
+            $em->flush();
+        }
+        return new Response("Images prepared deleted from database.");
+    }
+
+    /**
+     * Daily comments report
+     *
+     * @return Response
+     */
+    public function sendReportCommentAction()
+    {
+        $mailReport  = $this->container->getParameter('report_mail');
+        $getDailyComment = $this->getDoctrine()->getManager()
+            ->createQuery(
+                'SELECT t FROM BachHomeBundle:Comment t
+                WHERE t.state = 0'
+            );
+
+        $em = $this->getDoctrine()->getManager();
+        $date = new \DateTime();
+        $date->sub(new \DateInterval('P1D'));
+        $dateSql = $date->format('Y-m-d');
+        $query = $em->createQuery(
+            'SELECT c FROM BachHomeBundle:Comment c WHERE c.creation_date = :yesterday AND c.state = 0'
+        )->setParameter('yesterday', $dateSql);
+        $commentResults = $query->getResult();
+
+        $dateShow = $date->format('d/m/Y');
+        if (!empty($commentResults)
+            && $mailReport != null
+            && filter_var($mailReport, FILTER_VALIDATE_EMAIL)
+        ) {
+            $container  = $this->container;
+            $user       = $container->getParameter('mailer_user');
+            $password   = $container->getParameter('mailer_password');
+            $port       = $container->getParameter('mailer_port');
+            $host       = $container->getParameter('mailer_host');
+            $encryption = $container->getParameter('mailer_encryption');
+
+            $transport  = \Swift_SmtpTransport::newInstance(
+                $host,
+                $port,
+                $encryption
+            );
+            $transport->setUserName($user);
+            $transport->setPassword($password);
+            $mailer  = \Swift_Mailer::newInstance($transport);
+            $message = \Swift_Message::newInstance();
+            //FIXME Manage english and translation
+            $message->setSubject('Bach - CR commentaires du ' . $dateShow);
+            if ($container->getParameter('aws.sender') != null ) {
+                $message->setFrom($container->getParameter('aws.sender'));
+            } else {
+                $message->setFrom($user);
+            }
+            $message->setTo($mailReport);
+            //FIXME Add a way to call here a template with the content
+            $headerMessage = 'Bonjour,<br><br>Compte rendu des commentaires du ' . $dateShow;
+            $thead = "<table border='1'><thead><tr><th>Sujet</th><th>Message</th><th>Type</th></tr></thead>";
+            $tbody = '<tbody>';
+            foreach ($commentResults as $comment) {
+                $tbody .= '<tr><td>'.$comment->getSubject().'</td><td>'.$comment->getMessage().'</td><td>'.Comment::getKnownPriorities()[$comment->getPriority()].'</td></tr>';
+            }
+
+            $tbody .= "</tbody></table>";
+            $message->setBody(
+                $headerMessage.$thead.$tbody,
+                'text/html'
+            );
+            $mailer->send($message);
+        }
+
+        return new Response();
     }
 }

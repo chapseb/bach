@@ -72,6 +72,8 @@ class FilesController extends Controller
     public function getFileAction($type, $name)
     {
         $path = null;
+        $container = $this->container;
+
         switch ( $type ) {
         case 'video':
             if ( !defined('BACH_FILES_VIDEOS') ) {
@@ -101,11 +103,33 @@ class FilesController extends Controller
             }
             break;
         }
-        $path .= '/' . $name;
 
-        if ( !file_exists($path) ) {
+        if (substr($name, 0, 1) === '/'
+            || substr($path, -1) === '/'
+        ) {
+            $path .=$name;
+        } else {
+            $path .= '/' . $name;
+        }
+
+        $existsAws = false;
+        if ($container->getParameter('aws.s3') == true) {
+            $file = BACH_FILES_MISC . $name;
+            $ch = curl_init($file);
+            curl_setopt($ch, CURLOPT_NOBODY, true);
+            curl_exec($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if ($code == 200) {
+                $existsAws = true;
+            }
+            curl_close($ch);
+        }
+        if (!file_exists($path)
+            && !$existsAws
+        ) {
             $msg_file = $name;
-            if ( $this->container->get('kernel')->getEnvironment() === 'DEBUG' ) {
+            if ($this->container->get('kernel')->getEnvironment() === 'DEBUG') {
                 $msg_file = $path;
             }
             throw new NotFoundHttpException(
@@ -117,19 +141,23 @@ class FilesController extends Controller
             );
         }
 
-        $file = fopen($path, 'rb');
-        $out = fopen('php://output', 'wb');
+        if ($container->getParameter('aws.s3') == true) {
+            return $this->redirect(BACH_FILES_MISC . $name);
+        } else {
+            $file = fopen($path, 'rb');
+            $out = fopen('php://output', 'wb');
 
-        $mime = mime_content_type($path);
-        header('Cache-Control: public');
-        header('Content-type: ' . $mime);
-        header('Content-Length:' . filesize($path));
-        stream_copy_to_stream($file, $out);
+            $mime = mime_content_type($path);
+            header('Cache-Control: public');
+            header('Content-type: ' . $mime);
+            header('Content-Length:' . filesize($path));
+            stream_copy_to_stream($file, $out);
 
-        fclose($out);
-        fclose($file);
+            fclose($out);
+            fclose($file);
 
-        return new Response();
+            return new Response();
+        }
     }
 
     /**

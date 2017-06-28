@@ -62,19 +62,22 @@ class DisplayCdc extends DisplayHtml
 {
     private $_cdc_uri;
     private $_docs;
+    private $_cdcDocuments;
+    private $_unlistedFiles;
     protected $cache_key_prefix = 'cdc';
 
     /**
      * Main constructor
      *
-     * @param UrlGeneratorInterface $router   Router
-     * @param Kernel                $kernel   App kernel
-     * @param string                $cote_loc Cote location
-     * @param string                $path     Classification scheme URL
+     * @param UrlGeneratorInterface $router     Router
+     * @param Kernel                $kernel     App kernel
+     * @param string                $cote_loc   Cote location
+     * @param string                $path       Classification scheme URL
+     * @param string                $viewer_uri Viewer Url
      */
-    public function __construct(Router $router, Kernel $kernel, $cote_loc, $path)
+    public function __construct(Router $router, Kernel $kernel, $cote_loc, $path, $viewer_uri)
     {
-        parent::__construct($router, $kernel, $cote_loc);
+        parent::__construct($router, $kernel, $cote_loc, $viewer_uri);
         $this->_cdc_uri = $path;
     }
 
@@ -94,12 +97,20 @@ class DisplayCdc extends DisplayHtml
     /**
      * Displays classification scheme from EAD in HTML with XSLT
      *
-     * @param SimpleXMLElement $docs Published documents
+     * @param SimpleXMLElement $docs         Published documents
+     * @param String           $otherXml     Other doc if not cdc
+     * @param boolean          $cdcDocuments Do not display unlinked doc
      *
      * @return string
      */
-    public function displayCdc(\SimpleXMLElement $docs)
-    {
+    public function displayCdc(\SimpleXMLElement $docs, $otherXml = null,
+        $cdcDocuments = false, $unlistedFiles = true
+    ) {
+        $this->_cdcDocuments  = $cdcDocuments;
+        $this->_unlistedFiles = $unlistedFiles;
+        if ( $otherXml != null ) {
+            $this->_cdc_uri = $otherXml;
+        }
         $this->_docs = $docs;
         return $this->display('', $this->_cdc_uri);
     }
@@ -112,8 +123,9 @@ class DisplayCdc extends DisplayHtml
      *
      * @return string
      */
-    protected function renderContents($xml_doc, $docid)
-    {
+    protected function renderContents($xml_doc, $docid, $audience = false,
+        $daodetector = null
+    ) {
         $proc = new \XsltProcessor();
 
         $proc->importStylesheet(
@@ -121,6 +133,10 @@ class DisplayCdc extends DisplayHtml
         );
 
         $proc->setParameter('', 'docid', $docid);
+        $cdcDocuments  = ($this->_cdcDocuments) ? 'true' : 'false';
+        $unlistedFiles = ($this->_unlistedFiles) ? 'true' : 'false';
+        $proc->setParameter('', 'cdcdocuments', $cdcDocuments);
+        $proc->setParameter('', 'unlistedfiles', $unlistedFiles);
         $proc->registerPHPFunctions();
 
         $dadocs = $xml_doc->addChild('dadocs');
@@ -182,12 +198,14 @@ class DisplayCdc extends DisplayHtml
      *
      * @return string
      */
-    public function cdcScheme($docid, $xml_file, $docs)
+    public function cdcScheme($docid, $xml_file, $docs, $unlistedFiles)
     {
-        $contents = parent::scheme($docid, $xml_file);
+        $contents = parent::scheme($docid, $xml_file, false);
 
         $this->_docs = $docs;
-        if (count($this->_getNotMatched(simplexml_load_file($xml_file))) > 0 ) {
+        if ($unlistedFiles
+            && count($this->_getNotMatched(simplexml_load_file($xml_file))) > 0
+        ) {
             $contents .= '<h3 class="no-accordion"><a href="#not-classified">' .
                 _('Not classified') . '</a></h3>';
         }

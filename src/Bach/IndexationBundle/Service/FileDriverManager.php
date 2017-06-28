@@ -105,17 +105,20 @@ class FileDriverManager
     /**
      * Convert an input file into FileFormat object
      *
-     * @param DataBag  $bag          Data bag
-     * @param string   $format       File format
-     * @param Document $doc          Document
-     * @param boolean  $transaction  Whether to use DB transaction or not
-     * @param string   $preprocessor Preprocessor, if any (defaults to null)
-     * @param array    $geonames     Geoloc data
+     * @param DataBag  $bag               Data bag
+     * @param string   $format            File format
+     * @param Document $doc               Document
+     * @param boolean  $transaction       Whether to use DB transaction or not
+     * @param string   $preprocessor      Preprocessor, if any (defaults to null)
+     * @param array    $geonames          Geoloc data
+     * @param boolean  $pdfFlag           Flag to index pdf
+     * @param boolean  $generateImageFlag Flag to generate thumb
      *
      * @return FileFormat the normalized file object
      */
     public function convert(DataBag $bag, $format, $doc, $transaction = true,
-        $preprocessor = null, &$geonames = null, $pdfFlag
+        $preprocessor = null, &$geonames = null,
+        $pdfFlag = false, $generateImageFlag = false
     ) {
         $start_memory = memory_get_usage();
 
@@ -256,7 +259,8 @@ class FileDriverManager
                     $header_obj,
                     null,
                     null,
-                    $pdfFlag
+                    $pdfFlag,
+                    $generateImageFlag
                 );
 
                 $archdescid = $handledArchdesc['id'];
@@ -284,7 +288,8 @@ class FileDriverManager
                         $header_obj,
                         $archdescid,
                         $archdesc_obj,
-                        $pdfFlag
+                        $pdfFlag,
+                        $generateImageFlag
                     );
 
                     $count++;
@@ -315,6 +320,60 @@ class FileDriverManager
                             true,
                             $pdfFlag
                         );
+
+                        // record dao for image prepared in daos_prepared table
+                        if ($generateImageFlag == true
+                            && $record->getStartDao() != ''
+                        ) {
+                            if ($record->getEndDao() == '') {
+                                $endDao = '';
+                            } else {
+                                $endDao = $record->getEndDao();
+                            }
+                            $fullDirectory = substr(
+                                $record->getStartDao(),
+                                0,
+                                strrpos($record->getStartDao(), '/')
+                            );
+                            $select = $this->_zdb->select('daos_prepared')->where(
+                                array(
+                                    'href' => $fullDirectory.'/'
+                                )
+                            );
+                            $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                                $select
+                            );
+                            $res = $stmt->execute()->current();
+
+                            if ($res == null) {
+                                $select = $this->_zdb->select('daos_prepared')->where(
+                                    array(
+                                        'href'    => $record->getStartDao(),
+                                        'end_dao' => $endDao
+                                    )
+                                );
+                                $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                                    $select
+                                );
+                                $res = $stmt->execute()->current();
+
+                                if ($res == null) {
+                                    $insert = $this->_zdb->insert('daos_prepared')
+                                        ->values(
+                                            array(
+                                                'href'    => $record->getStartDao(),
+                                                'end_dao' => $endDao,
+                                                'action'  => false
+                                            )
+                                        );
+                                    $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                                        $insert
+                                    );
+                                    $stmt->execute();
+                                }
+                            }
+                        }
+
                         $record = $record->toArray();
 
                         //record does not exists yet. Store it.
@@ -382,13 +441,15 @@ class FileDriverManager
     /**
      * Handle an EAD component (c* and archdesc)
      *
-     * @param array         $data         Data from databag
-     * @param int           $docid        Document id
-     * @param Document      $doc          Document entity instance
-     * @param int           $headerid     Header id
-     * @param EADHeader     $header_obj   EADHeader instance
-     * @param int           $archdescid   Archdesc id
-     * @param EADFileFormat $archdesc_obj archdesc instance
+     * @param array         $data              Data from databag
+     * @param int           $docid             Document id
+     * @param Document      $doc               Document entity instance
+     * @param int           $headerid          Header id
+     * @param EADHeader     $header_obj        EADHeader instance
+     * @param int           $archdescid        Archdesc id
+     * @param EADFileFormat $archdesc_obj      archdesc instance
+     * @param boolean       $pdfFlag           Flag to index pdf
+     * @param boolean       $generateImageFlag Flag to generate thumb
      *
      * @return array(
      *  'id'    => object id
@@ -396,7 +457,8 @@ class FileDriverManager
      * )
      */
     private function _handleEadComponent($data, $docid, $doc, $headerid,
-        $header_obj, $archdescid = null, $archdesc_obj = null, $pdfFlag
+        $header_obj, $archdescid = null, $archdesc_obj = null,
+        $pdfFlag = false, $generateImageFlag = false
     ) {
         $translated = $this->_mapper->translate($data);
 
@@ -421,6 +483,77 @@ class FileDriverManager
                 $pdfFlag
             );
             $fragment = $obj->toArray();
+            if ($generateImageFlag == true) {
+                $daosCopy = $fragment['daos'];
+                foreach ($daosCopy as $key=>&$dao) {
+                    $authorizedExtensions = array(
+                        'png', 'jpg', 'jpeg', 'tiff',
+                        'PNG', 'JPG', 'JPEG', 'TIFF'
+                    );
+                    $testExtension = substr(
+                        $dao['href'],
+                        strrpos($dao['href'], '.') + 1
+                    );
+
+                    if (in_array($testExtension, $authorizedExtensions) 
+                        || strrpos($dao['href'], '.') == ''
+                    ) {
+                        $fullDirectory = substr(
+                            $dao['href'],
+                            0,
+                            strrpos($dao['href'], '/')
+                        );
+                        $select = $this->_zdb->select('daos_prepared')->where(
+                            array(
+                                'href'    => $fullDirectory.'/'
+                            )
+                        );
+
+                        $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                            $select
+                        );
+                        $res = $stmt->execute()->current();
+
+                        if ($res == null) {
+                            $end = '';
+                            if ($dao['role'] == 'image:first') {
+                                $testKey = $key + 1;
+                                if (isset($testKey, $daosCopy)
+                                    && $daosCopy[$testKey]['role'] == 'image:last'
+                                ) {
+                                    $end = $daosCopy[$testKey]['href'];
+                                    unset($daosCopy[$testKey]);
+                                }
+                            }
+
+                            $select = $this->_zdb->select('daos_prepared')->where(
+                                array(
+                                    'href'    => $dao['href'],
+                                    'end_dao' => $end
+                                )
+                            );
+                            $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                                $select
+                            );
+                            $res = $stmt->execute()->current();
+                            if ($res == null) {
+                                $insert = $this->_zdb->insert('daos_prepared')
+                                    ->values(
+                                        array(
+                                            'href' => $dao['href'],
+                                            'end_dao' => $end,
+                                            'action'  => false
+                                        )
+                                    );
+                                $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                                    $insert
+                                );
+                                $stmt->execute();
+                            }
+                        }
+                    }
+                }
+            }
             //EAD archdesc does not exists yet. Store it.
             $id = $this->_storeEadFragment(
                 $fragment,
@@ -536,6 +669,24 @@ class FileDriverManager
             );
         }
         $fragid = $this->_zdb->getAutoIncrement($table);
+        // Highest node has no parent, so had archdesc_id for incorporate this node
+        if ($table == 'ead_file_format'
+            && $data['archdesc_id'] == null
+        ) {
+            $updateObject = array();
+            $updateObject['archdesc_id']  = $fragid;
+            $update = $this->_zdb->update('ead_file_format')
+                ->set($updateObject)
+                ->where(
+                    array('uniqid' => ':uniqid'
+                    )
+                );
+                $stmt = $this->_zdb->sql->prepareStatementForSqlObject(
+                    $update
+                );
+            $updateObject['where1'] = $fragid;
+            $stmt->execute($updateObject);
+        }
         return $fragid;
     }
 
@@ -567,6 +718,7 @@ class FileDriverManager
             );
 
         }
+
         $obj = new Entity\MatriculesFileFormat(
             $converted_data,
             false

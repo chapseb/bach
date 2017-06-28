@@ -165,7 +165,8 @@ class DisplayEADFragment extends \Twig_Extension
      */
     public function display($fragment, $docid, $form_name = 'default', $full = false,
         $hasChildren = false, $hasComments = false, $countSub = 0, $ajax = false,
-        $print = false, $highlight = false
+        $print = false, $highlight = false, $communicability = false, $audience = false,
+        $aws = false, $cloudfront = null
     ) {
         $proc = new \XsltProcessor();
         $proc->importStylesheet(
@@ -201,6 +202,11 @@ class DisplayEADFragment extends \Twig_Extension
         $comments_enabled = $this->_comms ? 'true' : 'false';
         $proc->setParameter('', 'comments_enabled', $comments_enabled);
         $proc->setParameter('', 'print', $print);
+        $proc->setParameter('', 'communicability', $communicability);
+        $audience = ($audience) ? 'true' : 'false';
+        $proc->setParameter('', 'audience', $audience);
+        $proc->setParameter('', 'aws', $aws);
+        $proc->setParameter('', 'cloudfront', $cloudfront);
 
         if ( $hasChildren === true ) {
             $proc->setParameter('', 'children', 'true');
@@ -274,12 +280,25 @@ class DisplayEADFragment extends \Twig_Extension
                 $text,
                 $matches
             );
+
+            $getSectionImage = preg_match(
+                '@<section id="images"[^>]*?>.*?</section>@si',
+                $text,
+                $sectionImage
+            );
+            $getSectionSerie = preg_match(
+                '@<section id="series"[^>]*?>.*?</section>@si',
+                $text,
+                $sectionSerie
+            );
+
             // need to rebuild the link because link has the search word
             foreach ($allWord as $wordHigh) {
                 foreach ($matches[1] as $key => $link) {
                     if (preg_match("/\b".$wordHigh."\b/i", $matches[2][$key])
                         && strpos($link, $wordHigh) != false
                         && !strpos('<em class="hl">', $wordHigh)
+                        && !strpos($link, '.pdf')
                     ) {
                         $result = str_replace(
                             $wordHigh,
@@ -300,6 +319,34 @@ class DisplayEADFragment extends \Twig_Extension
                         }
                     }
                 }
+            }
+
+            $getSectionBadImage = preg_match(
+                '@<section id="images"[^>]*?>.*?</section>@si',
+                $text,
+                $sectionBadImage
+            );
+
+            if ($sectionBadImage != null && $sectionImage != null) {
+                $text = str_replace(
+                    $sectionBadImage[0],
+                    $sectionImage[0],
+                    $text
+                );
+            }
+
+            $getSectionBadSerie = preg_match(
+                '@<section id="series"[^>]*?>.*?</section>@si',
+                $text,
+                $sectionBadSerie
+            );
+
+            if ($sectionBadSerie != null && $sectionSerie != null) {
+                $text = str_replace(
+                    $sectionBadSerie[0],
+                    $sectionSerie[0],
+                    $text
+                );
             }
 
             $text = htmlspecialchars_decode($text);
@@ -342,7 +389,10 @@ class DisplayEADFragment extends \Twig_Extension
             );
         }
 
-        return $text;
+        if ($full == false) {
+            return $text;
+        }
+        return html_entity_decode($text);
     }
 
     /**

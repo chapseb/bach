@@ -73,7 +73,7 @@ class EADFileFormat extends FileFormat
     protected $parents;
 
     /**
-     * @ORM\Column(type="string", nullable=true, length=500)
+     * @ORM\Column(type="string", nullable=true, length=1000)
      */
     protected $cUnitid;
 
@@ -98,12 +98,12 @@ class EADFileFormat extends FileFormat
     protected $cScopcontent;
 
     /**
-     * @ORM\Column(type="string", nullable=true, length=100)
+     * @ORM\Column(type="string", nullable=true, length=200)
      */
     protected $cControlacces;
 
     /**
-     * @ORM\Column(type="string", nullable=true, length=100)
+     * @ORM\Column(type="string", nullable=true, length=200)
      */
     protected $cLegalstatus;
 
@@ -116,6 +116,11 @@ class EADFileFormat extends FileFormat
      * @ORM\Column(type="string", nullable=true, length=200)
      */
     protected $cRepository;
+
+    /**
+     * @ORM\Column(type="string", nullable=true, length=200)
+     */
+    protected $cAudience;
 
     /**
      * @ORM\Column(type="integer", length=10, nullable=true)
@@ -268,7 +273,8 @@ class EADFileFormat extends FileFormat
         'next_id',
         'next_title',
         'cLegalstatus',
-        'cMediaContent'
+        'cMediaContent',
+        'audience'
     );
 
     /**
@@ -687,6 +693,29 @@ class EADFileFormat extends FileFormat
     }
 
     /**
+     * Set CAudience
+     *
+     * @param string $audience audience
+     *
+     * @return EADFileFormat
+     */
+    public function setCAudience($audience)
+    {
+        $this->cAudience = $audience;
+        return $this;
+    }
+
+    /**
+     * Get CAudience
+     *
+     * @return string
+     */
+    public function getCAudience()
+    {
+        return $this->cAudience;
+    }
+
+    /**
      * Parse indexes objects from bag
      *
      * @param array $data Indexes data
@@ -980,7 +1009,8 @@ class EADFileFormat extends FileFormat
 
                 if ($pdfFlag == true && $dao['attributes']['href']) {
                     $daolink = $dao['attributes']['href'];
-                    if (file_exists(BACH_FILES_MISC . $daolink)) {
+                    if (file_exists(BACH_FILES_MISC . $daolink)
+                    ) {
                         $parser = new \Smalot\PdfParser\Parser();
                         try {
                             $pdf = $parser->parseFile(BACH_FILES_MISC . $daolink);

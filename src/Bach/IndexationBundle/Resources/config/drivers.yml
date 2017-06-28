@@ -49,6 +49,8 @@ drivers:
             - end_dao
             - additional_informations
             - lieu_residence
+            - communicability_general
+            - communicability_sallelecture
     ead:
         mapper: Bach\IndexationBundle\Entity\Mapper\EADDriverMapper
         fileformat: Bach\IndexationBundle\Entity\EADFileFormat

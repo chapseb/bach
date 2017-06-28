@@ -53,28 +53,47 @@ POSSIBILITY OF SUCH DAMAGE.
         <article id="result_{{ document.id }}" role="document" about="{{ document.id }}" class="thumbs">
             <figure class="result_pic{% if document.start_dao is not defined %} no-image{% endif %}">
                 {% if document.start_dao is defined %}
-                    {% set series_name %}
-                        {%- for i in document.start_dao|split('/') -%}
-                            {%- if not loop.last -%}
-                                /{{ i }}
-                            {%- endif -%}
-                        {%- endfor -%}
-                    {% endset %}
-                    {% set images_link %}
-                        {%- if viewer_uri[-1:1] != '/' -%}/{%- endif -%}
-                        {%- if document.end_dao is defined and document.start_dao != document.end_dao -%}
-                            series{{ series_name }}?s={{ document.start_dao|split('/')|slice(-1,1)[0] }}&e={{ document.end_dao|split('/')|slice(-1,1)[0] }}
-                        {%- else -%}
-                            viewer/{{ document.start_dao }}
-                        {%- endif -%}
-                    {% endset %}
-                    <a href="{{ viewer_uri ~ images_link }}" target="_blank" >
-                    {% if document.nom is defined or document.prenom is defined %}
-                        <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ document.nom ~ ' ' ~ document.prenoms|join(' ') }}"/>
-                    {% else %}
-                        <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ _('Scan') }}"/>
+                    {% set communicable = false %}
+                    {% if (document.communicability_general is not defined and document.communicability_sallelecture is not defined)
+                      or document.communicability_general < "now"|date('Ymd')
+                      or (rights == true
+                        and document.communicability_sallelecture < "now"|date('Ymd'))%}
+                        {% set communicable = true %}
                     {% endif %}
-                    </a>
+                    {% if communicable == true%}
+                        {% set series_name %}
+                            {%- for i in document.start_dao|split('/') -%}
+                                {%- if not loop.last -%}
+                                    /{{ i }}
+                                {%- endif -%}
+                            {%- endfor -%}
+                        {% endset %}
+                        {% set images_link %}
+                            {%- if viewer_uri[-1:1] != '/' -%}/{%- endif -%}
+                            {%- if document.end_dao is defined and document.start_dao != document.end_dao -%}
+                                series{{ series_name }}?s={{ document.start_dao|split('/')|slice(-1,1)[0] }}&e={{ document.end_dao|split('/')|slice(-1,1)[0] }}
+                            {%- else -%}
+                                viewer/{{ document.start_dao }}
+                            {%- endif -%}
+                        {% endset %}
+                        <a href="{{ viewer_uri ~ images_link }}" target="_blank" >
+                        {% if listImgAws is not defined %}
+                            {% if document.nom is defined or document.prenom is defined %}
+                            <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ document.nom ~ ' ' ~ document.prenoms|join(' ') }}"/>
+                            {% else %}
+                            <img src="{{ viewer_uri ~ 'ajax/img/' ~ document.start_dao ~ '/format/thumb' }}" alt="{{ _('Scan') }}"/>
+                            {% endif %}
+                        {% else %}
+                            {% if document.nom is defined or document.prenom is defined %}
+                            <img src="{{ listImgAws[loop.index0] }}" alt="{{ document.nom ~ ' ' ~ document.prenoms|join(' ') }}"/>
+                            {% else %}
+                            <img src="{{ listImgAws[loop.index0] }}" alt="{{ _('Scan') }}"/>
+                            {% endif %}
+                        {% endif %}
+                        </a>
+                    {% else %}
+                        <img src="{{ asset('img/thumb_comm.png')}}" alt="{{ document.nom ~ ' ' ~ document.prenoms|join(' ') }}" title="{{ _('This picture is not communicable') }}" />
+                    {%endif%}
                 {% else %}
                     <img src="{% include '::images/noimage.html.twig' %}" alt=""/>
                 {% endif %}
@@ -190,9 +209,21 @@ POSSIBILITY OF SUCH DAMAGE.
                                     viewer/{{ document.start_dao }}
                                 {%- endif -%}
                             {% endset %}
+
+                            {% set communicable = false %}
+                            {% if (document.communicability_general is not defined and document.communicability_sallelecture is not defined)
+                                or document.communicability_general < "now"|date('Ymd')
+                                or (rights == true
+                                and document.communicability_sallelecture < "now"|date('Ymd'))%}
+                                {% set communicable = true %}
+                            {% endif %}
+                            {% if communicable == true%}
                             <a href="{{ viewer_uri ~ images_link }}" title="{{ _('Scan') }}" target="_blank" property="image">
                                 <i class="link_viewer" title="{{ _('Scan')}}"></i>
                             </a>
+                            {% else %}
+                                <i class="link_viewer" title="{{ _('This picture is not communicable') }}"></i>
+                            {% endif%}
                         {% endif %}
                         <a class="addBasket" title="{{ _('Add to basket')}}" href="{{ path('basket_add_mat',{'docid': document.id})}}">{{ _('Add to basket')}}
                     </td>
@@ -273,17 +304,35 @@ POSSIBILITY OF SUCH DAMAGE.
 {% endblock %}
 
 {% block autocomplete %}
+    function split(val) {
+        return val.split(/ +/);
+    }
+    function extractLast(term) {
+        return split(term).pop();
+    }
+
     $('#searchQuery_query').autocomplete({
         source: function(request, response) {
             $.getJSON(
                 '{{ path('bach_matricules_suggest') }}', {
-                    q: request.term
+                    q: extractLast(request.term)
                 }, response
             );
+        },
+        focus: function() {
+            return false
+        },
+        select: function(event, ui) {
+            var terms = split(this.value);
+            terms.pop();
+            terms.push(ui.item.value);
+            terms.push('');
+            this.value = terms.join(' ');
+            return false;
         }
     }).data('uiAutocomplete')._renderItem = function( ul, item ) {
         var newText = String(item.value).replace(
-            new RegExp(preg_quote(this.term), "gi"),
+            new RegExp(preg_quote(extractLast(this.term)), "gi"),
             "<span class='ui-state-highlight'>$&</span>"
         );
 

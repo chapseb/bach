@@ -328,6 +328,14 @@ p {
     list-style-type: none;
 }
 
+[id=menu] li.show_more a {
+    color: #b73a34 !important;
+}
+
+[id=menu] li.show_more a:hover {
+    text-decoration: underline !important;
+}
+
 [id=menu] a,
 [id=menu] div.ui-accordion-content a,
 [id=menu] li,
@@ -502,6 +510,10 @@ input[type=number] {
     margin-top: 1em;
 }
 
+.special_result {
+    color: #DAA520 !important;
+}
+
 /** View switcher */
 [id=change_view] {
     position: absolute;
@@ -644,6 +656,11 @@ input[type=number] {
 [id=search_results] article figure .flashplayer a img,
 [id=search_results] article figure a.flashmusicplayer img {
     margin-top: 0;
+}
+
+.nonCommPic {
+    left: -45px;
+    position: relative;
 }
 
 [id=search_results] a.flashmusicplayer h2 {
@@ -848,13 +865,13 @@ h2.back a:hover {
 }
 
 .breadcrumb {
-    background: #d1c6c0;
+    /*background: #d1c6c0;*/
     padding: 0.5em 1.5em 0.5em 0.5em;
     list-style-type: none;
 }
 
 [id=search_results] .breadcrumb {
-    padding: .1em .5em;
+    padding: .1em .5em .1em 0.0em;
     margin-bottom: .2em;
 }
 
@@ -869,11 +886,19 @@ h2.back a:hover {
 }
 
 .breadcrumb li a:before {
-    content: "» ";
+    content: "› ";
 }
 
 .breadcrumb li:first-child a:before {
     content: "";
+}
+
+.last_title {
+    display: block !important;
+}
+
+.date {
+    font-size: 14px;
 }
 
 [id=display_facets] li {
@@ -1067,6 +1092,7 @@ h2.back a:hover {
 [id=map] {
     height: 300px;
     margin-bottom: 1em;
+    margin-top: 1em;
     clear: right;
 }
 
@@ -1367,6 +1393,11 @@ form > footer {
 [id=browse_tabs] section ul {
     list-style-type: disc;
     margin-left: 1em;
+}
+
+[id=browse_tabs] section .listNav {
+    margin-top: 15px;
+    margin-bottom: 10px;
 }
 
 /**
@@ -1697,17 +1728,18 @@ div.sonata-bc .btn-primary:hover {
 
 .css-treeview .related_informations {
     background-image: url(../img/link.png);
+    background-size: 20px;
     background-repeat: no-repeat;
-    padding: 1px 0.6em 0.5em;
+    padding: 1px 1em 0.5em;
     margin-left: 5px;
-    width: 14px;
-    height: 14px;
-    line-height: 14px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
 }
 
-.css-treeview .media_informations {
+.css-treeview .media_informations, .gomedia_informations {
     background-image: url(../img/glyphicons-halflings.png);
-    background-position: -96px -120px;
+    background-position: -95px -118px;
     background-repeat: no-repeat;
     padding: 1px 0.6em 0.5em;
     margin-left: 5px;

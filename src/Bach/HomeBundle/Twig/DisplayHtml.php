@@ -65,6 +65,7 @@ class DisplayHtml extends \Twig_Extension
     protected $router;
     protected $request;
     protected $cote_location;
+    protected $viewer_uri;
     protected $prod;
     protected $kernel_root_dir;
     protected $cache_key_prefix = 'html';
@@ -72,11 +73,12 @@ class DisplayHtml extends \Twig_Extension
     /**
      * Main constructor
      *
-     * @param UrlGeneratorInterface $router   Router
-     * @param Kernel                $kernel   App kernel
-     * @param string                $cote_loc Cote location
+     * @param UrlGeneratorInterface $router     Router
+     * @param Kernel                $kernel     App kernel
+     * @param string                $cote_loc   Cote location
+     * @param string                $viewer_uri Viewer Url
      */
-    public function __construct(Router $router, Kernel $kernel, $cote_loc)
+    public function __construct(Router $router, Kernel $kernel, $cote_loc, $viewer_uri)
     {
         $this->router = $router;
         $this->kernel_root_dir = $kernel->getRootDir();
@@ -86,6 +88,7 @@ class DisplayHtml extends \Twig_Extension
             $this->prod = false;
         }
         $this->cote_location = $cote_loc;
+        $this->viewer_uri = $viewer_uri;
     }
 
     /**
@@ -116,13 +119,15 @@ class DisplayHtml extends \Twig_Extension
     /**
      * Displays an EAD document as HTML with XSLT
      *
-     * @param string $docid    Document id
-     * @param string $xml_file Document
+     * @param string  $docid    Document id
+     * @param string  $xml_file Document
+     * @param boolean $audience Authorization audience
      *
      * @return string
      */
-    public function display($docid, $xml_file)
-    {
+    public function display($docid, $xml_file, $audience = false,
+        $daodetector = null
+    ) {
         $cached_doc = null;
         //do not use cache when not in prod
         if ( $this->prod === true ) {
@@ -159,7 +164,7 @@ class DisplayHtml extends \Twig_Extension
             $xml_doc = simplexml_load_file($xml_file);
 
             $archdesc_html = $this->_renderArchdesc($xml_doc, $docid);
-            $contents = $this->renderContents($xml_doc, $docid);
+            $contents = $this->renderContents($xml_doc, $docid, $audience, $daodetector);
 
             $proc = new \XsltProcessor();
             $proc->importStylesheet(
@@ -290,19 +295,25 @@ class DisplayHtml extends \Twig_Extension
     /**
      * Render contents
      *
-     * @param simple_xml $xml_doc XML document
-     * @param string     $docid   Document id
+     * @param simple_xml $xml_doc  XML document
+     * @param string     $docid    Document id
+     * @param boolean    $audience Authorization audience
      *
      * @return string
      */
-    protected function renderContents($xml_doc, $docid)
+    protected function renderContents($xml_doc, $docid, $audience = false, $daodetector = null)
     {
         $proc = new \XsltProcessor();
         $proc->importStylesheet(
             simplexml_load_file(__DIR__ . '/display_html_contents.xsl')
         );
 
+        //$authorizedArchives = $this->get('bach.home.authorization')->archivesRight();
         $proc->setParameter('', 'docid', $docid);
+        $audience = ($audience) ? 'true' : 'false';
+        $proc->setParameter('', 'audience', $audience);
+        $proc->setParameter('', 'daodetector', $daodetector);
+        $proc->setParameter('', 'viewer_uri', $this->viewer_uri);
         $proc->registerPHPFunctions();
 
         $up_nodes = $xml_doc->xpath('/ead/archdesc/dsc/c');
@@ -319,12 +330,13 @@ class DisplayHtml extends \Twig_Extension
     /**
      * Displays an EAD document scheme as HTML with XSLT
      *
-     * @param string $docid    Document id
-     * @param string $xml_file Document
+     * @param string  $docid    Document id
+     * @param string  $xml_file Document
+     * @param boolean $audience Authorization audience
      *
      * @return string
      */
-    public function scheme($docid, $xml_file)
+    public function scheme($docid, $xml_file, $audience = false)
     {
         $xml_doc = simplexml_load_file($xml_file);
 
@@ -334,6 +346,9 @@ class DisplayHtml extends \Twig_Extension
         );
 
         $proc->setParameter('', 'docid', $docid);
+        $audience = ($audience) ? 'true' : 'false';
+        $proc->setParameter('', 'audience', $audience);
+
         $proc->registerPHPFunctions();
 
         $up_nodes = $xml_doc->xpath('/ead/archdesc/dsc/c');

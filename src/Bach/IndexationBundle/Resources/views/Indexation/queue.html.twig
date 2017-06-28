@@ -36,9 +36,9 @@ POSSIBILITY OF SUCH DAMAGE.
 {% block container %}
     <fieldset class="list">
         <legend>
-            {{ _('Publication tasks') }}
+            {{ _('Publication tokens') }}
             <span class="btn-groups pull-right">
-                <a href="{{ path("bach_indexation_purge") }}" class="btn btn-delete" title="{{ _('Remove all finished tasks') }}">{{ _('Remove finished') }}</a>
+                <a href="{{ path("bach_indexation_unblock") }}" class="btn btn-delete" title="{{ _('Delete current token in database') }}" onclick="return confirm('Etes vous sûre de vouloir supprimer l\'action en cours?');" >{{ _('Delete blocked token') }}</a>
                 <a id="refresh" class="btn btn-refresh">{{ _('Refresh') }}</a>
             </span>
         </legend>
@@ -46,23 +46,27 @@ POSSIBILITY OF SUCH DAMAGE.
         <table>
             <thead>
                 <tr>
+                    <th>{{ _('Id') }}</th>
                     <th>{{ _('File name') }}</th>
-                    <th>{{ _('Format') }}</th>
-                    <th>{{ _('Size') }}</th>
+                    <th>{{ _('Token') }}</th>
+                    <th>{{ _('Action') }}</th>
+                    <th>{{ _('Type') }}</th>
                 </tr>
             </thead>
             <tbody>
-                {% if tasks|length > 0 %}
-                {% for task in tasks %}
-                <tr class="task_{{ task.status }}">
-                    <td>{{ task.filename }}</td>
-                    <td>{{ task.format }}</td>
-                    <td>{{ task.size }}</td>
+                {% if tokens|length > 0 %}
+                {% for token in tokens %}
+                <tr>
+                    <td>{{ token.id }}</td>
+                    <td>{{ token.filename }}</td>
+                    <td>{{ token.bach_token }}</td>
+                    <td>{{ token.action }}</td>
+                    <td>{{ token.action_type }}</td>
                 </tr>
                 {% endfor %}
                 {% else %}
                 <tr>
-                    <td colspan="3">{{ _('No publication in queue') }}</td>
+                    <td colspan="4">{{ _('No publication in queue') }}</td>
                 </tr>
                 {% endif %}
             </tbody>

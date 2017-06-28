@@ -42,7 +42,8 @@
         "zendframework/zend-db": "2.3.*",
         "zendframework/zend-stdlib": "2.3.*",
         "tecnickcom/tcpdf": "6.2.*",
-        "smalot/pdfparser": "0.9.25"
+        "smalot/pdfparser": "0.9.25",
+        "aws/aws-sdk-php-symfony": "^1.2"
     },
     "require-dev": {
         "atoum/atoum": "1.0.x",

@@ -49,6 +49,7 @@ if ( file_exists(__DIR__ . '/config/constants.php') ) {
 
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Aws\S3\S3Client;
 
 /**
  * Bach Kernel
@@ -61,6 +62,28 @@ use Symfony\Component\Config\Loader\LoaderInterface;
  */
 class AppKernel extends Kernel
 {
+
+
+    public function boot()
+    {
+        parent::boot();
+
+        $container = $this->getContainer();
+        if ($container->getParameter('aws.s3') == true) {
+            $s3 = new S3Client(
+                [
+                    'version' => $container->getParameter('aws.version'),
+                    'region'  => $container->getParameter('aws.region'),
+                    'credentials' => array(
+                        'key' => $container->getParameter('aws.credentials.key'),
+                        'secret' => $container->getParameter('aws.credentials.secret')
+                        )
+                ]
+            );
+            $s3->registerStreamWrapper('s3');
+        }
+    }
+
     /**
      * Returns an array of bundles to registers.
      *
@@ -108,7 +131,8 @@ class AppKernel extends Kernel
             new Presta\SitemapBundle\PrestaSitemapBundle(),
             new Liip\DoctrineCacheBundle\LiipDoctrineCacheBundle(),
             new Liip\ThemeBundle\LiipThemeBundle(),
-            new Jns\Bundle\XhprofBundle\JnsXhprofBundle()
+            new Jns\Bundle\XhprofBundle\JnsXhprofBundle(),
+            new Aws\Symfony\AwsBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test', 'console'))) {

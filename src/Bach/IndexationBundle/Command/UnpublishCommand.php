@@ -129,6 +129,12 @@ EOF
                 null,
                 InputOption::VALUE_NONE,
                 _('Use document ids instead of files path')
+            )->addOption(
+                'token',
+                'token',
+                InputOption::VALUE_REQUIRED,
+                'Which token for publish file in bach_token table ?',
+                '-1'
             );
     }
 
@@ -143,14 +149,14 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $stats = $input->getOption('stats');
-        if ( $stats === true ) {
+        if ($stats === true) {
             $start_time = new \DateTime();
         }
 
         $flagDeleteFile = $input->getOption('not-delete-file');
 
         $dry = $input->getOption('dry-run');
-        if ( $dry === true ) {
+        if ($dry === true) {
             $output->writeln(
                 '<fg=green;options=bold>' .
                 _('Running in dry mode') .
@@ -164,10 +170,10 @@ EOF
         $logger = $container->get('publication.logger');
         $known_types = $container->getParameter('bach.types');
 
-        if ( $input->getArgument('type')) {
+        if ($input->getArgument('type')) {
             $type = $input->getArgument('type');
 
-            if ( !in_array($type, $known_types) ) {
+            if (!in_array($type, $known_types)) {
                 $msg = _('Unknown type! Please choose one of:');
                 throw new \UnexpectedValueException(
                     $msg . "\n -" .
@@ -223,32 +229,36 @@ EOF
             );
 
             $steps = 1;
-            $progress = $this->getHelperSet()->get('progress');
+            $flagAws = $container->getParameter('aws.s3');
+            if (!$flagAws) {
+                $progress = $this->getHelperSet()->get('progress');
+            }
 
             $flagDocIds = $input->getOption('docids');
-            if ( !$flagDocIds ) {
+            $getXML = true;
+            if (!$flagDocIds) {
                 // recuperation de l'id des documents
                 $ids = array();
                 $documents = $documents[$type];
-                foreach ( $documents as $document) {
+                foreach ($documents as $document) {
                     $extension = $type;
                     $getXML = simplexml_load_file($document);
-                    if ($type == 'ead') {
-                        $id = strip_tags($getXML->eadheader->eadid->asXml());
-                    } else {
-                        $id = strip_tags($getXML->id);
+                    if ($getXML !== false) {
+                        if ($type == 'ead') {
+                            $id = strip_tags($getXML->eadheader->eadid->asXml());
+                        } else {
+                            $id = strip_tags($getXML->id);
+                        }
+                        if (!isset($extensions[$extension])) {
+                            $extensions[$extension] = array();
+                        }
+                        $extensions[$extension][] = $id;
+                        $ids[] = $id;
                     }
-
-                    if ( !isset($extensions[$extension]) ) {
-                        $extensions[$extension] = array();
-                    }
-                    $extensions[$extension][] = $id;
-                    $ids[] = $id;
 
                     if ($flagDeleteFile != true) {
                         unlink($document);
                     }
-
                 }
             } else {
                 $ids = $to_publish;
@@ -269,6 +279,15 @@ EOF
                         )
                     );
 
+                if ($getXML === false) {
+                    $select = $zdb->select('documents')
+                        ->where(
+                            array(
+                                'extension' => $type,
+                                'path'      => $to_publish
+                            )
+                        );
+                }
                 $stmt = $zdb->sql->prepareStatementForSqlObject(
                     $select
                 );
@@ -286,27 +305,31 @@ EOF
             //remove solr indexed documents per core
             $updates = array();
             $clients = array();
-            $clients = array();
 
             $cpt=0;
             $steps += count($docs);
-            $progress->start($output, $steps);
+            if (!$flagAws) {
+                $progress->start($output, $steps);
+            }
             foreach ($docs as $doc) {
-                $progress->advance();
+                if (!$flagAws) {
+                    $progress->advance();
+                }
                 $cpt++;
-                if ( !isset($updates[$doc['corename']]) ) {
-                    $client = $this->getContainer()->get('solarium.client.' . $doc['extension']);
+                if (!isset($updates[$doc['corename']]) ) {
+                    $client = $this->getContainer()
+                        ->get('solarium.client.' . $doc['extension']);
                     $clients[$doc['corename']] = $client;
                     $updates[$doc['corename']] = $client->createUpdate();
                 }
                 $update = $updates[$doc['corename']];
-                if ( $doc['extension'] === 'matricules' ) {
+                if ($doc['extension'] === 'matricules') {
                     $update->addDeleteQuery('id:' . $doc['docid']);
                 } else {
                     $update->addDeleteQuery('headerId:' . $doc['docid']);
                 }
 
-                if ( $doc['extension'] == 'ead' ) {
+                if ($doc['extension'] == 'ead') {
                     ////////////////////////////////////////////////////////
                     // Suppression des header des ead
                     try {
@@ -374,12 +397,43 @@ EOF
 
             }
 
-            $progress->advance();
-            foreach ( $updates as $key=>$update ) {
+            if (!$flagAws) {
+                $progress->advance();
+            }
+
+            if ($input->getOption('token') != '-1') {
+                try {
+                    $logger->info("Destroy token for ".$doc['docid']);
+                    $em = $this->getContainer()->get('doctrine')->getManager();
+                    $query = $em->createQuery(
+                        'SELECT t FROM BachIndexationBundle:BachToken t
+                        WHERE t.bach_token = :token
+                        AND t.filename = :filename'
+                    )->setParameters(
+                        array(
+                            'token' => $input->getOption('token'),
+                            'filename'   => $input->getArgument('document')
+                        )
+                    );
+
+                    if (!empty($query->getResult())) {
+                        $result = $query->getResult()[0];
+                        $em->remove($result);
+                        $em->flush();
+                    }
+                } catch ( \Exception $e ) {
+                    $logger->error('Exception : '.  $e->getMessage(). "\n");
+                        throw $e;
+                }
+            } else {
+                $logger->error('Not token ' . $input->getOption('token'));
+            }
+
+            foreach ($updates as $key=>$update) {
                 $client = $clients[$key];
                 $update->addCommit(null, null, true);
                 $result = $client->update($update);
-                if ( $result->getStatus() === 0 ) {
+                if ($result->getStatus() === 0) {
                     $logger->info(
                         str_replace(
                             array('%doc', '%time'),
@@ -388,7 +442,7 @@ EOF
                         )
                     );
                 } else {
-                    $logger->err(
+                    $logger->info(
                         str_replace(
                             '%doc',
                             $doc['docid'],
@@ -398,7 +452,9 @@ EOF
                 }
             }
 
-            $progress->finish();
+            if (!$flagAws) {
+                $progress->finish();
+            }
             if ($stats === true) {
                 $peak = $this->formatBytes(memory_get_peak_usage());
 
@@ -439,7 +495,7 @@ EOF
     public function formatBytes($bytes)
     {
         $multiplicator = 1;
-        if ( $bytes < 0 ) {
+        if ($bytes < 0) {
             $multiplicator = -1;
             $bytes = $bytes * $multiplicator;
         }
@@ -449,3 +505,4 @@ EOF
         return $fmt;
     }
 }
+

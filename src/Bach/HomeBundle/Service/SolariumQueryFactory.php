@@ -93,19 +93,22 @@ class SolariumQueryFactory
 
     private $_date_field;
     private $_dates_fields;
+    private $_authorized;
+
     /**
      * Factory constructor
      *
      * @param \Solarium\Client $client Solarium client
      * @param string           $qf     Query fields
      */
-    public function __construct(\Solarium\Client $client, $qf = null)
+    public function __construct(\Solarium\Client $client, $qf = null, $authorized = null)
     {
         $this->_client = $client;
         if ( $qf !== null ) {
             $this->_query_fields = $qf;
         }
         $this->_searchQueryDecorators();
+        $this->_authorized = $authorized;
     }
 
     /**
@@ -190,6 +193,12 @@ class SolariumQueryFactory
     {
         $this->_query = $this->_client->createSelect();
 
+        if ($this->_authorized != null && !$this->_authorized->archivesRight()) {
+            $this->_query->createFilterQuery("audience")->setQuery(
+                '-cAudience:internal'
+            );
+        }
+
         $hl = $this->_query->getHighlighting();
         $hl_fields = '';
         $this->_query->getSpellcheck();
@@ -197,6 +206,8 @@ class SolariumQueryFactory
         $filters = $container->getFilters();
 
         if ( count($filters) > 0 ) {
+            $begin = '';
+            $end = '';
             foreach ( $container->getFilters() as $name=>$value ) {
                 if ( preg_match('/(date_(.*)_)(min|max)/', $name, $matches) ) {
                     switch ( $matches[3] ) {
@@ -212,6 +223,15 @@ class SolariumQueryFactory
                                 '+' . $matches[2] . ':[' . $value .
                                 'T00:00:00Z TO ' . $end . ']'
                             );
+                        if ($this->getQuery()->getFilterQuery('date_cDateBegin_min') != null) {
+                            $begin = $value . 'T23:59:59Z';
+                            $queryBegin = $this->getQuery()->getFilterQuery('date_cDateBegin_min')->getQuery();
+                            $queryBegin = explode('+', $queryBegin);
+                            $queryBegin = $queryBegin[1];
+                            $queryEnd   = str_replace('Begin', 'End', $queryBegin);
+                            $finalQuery = '+(' . $queryBegin . ' OR ' . $queryEnd . ')';
+                            $this->getQuery()->getFilterQuery('date_cDateBegin_min')->setQuery($finalQuery);
+                        }
                         break;
                     case 'max':
                         $b_offset = $matches[1] . 'min';
@@ -221,6 +241,24 @@ class SolariumQueryFactory
                                     '+' . $matches[2] . ':[* TO ' . $value .
                                     'T23:59:59Z]'
                                 );
+                        }
+
+                        // dates intervals search
+                        if ($this->getQuery()->getFilterQuery('date_cDateBegin_min') != null) {
+                            $existingQuery = $this->getQuery()->getFilterQuery('date_cDateBegin_min')->getQuery();
+                            $existingQuery = explode('+', $existingQuery);
+                            $existingQuery = $existingQuery[1];
+                            $AndQuery = '(cDateBegin:[* TO '. $begin .'] AND cDateEnd:[' . $end . ' TO *])';
+                            $finalQuery = '+(' . $existingQuery . ' OR ' . $AndQuery.')';
+                            $this->getQuery()->getFilterQuery('date_cDateBegin_min')->setQuery($finalQuery);
+                        }
+                        if ($this->getQuery()->getFilterQuery('date_cDateBegin_max') != null ) {
+                            $queryBegin = $this->getQuery()->getFilterQuery('date_cDateBegin_max')->getQuery();
+                            $queryBegin = explode('+', $queryBegin);
+                            $queryBegin = $queryBegin[1];
+                            $queryEnd   = str_replace('Begin', 'End', $queryBegin);
+                            $finalQuery = '+(' . $queryBegin . ' OR ' . $queryEnd . ')';
+                            $this->getQuery()->getFilterQuery('date_cDateBegin_max')->setQuery($finalQuery);
                         }
                         break;
                     }

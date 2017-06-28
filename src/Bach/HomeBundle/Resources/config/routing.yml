@@ -419,13 +419,13 @@ searchhisto_execute:
     pattern: /searchhistoexecute
     defaults: { _controller: BachHomeBundle:Default:searchHistoExecute}
     requirements:
-        _method: POST
+        _method: POST|GET
 
 searchhistomat_execute:
     pattern: /searchhistomatexecute
     defaults: { _controller: BachHomeBundle:Matricules:searchHistomatExecute}
     requirements:
-        _method: POST
+        _method: POST|GET
 
 search_histo_delete:
     pattern: /searchhistoDeleteEad
@@ -469,3 +469,32 @@ search_histo_import:
     requirements:
         _method: POST
 
+api_publish_command:
+    pattern: /publishCommand
+    defaults: { _controller: BachIndexationBundle:Default:publishCommand }
+    requirements:
+        _method: POST|GET
+
+api_unpublish_command:
+    pattern: /unpublishCommand
+    defaults: { _controller: BachIndexationBundle:Default:unpublishCommand }
+    requirements:
+        _method: POST|GET
+
+api_launch_generate_image:
+    pattern: /generateImage
+    defaults: { _controller: BachIndexationBundle:Default:generateImage }
+    requirements:
+        _method: POST|GET
+
+api_delete_generate_image:
+    pattern: /deleteImage
+    defaults: { _controller: BachIndexationBundle:Default:deleteImage }
+    requirements:
+        _method: POST|GET
+
+api_comment_report:
+    pattern: /reportComment
+    defaults: { _controller: BachIndexationBundle:Default:sendReportComment }
+    requirements:
+        _method: POST|GET

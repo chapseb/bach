@@ -47,25 +47,52 @@ POSSIBILITY OF SUCH DAMAGE.
 
 {% block show_results %}
             {% for document in searchResults %}
+                {% set specialflag = false %}
+                {% if specialeads is defined %}
+                {% for specialead in specialeads%}
+                    {% if specialead in document.fragmentid %}
+                        {% set specialflag = true %}
+                    {% endif%}
+                {% endfor %}
+                {% endif%}
                 <article id="result_{{ document.fragmentid }}" role="document" about="{{ document.fragmentid }}"{% if view == 'thumbs' %} class="thumbs"{% endif %}>
                     {% if show_pics %}
                     <figure class="result_pic{% if document.dao is not defined %} no-image{% endif %}">
                         {% if document.dao is defined %}
-                         {% if daoSeries[document.fragmentid] is defined and daoSeries[document.fragmentid] == 'series'%}
-                            {{ displayDao(document.dao, false, 'thumb', 'series')|raw }}
-                         {%else%}
-                            {{ displayDao(document.dao)|raw }}
-                         {%endif%}
+                        {% set flagCommunicability = false%}
+                        {% set flagAudience = false %}
+                        {% for docdao in document.dao %}
+                            {% if docdao in listDaos %}
+                             {% set flagCommunicability = true %}
+                            {% endif%}
+                            {% if listDaosAudience is defined and docdao in listDaosAudience %}
+                             {% set flagAudience = true %}
+                            {% endif%}
+                        {% endfor %}
+                        {% endif %}
+                        {% set documentTitle = null%}
+                        {% if document.dao is defined and document.dao is not null and listDaosTitle[document.dao[0]] is defined and listDaosTitle[document.dao[0]] is not empty%}
+                            {% set documentTitle = listDaosTitle[document.dao[0]]%}
+                        {% endif %}
+                        {% if daoSeries[document.fragmentid] is defined and daoSeries[document.fragmentid] == 'series' and flagCommunicability == true and flagAudience != true%}
+                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability, 'series', aws, cloudfront, documentTitle)|raw }}
                         {% else %}
+                          {% if document.dao is defined and flagCommunicability == true and flagAudience != true%}
+                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability, null, aws, cloudfront, documentTitle)|raw }}
+                          {% elseif document.dao is defined and flagCommunicability is defined and flagCommunicability == false and flagAudience != true%}
+                            <img src="/img/thumb_comm.png" class="nonCommPic" title="{{ _('This picture is not communicable') }}"/>
+                          {% else %}
                             <img src="{% include '::images/noimage.html.twig' %}" alt=""/>
+                          {% endif %}
                         {% endif %}
                     </figure>
                     {% endif %}
-
                     <div{% if not show_pics %} class="nopic"{% endif %}>
+
+                    {% if display_breadcrumb %}
                     {%- if (view == 'list' or view == 'txtlist') and (document.parents_titles is defined or document.archDescUnitTitle is defined) -%}
                         <ul class="breadcrumb">
-                        {%- if document.archDescUnitTitle is defined -%}
+                        {%- if document.archDescUnitTitle is defined %}
                             <li>
                                 <a href="{{ path('bach_display_document', {docid: document.headerId ~ '_description'}) }}" property="dc:isPartOf">{{ document.archDescUnitTitle }}</a>
                             </li>
@@ -95,10 +122,9 @@ POSSIBILITY OF SUCH DAMAGE.
                             {%- endif -%}
                         </ul>
                     {%- endif -%}
-
-                    <header>
+                        <header>
                         <h3 property="dc:title">
-                            <a href="{{ path('bach_display_document', {docid: document.fragmentid}) }}" class="display_doc">
+                            <a href="{{ path('bach_display_document', {docid: document.fragmentid}) }}" class="{%if specialflag == true%}special_result {%endif%}display_doc">
                             {%- if hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')|length > 0 -%}
                                 {{ hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')[0]|raw }}
                             {%- elseif document.cUnittitle is defined -%}
@@ -106,6 +132,7 @@ POSSIBILITY OF SUCH DAMAGE.
                             {%- else -%}
                                 {{ _('Untitled unit') }}
                             {%- endif -%}
+
                             {%- if document.cDate is defined and document.cDate != '' and document.cDate != document.cUnittitle -%}
                                 <span class="date" property="dc:date"> • {{ document.cDate }}</span>
                             {%- endif -%}
@@ -114,10 +141,66 @@ POSSIBILITY OF SUCH DAMAGE.
                         {% set subid = document.fragmentid|replace({(document.headerId ~ '_'): ''}) %}
                         <a href="{{ path('bach_ead_html', {'docid': document.headerId}) }}#{{ subid }}" class="treeLinkResults" title="{{ _('Locate in document tree') }}" >{{ _('Locate in document tree') }}</a>{% if cMediaContent is defined and cMediaContent[loop.index0] == 1 %}<span class="cMedia"></span>{% endif %}<a class="addBasket" title="{{ _('Add to basket')}}" href="{{ path('basket_add',{'docid': document.fragmentid})}}">{{ _('Add to basket')}}</a>
                         </h3>
+                        </header>
+
+                    {% set rend = displayFragment(document.fragment, document.fragmentid, search_form,false,false,false,0,false,false, hlSearchResults.getResult(document.fragmentid)) %}
+                    {{ rend|raw }}
+                    {% endif %}
+                    {% else %}
+                    <header>
+                        <h3 property="dc:title">
+                            <ul class="breadcrumb">
+                            {%- if document.archDescUnitTitle is defined and document.archDescUnitTitle != document.cUnittitle%}
+                                <li>
+                                    <a class="display_doc" href="{{ path('bach_display_document', {docid: document.headerId ~ '_description'}) }}" property="dc:isPartOf">{{ document.archDescUnitTitle }}</a>
+                                </li>
+                            {%- endif -%}
+                            {%- if document.parents_titles is defined -%}
+                                {% set parents_ids = document.parents|split('/') %}
+                                {% for ptitle in document.parents_titles %}
+                                    <li>
+                                        <a class="display_doc" href="{{ path('bach_display_document', {docid: document.headerId ~ '_' ~ parents_ids[loop.index0]}) }}" property="dc:isPartOf">
+                                        {% set testHighlight = 0 %}
+                                        {% if hlSearchResults.getResult(document.fragmentid).getField('parents_titles') %}
+                                            {% for ptitleHighlight in hlSearchResults.getResult(document.fragmentid).getField('parents_titles') if testHighlight == 0 %}
+                                                {% if ptitleHighlight|striptags in ptitle %}
+                                                    {% set testHighlight = 1 %}
+                                                    {{ ptitle|replace({ (ptitleHighlight|striptags): ptitleHighlight })|raw }}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if testHighlight == 0%}
+                                                {{ ptitle }}
+                                            {% endif%}
+                                        {% else %}
+                                            {{ ptitle }}
+                                        {% endif %}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            {%- endif -%}
+                                <li class="last_title"><a href="{{ path('bach_display_document', {docid: document.fragmentid}) }}" class="{%if specialflag == true%}special_result {%endif%}display_doc">
+                                {%- if hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')|length > 0 -%}
+                                    {{ hlSearchResults.getResult(document.fragmentid).getField('cUnittitle')[0]|raw }}
+                                {%- elseif document.cUnittitle is defined -%}
+                                    {{ document.cUnittitle }}
+                                {%- else -%}
+                                    {{ _('Untitled unit') }}
+                                {%- endif -%}
+                                </a></li>
+                            </ul>
+                        {% if view == 'list' or view == 'txtlist' %}
+                            {%- if document.cDate is defined and document.cDate != '' and document.cDate != document.cUnittitle -%}
+                                <span class="date" property="dc:date">{{ document.cDate }}</span>
+                            {%- endif -%}
+                            {% set subid = document.fragmentid|replace({(document.headerId ~ '_'): ''}) %}
+                        <a href="{{ path('bach_ead_html', {'docid': document.headerId}) }}#{{ subid }}" class="treeLinkResults" title="{{ _('Locate in document tree') }}" >{{ _('Locate in document tree') }}</a>{% if cMediaContent is defined and cMediaContent[loop.index0] == 1 %}<span class="cMedia"></span>{% endif %}<a class="addBasket" title="{{ _('Add to basket')}}" href="{{ path('basket_add',{'docid': document.fragmentid})}}">{{ _('Add to basket')}}</a>
+                        </h3>
                     </header>
                     {% set rend = displayFragment(document.fragment, document.fragmentid, search_form,false,false,false,0,false,false, hlSearchResults.getResult(document.fragmentid)) %}
                     {{ rend|raw }}
                     {% endif %}
+
+                    {%endif%}
                     </div>
                 </article>
             {% endfor %}
@@ -184,6 +267,9 @@ POSSIBILITY OF SUCH DAMAGE.
                     q: extractLast(request.term)
                 }, response
             );
+        },
+        focus: function() {
+            return false
         },
         select: function(event, ui) {
             var terms = split(this.value);

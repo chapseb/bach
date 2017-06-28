@@ -71,6 +71,7 @@ class GroupAdmin extends SonataGroupAdmin
         //use Bach specific roles only, not all the stuff available.
         $roles = [
             'ROLE_USER'         => _('User'),
+            'ROLE_READER'       => _('Reader'),
             'ROLE_CONTENT_ADMIN'=> _('Content administrator'),
             'ROLE_ARCHIVIST'    => _('Archivist'),
             'ROLE_ADMIN'        => _('Administrator')

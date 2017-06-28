@@ -49,7 +49,7 @@ parameters:
     #Solr parameters
     solr_ssl: false
     solr_host: localhost
-    solr_port: 8080
+    solr_port: 8983
     solr_path: /solr
     #Core names for each type
     ead_corename: ead
@@ -97,6 +97,8 @@ parameters:
     display.disable_searchmap: true
     display.ead.result_order: null
     display.disable_connectbutton: false
+    display.breadcrumb: true
+    matricules_order: null
     cote_location: 'bottom' #either top or bottom
     #other
     feature.openid: false
@@ -104,10 +106,12 @@ parameters:
     feature.register: false
     feature.heritage: true
     feature.minify: false
+    readingroom: null
+    ip_internal: false
     matricules_histogram: 'annee_naissance'
     matricules_listparameters: ['cote', 'date_enregistrement', 'lieu_enregistrement', 'classe', 'nom', 'prenoms', 'matricule', 'annee_naissance', 'lieu_naissance', 'lieu_residence', 'comment']
     matricules_searchparameters: ['cote', 'date_enregistrement', 'lieu_enregistrement', 'classe', 'nom', 'prenoms', 'matricule', 'annee_naissance', 'lieu_naissance', 'lieu_residence', 'comment']
-
+    report_mail: null
     #UI parameters
     viewer_uri: http://viewer.localhost/
     covers_dir: '%kernel.root_dir%/../web/covers/'
@@ -166,6 +170,11 @@ parameters:
     label.matricules: null
     label.expos: null
     label.browse: null
+    daodetector: null
+    specialeads: null
+    cdcdocuments: null
+    cdcunlistedfiles: true
+    nbrowgenerateimage: 10
 
     #mail parameters
     mailer_transport: smtp
@@ -179,8 +188,16 @@ parameters:
     weight.cUnittitle : 1
     weight.parents_titles: 1
     weight.fulltext: 0.1
+    weight.cUnitid : 0.1
     collapsecdc: false
     pdf_search: false
+    aws.sender: null
+    aws.s3.ead_files_path: null
+    aws.s3.matricules_files_path: null
+    aws.s3.cdc_files_path: null
+    aws.s3.bucket: null
+    aws.s3: false
+    cloudfront: null
     print:
        header:
             image: '%kernel.root_dir%/../web/img/smlogo.png'

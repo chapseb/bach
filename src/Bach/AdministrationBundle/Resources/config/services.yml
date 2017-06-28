@@ -32,6 +32,8 @@
 parameters:
     administration.configreader.class: Bach\AdministrationBundle\Entity\SolrCore\BachCoreAdminConfigReader
     bach_administration_corecreationform.class: Bach\AdministrationBundle\Form\Type\CoreCreationForm
+    bach_administration_authenticationsucesshandler.class: Bach\AdministrationBundle\Handler\AuthenticationSuccessHandler
+    bach_administration_logoutsuccesshandler.class: Bach\AdministrationBundle\Handler\LogoutSuccessHandler
 
 services:
     bach.administration.configreader:
@@ -43,3 +45,13 @@ services:
         arguments: [ '%bach.types%' ]
         tags:
             - { name: form.type, alias: corecreation}
+
+    bach.administration.authentification.success_handler:
+        class:  '%bach_administration_authenticationsucesshandler.class%'
+        arguments:  ['@security.http_utils', {}]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
+
+    bach.administration.logout_success_handler:
+       class: '%bach_administration_logoutsuccesshandler.class%'
+       arguments: ['@security.http_utils', '/']

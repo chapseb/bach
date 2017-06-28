@@ -651,7 +651,7 @@ class DisplayDao extends \Twig_Extension
                     $ret = '<a href="' . $viewer . 'series/' .
                     $dao . '" target="_blank" property="image">';
                     if ($daorep != null) {
-                        $ret .= '<img src="' . $viewer . 'ajax/representative/' .
+                        $ret .= '<img src="' . $viewer . 'ajax/img/' .
                         rtrim($daorep, '/') .  '/format/' . $format
                         . '" alt="' . $dao . '" title="'. $daotitle .'" />';
                     } else {

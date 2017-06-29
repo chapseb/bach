@@ -224,7 +224,7 @@ POSSIBILITY OF SUCH DAMAGE.
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="genreform[not(@source='liste-niveau') and not(@source='liste-typedocAC') and not(@type='typir') and not(parent::controlaccess)]|extent|physfacet|dimensions|langmaterial" mode="full">
+    <xsl:template match="genreform[not(@source='liste-niveau') and not(@source='liste-typedocAC') and not(@type='typir') and not(parent::controlaccess)]|extent|physfacet|dimensions|langmaterial|container|origination" mode="full">
         <xsl:variable name="elt_name">
             <xsl:choose>
                 <xsl:when test="preceding-sibling::lb or following-sibling::lb">span</xsl:when>
@@ -232,7 +232,7 @@ POSSIBILITY OF SUCH DAMAGE.
             </xsl:choose>
         </xsl:variable>
         <xsl:element name="{$elt_name}">
-            <strong>
+            <h4>
                 <xsl:choose>
                     <xsl:when test="@label">
                         <xsl:value-of select="@label"/>
@@ -252,7 +252,10 @@ POSSIBILITY OF SUCH DAMAGE.
                                 <xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Dimensions:')"/>
                             </xsl:when>
                             <xsl:when test="local-name() = 'langmaterial'">
-                                <xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Language:')"/>
+                                <xsl:value-of select="php:function('Bach\homebundle\twig\displayeadfragment::i18nfromxsl', 'language:')"/>
+                            </xsl:when>
+                            <xsl:when test="local-name() = 'container'">
+                                <xsl:value-of select="php:function('Bach\homebundle\twig\displayeadfragment::i18nfromxsl', 'container:')"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 UNKNONWN ELEMENT
@@ -260,7 +263,7 @@ POSSIBILITY OF SUCH DAMAGE.
                         </xsl:choose>
                     </xsl:otherwise>
                 </xsl:choose>
-            </strong>
+            </h4>
             <xsl:text> </xsl:text>
             <xsl:value-of select="."/>
         </xsl:element>
@@ -401,7 +404,7 @@ POSSIBILITY OF SUCH DAMAGE.
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="accessrestrict|legalstatus|odd|processinfo|custodhist|arrangement|relatedmaterial|originalsloc|bibliography|userestrict|bioghist|acqinfo|separatedmaterial|otherfindaid|repository|physdesc|container|controlaccess|origination|abstract" mode="full">
+    <xsl:template match="accessrestrict|legalstatus|odd|processinfo|custodhist|arrangement|relatedmaterial|originalsloc|bibliography|userestrict|bioghist|acqinfo|separatedmaterial|otherfindaid|repository|physdesc|controlaccess|abstract" mode="full">
         <xsl:call-template name="section_content">
             <xsl:with-param name="title">
                 <xsl:choose>

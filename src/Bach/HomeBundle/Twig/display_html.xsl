@@ -137,7 +137,7 @@ POSSIBILITY OF SUCH DAMAGE.
         </dd>
     </xsl:template>
 
-    <xsl:template match="extent|physfacet|genreform" mode="presentation">
+    <xsl:template match="extent|physfacet|genreform|container" mode="presentation">
         <dt>
             <h3>
                 <xsl:choose>

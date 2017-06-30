@@ -276,8 +276,18 @@ POSSIBILITY OF SUCH DAMAGE.
     </xsl:template>
 
     <xsl:template match="controlaccess" mode="presentation">
+            <section class="{local-name()}">
+                <xsl:if test="head">
+                <header>
+                    <xsl:variable name="count" select="count(ancestor::*/head)"/>
+                    <xsl:element name="h{$count + 2}">
+                        <xsl:value-of select="head"/>
+                    </xsl:element>
+                </header>
+            </xsl:if>
         <xsl:variable name="nodes" select="subject|geogname|persname|corpname|name|function|genreform[not(@source='liste-niveau') and not(@source='liste-typedocAC') and not(@type='typir')]"/>
-        <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayHtml::showDescriptors', $nodes, $docid)/descriptors/*"/>
+        <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::showDescriptors', $nodes, $docid)"/>
+            </section>
     </xsl:template>
 
     <xsl:template match="genreform[@source = 'liste-typedocAC']" mode="contents"/>

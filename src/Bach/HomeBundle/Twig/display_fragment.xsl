@@ -211,13 +211,20 @@ POSSIBILITY OF SUCH DAMAGE.
 
     <xsl:template match="subject|geogname|persname|corpname|name|function" mode="full">
         <xsl:if test="not(parent::controlaccess)">
-            <a>
-                <xsl:attribute name="link">
-                    <!-- URL cannot ben generated from here. Let's build a specific value to be replaced -->
-                    <xsl:value-of select="concat('%%%', local-name(), '::', string(.), '%%%')"/>
-                </xsl:attribute>
-                <xsl:value-of select="."/>
-            </a>
+            <xsl:choose>
+                <xsl:when test="ancestor::processinfo">
+                    <xsl:value-of select="."/>
+                </xsl:when>
+                <xsl:otherwise>
+                <a>
+                    <xsl:attribute name="link">
+                        <!-- URL cannot ben generated from here. Let's build a specific value to be replaced -->
+                        <xsl:value-of select="concat('%%%', local-name(), '::', string(.), '%%%')"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="."/>
+                </a>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:if test="following-sibling::subject or following-sibling::geogname or following-sibling::persname or following-sibling::corpname or following-sibling::name or following-sibling::function">
                 <xsl:text>, </xsl:text>
             </xsl:if>

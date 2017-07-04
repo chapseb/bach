@@ -543,6 +543,11 @@ EOF
             $insertObject['lat']    = $geonames[$key]['attributes']['latitude'];
             $insertObject['lon']    = $geonames[$key]['attributes']['longitude'];
             $insertObject['indexed_name'] = $geonames[$key]['value'];
+            $insertObject['name']   = preg_replace(
+                "/\([^)]+\)/",
+                "",
+                $geonames[$key]['value']
+            );
             $insertObject['found']  = '1';
 
             if ($this->_insert_geo_stmt === null) {
@@ -561,6 +566,11 @@ EOF
             $updateObject['lat']    = $geonames[$key]['attributes']['latitude'];
             $updateObject['lon']    = $geonames[$key]['attributes']['longitude'];
             $updateObject['indexed_name'] = $geonames[$key]['value'];
+            $updateObject['name']   = preg_replace(
+                "/\([^)]+\)/",
+                "",
+                $geonames[$key]['value']
+            );
             $updateObject['id']     = $geonameUpdate['id'];
             $updateObject['found']  = '1';
 

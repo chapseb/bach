@@ -197,7 +197,8 @@ parameters:
     aws.s3.cdc_files_path: null
     aws.s3.bucket: null
     aws.s3: false
-    aws.sqs_url: null
+    aws.sqs_url: ''
+    awsdetect: false
     aws.sqs_nbimages: 10
     cloudfront: null
     print:

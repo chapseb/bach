@@ -97,6 +97,7 @@ twig:
             providerversion: '%minify.providerversion%'
             apikey: '%minify.apikey%'
             login: '%minify.login%'
+        awsdetect: '%awsdetect%'
 
 # Assetic Configuration
 assetic:

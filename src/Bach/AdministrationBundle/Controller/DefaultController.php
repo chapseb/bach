@@ -91,7 +91,7 @@ class DefaultController extends Controller
         $queueUrl = $this->container->getParameter('aws.sqs_url');
 
         $logger = $this->get('logger');
-        $aws = $this->container->getParameter('aws.s3');
+        $aws = $this->container->getParameter('awsdetect');
         if ($aws) {
             $version      = $this->container->getParameter('aws.version');
             $region       = $this->container->getParameter('aws.region');
@@ -126,6 +126,7 @@ class DefaultController extends Controller
                 $date->add(new \DateInterval($add));
                 $resultDate = $date->format('Y/m/d H:i:s');
             } catch (AwsException $e) {
+                $resultDate = null;
                 // output error message in logs if fails
                 $logger->error('Exception Aws SQS : '.  $e->getMessage(). "\n");
             }

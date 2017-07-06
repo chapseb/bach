@@ -7,125 +7,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: src/Bach/AdministrationBundle@20131025144736\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-28 09:25+0200\n"
-"PO-Revision-Date: 2015-05-11 16:41+0100\n"
+"POT-Creation-Date: 2017-07-06 13:06+0200\n"
+"PO-Revision-Date: 2017-07-06 13:08+0200\n"
 "Last-Translator: Sebastien Chaptal <sebastien.chaptal@anaphore.eu>\n"
+"Language-Team: \n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.5\n"
-"Language-Team: \n"
+"X-Generator: Poedit 1.8.8\n"
 
 #: src/Bach/AdministrationBundle/Controller/CoreAdminController.php:137
 #: src/Bach/AdministrationBundle/Command/CreatecoreCommand.php:129
 msgid "Unkwown type %type"
 msgstr "Type %type inconnu"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:49
-msgid "Solr server informations"
-msgstr "Informations du serveur Solr"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:54
-msgid "Solr version:"
-msgstr "Version de Solr :"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:60
-msgid "JVM:"
-msgstr "JVM :"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:66
-msgid "System:"
-msgstr "Système :"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:72
-msgid "Load average:"
-msgstr "Charge :"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:80
-msgid "System memory"
-msgstr "Mémoire système"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:87
-msgid "Swap"
-msgstr "Swap"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:94
-msgid "JVM memory"
-msgstr "Mémoire JVM"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:102
-msgid "Active Solr cores"
-msgstr "Noyaux Solr actifs"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:131
-msgid "Add new core"
-msgstr "Ajouter un nouveau noyau"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:149
-msgid "Documents count:"
-msgstr "Nombre de  documents :"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:155
-msgid "Index size (Kb)"
-msgstr "Taille de l'index (Kb)"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:161
-msgid "Up since:"
-msgstr "Démarré depuis :"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:169
-msgid "Core directory:"
-msgstr "Dossier du noyau :"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:175
-msgid "Data directory:"
-msgstr "Dossier des données :"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:197
-msgid "Temporary Solr cores"
-msgstr "Noyaux Solr temporaires"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:201
-msgid ""
-"Above list should be a list of temporary created Solr cores, that has not "
-"been copied because of a lack of permissions. A warning message should have "
-"been displayed at core creation about this issue."
-msgstr ""
-"La liste ci-dessous devrait être une liste de noyaux Solr temporaires, qui "
-"n'ont pas été copées en raison de problèmes de permission. Un message "
-"d'avertissement a été affiché lors de la création du noyau à propos de ce "
-"problème."
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:271
-msgid "Loading..."
-msgstr "Chargement..."
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:273
-msgid "Currently loading..."
-msgstr "En cours de chargement..."
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:283
-msgid "An error occured loading tab :("
-msgstr "Un erreur est survenue au chargement de l'onglet :("
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:431
-msgid "Add a new Solr core"
-msgstr "Ajouter un nouveau noyau Solr"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:437
-msgid "Type"
-msgstr "Type"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:447
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:199
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:248
-msgid "Name"
-msgstr "Nom"
-
-#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:461
-msgid "Create core"
-msgstr "Créer le noyau"
 
 #: src/Bach/AdministrationBundle/Command/CreatecoreCommand.php:84
 msgid "Core name"
@@ -155,7 +50,7 @@ msgstr "Le noyau n'a pas été créé."
 msgid "A directory %dir already exists!"
 msgstr "Un dossier %dir existe déjà !"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/SolrCoreAdmin.php:230
+#: src/Bach/AdministrationBundle/Entity/SolrCore/SolrCoreAdmin.php:232
 msgid ""
 "A temporary core has been created in %tempdir. You have to put it the right "
 "place.\n"
@@ -169,7 +64,7 @@ msgstr ""
 "Une fois cela fait, lancer l'URL suivante dans votre instance Solr :\n"
 "%solr_url"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/SolrCoreAdmin.php:399
+#: src/Bach/AdministrationBundle/Entity/SolrCore/SolrCoreAdmin.php:401
 #, php-format
 msgid "Unable to unload %corename, therefore it should not be removed."
 msgstr "Impossible de décharger %corename, il ne pourra donc être supprimé."
@@ -206,6 +101,12 @@ msgstr "Nom de personne"
 msgid "Family name"
 msgstr "Nom de famille"
 
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:199
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:257
+#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:44
+msgid "Name"
+msgstr "Nom"
+
 #: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:202
 msgid "Subject"
 msgstr "Sujet"
@@ -215,92 +116,225 @@ msgid "Unit ID"
 msgstr "ID de l'unité"
 
 #: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:208
+msgid "Unit ID begin"
+msgstr "Début de cotes extrêmes"
+
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:211
+msgid "Unit ID end"
+msgstr "Fin de cotes extrêmes"
+
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:214
 msgid "Unit title"
 msgstr "Titre de l'unité"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:211
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:217
 msgid "Title"
 msgstr "Titre"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:214
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:220
 msgid "Descriptors"
 msgstr "Descripteurs"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:217
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:223
 msgid "File title"
 msgstr "Titre du fichier"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:220
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:226
 msgid "File description author"
 msgstr "Auteur de la description du fichier"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:223
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:229
 msgid "Document identifier"
 msgstr "Identifiant du document"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:226
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:232
 msgid "File document publisher"
 msgstr "Éditeur du document fichier"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:229
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:235
 msgid "File document language"
 msgstr "Langue du document fichier"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:232
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:238
 msgid "Digital substitute"
 msgstr "Substitut numérique"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:235
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:241
+msgid "Media content"
+msgstr "Contenu multimédia"
+
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:244
 msgid "Dates periods"
 msgstr "Périodes de dates"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:238
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:247
 msgid "Archival description identifier"
 msgstr "Identifiant de la description du fichier"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:241
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:250
 msgid "Archival description access restriction"
 msgstr "Restriction d'accès de la description du fichier"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:245
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:254
 msgid "Cote"
 msgstr "Cote"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:251
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:260
 msgid "Place of recording"
 msgstr "Lieu d'enregistrement"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:254
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:263
 msgid "Place of birth"
 msgstr "Lieu de naissance"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:257
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:266
+msgid "Place of residence"
+msgstr "Lieu de résidence"
+
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:269
 msgid "Surnames"
 msgstr "Prénoms"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:260
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:272
 msgid "Matricule"
 msgstr "Matricule"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:263
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:275
 msgid "Year of recording"
 msgstr "Année d'enregistrement"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:266
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:278
 msgid "Class"
 msgstr "Classe"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:269
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:281
 msgid "Year of birth"
 msgstr "Année de naissance"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:272
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:284
 msgid "Legal status"
 msgstr "Statut juridique"
 
-#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:301
+#: src/Bach/AdministrationBundle/Entity/SolrCore/Fields.php:313
 msgid "without specific"
 msgstr "sans spécifiques"
+
+#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:28
+msgid "Add a new Solr core"
+msgstr "Ajouter un nouveau noyau Solr"
+
+#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:34
+msgid "Type"
+msgstr "Type"
+
+#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:58
+msgid "Create core"
+msgstr "Créer le noyau"
+
+#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:103
+#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:387
+msgid "Image generation"
+msgstr "Génération d'images"
+
+#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:109
+msgid "Image generation !"
+msgstr "Génération d'images !"
+
+#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:188
+msgid "Welcome to Bach's!"
+msgstr "Bienvenue dans Bach !"
+
+#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:192
+msgid ""
+"This section contain additional informations not directly related to Bach "
+"Ricercare."
+msgstr ""
+"Cette section contient des informations annexes n'étant pas liées "
+"directement à Bach Ricercare."
+
+#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:266
+msgid "Image generation is over!"
+msgstr "La génération d'images est terminée !"
+
+#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:376
+msgid "Bach other features"
+msgstr "Autres informations"
+
+#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:397
+msgid "Publication queue"
+msgstr "Queue de publication"
+
+#: src/Bach/AdministrationBundle/Resources/gettext/twig.cache.php:495
+msgid "This feature is allowed for hosted customers by Anaphore"
+msgstr ""
+"Cette fonctionnalité n'est accessible qu'aux clients hébergés chez Anaphore"
+
+#~ msgid "Solr server informations"
+#~ msgstr "Informations du serveur Solr"
+
+#~ msgid "Solr version:"
+#~ msgstr "Version de Solr :"
+
+#~ msgid "JVM:"
+#~ msgstr "JVM :"
+
+#~ msgid "System:"
+#~ msgstr "Système :"
+
+#~ msgid "Load average:"
+#~ msgstr "Charge :"
+
+#~ msgid "System memory"
+#~ msgstr "Mémoire système"
+
+#~ msgid "Swap"
+#~ msgstr "Swap"
+
+#~ msgid "JVM memory"
+#~ msgstr "Mémoire JVM"
+
+#~ msgid "Active Solr cores"
+#~ msgstr "Noyaux Solr actifs"
+
+#~ msgid "Add new core"
+#~ msgstr "Ajouter un nouveau noyau"
+
+#~ msgid "Documents count:"
+#~ msgstr "Nombre de  documents :"
+
+#~ msgid "Index size (Kb)"
+#~ msgstr "Taille de l'index (Kb)"
+
+#~ msgid "Up since:"
+#~ msgstr "Démarré depuis :"
+
+#~ msgid "Core directory:"
+#~ msgstr "Dossier du noyau :"
+
+#~ msgid "Data directory:"
+#~ msgstr "Dossier des données :"
+
+#~ msgid "Temporary Solr cores"
+#~ msgstr "Noyaux Solr temporaires"
+
+#~ msgid ""
+#~ "Above list should be a list of temporary created Solr cores, that has not "
+#~ "been copied because of a lack of permissions. A warning message should "
+#~ "have been displayed at core creation about this issue."
+#~ msgstr ""
+#~ "La liste ci-dessous devrait être une liste de noyaux Solr temporaires, "
+#~ "qui n'ont pas été copées en raison de problèmes de permission. Un message "
+#~ "d'avertissement a été affiché lors de la création du noyau à propos de ce "
+#~ "problème."
+
+#~ msgid "Loading..."
+#~ msgstr "Chargement..."
+
+#~ msgid "Currently loading..."
+#~ msgstr "En cours de chargement..."
+
+#~ msgid "An error occured loading tab :("
+#~ msgstr "Un erreur est survenue au chargement de l'onglet :("
 
 #~ msgid "Copy fields"
 #~ msgstr "Champs copiés"

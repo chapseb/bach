@@ -37,7 +37,8 @@
  *
  * @category Administration
  * @package  Bach
- * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Johan Cwiklinski  <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
@@ -48,13 +49,16 @@ use Bach\AdministrationBundle\Entity\Helpers\ViewObjects\CoreStatus;
 use Bach\AdministrationBundle\Entity\SolrCore\SolrCoreAdmin;
 use Bach\AdministrationBundle\Entity\SolrAdmin\Infos;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Aws\Sqs\SqsClient;
+use Aws\Exception\AwsException;
 
 /**
  * Bach default administration controller
  *
  * @category Administration
  * @package  Bach
- * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Johan Cwiklinski  <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
@@ -67,43 +71,74 @@ class DefaultController extends Controller
      */
     public function dashboardAction()
     {
-        $solr_infos = new Infos(
-            $this->container->getParameter('solr_ssl'),
-            $this->container->getParameter('solr_host'),
-            $this->container->getParameter('solr_port'),
-            $this->container->getParameter('solr_path')
+        $aws = $this->container->getParameter('aws.s3');
+        return $this->render(
+            'AdministrationBundle:Default:dashboard.html.twig',
+            array(
+                'template' => 'main',
+                'aws'      => $aws
+            )
         );
+    }
 
-        $solr_infos->loadSystemInfos();
+    /**
+     * Displays remaining time for generated thumbs
+     *
+     * @return void
+     */
+    public function generateImagesAction()
+    {
+        $queueUrl = $this->container->getParameter('aws.sqs_url');
 
-        $configreader = $this->container->get('bach.administration.configreader');
-        $sca = new SolrCoreAdmin($configreader);
-        $coreNames = $sca->getStatus()->getCoreNames();
-        $coresInfo = array();
-        foreach ($coreNames as $cn) {
-            $coresInfo[$cn] = new CoreStatus($sca, $cn);
+        $logger = $this->get('logger');
+        $aws = $this->container->getParameter('aws.s3');
+        if ($aws) {
+            $version      = $this->container->getParameter('aws.version');
+            $region       = $this->container->getParameter('aws.region');
+            $nbImageByMin = $this->container->getParameter('aws.sqs_nbimages');
+
+            $client = new SqsClient(
+                [
+                    'region'  => $region,
+                    'version' => $version,
+                    'credentials' => array(
+                        'key' =>
+                            $this->container->getParameter('aws.credentials.key'),
+                        'secret' =>
+                            $this->container->getParameter('aws.credentials.secret')
+                    )
+                ]
+            );
+            try {
+                $result = $client->getQueueAttributes(
+                    [
+                        'AttributeNames' => array('ApproximateNumberOfMessages'),
+                        'QueueUrl' => $queueUrl // REQUIRED
+                    ]
+                );
+                $date = new \DateTime();
+                $nbImageToTreat = intval(
+                    $result->get('Attributes')['ApproximateNumberOfMessages']
+                );
+                $numberMin = $nbImageToTreat/$nbImageByMin;
+                $numberSec = $numberMin * 60;
+                $add = 'PT'.strval($numberSec).'S';
+                $date->add(new \DateInterval($add));
+                $resultDate = $date->format('Y/m/d H:i:s');
+            } catch (AwsException $e) {
+                // output error message in logs if fails
+                $logger->error('Exception Aws SQS : '.  $e->getMessage(). "\n");
+            }
+        } else {
+            $resultDate = null;
         }
-        $session = $this->getRequest()->getSession();
-        $session->set('coreNames', $coreNames);
-
-        $tmpCoreNames = $sca->getTempCoresNames();
 
         return $this->render(
             'AdministrationBundle:Default:dashboard.html.twig',
             array(
-                'coreNames'         => $coreNames,
-                'tmpCoresNames'     => $tmpCoreNames,
-                'coresInfo'         => $coresInfo,
-                'total_virt_mem'    => $solr_infos->getTotalVirtMem(),
-                'used_virt_mem'     => $solr_infos->getUsedVirtMem(),
-                'total_swap'        => $solr_infos->getTotalSwap(),
-                'used_swap'         => $solr_infos->getUsedSwap(),
-                'total_jvm'         => $solr_infos->getTotalJvmMem(),
-                'used_jvm'          => $solr_infos->getUsedJvmMem(),
-                'solr_version'      => $solr_infos->getSolrVersion(),
-                'jvm_version'       => $solr_infos->getJvmInfos(),
-                'system_version'    => $solr_infos->getSystemInfos(),
-                'load_average'      => $solr_infos->getLoadAverage()
+                'template'    => 'generateImages',
+                'aws'         => $aws,
+                'clockending' => $resultDate
             )
         );
     }

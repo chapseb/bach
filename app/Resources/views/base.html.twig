@@ -169,9 +169,9 @@ POSSIBILITY OF SUCH DAMAGE.
                         <a href="{{ path('sonata_admin_dashboard') }}">{{ _('Manage') }}</a>
                     </li>
                         {% endif %}
-                        {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        {% if is_granted('ROLE_ADMIN') %}
                     <li{% if app.request.attributes.get('_route') == 'administration_dashboard' %} class="active"{% endif %}>
-                        <a href="{{ path('administration_dashboard') }}">{{ _('Manage Solr') }}</a>
+                        <a href="{{ path('administration_dashboard') }}">{{ _('Other admin') }}</a>
                     </li>
                         {% endif %}
                     {% endif %}

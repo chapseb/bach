@@ -46,3 +46,9 @@ administration_newcore:
     defaults: { _controller: AdministrationBundle:CoreAdmin:newcore, 'ajax': false }
     requirements:
         _method: GET
+
+administration_generateImages:
+    pattern: /generateImages
+    defaults: { _controller: AdministrationBundle:Default:generateImages }
+    requirements:
+        _method: GET

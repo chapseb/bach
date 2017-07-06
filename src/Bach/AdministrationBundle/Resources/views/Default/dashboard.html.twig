@@ -33,173 +33,45 @@ POSSIBILITY OF SUCH DAMAGE.
 
 {% extends '::base.html.twig' %}
 
-{% block css %}
-    <link href="{{ asset('css/jqplot/jquery.jqplot.min.css') }}" type="text/css" rel="stylesheet" />
+{% block menu %}
+    {% include 'AdministrationBundle:Admin:menu.html.twig' %}
 {% endblock %}
 
 {% block container %}
-    <h2>{{ _('Solr server informations') }}</h2>
-    <ul class="well">
-        <li><strong>{{ _('Solr version:') }}</strong> {{ solr_version }}</li>
-        <li><strong>{{ _('JVM:') }}</strong> {{ jvm_version }}</li>
-        <li><strong>{{ _('System:') }}</strong> {{ system_version }}</li>
-        <li><strong>{{ _('Load average:') }}</strong> {{ load_average }}</li>
-    </ul>
-    <section id="ram_usage">
-        <h4>{{ _('System memory') }}</h4>
-        <div id="memory"></div>
-    </section>
-    <section id="swap_usage">
-        <h4>{{ _('Swap') }}</h4>
-        <div id="swap"></div>
-    </section>
-    <section id="jvm_usage">
-        <h4>{{ _('JVM memory') }}</h4>
-        <div id="jvm"></div>
-    </section>
-
-    <section id="cores">
-        <h4>{{ _('Active Solr cores') }}</h4>
-        <div id="cores_list">
-            <ul>
-        {% for core in coreNames %}
-                <li>
-                    <a  href="#core_{{ core }}">{{ core }} </a>
-                </li>
-        {% endfor %}
-                <li>
-                    <a href="{{ path('administration_newcore') }}">{{ _('Add new core') }}</a>
-                </li>
-            </ul>
-
-        {% for core in coreNames %}
-            <div id="core_{{ core }}">
-                <div class="accordion-inner">
-                    <p>
-                        <strong>{{ _('Documents count:') }}</strong> {{ coresInfo[core].numDocs }}<br/>
-                        <strong>{{ _('Index size (Kb)') }}</strong> {{ coresInfo[core].size }}<br/>
-                        <strong>{{ _('Up since:') }}</strong> {{ coresInfo[core].startTime }}
-                    </p>
-                    <p>
-                        <strong>{{ _('Core directory:') }}</strong> {{ coresInfo[core].coreDir }}<br/>
-                        <strong>{{ _('Data directory:') }}</strong> {{ coresInfo[core].dataDir }}
-                    </p>
-                </div>
-            </div>
-        {% endfor %}
-    </section>
-
-    {% if tmpCoresNames|length > 0 %}
-    <section id="cores">
-        <h4 class="breadcrumb clear">{{ _('Temporary Solr cores') }}</h4>
-        <p>{{ _('Above list should be a list of temporary created Solr cores, that has not been copied because of a lack of permissions. A warning message should have been displayed at core creation about this issue.') }}</p>
-        <ul>
-        {% for core in tmpCoresNames %}
-            <li>{{ core.getFileName() }}</li>
-        {% endfor %}
-        </ul>
-    </section>
+    {% if aws %}
+        {% if template == 'generateImages' %}
+            {% include 'AdministrationBundle:Default:generateImages.html.twig'%}
+        {% endif %}
+    {% else %}
+        {% include 'AdministrationBundle:Admin:noAws.html.twig'%}
     {% endif %}
 {% endblock %}
 
+{% block css %}
+    <link href="{{ asset('css/countdown/countdown.css') }}" type="text/css" rel="stylesheet" />
+{% endblock%}
+
 {% block js_calls %}
-    <script src="{{ asset('js/jqplot/jquery.jqplot.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/jqplot/plugins/jqplot.meterGaugeRenderer.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/jquery-ui/jquery.ui.tabs.min.js') }}" type="text/javascript"></script>
-    <!--[if lte IE 8]><script src="{{ asset('js/jqplot/excanvas.min.js') }}" type="text/javascript"></script><![endif]-->
+    <script src="{{ asset('js/countdown/countdown.min.js') }}" type="text/javascript"></script>
 {% endblock %}
 
 {% block javascripts %}
     $(function(){
-        $('#cores_list > ul a').each(function(){
-            var _this = $(this);
-            var _href = _this.attr('href') + '/ajax';
-            if ( !_href.match(/^#.*/) ) {
-                _this.attr('href', _href);
-            }
-        });
-
-        $('#cores_list').tabs({
-            beforeLoad: function( event, ui ) {
-                if ( ui.tab.data( "loaded" ) ) {
-                    event.preventDefault();
-                    return;
+    {% if template == 'generateImages'%}
+        $('#clock').countdown('{{clockending}}')
+            .on('update.countdown', function(event) {
+                var format = '%H:%M:%S';
+                if(event.offset.totalDays > 0) {
+                    format = '%-d day%!d ' + format;
                 }
-
-                var _img = $('<figure id="loading"><p><img src="{{ asset('img/loading.png') }}" alt="{{ _('Loading...') }}"/><br/>{{ _('Currently loading...') }}</p></figure>');
-                $('body').append(_img);
-
-                ui.jqXHR.done(function() {
-                    ui.tab.data( "loaded", true );
-                });
-                ui.jqXHR.fail(function(){
-                    alert('{{ _('An error occured loading tab :(')|escape('js') }}');
-                    $('#loading').remove();
-                });
-            },
-            load: function(event, ui){
-                $('#loading').remove();
-            }
-        });
-
-        var _total_memory = {{ total_virt_mem }};
-        var _memory_hlimit = {{ total_virt_mem /8 * 7 }};
-        var _memory_llimit = {{ total_virt_mem /8 * 5 }};
-
-        var _v_memory = [{{ used_virt_mem }}];
-        var _memory_plot = $.jqplot('memory',[_v_memory],{
-            seriesDefaults: {
-                renderer: $.jqplot.MeterGaugeRenderer,
-                rendererOptions: {
-                    intervals:[_memory_llimit, _memory_hlimit, _total_memory],
-                    intervalColors:['#66cc66', '#E7E658', '#cc6666'],
-                    max: _total_memory,
+                if(event.offset.weeks > 0) {
+                    format = '%-w week%!w ' + format;
                 }
-            },
-            grid: {
-                background: 'transparent'
-            }
-        });
-
-        var _total_swap = {{ total_swap }};
-        var _swap_hlimit = {{ total_swap /8 * 5 }};
-        var _swap_llimit = {{ total_swap /8 * 3 }};
-
-        var _s_memory = [{{ used_swap }}];
-        var _swap_plot = $.jqplot('swap',[_s_memory],{
-            seriesDefaults: {
-                renderer: $.jqplot.MeterGaugeRenderer,
-                rendererOptions: {
-                    intervals:[_swap_llimit, _swap_hlimit, _total_swap],
-                    intervalColors:['#66cc66', '#E7E658', '#cc6666'],
-                    max: _total_swap,
-                }
-            },
-            grid: {
-                background: 'transparent'
-            }
-        });
-
-        var _total_jvm = {{ total_jvm }};
-        var _jvm_hlimit = {{ total_jvm /8 * 7 }};
-        var _jvm_llimit = {{ total_jvm /8 * 5 }};
-
-        var _j_memory = [{{ used_jvm }}];
-        var _memory_plot = $.jqplot('jvm',[_j_memory],{
-            seriesDefaults: {
-                renderer: $.jqplot.MeterGaugeRenderer,
-                rendererOptions: {
-                    intervals:[_jvm_llimit, _jvm_hlimit, _total_jvm],
-                    intervalColors:['#66cc66', '#E7E658', '#cc6666'],
-                    max: _total_jvm,
-                }
-            },
-            grid: {
-                background: 'transparent'
-            }
-        });
-
+                $(this).html(event.strftime(format));
+            }).on('finish.countdown', function(event) {
+                $(this).html('{{ _('Image generation is over!') }}')
+                .parent().addClass('disabled');
+            });
+    {% endif %}
     });
-{% endblock %}
-
-
+{%endblock%}

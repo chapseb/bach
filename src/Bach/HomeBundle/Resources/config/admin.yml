@@ -127,7 +127,6 @@ services:
         calls:
             - [ setTemplate, [edit, BachHomeBundle:Admin:edit_images_comment.html.twig] ]
 
-
     sonata.admin.geoloc:
         class: Bach\HomeBundle\Admin\GeolocAdmin
         tags:
@@ -139,4 +138,12 @@ services:
         calls:
             - [ setTemplate, [edit, BachHomeBundle:Admin:edit_wmap.html.twig] ]
 
+    sonata.admin.parameters:
+        class: Bach\HomeBundle\Admin\ParametersAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Parameters", label: "Parameters" }
+        arguments:
+            - ~
+            - Bach\HomeBundle\Entity\Parameters
+            - BachHomeBundle:ParametersAdmin
 

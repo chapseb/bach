@@ -33,6 +33,8 @@ POSSIBILITY OF SUCH DAMAGE.
 
 {% extends '::base.html.twig' %}
 
+    {# have parameters in session is useful for admin part#}
+    {% set parameters = app.session.get('tpl_vars_admin')%}
     {# Empty block to prevent navigation duplicate #}
     {% block content %}{% endblock %}
 

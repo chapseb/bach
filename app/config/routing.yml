@@ -88,6 +88,11 @@ sonata_user:
     resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
     prefix: /admin
 
+sonata_admin_dashboard:
+    pattern: /admin/dashboard
+    #defaults: { _controller: SonataAdminBundle:Core:dashboard}
+    defaults: { _controller: AdministrationBundle:CoreAdmin:dashboard}
+
 elfinder:
     resource: "@FMElfinderBundle/Resources/config/routing.yml"
 

@@ -36,6 +36,7 @@ POSSIBILITY OF SUCH DAMAGE.
 {% block block %}
     <table class="table table-condensed sonata-ba-list">
 
+{% set tpl_vars_admin = app.session.get('tpl_vars_admin')%}
         {% for group in groups %}
             {% set display = (group.roles is empty or is_granted('ROLE_SUPER_ADMIN') ) %}
             {% for role in group.roles if not display %}
@@ -51,10 +52,10 @@ POSSIBILITY OF SUCH DAMAGE.
             {% if group.label == 'Matricules' and not features.matricules %}
                 {% set display = false %}
             {% endif %}
-            {% if group.label == 'Global' and not features.maps %}
+            {% if group.label == 'Global' and tpl_vars_admin['feature.maps'] != 'true' %}
                 {% set display = false %}
             {% endif %}
-            {% if group.label == 'Images' and not features.comments %}
+            {% if group.label == 'Images' and tpl_vars_admin['feature.comments'] != 'true' %}
                 {% set display = false %}
             {% endif %}
 
@@ -65,10 +66,10 @@ POSSIBILITY OF SUCH DAMAGE.
 
                 {% for admin in group.items %}
                     {% if admin.getCode == 'sonata.admin.archives.browsefields' and features.browse
-                        or admin.getCode == 'sonata.admin.archives.geoloc' and features.maps
-                        or admin.getCode == 'sonata.admin.archives.comment' and features.comments
-                        or admin.getCode == 'sonata.admin.matricules.comment' and features.comments
-                        or admin.getCode == 'sonata.admin.images.comment' and features.comments
+                        or admin.getCode == 'sonata.admin.archives.geoloc' and tpl_vars_admin['feature.maps'] == 'true'
+                        or admin.getCode == 'sonata.admin.archives.comment' and tpl_vars_admin['feature.comments'] == 'true'
+                        or admin.getCode == 'sonata.admin.matricules.comment' and tpl_vars_admin['feature.comments'] == 'true'
+                        or admin.getCode == 'sonata.admin.images.comment' and tpl_vars_admin['feature.comments'] == 'true'
                         or admin.getCode != 'sonata.admin.archives.browsefields' and admin.getCode != 'sonata.admin.archives.geoloc' and admin.getCode != 'sonata.admin.archives.comment' and admin.getCode != 'sonata.admin.matricules.comment' and admin.getCode != 'sonata.admin.images.comment'
                     %}
                     {% if admin.hasroute('create') and admin.isGranted('CREATE') or admin.hasroute('list') and admin.isGranted('LIST') %}
@@ -124,7 +125,7 @@ POSSIBILITY OF SUCH DAMAGE.
                                 </div>
                             </td>
                         </tr>
-                    {% elseif features.tagcloud and admin.getCode == 'sonata.admin.archives.tagcloud' and admin.isGranted('EDIT') %}
+                    {% elseif tpl_vars_admin['feature.tagcloud'] == 'true' and admin.getCode == 'sonata.admin.archives.tagcloud' and admin.isGranted('EDIT') %}
                         <tr>
                             <td class="sonata-ba-list-label">
                                 {{ admin.label|trans({}, admin.translationdomain) }}
@@ -136,7 +137,7 @@ POSSIBILITY OF SUCH DAMAGE.
                                 </a>
                             </td>
                         </tr>
-                    {% elseif features.maps and (admin.getCode == 'sonata.admin.archives.geolocfields' or admin.getCode == 'sonata.admin.matricules.geolocfields' ) and admin.isGranted('EDIT') %}
+                    {% elseif tpl_vars_admin['feature.maps'] == 'true' and (admin.getCode == 'sonata.admin.archives.geolocfields' or admin.getCode == 'sonata.admin.matricules.geolocfields' ) and admin.isGranted('EDIT') %}
                         <tr>
                             <td class="sonata-ba-list-label">
                                 {{ admin.label|trans({}, admin.translationdomain) }}

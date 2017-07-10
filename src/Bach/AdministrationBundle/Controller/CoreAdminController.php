@@ -48,6 +48,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Bach\AdministrationBundle\Entity\Helpers\FormObjects\CoreCreation;
 use Bach\AdministrationBundle\Entity\SolrCore\SolrCoreAdmin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sonata\AdminBundle\Controller\CoreController as BaseCoreContBroller;
 
 /**
  * Bach core administration controller
@@ -58,7 +59,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
-class CoreAdminController extends Controller
+class CoreAdminController extends BaseCoreContBroller
 {
 
     /**
@@ -175,4 +176,40 @@ class CoreAdminController extends Controller
         }
         return $form;
     }
+
+
+    /**
+     * Return the dashboard admin
+     *
+     * @return Response
+     */
+    public function dashboardAction()
+    {
+        $tpl_vars = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:Parameters')
+            ->createQueryBuilder('a')
+            ->select('a.name, a.value')
+            ->getQuery()
+            ->getResult();
+
+        $tpl_vars_admin = array();
+        foreach ( $tpl_vars as $var) {
+            $tpl_vars_admin[$var['name']] = $var['value'];
+        }
+
+        $session = $this->get('session');
+        $session->set(
+            'tpl_vars_admin',
+            $tpl_vars_admin
+        );
+        return $this->render(
+            $this->getAdminPool()->getTemplate('dashboard'),
+            array(
+                'base_template'   => $this->getBaseTemplate(),
+                'admin_pool'      => $this->container->get('sonata.admin.pool'),
+                'blocks'          => $this->container->getParameter('sonata.admin.configuration.dashboard_blocks')
+            )
+        );
+    }
+
 }

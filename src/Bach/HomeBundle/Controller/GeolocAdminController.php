@@ -225,8 +225,36 @@ class GeolocAdminController extends Controller
             }
         }
 
+        $tpl_vars = $this->getApplicationParametersCenterMap();
         return $this->render(
-            'BachHomeBundle:Admin:geoloc_visualize.html.twig'
+            'BachHomeBundle:Admin:geoloc_visualize.html.twig',
+            $tpl_vars
         );
+    }
+
+    /**
+     * Retrieve application parameters
+     *
+     * @return array
+     */
+    public function getApplicationParametersCenterMap()
+    {
+        $tpl_vars = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:Parameters')
+            ->createQueryBuilder('a')
+            ->select('a.name, a.value')
+            ->where('a.name LIKE :centerlat OR a.name LIKE :centerlon OR a.name LIKE :zoommap')
+            ->setParameter('centerlat', 'centerlat')
+            ->setParameter('centerlon', 'centerlon')
+            ->setParameter('zoommap', 'zoommap')
+            ->getQuery()
+            ->getResult();
+
+        $tpl_vars_param = array();
+        foreach ( $tpl_vars as $var) {
+            $tpl_vars_param[$var['name']] = $var['value'];
+        }
+
+        return $tpl_vars_param;
     }
 }

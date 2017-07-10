@@ -175,12 +175,12 @@ class CommentsController extends Controller
      */
     public function getAction($docid, $type)
     {
-        $show_comments = $this->container->getParameter('feature.comments');
-        if ( $show_comments ) {
 
+        $tpl_vars_param = $this->getApplicationParameters();
+        $show_comments = $tpl_vars_param['feature.comments'];
+        if ($show_comments == 'true') {
             $class = 'Comment';
             $class = ucfirst($type) . $class;
-
             $query = $this->getDoctrine()->getManager()
                 ->createQuery(
                     'SELECT c FROM BachHomeBundle:' . $class . ' c
@@ -206,5 +206,27 @@ class CommentsController extends Controller
             $response->setData($comments);
             return $response;
         }
+    }
+
+    /**
+     * Retrieve application parameters
+     *
+     * @return array
+     */
+    public function getApplicationParameters()
+    {
+        $tpl_vars = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:Parameters')
+            ->createQueryBuilder('a')
+            ->select('a.name, a.value')
+            ->getQuery()
+            ->getResult();
+
+        $tpl_vars_param = array();
+        foreach ( $tpl_vars as $var) {
+            $tpl_vars_param[$var['name']] = $var['value'];
+        }
+
+        return $tpl_vars_param;
     }
 }

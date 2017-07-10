@@ -56,6 +56,7 @@ services:
             - [setCoversDir, ['%covers_dir%']]
         tags:
             - { name: twig.extension }
+
     bach.home.display_dao:
         class: Bach\HomeBundle\Twig\DisplayDao
         arguments: [ '%viewer_uri%', '%covers_dir%', '%bach_default_theme%' ]
@@ -102,11 +103,9 @@ services:
 
     bach.home.ead_view_params:
         class: Bach\HomeBundle\Entity\ViewParams
-        arguments: [ '%display.ead.show_maps%', '%display.ead.show_daterange%', '%display.ead.rows%', '%display.ead.show_param%', '%display.ead.result_order%' ]
 
     bach.home.matricules_view_params:
         class: Bach\HomeBundle\Entity\MatriculesViewParams
-        arguments: [ '%display.matricules.show_maps%', '%display.matricules.show_daterange%', '%display.matricules.rows%', '%display.matricules.show_param%' ]
 
     bach.home.search_forms:
         class: Bach\HomeBundle\Twig\SearchForms

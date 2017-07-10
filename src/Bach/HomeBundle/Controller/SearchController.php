@@ -37,7 +37,8 @@
  *
  * @category Search
  * @package  Bach
- * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Johan Cwiklinski  <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
@@ -62,6 +63,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @category Search
  * @package  Bach
  * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
@@ -139,7 +141,9 @@ abstract class SearchController extends Controller
      */
     protected function commonTemplateVariables()
     {
-        $show_maps              = $this->container->getParameter('feature.maps');
+        $tpl_params = $this->getApplicationParameters();
+
+        $show_maps              = $tpl_params['feature.maps'];
         $viewer_uri             = $this->container->getParameter('viewer_uri');
         $covers_dir             = $this->container->getParameter('covers_dir');
         $viewDisplayParam       = $this->container->getParameter('display.ead.show_param');
@@ -167,8 +171,9 @@ abstract class SearchController extends Controller
      */
     protected function handleGeoloc(SolariumQueryFactory $factory)
     {
-        $show_maps = $this->container->getParameter('feature.maps');
-        if ($show_maps) {
+        $tpl_params = $this->getApplicationParameters();
+        $show_maps = $tpl_params['feature.maps'];
+        if ( $show_maps == 'true' ) {
             $request = $this->getRequest();
             $session = $request->getSession();
             $fields = $this->getGeolocFields();
@@ -203,7 +208,8 @@ abstract class SearchController extends Controller
         $request = $this->getRequest();
         $session = $request->getSession();
 
-        $show_maps = $this->container->getParameter('feature.maps');
+        $tpl_params = $this->getApplicationParameters();
+        $show_maps = $tpl_params['feature.maps'];
         $facets = array();
         $facetset = $searchResults->getFacetSet();
 
@@ -326,7 +332,7 @@ abstract class SearchController extends Controller
             }
         }
 
-        if ($show_maps) {
+        if ( $show_maps == 'true' ) {
             $geoloc = $this->getGeolocFields();
             foreach ( $geoloc as $field ) {
                 $map_facets[$field] = $facetset->getFacet($field);
@@ -381,7 +387,7 @@ abstract class SearchController extends Controller
             }
         }
 
-        if ($show_maps) {
+        if ( $show_maps == 'true' ) {
             $session->set(
                 $this->mapFacetsName(),
                 $map_facets
@@ -703,8 +709,9 @@ abstract class SearchController extends Controller
      */
     protected function getGeolocFields()
     {
-        $show_maps = $this->container->getParameter('feature.maps');
-        if ($show_maps && !isset($this->_geoloc)) {
+        $tpl_params = $this->getApplicationParameters();
+        $show_maps = $tpl_params['feature.maps'];
+        if ($show_maps == 'true' && !isset($this->_geoloc)) {
             $class = $this->getGeolocClass();
             $gf = new $class;
             $gf = $gf->loadDefaults(
@@ -757,6 +764,23 @@ abstract class SearchController extends Controller
         if (!$view_params) {
             $view_params = $this->get($this->getViewParamsServicename());
         }
+
+        if ($view_params->showMap() == null) {
+            $show_maps = filter_var(
+                $this->getOneApplicationParameter('display.show_maps')['display.show_maps'],
+                FILTER_VALIDATE_BOOLEAN
+            );
+            $view_params->setShowMap($show_maps);
+        }
+        if ($view_params->showDaterange() == null) {
+            $show_daterange = filter_var(
+                $this->getOneApplicationParameter('display.show_daterange')['display.show_daterange'],
+                FILTER_VALIDATE_BOOLEAN
+            );
+            $view_params->setShowDaterange($show_daterange);
+        }
+
+
         //take care of user view params
         $view_params->bindCookie($this->getCookieName());
 
@@ -1183,5 +1207,52 @@ abstract class SearchController extends Controller
         }
         return $flag;
     }
+    
+    /**
+     * Retrieve application parameters
+     *
+     * @return array
+     */
+    public function getApplicationParameters()
+    {
+        $tpl_vars = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:Parameters')
+            ->createQueryBuilder('a')
+            ->select('a.name, a.value')
+            ->getQuery()
+            ->getResult();
 
+        $tpl_vars_param = array();
+        foreach ( $tpl_vars as $var) {
+            $tpl_vars_param[$var['name']] = $var['value'];
+        }
+
+        return $tpl_vars_param;
+    }
+
+    /**
+     * Retrieve application parameters
+     *
+     * @param string $name Name parameter
+     *
+     * @return array
+     */
+    public function getOneApplicationParameter($name)
+    {
+        $tpl_var = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:Parameters')
+            ->createQueryBuilder('a')
+            ->select('a.name, a.value')
+            ->where('a.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getResult();
+
+        $param = array();
+        foreach ($tpl_var as $var) {
+            $param[$var['name']] = $var['value'];
+        }
+
+        return $param;
+    }
 }

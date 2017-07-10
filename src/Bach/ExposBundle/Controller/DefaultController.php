@@ -71,11 +71,11 @@ class DefaultController extends Controller
 
         $expos = $repository->findCurrent();
 
+        $tpl_vars['parameters'] = $this->getApplicationParameters();
+        $tpl_vars['expos']      = $expos;
         return $this->render(
             'ExposBundle:Default:index.html.twig',
-            array(
-                'expos' => $expos
-            )
+            $tpl_vars
         );
     }
 
@@ -107,7 +107,8 @@ class DefaultController extends Controller
                 array(
                     'position'      => $position,
                     'expos'         => $expos,
-                    'current_expo'  => $expo
+                    'current_expo'  => $expo,
+                    'parameters'    => $this->getApplicationParameters()
                 )
             );
         } else {
@@ -148,7 +149,8 @@ class DefaultController extends Controller
                 'position'      => $position,
                 'expos'         => $expos,
                 'current_expo'  => $expo,
-                'current_room'  => $room
+                'current_room'  => $room,
+                'parameters'    => $this->getApplicationParameters()
             )
         );
     }
@@ -188,10 +190,32 @@ class DefaultController extends Controller
                 'expos'         => $expos,
                 'current_expo'  => $expo,
                 'current_room'  => $room,
-                'current_panel' => $panel
+                'current_panel' => $panel,
+                'parameters'    => $this->getApplicationParameters()
             )
         );
     }
 
+    /**
+     * Retrieve application parameters
+     *
+     * @return array
+     */
+    public function getApplicationParameters()
+    {
+        $tpl_vars = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:Parameters')
+            ->createQueryBuilder('a')
+            ->select('a.name, a.value')
+            ->getQuery()
+            ->getResult();
+
+        $tpl_vars_param = array();
+        foreach ( $tpl_vars as $var) {
+            $tpl_vars_param[$var['name']] = $var['value'];
+        }
+
+        return $tpl_vars_param;
+    }
 
 }

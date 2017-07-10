@@ -65,20 +65,17 @@ class DisplayEADFragment extends \Twig_Extension
     private $_request;
     private $_viewer_uri;
     private $_covers_dir;
-    private $_comms;
     private $_cote_location;
 
     /**
      * Main constructor
      *
      * @param UrlGeneratorInterface $router   Router
-     * @param boolean               $comms    Comments feature enabled
      * @param string                $cote_loc Cote location
      */
-    public function __construct(Router $router, $comms, $cote_loc)
+    public function __construct(Router $router, $cote_loc)
     {
         $this->_router = $router;
-        $this->_comms = $comms;
         $this->_cote_location = $cote_loc;
     }
 
@@ -165,7 +162,7 @@ class DisplayEADFragment extends \Twig_Extension
      */
     public function display($fragment, $docid, $form_name = 'default', $full = false,
         $hasChildren = false, $hasComments = false, $countSub = 0, $ajax = false,
-        $print = false, $highlight = false, $communicability = false, $audience = false,
+        $print = false, $highlight = false, $communicability = false, $audience = false, $commentFeature = false,
         $aws = false, $cloudfront = null
     ) {
         $proc = new \XsltProcessor();
@@ -199,7 +196,7 @@ class DisplayEADFragment extends \Twig_Extension
         $proc->setParameter('', 'viewer_uri', $this->_viewer_uri);
         $proc->setParameter('', 'covers_dir', $this->_covers_dir);
         $proc->setParameter('', 'cote_location', $this->_cote_location);
-        $comments_enabled = $this->_comms ? 'true' : 'false';
+        $comments_enabled = $commentFeature;//$this->_comms ? 'true' : 'false';
         $proc->setParameter('', 'comments_enabled', $comments_enabled);
         $proc->setParameter('', 'print', $print);
         $proc->setParameter('', 'communicability', $communicability);

@@ -196,7 +196,7 @@ POSSIBILITY OF SUCH DAMAGE.
                         <a href="{{ path('bach_ead_html', {'docid': document.headerId}) }}#{{ subid }}" class="treeLinkResults" title="{{ _('Locate in document tree') }}" >{{ _('Locate in document tree') }}</a>{% if cMediaContent is defined and cMediaContent[loop.index0] == 1 %}<span class="cMedia"></span>{% endif %}<a class="addBasket" title="{{ _('Add to basket')}}" href="{{ path('basket_add',{'docid': document.fragmentid})}}">{{ _('Add to basket')}}</a>
                         </h3>
                     </header>
-                    {% set rend = displayFragment(document.fragment, document.fragmentid, search_form,false,false,false,0,false,false, hlSearchResults.getResult(document.fragmentid)) %}
+                    {% set rend = displayFragment(document.fragment, document.fragmentid, search_form,false,false,false,0,false,false, hlSearchResults.getResult(document.fragmentid), parameters['feature.comments']) %}
                     {{ rend|raw }}
                     {% endif %}
 

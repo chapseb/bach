@@ -49,7 +49,7 @@ services:
 
     bach.home.display_ead_fragment:
         class: Bach\HomeBundle\Twig\DisplayEADFragment
-        arguments: [ @router, '%feature.comments%', '%cote_location%' ]
+        arguments: [ @router, '%cote_location%' ]
         calls:
             - [setRequest, ['@?request=']]
             - [setViewer, ['%viewer_uri%']]

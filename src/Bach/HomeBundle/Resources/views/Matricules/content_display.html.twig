@@ -45,7 +45,7 @@ POSSIBILITY OF SUCH DAMAGE.
             {% set prenomsMatricules = '' %}
         {% endif %}
                 {{ nomMatricule ~ ' ' ~ prenomsMatricules|join(' ') }}
-        {% if features.social and (features.comments == false) and (print is not defined or print != true) %}
+        {% if parameters['feature.social'] == 'true' and (parameters['feature.comments'] == 'false') and (print is not defined or print != true) %}
             <div id="matriculesSocial">
             <a href="{{ path('print_matdoc', {'docid':docid})}}" class="printLink" title="{{ _('Print') }}"></a>
                 {{ socialButtons() }}
@@ -54,7 +54,7 @@ POSSIBILITY OF SUCH DAMAGE.
             <a class="addBasket" title="{{ _('Add to basket')}}" href="{{ path('basket_add_mat',{'docid': docid})}}">{{ _('Add to basket')}}</a>
             </h2>
         </header>
-        {% if features.social and features.comments and (print is not defined or print != true) %}<div id="social">
+        {% if parameters['feature.social'] == 'true' and parameters['feature.comments'] == 'true' and (print is not defined or print != true) %}<div id="social">
             <a href="{{ path('print_matdoc', {'docid':docid})}}" class="printLink" title="{{ _('Print') }}"></a>
 {{ socialButtons() }}</div>{% endif %}
         {% if comments is defined %}
@@ -62,7 +62,7 @@ POSSIBILITY OF SUCH DAMAGE.
         {% else %}
             {% set hasComments = false %}
         {% endif %}
-            {%- if features.comments and (print is not defined or print != true) -%}
+            {%- if parameters['feature.comments'] == 'true' and (print is not defined or print != true) -%}
         <ul>
             <li><a href="#matricule_record">{{ _('Record') }}</a></li>
             {%- if comments is defined -%}

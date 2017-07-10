@@ -100,7 +100,7 @@ POSSIBILITY OF SUCH DAMAGE.
             </aside>
         {% endif%}
         {% endif %}
-        {% if features.social and print == false%}
+        {% if parameters['feature.social'] == 'true' and print == false%}
         <div id="social">
             <a href="{{ path('print_doc', {'docid':docid})}}" class="printLink" title="{{ _('Print') }}"></a>
             {{ socialButtons() }}

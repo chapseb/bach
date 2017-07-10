@@ -101,10 +101,10 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% if features.archives %}
                     <li{% if (app.request.attributes.get('_route') == 'bach_archives') and (app.request.attributes.get('_route_params').form_name is not defined or app.request.attributes.get('_route_params').form_name == 'default') %} class="active"{% endif %}>
                         <a href="{{ path('bach_archives') }}">
-                        {% if label.archives is null %}
+                        {% if parameters['label.archives'] is not defined or parameters['label.archives'] == '' %}
                             {{ _('Search') }}
                         {% else %}
-                            {{ label.archives}}
+                            {{ parameters['label.archives']}}
                         {% endif %}
                         </a>
                     </li>
@@ -117,10 +117,10 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% if features.matricules %}
                     <li{% if app.request.attributes.get('_route') == 'bach_matricules' %} class="active"{% endif %}>
                         <a href="{{ path('bach_matricules') }}">
-                        {% if label.matricules is null %}
+                        {% if parameters['label.matricules'] is not defined or parameters['label.matricules'] == '' %}
                             {{ _('Matricules') }}
                         {% else %}
-                            {{ label.matricules}}
+                            {{ parameters['label.matricules'] }}
                         {% endif %}
                         </a>
                     </li>
@@ -128,10 +128,10 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% if features.archives and features.cdc %}
                      <li{% if app.request.attributes.get('_route') == 'bach_classification' %} class="active"{% endif %}>
                         <a href="{{ path('bach_classification') }}">
-                        {% if label.cdc is null %}
+                        {% if parameters['label.cdc'] is not defined or parameters['label.cdc'] == '' %}
                             {{ _('Classification scheme') }}
                         {% else %}
-                            {{ label.cdc }}
+                            {{ parameters['label.cdc'] }}
                         {% endif %}
                         </a>
                     </li>
@@ -139,10 +139,10 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% if features.archives and features.browse %}
                     <li{% if app.request.attributes.get('_route') == 'bach_browse' %} class="active"{% endif %}>
                         <a href="{{ path('bach_browse') }}">
-                        {% if label.browse is null %}
+                        {% if parameters['label.browse'] is not defined or parameters['label.browse'] == '' %}
                             {{ _('Index') }}
                         {% else %}
-                            {{ label.browse }}
+                            {{ parameters['label.browse'] }}
                         {% endif %}
                         </a>
                     </li>
@@ -150,10 +150,10 @@ POSSIBILITY OF SUCH DAMAGE.
                     {% if features.expos %}
                     <li{% if app.request.attributes.get('_route') == 'expos_homepage' %} class="active"{% endif %}>
                         <a href="{{ path('expos_homepage') }}">
-                        {% if label.expos is null %}
+                        {% if parameters['label.expos'] is not defined or parameters['label.expos'] == '' %}
                             {{ _('Virtual expositions') }}
                         {% else %}
-                            {{ label.expos }}
+                            {{ parameters['label.expos'] }}
                         {% endif %}
                         </a>
                     </li>

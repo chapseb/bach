@@ -82,7 +82,7 @@
                 }
                 map.addControl(fullScreen);
 
-                {% if from_search and display.disable_searchmap != true %}
+                {% if from_search and disable_searchmap != 'true' %}
                 new L.Control.GeoSearch({
                     provider: new L.GeoSearch.Provider.OpenStreetMap(),
                     showMarker: false,
@@ -124,7 +124,7 @@
                     {% include '::loader.js.twig' with {'parent_elt': '#map', 'silent_error': true} %}
                     success: function(data) {
                         if ( data.data.length == 0 ) {
-                         {% if (centerlat is not null) and (centerlon is not null) and (zoommap is not null) %}
+                         {% if (centerlat is not null and centerlat != '') and (centerlon is not null and centerlon != '') and (zoommap is not null and zoommap != '') %}
                             map.setView([{{centerlat}}, {{centerlon}}],{{zoommap}});
                          {% else %}
                             map.setView([47.010, 5.087], 5);

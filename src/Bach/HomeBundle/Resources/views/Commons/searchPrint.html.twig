@@ -86,7 +86,7 @@ POSSIBILITY OF SUCH DAMAGE.
                                     <span class="date" property="dc:date"> • {{ document.cDate }}</span>
                                 {%- endif -%}
                             </h3>
-                        {{ displayFragment(document.fragment, document.fragmentid, search_form, false, false, false, 5, false, true)|raw }}
+                        {{ displayFragment(document.fragment, document.fragmentid, search_form, false, false, false, 5, false, true, false, parameters['feature.comments'])|raw }}
                     <hr />
                 {% endfor %}
             {% endblock%}

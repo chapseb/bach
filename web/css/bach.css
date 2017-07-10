@@ -1597,6 +1597,17 @@ div.sonata-bc .btn-primary {
     color: inherit;
 }
 
+div.sonata-bc i.icon-ok {
+    background-image: url(../img/glyphicons-halflings.png);
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 14px;
+    line-height: 14px;
+    margin-top: 1px;
+    vertical-align: text-top;
+    width: 14px;
+}
+
 div.sonata-bc .btn-primary:hover {
     color: inherit;
     background-color: #e6e6e6;

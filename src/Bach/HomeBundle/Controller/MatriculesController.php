@@ -99,9 +99,14 @@ class MatriculesController extends SearchController
 
         $this->search_form = $form_name;
 
+        $resultsByPage = $this->getOneApplicationParameter('display.matricules.rows')['display.matricules.rows'];
         /* Manage view parameters */
         $view_params = $this->handleViewParams();
-
+        $view_params->setResultsByPage($resultsByPage);
+        if ($view_params->getView() == null ) {
+            $show_param = $this->getOneApplicationParameter('display.matricules.show_param')['display.matricules.show_param'];
+            $view_params->setView($show_param);
+        }
         $tpl_vars = $this->searchTemplateVariables($view_params, $page);
         if ($tpl_vars['view'] == 'txtlist') {
             $tpl_vars['view'] = 'list';
@@ -161,8 +166,9 @@ class MatriculesController extends SearchController
                     array('position' => 'ASC')
                 );
         }
-        if ($this->container->hasParameter('matricules_histogram')) {
-            $current_date = $this->container->getParameter('matricules_histogram');
+        $histogram = $this->getOneApplicationParameter('matricules_histogram')['matricules_histogram'];
+        if (!empty($histogram)) {
+            $current_date = $histogram;
         } else {
             $current_date = 'date_enregistrement';
         }
@@ -220,6 +226,7 @@ class MatriculesController extends SearchController
             $tpl_vars
         );
 
+        $tpl_vars['parameters'] = $this->getApplicationParameters();
         if ($query_terms !== null) {
             $hlSearchResults = $factory->getHighlighting();
             $scSearchResults = $factory->getSpellcheck();
@@ -233,7 +240,7 @@ class MatriculesController extends SearchController
             );
 
 
-            if ($this->container->getParameter('display.disable_suggestions') != true) {
+            if ($tpl_vars['parameters']['display.disable_suggestions'] != 'true') {
                 $suggestions = $factory->getSuggestions($query_terms);
             }
 
@@ -283,8 +290,7 @@ class MatriculesController extends SearchController
                 = $this->container->getParameter('matricules_searchparameters');
         }
         $tpl_vars['all_facets'] = $tpl_vars['facet_names'];
-        $tpl_vars['disable_select_daterange']
-            = $this->container->getParameter('display.disable_select_daterange');
+
 
         $this->searchhistoMatAddAction($searchResults->getNumFound());
 
@@ -368,8 +374,9 @@ class MatriculesController extends SearchController
         );
 
         //retrieve comments
-        $show_comments = $this->container->getParameter('feature.comments');
-        if ($show_comments) {
+        $tplParams['parameters'] = $this->getApplicationParameters();
+        $show_comments = $tplParams['parameters']['feature.comments'];
+        if ($show_comments == 'true') {
             $query = $this->getDoctrine()->getManager()
                 ->createQuery(
                     'SELECT c FROM BachHomeBundle:MatriculesComment c
@@ -928,8 +935,19 @@ class MatriculesController extends SearchController
                     array('position' => 'ASC')
                 );
         }
-        if ($this->container->hasParameter('matricules_histogram')) {
-            $current_date = $this->container->getParameter('matricules_histogram');
+        $histogram = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:Parameters')
+            ->createQueryBuilder('a')
+            ->select('a.name, a.value')
+            ->where('a.name LIKE :weight')
+            ->setParameter('weight', '%matricules_histogram%')
+            ->getQuery()
+            ->getResult();
+
+        $histogram = $this->getOneApplicationParameter('matricules_histogram')['matricules_histogram'];
+
+        if (!empty($histogram)) {
+            $current_date = $histogram;
         } else {
             $current_date = 'date_enregistrement';
         }

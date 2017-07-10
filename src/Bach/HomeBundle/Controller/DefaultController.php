@@ -150,8 +150,16 @@ class DefaultController extends SearchController
         }
 
         /** Manage view parameters */
+
+        $resultsByPage = $this->getOneApplicationParameter('display.ead.rows')['display.ead.rows'];
         $view_params = $this->handleViewParams();
 
+        $view_params->setResultsByPage($resultsByPage);
+
+        if ($view_params->getView() == null ) {
+            $show_param = $this->getOneApplicationParameter('display.ead.show_param')['display.ead.show_param'];
+            $view_params->setView($show_param);
+        }
         $filters = $session->get($this->getFiltersName());
         if (!$filters instanceof Filters || $request->get('clear_filters')) {
             $filters = new Filters();
@@ -209,11 +217,12 @@ class DefaultController extends SearchController
 
         $container = new SolariumQueryContainer();
 
+        $tpl_vars['parameters'] = $this->getApplicationParameters();
         if (!is_null($query_terms)) {
             if ($request->get('results_order') !== null) {
-                $container->setOrder($request->get('results_order'));//$view_params->getOrder();
+                $container->setOrder($request->get('results_order'));
             } else if ($this->container->getParameter('display.ead.result_order') != null) {
-                $container->setOrder($this->container->getParameter('display.ead.result_order'));//$view_params->getOrder();
+                $container->setOrder($this->container->getParameter('display.ead.result_order'));
             } else {
                 $container->setOrder($view_params->getOrder());
             }
@@ -239,15 +248,11 @@ class DefaultController extends SearchController
             //Add filters to container
             $container->setFilters($filters);
 
-            $weight = array(
-                "descriptors" =>
-                    $this->container->getParameter('weight.descriptors'),
-                "cUnittitle" => $this->container->getParameter('weight.cUnittitle'),
-                "parents_titles" =>
-                    $this->container->getParameter('weight.parents_titles'),
-                "fulltext" => $this->container->getParameter('weight.fulltext'),
-                "cUnitid" => $this->container->getParameter('weight.cUnitid')
-            );
+            $weight = array();
+            $weight['descriptors']    = $tpl_vars['parameters']['weight.descriptors'];
+            $weight['parents_titles'] = $tpl_vars['parameters']['weight.parents_titles'];
+            $weight['cUnittitle']     = $tpl_vars['parameters']['weight.cUnittitle'];
+            $weight['fulltext']       = $tpl_vars['parameters']['weight.fulltext'];
             $cMediaContentQuery = array();
             if ($session->get('pdf_filters') == true) {
                 $cMediaContentQuery = array(
@@ -470,7 +475,7 @@ class DefaultController extends SearchController
             $query_session = str_replace("NOT", " ", $query_session);
             $session->set('query_terms', $query_session);
 
-            if ($this->container->getParameter('display.disable_suggestions') != true) {
+            if ($tpl_vars['parameters']['display.disable_suggestions'] != 'true') {
                 $suggestions = $factory->getSuggestions($query_session);
             }
 
@@ -491,8 +496,10 @@ class DefaultController extends SearchController
             }
             $tpl_vars['resultEnd'] = $resultEnd;
         } else {
-            $show_tagcloud = $this->container->getParameter('feature.tagcloud');
-            if ($show_tagcloud) {
+            $tagcloud_query = $tpl_vars['parameters']['feature.tagcloud'];
+            $show_tagcloud = filter_var($tagcloud_query, FILTER_VALIDATE_BOOLEAN);
+            if ($show_tagcloud == true) {
+                $tpl_vars['tagflag'] = $show_tagcloud;
                 $tagcloud = $factory->getTagCloud(
                     $this->getDoctrine()->getManager(),
                     $search_form_params
@@ -519,8 +526,6 @@ class DefaultController extends SearchController
         if (isset($suggestions) && $suggestions->count() > 0) {
             $tpl_vars['suggestions'] = $suggestions;
         }
-        $tpl_vars['disable_select_daterange']
-            = $this->container->getParameter('display.disable_select_daterange');
         $tpl_vars['current_date'] = 'cDateBegin';
 
         $this->searchhistoAddAction($searchResults->getNumFound(), $all_facets);
@@ -722,6 +727,7 @@ class DefaultController extends SearchController
             $tpl_name = 'browse_tab_contents';
         }
 
+        $tpl_vars['parameters'] = $this->getApplicationParameters();
         return $this->render(
             'BachHomeBundle:Default:' . $tpl_name  . '.html.twig',
             $tpl_vars
@@ -862,9 +868,10 @@ class DefaultController extends SearchController
             $tpl_vars['ajax'] = false;
         }
 
+        $tpl_vars['parameters'] = $this->getApplicationParameters();
         //retrieve comments
-        $show_comments = $this->container->getParameter('feature.comments');
-        if ($show_comments) {
+        $show_comments = $tpl_vars['parameters']['feature.comments'];
+        if ($show_comments == 'true') {
             $query = $this->getDoctrine()->getManager()
                 ->createQuery(
                     'SELECT c FROM BachHomeBundle:Comment c
@@ -997,6 +1004,7 @@ class DefaultController extends SearchController
             $tpl_vars['cookie_param'] = true;
         }
 
+        $tpl_vars['parameters'] = $this->getApplicationParameters();
         return $this->render(
             'BachHomeBundle:Default:html.html.twig',
             $tpl_vars
@@ -1115,6 +1123,7 @@ class DefaultController extends SearchController
                     }
 
                     $authorizedArchives = $this->get('bach.home.authorization')->archivesRight();
+                $tpl_vars['parameters'] = $this->getApplicationParameters();
                     $tpl_vars['audience'] = $authorizedArchives;
                     $tpl_vars['daodetector'] = $this->container->getParameter('daodetector');
                     return $this->render(
@@ -1458,10 +1467,26 @@ class DefaultController extends SearchController
      */
     public function authorizedCookieAction()
     {
+        $tpl_vars_param = $this->getApplicationParameters();
         $view_params = $this->get($this->getViewParamsServicename());
+        $show_maps = filter_var(
+            $tpl_vars_param['display.show_maps'],
+            FILTER_VALIDATE_BOOLEAN
+        );
+        $show_daterange = filter_var(
+            $tpl_vars_param['display.show_daterange'],
+            FILTER_VALIDATE_BOOLEAN
+        );
+        $view_params->setShowMap($show_maps);
+        $view_params->setShowDaterange($show_daterange);
+
+        // set the session with the new values
+        $this->getRequest()->getSession()->set($this->getParamSessionName(), $view_params);
+
+        // set the cookie with the new values
         $_cook = new \stdClass();
-        $_cook->map = $this->container->getParameter('display.show_maps');
-        $_cook->daterange = $this->container->getParameter('display.show_daterange');
+        $_cook->map = $show_maps;
+        $_cook->daterange = $show_daterange;
         $expire = 365 * 24 * 3600;
         setcookie($this->getCookieName(), json_encode($_cook), time()+$expire, '/');
         return new Response();
@@ -1709,15 +1734,14 @@ class DefaultController extends SearchController
             $tpl_vars['resultEnd'] = $resultEnd;
         }
         $tpl_vars['form'] = $form->createView();
-
         $tpl_vars['view'] = $view_params->getView();
         $tpl_vars['current_date'] = 'cDateBegin';
+        $tpl_vars['parameters'] = $this->getApplicationParameters();
         return $this->render(
             'BachHomeBundle:Commons:searchPrint.html.twig',
             $tpl_vars
         );
     }
-
     /**
      *  Basket add action
      *
@@ -1763,7 +1787,6 @@ class DefaultController extends SearchController
             unset($basketArray['ead'][array_search($file, $basketArray['ead'])]);
         }
         $docs = $session->set('documents', $basketArray);
-
         $session->set('resultAction', _('Ead have successfully been removed.'));
         return $this->redirect(
             $this->generateUrl(
@@ -1946,5 +1969,4 @@ class DefaultController extends SearchController
             )
         );
     }
-
 }

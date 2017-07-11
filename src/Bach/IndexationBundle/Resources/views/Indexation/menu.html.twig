@@ -36,8 +36,6 @@ POSSIBILITY OF SUCH DAMAGE.
         <li{% if app.request.attributes.get('_route') == 'bach_indexation_homepage' %} class="active"{% endif %}><a href="{{ path('bach_indexation_homepage') }}">{{ _('Published documents') }}</a></li>
         <li{% if app.request.attributes.get('_route') == 'bach_indexation_queue' %} class="active"{% endif %}><a href="{{ path('bach_indexation_queue')  }}"><span class="icon-tasks"></span>{{ _('Publication queue') }}</a></li>
         <li class="divider"></li>
-        <li{% if app.request.attributes.get('_route') == 'bach_indexation_add' %} class="active"{% endif %}><a href="{{ path('bach_indexation_add') }}"><span class="icon-download-alt"></span>{{ _('Publish new file') }}</a></li>
-        <li class="divider"></li>
         <li><a href="#help" role="button" id="show_help"><span class="icon-question-sign"></span>{{ _('Help') }}</a></li>
     </ul>
 {#    {% if features.cdc %}

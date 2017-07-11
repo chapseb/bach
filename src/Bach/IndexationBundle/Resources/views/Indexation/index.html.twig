@@ -65,6 +65,10 @@ POSSIBILITY OF SUCH DAMAGE.
     $(document).ready(function(){
         $('.btn-delete').tooltip();
 
+        $('#empty').click(function(){
+            return confirm('{{ _('Do you really want to remove all published document?\n\nThis can not be undone!')|escape('js') }}');
+        });
+
         $('#published_documents > ul a').each(function(){
             var _this = $(this);
             var _href = _this.attr('href') + '/ajax';
@@ -97,28 +101,6 @@ POSSIBILITY OF SUCH DAMAGE.
                 $('#loading').remove();
                 $('.btn-delete').tooltip()
             }
-        });
-
-        $('#empty').click(function(){
-            return confirm('{{ _('Do you really want to remove all published document?\n\nThis can not be undone!')|escape('js') }}');
-        });
-
-        $('#delete_documents').click(function(){
-            var _count = $('#published_documents :checked').length;
-            if ( _count == 0 ) {
-                alert('{{ _('Please select at least one document.')|escape('js') }}');
-                return false;
-            } else {
-                if ( _count == 1 ) {
-                    return confirm('{{ _('Do you want to remove selected document?')|escape('js') }}');
-                } else {
-                    return confirm('{{ _('Do you want to remove all %count selected documents?')|escape('js') }}'.replace(/%count/, _count));
-                }
-            }
-        });
-
-        $('#toggleerrors').click(function(){
-            $(this).parent().next('div').toggleClass('hidden');
         });
     });
 {% endblock %}

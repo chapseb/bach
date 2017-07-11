@@ -33,7 +33,7 @@
                 {% for document in documents %}
                 <tr>
                     <td>
-                        <input type="checkbox" name="documents[]" id="document_{{ document.getId }}" value="{{ document.getExtension }}::{{ document.getId }}"/>
+                        <input type="checkbox" class="removeCheckBox" name="documents[]" id="document_{{ document.getId }}" value="{{ document.getExtension }}::{{ document.getId }}"/>
                         <label for="document_{{ document.getId }}">{{ document.getId }}</label>
                     </td>
                     <td>{{ document.getDocId }}</td>
@@ -70,10 +70,32 @@
                                 _elt.remove();
                             }
                         });
+
+                        $('#toggleerrors').click(function(){
+                            $(this).parent().next('div').toggleClass('hidden');
+                        });
                     }
                 });
-
                 return false;
             });
+
+            $('#delete_documents_{{current_type}}').click(function(){
+                var _count = $('.removeCheckBox:checked').length;
+                if ( _count == 0 ) {
+                    alert('{{ _('Please select at least one document.')|escape('js') }}');
+                    return false;
+                } else {
+                    if ( _count == 1 ) {
+                        return confirm('{{ _('Do you want to remove selected document?')|escape('js') }}');
+                    } else {
+                        return confirm('{{ _('Do you want to remove all %count selected documents?')|escape('js') }}'.replace(/%count/, _count));
+                    }
+                }
+            });
+
+            $('#empty_{{current_type}}').click(function(){
+                return confirm('{{ current_type }} : '+'{{ _('Do you really want to remove all published document?\n\nThis can not be undone!')|escape('js') }}');
+            });
+
         });
     </script>

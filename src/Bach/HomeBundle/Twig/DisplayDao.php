@@ -65,7 +65,7 @@ class DisplayDao extends \Twig_Extension
         'gif', 'tif', 'tiff'
     );
     private static $_sounds_extensions = array('ogg', 'wav');
-    private static $_videos_extensions = array('ogv', 'mp4', 'webm', 'mov');
+    private static $_videos_extensions = array('ogv', 'mp4', 'webm', 'mov', 'wmv');
     private static $_flash_sounds_extensions = array('mp3');
     private static $_flash_extensions = array('flv');
 
@@ -719,6 +719,8 @@ class DisplayDao extends \Twig_Extension
             $ret .= '<a href="' . $href . '" target="_blank">' .
                 _('Your browser does not support this video format, you may want to download file and watch it offline') . '</a>';
             $ret .= '</video>';
+            $ret .= '<div><a href="' . $href . '" target="_blank">' .
+                _('If your browser does not support this video format, you may want to download this video and watch it offline') . '</a></div>';
             if ($daotitle !== null) {
                 $ret .= '<span class="title">' . $daotitle . '</span>';
             }

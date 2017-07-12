@@ -211,7 +211,9 @@ POSSIBILITY OF SUCH DAMAGE.
                                             <xsl:attribute name="target">_blank</xsl:attribute>
                                         </xsl:element>
                                     </xsl:when>
-                                    <xsl:otherwise></xsl:otherwise>
+                                    <xsl:otherwise>
+                                        <span class="media_informations"></span>
+                                    </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:when>
                             <xsl:otherwise>

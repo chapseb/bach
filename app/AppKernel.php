@@ -129,9 +129,8 @@ class AppKernel extends Kernel
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
             new FM\ElfinderBundle\FMElfinderBundle(),
             new Presta\SitemapBundle\PrestaSitemapBundle(),
-            new Liip\DoctrineCacheBundle\LiipDoctrineCacheBundle(),
+            new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
             new Liip\ThemeBundle\LiipThemeBundle(),
-            new Jns\Bundle\XhprofBundle\JnsXhprofBundle(),
             new Aws\Symfony\AwsBundle()
         );
 
@@ -140,7 +139,6 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
             $bundles[] = new atoum\AtoumBundle\AtoumAtoumBundle();
-            //$bundles[] = new Jns\Bundle\XhprofBundle\JnsXhprofBundle();
             $bundles[] = new Elao\WebProfilerExtraBundle\WebProfilerExtraBundle();
         }
 

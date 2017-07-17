@@ -350,13 +350,3 @@ presta_sitemap:
 liip_theme:
     themes: %bach_themes%
     active_theme: %bach_default_theme%
-
-jns_xhprof:
-    location_web:    http://xhprof-gui.localhost/
-    enabled:         true
-    request_query_argument: "_profile"
-    exclude_patterns: ['/assetic/']
-    command: "option"
-    command_option_name: "profile"
-    entity_class: Bach\HomeBundle\Entity\XhprofDetail
-    enable_xhgui: true

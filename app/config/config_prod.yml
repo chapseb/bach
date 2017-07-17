@@ -58,8 +58,3 @@ assetic:
         yui_js:
             jar: '%kernel.root_dir%/Resources/java/yuicompressor-2.4.8.jar'
             apply_to: "\.js$"
-
-liip_doctrine_cache:
-    namespaces:
-        presta_sitemap:
-            type: "apc"

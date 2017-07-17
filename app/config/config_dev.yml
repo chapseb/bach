@@ -63,9 +63,6 @@ atoum:
         BachIndexationBundle: ~
         AdministrationBundle: ~
 
-jns_xhprof:
-    request_query_argument: ""
-
 web_profiler_extra:
     routing:
         enabled:        true

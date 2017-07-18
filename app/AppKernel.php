@@ -63,6 +63,11 @@ use Aws\S3\S3Client;
 class AppKernel extends Kernel
 {
 
+    public function __construct($environment, $debug)
+    {
+        date_default_timezone_set('Europe/Paris');
+        parent::__construct($environment, $debug);
+    }
 
     public function boot()
     {
@@ -112,7 +117,7 @@ class AppKernel extends Kernel
             //Sonata dependencies
             new Sonata\CoreBundle\SonataCoreBundle(),
             new Sonata\BlockBundle\SonataBlockBundle(),
-            new Sonata\jQueryBundle\SonatajQueryBundle(),
+            //new Sonata\jQueryBundle\SonatajQueryBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
             new Sonata\AdminBundle\SonataAdminBundle(),

@@ -80,14 +80,6 @@ _sonata_admin:
     type: sonata_admin
     prefix: /admin
 
-sonata_user:
-    security_acl: true
-    manager_type: orm
-
-sonata_user:
-    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
-    prefix: /admin
-
 elfinder:
     resource: "@FMElfinderBundle/Resources/config/routing.yml"
 

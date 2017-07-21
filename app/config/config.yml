@@ -304,11 +304,14 @@ ivory_ck_editor:
             head_tools: [ 'Maximize' ]
 
 fm_elfinder:
-    editor: ckeditor
-    connector:
-        roots:
-            uploads:
-                path: uploads/media
+    instances:
+        default:
+            editor: ckeditor
+            connector:
+                    roots:
+                        uploads:
+                            driver: LocalFileSystem
+                            path: uploads/media
 
 services:
     bach.twig.asset_exists:

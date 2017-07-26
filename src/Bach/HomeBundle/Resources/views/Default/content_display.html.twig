@@ -122,7 +122,7 @@ POSSIBILITY OF SUCH DAMAGE.
             {% set printTest = 'false' %}
         {% endif %}
         <div class="content frag">
-        {{ displayFragment(document.fragment, docid, search_form, true, hasChildren, hasComments, count_children, ajax, printTest, highlight, communicability, audience, aws, cloudfront)|raw }}
+        {{ displayFragment(document.fragment, docid, search_form, true, hasChildren, hasComments, count_children, ajax, printTest, highlight, communicability, audience, parameters['feature.comments'], aws, cloudfront)|raw }}
         {% if not children == false %}
             <section id="children_documents">
                 <header>
@@ -159,7 +159,7 @@ POSSIBILITY OF SUCH DAMAGE.
                 {% endif %}
             </section>
         {% endif %}
-        {% if comments is defined and print == false %}
+        {% if comments is defined and parameters['feature.comments'] == 'true' and print == false %}
             <section id="comments">
                 <header>
                     <h3>{{ _('User comments') }}</h3>

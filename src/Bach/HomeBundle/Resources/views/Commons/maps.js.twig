@@ -125,7 +125,7 @@
                     success: function(data) {
                         if ( data.data.length == 0 ) {
                          {% if (centerlat is not null and centerlat != '') and (centerlon is not null and centerlon != '') and (zoommap is not null and zoommap != '') %}
-                            map.setView([{{centerlat}}, {{centerlon}}],{{zoommap}});
+                            map.setView(['{{centerlat}}','{{centerlon}}'],{{zoommap}});
                          {% else %}
                             map.setView([47.010, 5.087], 5);
                          {% endif %}

@@ -237,42 +237,47 @@ class DisplayDao extends \Twig_Extension
                 if ($xml_dg->attributes()['role'] == 'series') {
                     $retLink = '';
                     $retImg = '';
-                    foreach ($xml_dg->children() as $node_name => $xml_dao) {
-                        if ($xml_dao['role'] == 'image:first') {
-                            $dao = (string)$xml_dao['href'];
-                            $daotitle = null;
-                            if ($xml_dao['title']) {
-                                $daotitle = $xml_dao['title'];
-                            }
-                            $directory = substr($dao, 0, strrpos($dao, '/'));
-                            $imageBegin = substr($dao, strrpos($dao, '/') + 1);
-                            $retLink = '<a href="' . $viewer . 'series/' .
-                                $directory . '?s=' . $imageBegin;
-                            if ($aws == true) {
-                                $srcImage = @file_get_contents(
-                                    $viewer.'ajax/representativeAws/'.
-                                    rtrim($dao, '/') . '/format/' . $format
-                                );
-                                $retImg .= '<img src="'.$srcImage.'" alt="' . $dao . '"/>';
-                            } else {
-                                $retImg .= '<img src="' . $viewer . 'ajax/img/' .
-                                    rtrim($dao, '/') . '/format/' . $format .
-                                    '" alt="' . $dao . '"/>';
-                            }
-                        } else if ($xml_dao['role'] == 'image:last') {
-                            $dao = (string)$xml_dao['href'];
-                            $daotitle = null;
-                            if ($xml_dao['title']) {
-                                $daotitle = $xml_dao['title'];
-                            }
-                            $directory = substr($dao, 0, strrpos($dao, '/'));
+                    if (!$communicability) {
+                        $results[self::SERIESBOUND][] = '<img src="/img/thumb_comm.png" title="'.
+                            _('This picture is not communicable') . '"/>';
+                    } else {
+                        foreach ($xml_dg->children() as $node_name => $xml_dao) {
+                            if ($xml_dao['role'] == 'image:first') {
+                                $dao = (string)$xml_dao['href'];
+                                $daotitle = null;
+                                if ($xml_dao['title']) {
+                                    $daotitle = $xml_dao['title'];
+                                }
+                                $directory = substr($dao, 0, strrpos($dao, '/'));
+                                $imageBegin = substr($dao, strrpos($dao, '/') + 1);
+                                $retLink = '<a href="' . $viewer . 'series/' .
+                                    $directory . '?s=' . $imageBegin;
+                                if ($aws == true) {
+                                    $srcImage = @file_get_contents(
+                                        $viewer.'ajax/representativeAws/'.
+                                        rtrim($dao, '/') . '/format/' . $format
+                                    );
+                                    $retImg .= '<img src="'.$srcImage.'" alt="' . $dao . '"/>';
+                                } else {
+                                    $retImg .= '<img src="' . $viewer . 'ajax/img/' .
+                                        rtrim($dao, '/') . '/format/' . $format .
+                                        '" alt="' . $dao . '"/>';
+                                }
+                            } else if ($xml_dao['role'] == 'image:last') {
+                                $dao = (string)$xml_dao['href'];
+                                $daotitle = null;
+                                if ($xml_dao['title']) {
+                                    $daotitle = $xml_dao['title'];
+                                }
+                                $directory = substr($dao, 0, strrpos($dao, '/'));
 
-                            $imageEnd = substr($dao, strrpos($dao, '/') + 1);
-                            $retLink .= '&e='. $imageEnd . '" target="_blank">';
-                            $ret = $retLink. $retImg . '</a>';
-                            $results[self::SERIESBOUND][] = $ret;
-                        } else {
-                            break;
+                                $imageEnd = substr($dao, strrpos($dao, '/') + 1);
+                                $retLink .= '&e='. $imageEnd . '" target="_blank">';
+                                $ret = $retLink. $retImg . '</a>';
+                                $results[self::SERIESBOUND][] = $ret;
+                            } else {
+                                break;
+                            }
                         }
                     }
                 }

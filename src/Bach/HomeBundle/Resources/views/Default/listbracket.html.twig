@@ -94,6 +94,9 @@ POSSIBILITY OF SUCH DAMAGE.
         <form action="{{ path('basket_delete_all_ead') }}" method="POST" class="formBasket">
             <input type="submit" id="deleteFilesEadAll" value="{{ _('Delete all documents') }}"/>
         </form>
+        <form action="{{ path('basket_print_ead') }}" method="POST" class="formBasket">
+            <input type="submit" id="printFileEad" value="{{ _('Print ead basket') }}"/>
+        </form>
         {% endif %}
     </div>
 {% endif %}
@@ -127,6 +130,9 @@ POSSIBILITY OF SUCH DAMAGE.
         </form>
         <form action="{{ path('basket_delete_all_mat') }}" method="POST" class="formBasket">
             <input type="submit" id="deleteFilesMatAll" value="{{ _('Delete all matricules') }}" />
+        </form>
+        <form action="{{ path('basket_print_mat') }}" method="POST" class="formBasket">
+            <input type="submit" id="printFileMat" value="{{ _('Print matricules basket') }}"/>
         </form>
         {% endif %}
     </div>

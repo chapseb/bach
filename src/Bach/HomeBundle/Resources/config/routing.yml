@@ -379,6 +379,18 @@ basket_export:
     requirements:
         _method: POST
 
+basket_print_ead:
+    pattern: /basketPrintEad
+    defaults: { _controller: BachHomeBundle:Default:basketPrintEad }
+    requirements:
+        _method: POST
+
+basket_print_mat:
+    pattern: /basketPrintMat
+    defaults: { _controller: BachHomeBundle:Matricules:basketPrintMat }
+    requirements:
+        _method: POST
+
 basket_import:
     pattern: /basketImport
     defaults: { _controller: BachHomeBundle:Default:basketImport }

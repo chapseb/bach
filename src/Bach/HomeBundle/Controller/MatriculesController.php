@@ -1138,6 +1138,73 @@ class MatriculesController extends SearchController
     }
 
     /**
+     *  Basket print all matricules action
+     *
+     * @return void
+     */
+    public function basketPrintMatAction()
+    {
+        $request = $this->getRequest();
+        $session = $request->getSession();
+        $content = '<style>' . file_get_contents('css/bach_print.css'). '</style>';
+
+        if (isset($session->get('documents')['matricules'])
+            && !empty($session->get('documents')['matricules'])
+        ) {
+            $docsMat = $this->getDoctrine()->getManager()->createQuery(
+                'SELECT m.id, m.cote, m.nom, m.prenoms ' .
+                'FROM BachIndexationBundle:MatriculesFileFormat m ' .
+                'WHERE m.id IN (:ids)'
+            )->setParameter(
+                'ids',
+                $session->get('documents')['matricules']
+            )->getResult();
+        } else {
+            $docsMat = array();
+        }
+
+        $baseurl = $request->getScheme() . '://' .
+            $request->getHttpHost() . $request->getBasePath();
+        $content .='<table>
+            <thead>
+                <tr>
+                    <th>'. _('Nom') . '</th>
+                    <th>'. _('Prenoms') . '</th>
+                    <th>' . _('Cote') . '</th>
+                </tr>
+            </thead>
+            <tbody>';
+
+        foreach ($docsMat as $doc) {
+            $content .= '<tr><td>';
+            $link = $this->generateUrl(
+                'bach_display_matricules',
+                array(
+                    'docid' => $doc['id']
+                )
+            );
+            $content .= '<a href="' . $baseurl . $link . '">' .
+                $doc['nom'] .'</a></td>';
+            $content .= '<td>' . $doc['prenoms'] . '</td>';
+            $content .= '<td>' . $doc['cote'] . '</td>';
+            $content .= '</tr>';
+        }
+
+        $content .= '</tbody></table>';
+
+        $params = $this->container->getParameter('print');
+        $params['name'] =  $this->container->getParameter('pdfname');
+        $pdf = new Pdf($params);
+        $pdf->setFont('helvetica', '', 11);
+        $pdf->addPage();
+        $pdf->setTopMargin(20);
+        $pdf->writeHTML($content);
+        $pdf->download();
+
+        return new Response();
+    }
+
+    /**
      *  Search historic add action
      *
      * @param string $nbResults Results search number

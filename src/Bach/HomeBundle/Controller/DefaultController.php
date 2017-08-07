@@ -1796,6 +1796,71 @@ class DefaultController extends SearchController
     }
 
     /**
+     *  Basket print all ead action
+     *
+     * @return void
+     */
+    public function basketPrintEadAction()
+    {
+        $request = $this->getRequest();
+        $session = $request->getSession();
+        $content = '<style>' . file_get_contents('css/bach_print.css'). '</style>';
+
+        if (isset($session->get('documents')['ead'])
+            && !empty($session->get('documents')['ead'])
+        ) {
+            $docs = $this->getDoctrine()->getManager()->createQuery(
+                'SELECT e.cUnittitle, e.fragmentid, e.cUnitid, d.date ' .
+                'FROM BachIndexationBundle:EADFileFormat e ' .
+                ' LEFT JOIN e.dates d WHERE e.fragmentid IN (:ids)'
+            )->setParameter('ids', $session->get('documents')['ead'])->getResult();
+        } else {
+            $docs = array();
+        }
+
+        $baseurl = $request->getScheme() . '://' .
+            $request->getHttpHost() . $request->getBasePath();
+        $content .='<table>
+            <thead>
+                <tr>
+                    <th style="width: 60%;">'. _('Title') . '</th>
+                    <th>'. _('Cote') . '</th>
+                    <th>' . _('Dates periods') . '</th>
+                    <th class="fragmentIdBasket"></th>
+                </tr>
+            </thead>
+            <tbody>';
+
+        foreach ($docs as $doc) {
+            $content .= '<tr><td style="width: 60%;">';
+            $link = $this->generateUrl(
+                'bach_display_document',
+                array(
+                    'docid' => $doc['fragmentid']
+                )
+            );
+            $title = mb_strimwidth($doc['cUnittitle'], 0, 50, '...');
+            $content .= '<a href="' . $baseurl . $link . '">' . $title .'</a></td>';
+            $content .= '<td>' . $doc['cUnitid'] . '</td>';
+            $content .= '<td>' . $doc['date'] . '</td>';
+            $content .= '</tr>';
+        }
+
+        $content .= '</tbody></table>';
+
+        $params = $this->container->getParameter('print');
+        $params['name'] =  $this->container->getParameter('pdfname');
+        $pdf = new Pdf($params);
+        $pdf->setFont('helvetica', '', 11);
+
+        $pdf->addPage();
+        $pdf->setTopMargin(20);
+        $pdf->writeHTML($content);
+        $pdf->download();
+        return new Response();
+    }
+
+    /**
      *  Search historic add action
      *
      * @param int $nbResults Number of results

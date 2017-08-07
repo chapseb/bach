@@ -201,13 +201,15 @@ parameters:
     awsdetect: false
     aws.sqs_nbimages: 10
     cloudfront: null
+    pdfname: 'bach-print.pdf'
     print:
-       header:
+        header:
             image: '%kernel.root_dir%/../web/img/smlogo.png'
             content: 'Bach'
-       footer:
+        footer:
             image: '%kernel.root_dir%/../web/img/smlogo.png'
             content: '© Anaphore'
+
 bach_home:
     #Paths to retrieve different types of files
     files:

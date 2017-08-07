@@ -1489,6 +1489,7 @@ class DefaultController extends SearchController
     public function printPdfDocAction($docid)
     {
         $params = $this->container->getParameter('print');
+        $params['name'] =  $this->container->getParameter('pdfname');
         $tpl_vars['docid'] = $docid;
         $content = '<style>' . file_get_contents('css/bach_print.css'). '</style>';
         $content .= $this->displayDocumentAction(
@@ -1518,6 +1519,7 @@ class DefaultController extends SearchController
         $facet_name = null, $form_name = null
     ) {
         $params = $this->container->getParameter('print');
+        $params['name'] =  $this->container->getParameter('pdfname');
         $content = '<style>' . file_get_contents('css/bach_print.css'). '</style>';
         $content .= $this->printSearch(
             $query_terms,

@@ -150,7 +150,7 @@ class Pdf extends \TCPDF
      */
     public function getContent()
     {
-        return $this->Output('bach_print.pdf', 'S');
+        return $this->Output($this->_params['name'], 'S');
     }
 
     /**
@@ -160,7 +160,7 @@ class Pdf extends \TCPDF
      */
     public function download()
     {
-        $this->output('bach_print.pdf', 'D');
+        $this->Output($this->_params['name'], 'D');
     }
 
 }

@@ -822,7 +822,15 @@ class DisplayDao extends \Twig_Extension
                         $src .= $cover_name;
                     } else {
                         $filetype = self::_guessFileType($dao);
-                        $src = '/img/' . $filetype . 'nocover.png';
+                        if (($bach_default_theme != 'web'
+                            || $bach_default_theme != 'phone')
+                            && (file_exists('assetic/img/'.$bach_default_theme.'_'.$filetype.'nocover.png'))
+                        ) {
+                            $src = '/assetic/img/' . $bach_default_theme .
+                                '_' . $filetype . 'nocover.png';
+                        } else {
+                            $src = '/img/' . $filetype . 'nocover.png';
+                        }
                     }
 
                     if ($daotitle) {
@@ -833,6 +841,18 @@ class DisplayDao extends \Twig_Extension
 
                     $ret .='<img src="' . $src . '" alt="' . $alt . '"/>';
                 } else {
+                    $filetype = self::_guessFileType($dao);
+                    if (($bach_default_theme != 'web'
+                        || $bach_default_theme != 'phone')
+                        && (file_exists('assetic/img/'.$bach_default_theme.'_'.$filetype.'nocover.png'))
+                    ) {
+                        $src = '/assetic/img/' . $bach_default_theme .
+                            '_' . $filetype . 'nocover.png';
+                    } else {
+                        $src = '/img/' . $filetype . 'nocover.png';
+                    }
+
+
                     $ret .= '<img src="/img/sound_nocover.png" alt="' . $dao . '"/>';
                 }
             }

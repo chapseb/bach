@@ -204,10 +204,10 @@ parameters:
     pdfname: 'bach-print.pdf'
     print:
         header:
-            image: '%kernel.root_dir%/../web/img/smlogo.png'
+            image: '%kernel.root_dir%/../web/img/logored.png'
             content: 'Bach'
         footer:
-            image: '%kernel.root_dir%/../web/img/smlogo.png'
+            image: '%kernel.root_dir%/../web/img/logored.png'
             content: '© Anaphore'
 
 bach_home:

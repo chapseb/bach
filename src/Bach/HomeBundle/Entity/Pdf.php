@@ -89,7 +89,7 @@ class Pdf extends \TCPDF
         if (file_exists($image)) {
             $this->SetY(5);
             $this->writeHTML(
-                '<table><tr><td with="50%"><img src="'. $image . '" /></td>' .
+                '<table><tr><td with="50%"><img style="height:30px;" src="'. $image . '" /></td>' .
                 '<td width="50%" style="text-align:right;">' .
                 $content .
                 '</td></tr></table>'
@@ -121,7 +121,7 @@ class Pdf extends \TCPDF
         if (file_exists($image)) {
             $this->SetY(280);
             $this->writeHTML(
-                '<table><tr><td with="33%"><img src="'. $image . '" /></td>' .
+                '<table><tr><td with="33%"><img style="height:45px;" src="'. $image . '" /></td>' .
                 '<td width="33%" style="text-align:center"> ' .
                 $this->getAliasNumPage(). '/'. $this->getAliasNbPages() . '</td>' .
                 '<td width="33%" style="text-align:right;">' .

@@ -1820,7 +1820,7 @@ class DefaultController extends SearchController
 
         $baseurl = $request->getScheme() . '://' .
             $request->getHttpHost() . $request->getBasePath();
-        $content .='<table>
+        $content .='<table border="1">
             <thead>
                 <tr>
                     <th style="width: 60%;">'. _('Title') . '</th>
@@ -1832,7 +1832,7 @@ class DefaultController extends SearchController
             <tbody>';
 
         foreach ($docs as $doc) {
-            $content .= '<tr><td style="width: 60%;">';
+            $content .= '<tr><td style="width: 60%;height:30px;">';
             $link = $this->generateUrl(
                 'bach_display_document',
                 array(

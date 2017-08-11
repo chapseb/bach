@@ -481,6 +481,12 @@ search_histo_import:
     requirements:
         _method: POST
 
+search_histo_print_ead:
+    pattern: /searchhistoPrintEad
+    defaults: { _controller: BachHomeBundle:Default:searchHistoPrintEad }
+    requirements:
+        _method: POST
+
 api_publish_command:
     pattern: /publishCommand
     defaults: { _controller: BachIndexationBundle:Default:publishCommand }

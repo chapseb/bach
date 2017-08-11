@@ -115,6 +115,9 @@ POSSIBILITY OF SUCH DAMAGE.
         <form action="{{ path('search_histo_delete_all_ead') }}" method="POST" class="formSearch">
             <input type="submit" id="deleteSearchEadAll" value="{{ _('Delete all ead search') }}"/>
         </form>
+        <form action="{{ path('search_histo_print_ead') }}" method="POST" class="formSearch" id="submitprintead">
+            <input type="submit" id="printSearchEad" value="{{ _('Print ead search') }}"/>
+        </form>
     {% endif %}
     </div>
     {% endif %}
@@ -333,5 +336,21 @@ POSSIBILITY OF SUCH DAMAGE.
             }
         });
 
-    } );
+        $("#submitprintead").submit(function(event){
+            event.preventDefault();
+            var ardata = $('.selected > .dateidsearchhisto');
+            var dataPrint = [];
+            ardata.each(function() {
+                dataPrint.push($(this).html());
+            });
+
+            $('<input />').attr('type', 'hidden')
+            .attr('name', "dataPrint")
+            .attr('value', dataPrint)
+            .appendTo('#submitprintead');
+            console.debug(dataPrint);
+            $(this).unbind('submit').submit();
+        });
+
+    });
 {% endblock %}

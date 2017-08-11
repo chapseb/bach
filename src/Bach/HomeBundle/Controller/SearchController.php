@@ -855,7 +855,7 @@ abstract class SearchController extends Controller
         }
 
         return $this->render(
-            'BachHomeBundle:Default:listbracket.html.twig',
+            'BachHomeBundle:Default:listbasket.html.twig',
             $arraytpl
         );
     }

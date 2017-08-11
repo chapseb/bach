@@ -174,12 +174,14 @@ POSSIBILITY OF SUCH DAMAGE.
                 <h2 property="dc:title"><xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Untitled unit')"/></h2>
             </header>
             <xsl:apply-templates mode="specific" select="scopecontent"/>
+            <xsl:apply-templates mode="specific" select="scopecontent/scopecontent"/>
         </xsl:if>
         <xsl:apply-templates mode="full"/>
     </xsl:template>
 
     <xsl:template match="unittitle" mode="full">
         <xsl:apply-templates mode="specific" select="../../scopecontent"/>
+        <xsl:apply-templates mode="specific" select="../../scopecontent/scopecontent"/>
     </xsl:template>
 
     <xsl:template match="unitdate" mode="full">

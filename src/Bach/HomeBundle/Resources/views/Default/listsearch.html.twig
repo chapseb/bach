@@ -172,6 +172,9 @@ POSSIBILITY OF SUCH DAMAGE.
         <form action="{{ path('search_histo_delete_all_mat') }}" method="POST" class="formSearch">
             <input type="submit" id="deleteSearchMatAll" value="{{ _('Delete all matricules search') }}"/>
         </form>
+        <form action="{{ path('search_histo_print_mat') }}" method="POST" class="formSearch" id="submitprintmat">
+            <input type="submit" id="printSearchMat" value="{{ _('Print matricules search') }}"/>
+        </form>
     {% endif %}
 
     </div>
@@ -348,6 +351,22 @@ POSSIBILITY OF SUCH DAMAGE.
             .attr('name', "dataPrint")
             .attr('value', dataPrint)
             .appendTo('#submitprintead');
+            console.debug(dataPrint);
+            $(this).unbind('submit').submit();
+        });
+
+        $("#submitprintmat").submit(function(event){
+            event.preventDefault();
+            var ardata = $('.selected > .dateidsearchhisto');
+            var dataPrint = [];
+            ardata.each(function() {
+                dataPrint.push($(this).html());
+            });
+
+            $('<input />').attr('type', 'hidden')
+            .attr('name', "dataPrint")
+            .attr('value', dataPrint)
+            .appendTo('#submitprintmat');
             console.debug(dataPrint);
             $(this).unbind('submit').submit();
         });

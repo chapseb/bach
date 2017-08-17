@@ -2077,40 +2077,42 @@ class DefaultController extends SearchController
         /********************************************************************/
 
         foreach ($arrayDataTime as $dataTime) {
-            $eadFile = $session->get('histosave')['ead'][$dataTime];
+            if (isset($session->get('histosave')['ead'][$dataTime])) {
+                $eadFile = $session->get('histosave')['ead'][$dataTime];
 
-            $content .= '<tr>';
-            $content .= '<td>' . $eadFile['query'] . '</td>';
+                $content .= '<tr>';
+                $content .= '<td>' . $eadFile['query'] . '</td>';
 
-            $filterText = '<td>';
-            foreach ($eadFile['filters'] as $name => $values) {
-                if (isset($all_facets[$name])) {
-                    $filterText .= $all_facets[$name];
-                } else {
-                    $filterText .= _('Unknown filter');
-                }
-                $filterText .= ": ";
-                if (is_object($values)) {
-                    foreach ($values as $value) {
-                        $filterText .= " ". $value;
+                $filterText = '<td>';
+                foreach ($eadFile['filters'] as $name => $values) {
+                    if (isset($all_facets[$name])) {
+                        $filterText .= $all_facets[$name];
+                    } else {
+                        $filterText .= _('Unknown filter');
                     }
-                } else {
-                    $filterText .= $values;
+                    $filterText .= ": ";
+                    if (is_object($values)) {
+                        foreach ($values as $value) {
+                            $filterText .= " ". $value;
+                        }
+                    } else {
+                        $filterText .= $values;
+                    }
+                    $filterText .= "<br />";
                 }
-                $filterText .= "<br />";
+                $filterText .= '</td>';
+                $content .= $filterText;
+                $content .= '<td>' . $eadFile['nbResults'] . '</td>';
+                $link = $baseurl . $this->generateUrl(
+                    'searchhisto_execute',
+                    array(
+                        'query_terms' => $eadFile['query'],
+                        'filtersListSearchhisto' => $eadFile['filters']
+                    )
+                );
+                $content .= '<td>' . '<a href="'.$link . '">'. _('launch the query'). '</a></td>';
+                $content .= '</tr>';
             }
-            $filterText .= '</td>';
-            $content .= $filterText;
-            $content .= '<td>' . $eadFile['nbResults'] . '</td>';
-            $link = $baseurl . $this->generateUrl(
-                'searchhisto_execute',
-                array(
-                    'query_terms' => $eadFile['query'],
-                    'filtersListSearchhisto' => $eadFile['filters']
-                )
-            );
-            $content .= '<td>' . '<a href="'.$link . '">'. _('launch the query'). '</a></td>';
-            $content .= '</tr>';
         }
 
         $content .= '</tbody></table>';

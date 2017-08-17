@@ -487,6 +487,12 @@ search_histo_print_ead:
     requirements:
         _method: POST
 
+search_histo_print_mat:
+    pattern: /searchhistoPrintMat
+    defaults: { _controller: BachHomeBundle:Matricules:searchHistoPrintMat }
+    requirements:
+        _method: POST
+
 api_publish_command:
     pattern: /publishCommand
     defaults: { _controller: BachIndexationBundle:Default:publishCommand }

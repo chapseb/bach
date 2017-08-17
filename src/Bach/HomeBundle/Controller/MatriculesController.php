@@ -1354,4 +1354,116 @@ class MatriculesController extends SearchController
             )
         );
     }
+
+    /**
+     *  Basket print all matricules action
+     *
+     * @return void
+     */
+    public function searchhistoPrintMatAction()
+    {
+        $request = $this->getRequest();
+        $session = $request->getSession();
+        $params = $this->container->getParameter('print');
+        $params['name'] =  $this->container->getParameter('pdfname');
+        $content = '<style>' . file_get_contents('css/bach_print.css'). '</style>';
+
+        $content .='<table border="1">
+            <thead>
+                <tr>
+                    <th>'. _('Request') . '</th>
+                    <th>'. _('Filtres') . '</th>
+                    <th>'. _('Results number') . '</th>
+                    <th>'. _('Actions') . '</th>
+                </tr>
+            </thead>
+            <tbody>';
+
+        $baseurl = $request->getScheme() . '://' .
+            $request->getHttpHost() . $request->getBasePath();
+
+        $arrayDataTime = explode(',', $request->get('dataPrint'));
+
+
+        /********************** Get all facet names ***********************/
+
+        $all_facets_table = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:Facets')
+            ->findAll();
+
+        $all_facets = array(
+            'geoloc'                       => _('Map selection'),
+            'date_cDateBegin_min'          => _('Start date'),
+            'date_cDateBegin_max'          => _('End date'),
+            'date_classe_min'              => _('Start class date'),
+            'date_classe_max'              => _('End class date'),
+            'date_date_enregistrement_min' => _('Start record date'),
+            'date_date_enregistrement_max' => _('End record date'),
+            'date_annee_naissance_min'     => _('Start birth date'),
+            'date_annee_naissance_max'     => _('End birth date'),
+            'headerId'                     => _('Document')
+        );
+        foreach ( $all_facets_table as $field ) {
+            $all_facets[$field->getSolrFieldName()]
+                = $field->getLabel($this->getRequest()->getLocale());
+        }
+
+        $browse_fields = $this->getDoctrine()
+            ->getRepository('BachHomeBundle:BrowseFields')
+            ->findAll();
+        foreach ( $browse_fields as $field ) {
+            $all_facets[$field->getSolrFieldName()]
+                = $field->getLabel($this->getRequest()->getLocale());
+        }
+        /********************************************************************/
+
+        foreach ($arrayDataTime as $dataTime) {
+            if (isset($session->get('histosave')['matricules'][$dataTime])) {
+                $matFile = $session->get('histosave')['matricules'][$dataTime];
+
+                $content .= '<tr>';
+                $content .= '<td>' . $matFile['query'] . '</td>';
+
+                $filterText = '<td>';
+                foreach ($matFile['filters'] as $name => $values) {
+                    if (isset($all_facets[$name])) {
+                        $filterText .= $all_facets[$name];
+                    } else {
+                        $filterText .= _('Unknown filter');
+                    }
+                    $filterText .= ": ";
+                    if (is_object($values)) {
+                        foreach ($values as $value) {
+                            $filterText .= " ". $value;
+                        }
+                    } else {
+                        $filterText .= $values;
+                    }
+                    $filterText .= "<br />";
+                }
+                $filterText .= '</td>';
+                $content .= $filterText;
+                $content .= '<td>' . $matFile['nbResults'] . '</td>';
+                $link = $baseurl . $this->generateUrl(
+                    'searchhistomat_execute',
+                    array(
+                        'query_terms' => $matFile['query'],
+                        'filtersListSearchhisto' => $matFile['filters']
+                    )
+                );
+                $content .= '<td>' . '<a href="'.$link . '">'. _('launch the query'). '</a></td>';
+                $content .= '</tr>';
+            }
+        }
+
+        $content .= '</tbody></table>';
+
+        $pdf = new Pdf($params);
+        $pdf->addPage();
+        $pdf->writeHTML($content);
+        $pdf->download();
+
+        return new Response();
+    }
+
 }

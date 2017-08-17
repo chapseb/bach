@@ -357,10 +357,16 @@ class DisplayEADFragment extends \Twig_Extension
                     $matches
                 );
 
+                $getLinkScopecontent = preg_match_all(
+                    '/<a href=\"(.*?)\>(.*?)<\/a>/',
+                    $matches[0][0],
+                    $matchesScopecontent
+                );
+
                 if (!empty($matches[0][0])) {
                     $result = $matches[0][0];
                     foreach ($allWord as $wordHigh) {
-                        if(!strpos('<em class="hl">', $wordHigh)) {
+                        if (!strpos('<em class="hl">', $wordHigh)) {
                             $result = str_replace(
                                 $wordHigh,
                                 '<em class="hl">'.$wordHigh.'</em>',
@@ -370,6 +376,25 @@ class DisplayEADFragment extends \Twig_Extension
                     }
                     $text = str_replace($matches[0][0], $result, $text);
                 }
+                $result = preg_match_all(
+                    '@<section class="scopecontent"[^>]*?>.*?</section>@si',
+                    $text,
+                    $matches
+                );
+
+                $getBadLinkScopecontent = preg_match_all(
+                    '/<a href=\"(.*?)\>(.*?)<\/a>/',
+                    $matches[0][0],
+                    $matchesBadScopecontent
+                );
+                foreach ($matchesBadScopecontent[0] as $key => $badScopecontent) {
+                    $text = str_replace(
+                        $badScopecontent,
+                        $matchesScopecontent[0][$key],
+                        $text
+                    );
+                }
+
             }
         }
 

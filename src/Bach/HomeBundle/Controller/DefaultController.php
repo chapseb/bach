@@ -1824,9 +1824,8 @@ class DefaultController extends SearchController
             <thead>
                 <tr>
                     <th style="width: 60%;">'. _('Title') . '</th>
-                    <th>'. _('Cote') . '</th>
-                    <th>' . _('Dates periods') . '</th>
-                    <th class="fragmentIdBasket"></th>
+                    <th style="width: 20%;">'. _('Cote') . '</th>
+                    <th style="width: 20%;">' . _('Dates periods') . '</th>
                 </tr>
             </thead>
             <tbody>';
@@ -1841,8 +1840,8 @@ class DefaultController extends SearchController
             );
             $title = mb_strimwidth($doc['cUnittitle'], 0, 50, '...');
             $content .= '<a href="' . $baseurl . $link . '">' . $title .'</a></td>';
-            $content .= '<td>' . $doc['cUnitid'] . '</td>';
-            $content .= '<td>' . $doc['date'] . '</td>';
+            $content .= '<td style="width: 20%;">' . $doc['cUnitid'] . '</td>';
+            $content .= '<td style="width: 20%;">' . $doc['date'] . '</td>';
             $content .= '</tr>';
         }
 

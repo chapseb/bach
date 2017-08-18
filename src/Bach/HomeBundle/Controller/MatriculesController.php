@@ -94,7 +94,7 @@ class MatriculesController extends SearchController
 
         if ($query_terms !== null) {
             $query_terms = urldecode($query_terms);
-            $session->set('query_orig', $query_terms);
+            $session->set('query_orig_mat', $query_terms);
         }
 
         $this->search_form = $form_name;
@@ -1215,7 +1215,7 @@ class MatriculesController extends SearchController
     {
         $time = time();
         $session = $this->getRequest()->getSession();
-        $query = $session->get('query_orig');
+        $query = $session->get('query_orig_mat');
         $filters = $session->get($this->getFiltersName());
 
         $histoArray = $session->get('histosave');

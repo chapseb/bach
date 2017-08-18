@@ -54,7 +54,6 @@ use Bach\HomeBundle\Entity\ViewParams;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Bach\HomeBundle\Entity\Pdf;
 
 /**
  * Bach home controller
@@ -1498,10 +1497,8 @@ class DefaultController extends SearchController
             'ajax',
             true
         )->getContent();
-        $pdf = new Pdf($params);
-        $pdf->addPage();
-        $pdf->writeHTML($content);
-        $pdf->download();
+
+        $this->printPdf($params, $content);
     }
 
     /**
@@ -1527,10 +1524,7 @@ class DefaultController extends SearchController
             $facet_name,
             $form_name
         )->getContent();
-        $pdf = new Pdf($params);
-        $pdf->addPage();
-        $pdf->writeHTML($content);
-        $pdf->download();
+        $this->printPdf($params, $content);
     }
 
 
@@ -1849,13 +1843,8 @@ class DefaultController extends SearchController
 
         $params = $this->container->getParameter('print');
         $params['name'] =  $this->container->getParameter('pdfname');
-        $pdf = new Pdf($params);
-        $pdf->setFont('helvetica', '', 11);
 
-        $pdf->addPage();
-        $pdf->setTopMargin(20);
-        $pdf->writeHTML($content);
-        $pdf->download();
+        $this->printPdf($params, $content);
         return new Response();
     }
 
@@ -2116,11 +2105,8 @@ class DefaultController extends SearchController
 
         $content .= '</tbody></table>';
 
-        $pdf = new Pdf($params);
-        $pdf->addPage();
-        $pdf->writeHTML($content);
-        $pdf->download();
-
+        $this->printPdf($params, $content);
         return new Response();
     }
+
 }

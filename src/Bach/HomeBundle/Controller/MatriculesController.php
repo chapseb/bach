@@ -53,7 +53,6 @@ use Bach\HomeBundle\Form\Type\SearchQueryFormType;
 use Bach\HomeBundle\Entity\SearchQuery;
 use Bach\HomeBundle\Entity\MatriculesViewParams;
 use Bach\HomeBundle\Entity\Comment;
-use Bach\HomeBundle\Entity\Pdf;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -807,12 +806,7 @@ class MatriculesController extends SearchController
             true,
             true
         )->getContent();
-        $pdf = new Pdf($params);
-        $pdf->setFont('helvetica', '', 12);
-        $pdf->addPage();
-        $pdf->setTopMargin(20);
-        $pdf->writeHTML($content);
-        $pdf->download();
+        $this->printPdf($params, $content);
     }
     /**
      * Print a pdf with a list of result
@@ -837,13 +831,7 @@ class MatriculesController extends SearchController
             $facet_name,
             $form_name
         )->getContent();
-        $pdf = new Pdf($params);
-        $pdf->setFont('helvetica', '', 12);
-
-        $pdf->addPage();
-        $pdf->setTopMargin(20);
-        $pdf->writeHTML($content);
-        $pdf->download();
+        $this->printPdf($params, $content);
     }
 
     /**
@@ -1194,12 +1182,7 @@ class MatriculesController extends SearchController
 
         $params = $this->container->getParameter('print');
         $params['name'] =  $this->container->getParameter('pdfname');
-        $pdf = new Pdf($params);
-        $pdf->setFont('helvetica', '', 11);
-        $pdf->addPage();
-        $pdf->setTopMargin(20);
-        $pdf->writeHTML($content);
-        $pdf->download();
+        $this->printPdf($params, $content);
 
         return new Response();
     }
@@ -1458,10 +1441,7 @@ class MatriculesController extends SearchController
 
         $content .= '</tbody></table>';
 
-        $pdf = new Pdf($params);
-        $pdf->addPage();
-        $pdf->writeHTML($content);
-        $pdf->download();
+        $this->printPdf($params, $content);
 
         return new Response();
     }

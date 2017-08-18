@@ -49,6 +49,7 @@ use Bach\HomeBundle\Entity\ViewParams;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Bach\HomeBundle\Entity\Filters;
+use Bach\HomeBundle\Entity\Pdf;
 use Bach\HomeBundle\Service\SolariumQueryFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -1184,4 +1185,20 @@ abstract class SearchController extends Controller
         return $flag;
     }
 
+    /**
+     *  Print a pdf
+     *
+     * @param array  $params  print parameters in bach config
+     * @param string $content content to print (could be with html tag)
+     *
+     * @return void
+     */
+    protected function printPdf($params, $content)
+    {
+        $pdf = new Pdf($params);
+        $pdf->setFont('helvetica', '', 12);
+        $pdf->addPage();
+        $pdf->writeHTML($content);
+        $pdf->download();
+    }
 }

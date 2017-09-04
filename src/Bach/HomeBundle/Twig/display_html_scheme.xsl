@@ -137,8 +137,27 @@ POSSIBILITY OF SUCH DAMAGE.
     <!-- ***** END CONTENTS ***** -->
 
     <!-- ***** GENERIC TAGS ***** -->
+    <xsl:template match="emph">
+        <xsl:choose>
+            <xsl:when test="@render='bold'">
+                <strong>
+                    <xsl:apply-templates/>
+                </strong>
+            </xsl:when>
+            <xsl:when test="@render='italic'">
+                <em>
+                    <xsl:apply-templates/>
+                </em>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
     <xsl:template match="text()">
-        <xsl:copy-of select="normalize-space(.)"/>
+        <xsl:copy-of select="."/>
+        <!--xsl:copy-of select="normalize-space(.)"/-->
     </xsl:template>
     <!-- ***** END GENERIC TAGS ***** -->
 

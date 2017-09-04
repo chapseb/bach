@@ -313,7 +313,8 @@ POSSIBILITY OF SUCH DAMAGE.
     </xsl:template>
 
     <xsl:template match="text()">
-        <xsl:copy-of select="normalize-space(.)"/>
+        <xsl:copy-of select="."/>
+        <!--xsl:copy-of select="normalize-space(.)"/-->
     </xsl:template>
 
     <xsl:template match="lb">

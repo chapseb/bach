@@ -94,6 +94,8 @@ class MatriculesController extends SearchController
         if ($query_terms !== null) {
             $query_terms = urldecode($query_terms);
             $session->set('query_orig_mat', $query_terms);
+        } else {
+            $session->set('query_orig_mat', '*:*');
         }
 
         $this->search_form = $form_name;

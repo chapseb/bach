@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Bach\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-06 09:55+0200\n"
-"PO-Revision-Date: 2017-04-06 09:56+0200\n"
+"POT-Creation-Date: 2017-09-04 14:48+0200\n"
+"PO-Revision-Date: 2017-09-04 15:01+0200\n"
 "Last-Translator: Sebastien Chaptal <sebastien.chaptal@anaphore.eu>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 1.8.12\n"
 
 #: src/Bach/HomeBundle/Form/Type/CommentType.php:79
 #: src/Bach/HomeBundle/Admin/CommentAdmin.php:102
@@ -26,7 +26,7 @@ msgstr "Sujet"
 
 #: src/Bach/HomeBundle/Form/Type/CommentType.php:87
 #: src/Bach/HomeBundle/Entity/Comment.php:453
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8764
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9059
 msgid "Comment"
 msgstr "Commentaire"
 
@@ -44,7 +44,7 @@ msgstr "Anomalie"
 #: src/Bach/HomeBundle/Admin/CommentAdmin.php:95
 #: src/Bach/HomeBundle/Admin/CommentAdmin.php:178
 #: src/Bach/HomeBundle/Admin/CommentAdmin.php:208
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:492
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:496
 msgid "Type"
 msgstr "Type"
 
@@ -59,41 +59,41 @@ msgid "Send your comment"
 msgstr "Soumettre votre commentaire"
 
 #: src/Bach/HomeBundle/Form/Type/MatriculesType.php:77
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:577
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:600
 #: src/Bach/HomeBundle/Admin/GeolocAdmin.php:98
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8604
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9099
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9947
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8899
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9394
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10242
 msgid "Name"
 msgstr "Nom"
 
 #: src/Bach/HomeBundle/Form/Type/MatriculesType.php:85
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:581
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:604
 msgid "Surname"
 msgstr "Prénoms"
 
 #: src/Bach/HomeBundle/Form/Type/MatriculesType.php:101
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:593
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8684
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9135
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9989
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:616
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8979
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9430
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10284
 msgid "Place of birth"
 msgstr "Lieu de naissance"
 
 #: src/Bach/HomeBundle/Form/Type/MatriculesType.php:109
 #: src/Bach/HomeBundle/Form/Type/MatriculesType.php:117
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:569
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8722
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9159
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10017
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:592
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9017
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9454
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10312
 msgid "Place of recording"
 msgstr "Lieu d'enregistrement"
 
 #: src/Bach/HomeBundle/Form/Type/MatriculesType.php:125
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:597
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8742
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9171
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10031
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:620
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9037
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9466
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10326
 msgid "Place of residence"
 msgstr "Lieu de résidence"
 
@@ -115,113 +115,255 @@ msgstr "Conserver les filtres"
 msgid "Search in pdf"
 msgstr "Recherche dans les pdfs"
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:766
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:346
+#: src/Bach/HomeBundle/Controller/DefaultController.php:774
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:350
 msgid "%count% results found, 1 expected."
 msgstr "%count% résultats trouvés, 1 attendu."
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1007
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1029
 #, php-format
 msgid "Document \"%docid\" does not exists."
 msgstr "Le document « %docid » n'existe pas."
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1031
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1055
 #, php-format
 msgid "File for %docid document no longer exists on disk."
 msgstr "Le fichier correspondant à %docid n'existe plus sur le disque."
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1112
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1136
 msgid "Inventory logic"
 msgstr "Logique de l'inventaire"
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1113
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1137
 msgid "Chronological"
 msgstr "Chronologique"
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1114
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1138
 msgid "Alphabetical"
 msgstr "Alphabétique"
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1128
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:613
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1152
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:636
 msgid "List"
 msgstr "Liste"
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1129
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1153
 msgid "View search results as a list, with images"
 msgstr "Voir les résultats de recherche en liste, avec images"
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1132
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1156
 msgid "Text only list"
 msgstr "Liste texte"
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1133
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1157
 msgid "View search results as a list, without images"
 msgstr "Voir les résultats de recherche en liste, sans images"
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1136
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:617
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1160
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:640
 msgid "Thumbnails"
 msgstr "Miniatures"
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1137
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:618
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1161
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:641
 msgid "View search results as thumbnails"
 msgstr "Voir les résultats de recherche en miniatures"
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1736
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1757
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1763
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1784
 msgid "Ead have successfully been removed."
 msgstr "Les ead ont bien été supprimés."
 
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1886
-#: src/Bach/HomeBundle/Controller/DefaultController.php:1910
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1820
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1145
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:436
+msgid "Title"
+msgstr "Titre"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1821
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1161
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1149
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1250
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8865
+msgid "Cote"
+msgstr "Cote"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1822
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1153
+msgid "Dates periods"
+msgstr "Dates"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1972
+#: src/Bach/HomeBundle/Controller/DefaultController.php:1996
 msgid "Ead search have successfully been removed."
 msgstr "Les recherches ead ont bien été supprimées"
 
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:561
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9195
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10061
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2021
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1357
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:150
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:348
+msgid "Request"
+msgstr "Recherche"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2022
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1358
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:154
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:352
+msgid "Filtres"
+msgstr "Filtres"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2023
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1359
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:158
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:356
+msgid "Results number"
+msgstr "Nombre de résultats"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2024
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1360
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:162
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:360
+msgid "Actions"
+msgstr "Actions"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2042
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1378
+#: src/Bach/HomeBundle/Controller/SearchController.php:212
+#: src/Bach/HomeBundle/Controller/SearchController.php:1017
+msgid "Map selection"
+msgstr "Sélection carte"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2043
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1379
+#: src/Bach/HomeBundle/Controller/SearchController.php:213
+#: src/Bach/HomeBundle/Controller/SearchController.php:1018
+msgid "Start date"
+msgstr "Date de début"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2044
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1380
+#: src/Bach/HomeBundle/Controller/SearchController.php:214
+#: src/Bach/HomeBundle/Controller/SearchController.php:1019
+msgid "End date"
+msgstr "Date de fin"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2045
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1381
+#: src/Bach/HomeBundle/Controller/SearchController.php:215
+#: src/Bach/HomeBundle/Controller/SearchController.php:1020
+msgid "Start class date"
+msgstr "Classe : début"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2046
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1382
+#: src/Bach/HomeBundle/Controller/SearchController.php:216
+#: src/Bach/HomeBundle/Controller/SearchController.php:1021
+msgid "End class date"
+msgstr "Classe : fin"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2047
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1383
+#: src/Bach/HomeBundle/Controller/SearchController.php:217
+#: src/Bach/HomeBundle/Controller/SearchController.php:1022
+msgid "Start record date"
+msgstr "Date d'enregistrement : début"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2048
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1384
+#: src/Bach/HomeBundle/Controller/SearchController.php:218
+#: src/Bach/HomeBundle/Controller/SearchController.php:1023
+msgid "End record date"
+msgstr "Date d'enregistrement : fin"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2049
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1385
+#: src/Bach/HomeBundle/Controller/SearchController.php:219
+#: src/Bach/HomeBundle/Controller/SearchController.php:1024
+msgid "Start birth date"
+msgstr "Année de naissance : début"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2050
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1386
+#: src/Bach/HomeBundle/Controller/SearchController.php:220
+#: src/Bach/HomeBundle/Controller/SearchController.php:1025
+msgid "End birth date"
+msgstr "Année de naissance : fin"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2051
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1387
+#: src/Bach/HomeBundle/Controller/SearchController.php:221
+#: src/Bach/HomeBundle/Controller/SearchController.php:1026
+msgid "Document"
+msgstr "Document"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2079
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1415
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:208
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:406
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6173
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8328
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9293
+msgid "Unknown filter"
+msgstr "Filtre inconnu"
+
+#: src/Bach/HomeBundle/Controller/DefaultController.php:2101
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1437
+msgid "launch the query"
+msgstr "lancer la requête"
+
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:584
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9490
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10356
 msgid "Classification"
 msgstr "Cote"
 
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:565
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8702
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:588
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8997
 msgid "Year of recording"
 msgstr "Année d'enregistrement"
 
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:573
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8640
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9147
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10003
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:596
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8935
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9442
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10298
 msgid "Class"
 msgstr "Classe"
 
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:585
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8588
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9087
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9933
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:608
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8883
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9382
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10228
 msgid "Matricule"
 msgstr "Matricule"
 
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:589
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8662
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9123
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9975
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:612
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8957
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9418
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10270
 msgid "Year of birth"
 msgstr "Année de naissance"
 
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:614
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:637
 msgid "View search results as a list"
 msgstr "Voir les résultats de recherche en liste"
 
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:1080
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:1104
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1094
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1118
 msgid "Matricules have successfully been removed."
 msgstr "Les matricules ont bien été supprimés."
 
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:1232
-#: src/Bach/HomeBundle/Controller/MatriculesController.php:1256
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1159
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1242
+msgid "Nom"
+msgstr "Nom"
+
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1160
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1246
+msgid "Prenoms"
+msgstr "Prénoms"
+
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1308
+#: src/Bach/HomeBundle/Controller/MatriculesController.php:1332
 msgid "Matricules search have successfully been removed."
 msgstr "Les recherches matricules ont bien été supprimées"
 
@@ -233,85 +375,35 @@ msgstr "Une erreur est survenue à la publication des commentaires :("
 msgid "Selected comments have been published"
 msgstr "Les commentaires sélectionnés ont été publiés"
 
-#: src/Bach/HomeBundle/Controller/SearchController.php:211
-#: src/Bach/HomeBundle/Controller/SearchController.php:1016
-msgid "Map selection"
-msgstr "Sélection carte"
-
-#: src/Bach/HomeBundle/Controller/SearchController.php:212
-#: src/Bach/HomeBundle/Controller/SearchController.php:1017
-msgid "Start date"
-msgstr "Date de début"
-
-#: src/Bach/HomeBundle/Controller/SearchController.php:213
-#: src/Bach/HomeBundle/Controller/SearchController.php:1018
-msgid "End date"
-msgstr "Date de fin"
-
-#: src/Bach/HomeBundle/Controller/SearchController.php:214
-#: src/Bach/HomeBundle/Controller/SearchController.php:1019
-msgid "Start class date"
-msgstr "Classe : début"
-
-#: src/Bach/HomeBundle/Controller/SearchController.php:215
-#: src/Bach/HomeBundle/Controller/SearchController.php:1020
-msgid "End class date"
-msgstr "Classe : fin"
-
-#: src/Bach/HomeBundle/Controller/SearchController.php:216
-#: src/Bach/HomeBundle/Controller/SearchController.php:1021
-msgid "Start record date"
-msgstr "Date d'enregistrement : début"
-
-#: src/Bach/HomeBundle/Controller/SearchController.php:217
-#: src/Bach/HomeBundle/Controller/SearchController.php:1022
-msgid "End record date"
-msgstr "Date d'enregistrement : fin"
-
-#: src/Bach/HomeBundle/Controller/SearchController.php:218
-#: src/Bach/HomeBundle/Controller/SearchController.php:1023
-msgid "Start birth date"
-msgstr "Année de naissance : début"
-
-#: src/Bach/HomeBundle/Controller/SearchController.php:219
-#: src/Bach/HomeBundle/Controller/SearchController.php:1024
-msgid "End birth date"
-msgstr "Année de naissance : fin"
-
-#: src/Bach/HomeBundle/Controller/SearchController.php:220
-#: src/Bach/HomeBundle/Controller/SearchController.php:1025
-msgid "Document"
-msgstr "Document"
-
-#: src/Bach/HomeBundle/Controller/SearchController.php:878
+#: src/Bach/HomeBundle/Controller/SearchController.php:879
 msgid "Documents have sucessfully been removed."
 msgstr "Les documents ont bien été supprimés."
 
-#: src/Bach/HomeBundle/Controller/SearchController.php:929
+#: src/Bach/HomeBundle/Controller/SearchController.php:930
 msgid "Your basket is now uploaded"
 msgstr "Votre panier est chargé"
 
-#: src/Bach/HomeBundle/Controller/SearchController.php:934
+#: src/Bach/HomeBundle/Controller/SearchController.php:935
 msgid "Wrong file format"
 msgstr "Mauvais format de fichier"
 
-#: src/Bach/HomeBundle/Controller/SearchController.php:940
+#: src/Bach/HomeBundle/Controller/SearchController.php:941
 msgid "You forget to put a file"
 msgstr "Vous avez oublié de mettre un fichier"
 
-#: src/Bach/HomeBundle/Controller/SearchController.php:1076
+#: src/Bach/HomeBundle/Controller/SearchController.php:1077
 msgid "All searches have sucessfully been removed."
 msgstr "Toutes les recherches ont bien été supprimées"
 
-#: src/Bach/HomeBundle/Controller/SearchController.php:1114
+#: src/Bach/HomeBundle/Controller/SearchController.php:1115
 msgid "Your historic is now uploaded"
 msgstr "Votre historique est chargé"
 
-#: src/Bach/HomeBundle/Controller/SearchController.php:1119
+#: src/Bach/HomeBundle/Controller/SearchController.php:1120
 msgid "Wrong format file."
 msgstr "Mauvais format de fichier"
 
-#: src/Bach/HomeBundle/Controller/SearchController.php:1125
+#: src/Bach/HomeBundle/Controller/SearchController.php:1126
 msgid "You forget to put a json file"
 msgstr "Vous avez oublié de mettre un json"
 
@@ -327,8 +419,8 @@ msgstr "Le chemin des musiques n'est pas défini !"
 msgid "Misc files path is not defined!"
 msgstr "Le chemin des fichiers divers n'est pas défini !"
 
-#: src/Bach/HomeBundle/Controller/FilesController.php:134
-#: src/Bach/HomeBundle/Controller/FilesController.php:175
+#: src/Bach/HomeBundle/Controller/FilesController.php:139
+#: src/Bach/HomeBundle/Controller/FilesController.php:180
 #, php-format
 msgid "File %file does not exists."
 msgstr "Le fichier %file n'existe pas."
@@ -378,7 +470,7 @@ msgid "Y-m-d"
 msgstr "d/m/Y"
 
 #: src/Bach/HomeBundle/Entity/Comment.php:441
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5539
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5836
 msgid "New comment"
 msgstr "Nouveau commentaire"
 
@@ -508,9 +600,9 @@ msgid "State"
 msgstr "État"
 
 #: src/Bach/HomeBundle/Admin/CommentAdmin.php:220
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5770
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6803
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:435
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6067
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7100
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:439
 msgid "Date"
 msgstr "Date"
 
@@ -528,68 +620,40 @@ msgid "Your search historic is empty."
 msgstr "Votre historique de recherche est vide"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:124
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1693
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:492
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1122
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:519
 msgid "Documents"
 msgstr "Documents"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:131
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1700
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1129
 msgid "Matricules"
 msgstr "Matricules"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:146
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:335
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:344
 msgid "Dates"
 msgstr "Dates"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:150
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:339
-msgid "Request"
-msgstr "Recherche"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:154
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:343
-msgid "Filtres"
-msgstr "Filtres"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:158
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:347
-msgid "Results number"
-msgstr "Nombre de résultats"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:162
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:351
-msgid "Actions"
-msgstr "Actions"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:208
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:397
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5876
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8033
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8998
-msgid "Unknown filter"
-msgstr "Filtre inconnu"
-
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:250
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:439
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:448
 msgid "Delete "
 msgstr "Supprimer"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:258
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:447
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:456
 msgid "Execute"
 msgstr "Lancer"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:262
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:264
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:451
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:453
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:460
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:462
 msgid "Copy in clipboard"
 msgstr "Copier dans le presse papier"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:270
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:459
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:468
 msgid "Copy to clipboard"
 msgstr "Copier dans le presse papier"
 
@@ -601,779 +665,782 @@ msgstr "Supprimer ces recherches ead"
 msgid "Delete all ead search"
 msgstr "Supprimer toutes les recherches ead"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:493
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:323
+msgid "Print selected ead search"
+msgstr "Imprimer les recherches notices sélectionnées"
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:502
 msgid "Delete those matricules searches"
 msgstr "Supprimer les recherches matricules sélectionnées"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:503
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:512
 msgid "Delete all matricules search"
 msgstr "Supprimer toutes les recherches matricules"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:519
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:521
+msgid "Print selected matricules search"
+msgstr "Imprimer les recherches matricules sélectionnées"
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:537
 msgid "Truncate the historic search"
 msgstr "Vider l'historique de recherche"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:527
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1892
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:545
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1339
 msgid "Import/Export"
 msgstr "Importer/Exporter"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:536
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:554
 msgid "Export your historic"
 msgstr "Exporter votre historique de recherche"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:550
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:568
 msgid "Import your historic"
 msgstr "Importer votre historique de recherche"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:648
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:681
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:666
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:699
 msgid "This search has been deleted"
 msgstr "Cette recherche a été supprimée"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:654
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:687
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:672
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:705
 msgid "Something goes wrong, your search may be not deleted"
 msgstr ""
 "Quelque chose ne va pas, votre recherche peut ne pas avoir été supprimée"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:700
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:718
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2008
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2026
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:736
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1455
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1473
 msgid "No files selected"
 msgstr "Pas de document sélectionné"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:706
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:724
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:736
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2014
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2032
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2044
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:742
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:754
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1461
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1479
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1491
 msgid "Are you sure ?"
 msgstr "Êtes vous sûr ?"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:795
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:845
 msgid "Enter a text to filter:"
 msgstr "Entrez un texte pour filtrer :"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:802
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6894
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:852
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7191
 msgid "Order:"
 msgstr "Ordre :"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:811
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:861
 msgid "Alphabetic (default)"
 msgstr "Alphabétique (défaut)"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:819
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:869
 msgid "Occurrence"
 msgstr "Occurrence"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:880
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:930
 msgid "Searching..."
 msgstr "Recherche..."
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:903
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:953
 #, php-format
 msgid "%count filtered result"
 msgstr "%count résultat filtré"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:908
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:958
 #, php-format
 msgid "%count filtered results"
 msgstr "%count résultats filtrés"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:923
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7381
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:973
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7676
 msgid "An error occured loading terms :("
 msgstr "Une erreur est survenue au chargement des termes :("
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1016
-msgid "Welcome to Bach's!"
-msgstr "Bienvenue dans Bach !"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1164
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8512
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9820
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10183
-#: src/Bach/HomeBundle/Twig/DisplayDao.php:598
-msgid "This picture is not communicable"
-msgstr "Ce média n'est pas communicable"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1322
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2220
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2417
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2755
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8170
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:486
-msgid "Untitled unit"
-msgstr "Unité sans intutilé"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1345
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1347
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2240
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2242
-msgid "Locate in document tree"
-msgstr "Voir dans l'inventaire"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1353
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1357
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2244
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2248
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8371
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8375
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10192
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10196
-msgid "Add to basket"
-msgstr "Ajout à votre panier"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1399
-msgid "Have one or several words in linked documents"
-msgstr "A un ou plusieurs mots dans les documents associés"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1409
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3080
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10081
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10085
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10434
-msgid "Detailled description"
-msgstr "Description détaillée"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1423
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3089
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10445
-msgid "An error occured loading document :("
-msgstr "Une erreur est survenue au chargement du document :("
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1542
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2552
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8904
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10473
-msgid "This document has been added to your basket"
-msgstr "Ce document a été ajouté à votre panier"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1548
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2558
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8910
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10479
-msgid "This document already exists in your basket"
-msgstr "Ce document est déjà dans votre panier"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1657
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1668
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1086
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1097
 msgid "Basket"
 msgstr "Panier"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1682
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1111
 msgid "Your basket is empty."
 msgstr "Votre panier est vide."
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1716
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:432
-msgid "Title"
-msgstr "Titre"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1720
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1812
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8570
-msgid "Cote"
-msgstr "Cote"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1724
-msgid "Dates periods"
-msgstr "Dates"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1773
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1202
 msgid "Delete those documents"
 msgstr "Supprimer tous les documents sélectionnés"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1783
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1212
 msgid "Delete all documents"
 msgstr "Supprimer tous les documents"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1804
-msgid "Nom"
-msgstr "Nom"
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1221
+msgid "Print ead basket"
+msgstr "Imprimer la liste des notices"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1808
-msgid "Prenoms"
-msgstr "Prénoms"
-
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1861
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1299
 msgid "Delete those matricules"
 msgstr "Supprimer les matricules sélectionnés"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1871
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1309
 msgid "Delete all matricules"
 msgstr "Supprimer tous les matricules"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1886
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1318
+msgid "Print matricules basket"
+msgstr "Imprimer la liste des matricules"
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1333
 msgid "Truncate the basket"
 msgstr "Vider le panier"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1901
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1348
 msgid "Export your basket"
 msgstr "Exporter votre panier"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1915
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1362
 msgid "Import"
 msgstr "Importer"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1926
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1373
 msgid "Import your basket"
 msgstr "Importer votre panier"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2270
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1578
+msgid "Welcome to Bach's!"
+msgstr "Bienvenue dans Bach !"
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1726
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8807
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10115
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10478
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:242
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:628
+msgid "This picture is not communicable"
+msgstr "Ce média n'est pas communicable"
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1886
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2065
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2476
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2680
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3022
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8465
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:513
+msgid "Untitled unit"
+msgstr "Unité sans intutilé"
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1909
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1911
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2088
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2090
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2499
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2501
+msgid "Locate in document tree"
+msgstr "Voir dans l'inventaire"
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1917
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1921
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2096
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2100
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2507
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2511
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8666
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8670
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10487
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10491
+msgid "Add to basket"
+msgstr "Ajout à votre panier"
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2146
+msgid "Have one or several words in linked documents"
+msgstr "A un ou plusieurs mots dans les documents associés"
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2156
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3351
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10376
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10380
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10747
+msgid "Detailled description"
+msgstr "Description détaillée"
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2170
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3360
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10758
+msgid "An error occured loading document :("
+msgstr "Une erreur est survenue au chargement du document :("
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2292
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2815
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9199
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10786
+msgid "This document has been added to your basket"
+msgstr "Ce document a été ajouté à votre panier"
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2298
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2821
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9205
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10792
+msgid "This document already exists in your basket"
+msgstr "Ce document est déjà dans votre panier"
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2533
 msgid "Display previous component (%title)"
 msgstr "Afficher le composant précédent (%title)"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2274
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2537
 msgid "Previous component"
 msgstr "Composant précédent"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2291
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2554
 msgid "Display next component (%title)"
 msgstr "Afficher le composant suivant (%title)"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2295
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2558
 msgid "Next component"
 msgstr "Composant suivant"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2316
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8360
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8387
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2579
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8655
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8682
 msgid "Print"
 msgstr "Imprimer"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2384
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2647
 msgid "Sub units"
 msgstr "Sous-unités"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2467
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8785
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2730
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9080
 msgid "User comments"
 msgstr "Commentaires utilisateurs"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2495
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8813
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2758
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9108
 msgid "Anonymous"
 msgstr "Anonyme"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2501
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8819
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2764
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9114
 msgid "By %user%"
 msgstr "Par %user%"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2505
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8823
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2768
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9118
 msgid "on %date%"
 msgstr "le %date%"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2622
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2885
 msgid "Browse fields"
 msgstr "Navigation par champs"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2669
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2932
 msgid "There are no configured fields for browsing."
 msgstr "Il n'y a pas d index configurés pour la navigation."
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2765
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3032
 msgid "Consult document \"%title\""
 msgstr "Consultation du document « %title »"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2861
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3128
 msgid "Classification scheme"
 msgstr "Cadre de classement"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2864
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2866
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3131
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3133
 #, php-format
 msgid "View document %doc"
 msgstr "Voir le document %doc"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2898
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3165
 msgid "Collapse all"
 msgstr "Plier tout"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2900
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3167
 msgid "Expand all"
 msgstr "Déplier tout"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2967
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3234
 msgid "Expand/Hide informations"
 msgstr "Afficher/Masquer les informations"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2992
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3259
 msgid "Has link"
 msgstr "Contient des liens vers des documents"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:2996
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3000
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3263
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3271
 msgid "Has media associated"
 msgstr "Possède des médias associés"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3177
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3267
+msgid "Go to media associated"
+msgstr "Aller au média associé"
+
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3448
 msgid "Search against current document"
 msgstr "Chercher dans le document courant"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3183
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3454
 msgid "Summary"
 msgstr "Sommaire"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3189
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:441
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3460
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:445
 msgid "Presentation"
 msgstr "Présentation"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3195
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:444
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3466
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:448
 msgid "Contents"
 msgstr "Contenu"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3201
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:510
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3472
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:537
 msgid "Bibliographic informations"
 msgstr "Informations bibliographiques"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3207
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3478
 msgid "Inventory scheme"
 msgstr "Plan de classement"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3380
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3677
 msgid "Flash missing"
 msgstr "Flash manquant"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3382
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3679
 msgid "You need flash to use embed player!"
 msgstr "Flash est requis pour utiliser le lecteur intégré !"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3384
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:3681
 msgid "You can still click on the links to read them on your own side."
 msgstr ""
 "Vous pouvez toujours cliquer sur les liens pour les lire depuis votre poste."
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4111
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4408
 msgid "Not geolocalized places"
 msgstr "Lieux non géolocalisés"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4117
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4414
 msgid "Click on a location to perform automatic search."
 msgstr "Cliquez sur un lieu pour effectuer une recherche automatique."
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4143
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4440
 msgid "Proposals for:"
 msgstr "Propositions pour :"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4147
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4444
 msgid "Back"
 msgstr "Retour"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4183
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4480
 msgid "Possible position for location:"
 msgstr "Position possible pour le lieu :"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4188
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4485
 msgid "Original:"
 msgstr "Original :"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4192
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4489
 msgid "Found:"
 msgstr "Trouvé :"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4194
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4491
 msgid "OSM id:"
 msgstr "Id OSM :"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4198
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4495
 msgid "Coordinates:"
 msgstr "Coordonnées :"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4205
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4502
 msgid "Store that position?"
 msgstr "Enregistrer cette position ?"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4217
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4514
 msgid "Unable to propose positions :("
 msgstr "Impossible de proposer des positions :("
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4271
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4349
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4568
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4646
 msgid "No results found :/"
 msgstr "Aucun résultat trouvé"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4311
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4608
 msgid "Unable to store that location :("
 msgstr "Impossible d'enregistrer cette position :("
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4317
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4614
 msgid "Position has been successfully stored!"
 msgstr "La position a été enregistrée avec succès !"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4332
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4629
 msgid "Something went wrong trying to store position :("
 msgstr "Quelque chose a mal tourné lors de l'enregistrement de la position :("
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4361
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4658
 msgid "No satisfying matches?<br/>Enter you own search:"
 msgstr ""
 "Aucune correspondance satisfaisante ?<br/>Entrez votre propre recherche :"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4450
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4747
 msgid "Show/Hide sidebar"
 msgstr "Afficher/Masquer la barre de côté"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4506
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5169
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7823
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4803
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5466
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8118
 msgid "© Cartographic data"
 msgstr "© Données cartographiques"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4508
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5171
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7825
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4805
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5468
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8120
 msgid "OpenStreetMap contributors"
 msgstr "Contributeurs OpenStreetMap"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4510
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5173
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7827
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4807
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5470
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8122
 msgid "© Imagery"
 msgstr "© Imagerie"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4682
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4979
 msgid "result(s)"
 msgstr "résultat(s)"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4724
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5021
 msgid "remove"
 msgstr "supprimer"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4728
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5025
 msgid "edit"
 msgstr "modifier"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4758
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5055
 msgid "NAME has been removed"
 msgstr "NAME a été supprimé"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4768
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5065
 msgid "Not yet implemented!"
 msgstr "Pas encore implémenté !"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4837
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:4900
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5304
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5134
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5197
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5601
 msgid "link to the original document"
 msgstr "Lien vers le document"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5363
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5660
 msgid "You can close this tab and continue your navigation."
 msgstr "Vous pouvez fermer cet onglet et continuer votre navigation."
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5495
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5792
 msgid "Add a comment"
 msgstr "Ajouter un commentaire"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5565
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5862
 msgid "Back to document"
 msgstr "Retour au document"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5658
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5955
 msgid "Search on \"%term\""
 msgstr "Recherche sur « %term »"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5734
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6031
 msgid "Shows or hides map"
 msgstr "Affiche ou masque la carte"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5742
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6039
 msgid "Show/Hide map"
 msgstr "Afficher/Masquer la carte"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5752
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6785
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6049
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7082
 msgid "record date"
 msgstr "date d'enregistrement"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5758
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6791
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6055
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7088
 msgid "class"
 msgstr "classe"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5764
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6797
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6061
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7094
 msgid "birthdate"
 msgstr "année de naissance"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5790
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6087
 msgid "Show or hide the graph of distribution by %datetype%"
 msgstr "Affiche ou masque le graphique de répartition par %datetype%"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5794
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6091
 msgid "Shows or hides date range graph"
 msgstr "Affiche ou masque le graphique de sélection de date"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5804
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6101
 msgid "Show/Hide date range"
 msgstr "Afficher/Masquer la sélection de date"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5825
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6122
 msgid "Active filters"
 msgstr "Filtres sélectionnés"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5829
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6126
 msgid "Clear refined query"
 msgstr "Effacer la recherche affinée"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5831
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6128
 msgid "Clear"
 msgstr "Effacer"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5904
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6201
 msgid "Remove filter on '%value%'"
 msgstr "Supprimer le filtre sur « %value% »"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:5967
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6264
 msgid "Refine Query"
 msgstr "Affiner votre recherche"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6081
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6182
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6378
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6479
 msgid "Go"
 msgstr "Go"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6113
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6410
 msgid "From:"
 msgstr "De :"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6142
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6439
 msgid "to:"
 msgstr "à :"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6250
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6547
 msgid "Please enter an integer as start date!"
 msgstr "Veuiller entrer un entier pour date de début !"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6259
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6556
 #, php-format
 msgid "Start date must be greater than %date"
 msgstr "La date de début doit être ultérieure à %date"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6269
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6566
 msgid "Please enter an integer as end date!"
 msgstr "Veuillez entrer un entier pour date de fin !"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6278
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6575
 #, php-format
 msgid "End date must be earlier than %date"
 msgstr "La date de fin doit être antérieure à %date"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6287
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6584
 msgid "Begin date must be ealier or equal than end date!"
 msgstr "La date de fin doit être antérieure ou égale à la date de début"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6496
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6793
 #, php-format
 msgid "Show more (%count left)"
 msgstr "Afficher plus (%count restants)"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6633
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6930
 msgid ""
 "Unckeck if you do not want to keep existing filters with your new search"
 msgstr ""
 "Décochez si vous ne souhaitez pas conserver les filtres existants pour votre "
 "nouvelle recherche"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6651
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6948
 msgid "Ckeck if you want to search in pdf associated files"
 msgstr "Cochez si vous voulez chercher dans les pdfs associés"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6688
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6698
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6985
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6995
 msgid "New search"
 msgstr "Nouvelle recherche"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6690
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6700
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6987
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6997
 msgid "Start a new search"
 msgstr "Lancer une nouvelle recherche"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6715
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7012
 msgid "Additionnal search suggestions:"
 msgstr "Suggestions de recherche complémentaires :"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6815
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7112
 msgid "Please adjust the period to narrow the search by %datetype%"
 msgstr "Veuillez ajuster la période pour affiner la recherche par %datetype%"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6817
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7114
 msgid "Number of records by %datetype%"
 msgstr "Nombre d'enregistrements par %datetype%"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6848
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8083
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9049
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7145
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8378
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9344
 msgid "1 result"
 msgstr "1 résultat"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6854
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8089
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9055
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7151
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8384
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9350
 msgid "Results %resultStart% to %resultEnd% on %resultCount%"
 msgstr "Résultats %resultStart% à %resultEnd% sur %resultCount%"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6873
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6875
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6883
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6885
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7170
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7172
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7180
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7182
 msgid "Print the two next result pages"
 msgstr "Imprimer les deux prochaines pages de résultats"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:6905
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7202
 msgid "Relevance (default)"
 msgstr "Pertinence (défaut)"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7001
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8105
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7298
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8400
 msgid "No result found."
 msgstr "Aucun résultat trouvé."
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7010
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7307
 msgid "Spelling suggestions:"
 msgstr "Suggestions orthographiques :"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7729
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8024
 msgid "Zoom in"
 msgstr "Zoom avant"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7733
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8028
 msgid "Zoom out"
 msgstr "Zoom arrière"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7741
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8036
 msgid "Full screen"
 msgstr "Plein écran"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7761
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8056
 msgid "Search a place on the map."
 msgstr "Recherchez un lieu sur la carte"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7765
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8060
 msgid "Sorry, that place cannot be found."
 msgstr "Désolé, ce lieu n'a pas été trouvé."
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7852
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8147
 msgid "Hover over a zone"
 msgstr "Survolez une zone"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7890
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8185
 msgid "No geolocalized places were found!"
 msgstr "Aucun lieu géolocalisés n'a été trouvé !"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:7897
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8192
 msgid "Hide map"
 msgstr "Masquer la carte"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8249
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8873
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8544
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9168
 msgid "Loading..."
 msgstr "Chargement..."
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8251
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8875
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8546
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9170
 msgid "Currently loading..."
 msgstr "En cours de chargement..."
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8261
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8885
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8556
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9180
 msgid "An error occured loading tab :("
 msgstr "Une erreur est survenue au chargement de l'onglet :("
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8415
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8710
 msgid "Record"
 msgstr "Enregistrement"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8421
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:507
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8716
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:534
 msgid "Comments"
 msgstr "Commentaires"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8428
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:498
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8723
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:525
 msgid "Add comment"
 msgstr "Ajouter un commentaire"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8555
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8850
 msgid "Identifier"
 msgstr "Identifiant"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8622
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9111
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9961
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8917
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9406
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10256
 msgid "Surnames"
 msgstr "Prénoms"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8975
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9607
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9270
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9902
 msgid "Search in matricules"
 msgstr "Chercher dans les matricules"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9183
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10047
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9478
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10342
 msgid "Record year"
 msgstr "Année d'enregistrement"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9280
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9284
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9781
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9803
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10172
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10176
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9575
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9579
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10076
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10098
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10467
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:10471
 msgid "Scan"
 msgstr "Document numérisé"
 
-#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9617
+#: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:9912
 msgid "Matricules search"
 msgstr "Recherche de matricules"
 
-#: src/Bach/HomeBundle/Twig/DisplayDao.php:432
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:458
 msgid "Images"
 msgstr "Images"
 
-#: src/Bach/HomeBundle/Twig/DisplayDao.php:441
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:467
 msgid "Series"
 msgstr "Séries"
 
-#: src/Bach/HomeBundle/Twig/DisplayDao.php:450
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:476
 msgid "Sounds"
 msgstr "Sons"
 
-#: src/Bach/HomeBundle/Twig/DisplayDao.php:459
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:485
 msgid "Flash sounds"
 msgstr "Sons Flash"
 
-#: src/Bach/HomeBundle/Twig/DisplayDao.php:470
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:496
 msgid "Videos"
 msgstr "Vidéos"
 
-#: src/Bach/HomeBundle/Twig/DisplayDao.php:479
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:505
 msgid "Flash videos"
 msgstr "Vidéos Flash"
 
-#: src/Bach/HomeBundle/Twig/DisplayDao.php:488
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:514
 msgid "Miscellaneous documents"
 msgstr "Documents divers"
 
-#: src/Bach/HomeBundle/Twig/DisplayDao.php:497
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:523
 msgid "XML documents"
 msgstr "Documents XML"
 
-#: src/Bach/HomeBundle/Twig/DisplayDao.php:602
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:632
 msgid "Play '%name%'"
 msgstr "Jouer « %name% »"
 
-#: src/Bach/HomeBundle/Twig/DisplayDao.php:683
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:725
 msgid ""
 "Your browser does not support this video format, you may want to download "
 "file and watch it offline"
@@ -1381,280 +1448,288 @@ msgstr ""
 "Votre navigateur ne supporte pas ce format de vidéo, vous souhaiterez peut-"
 "être télécharger le fichier et le visionner hors ligne"
 
-#: src/Bach/HomeBundle/Twig/DisplayDao.php:810
-#: src/Bach/HomeBundle/Twig/DisplayDao.php:865
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:728
+msgid ""
+"If your browser does not support this video format, you may want to download "
+"this video and watch it offline"
+msgstr ""
+"Votre navigateur ne supporte pas ce format de vidéo, vous souhaiterez peut-"
+"être télécharger le fichier et le visionner hors ligne"
+
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:874
+#: src/Bach/HomeBundle/Twig/DisplayDao.php:929
 msgid "Display '%name%'"
 msgstr "Afficher « %name% »"
 
-#: src/Bach/HomeBundle/Twig/DisplayCdc.php:202
-#: src/Bach/HomeBundle/Twig/DisplayCdc.php:264
+#: src/Bach/HomeBundle/Twig/DisplayCdc.php:210
+#: src/Bach/HomeBundle/Twig/DisplayCdc.php:272
 msgid "Not classified"
 msgstr "Non classé"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:411
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:375
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:438
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:379
 msgid "Publication informations"
 msgstr "Informations de publication"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:414
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:447
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:441
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:451
 msgid "Physical description"
 msgstr "Description physique"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:417
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:444
 msgid "Descriptors"
 msgstr "Descripteurs"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:420
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:447
 msgid "Gender:"
 msgstr "Genre :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:423
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:450
 msgid "Extent:"
 msgstr "Étendue :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:426
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:453
 msgid "Dimensions:"
 msgstr "Dimensions :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:429
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:456
 msgid "Appearance:"
 msgstr "Apparence :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:432
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:459
 msgid "Title:"
 msgstr "Titre :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:435
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:462
 msgid "Corporate name:"
 msgstr "Nom d'organisation :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:438
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:465
 msgid "Geographical name:"
 msgstr "Nom géographique :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:441
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:468
 msgid "Subject:"
 msgstr "Sujet :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:444
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:471
 msgid "Personal name:"
 msgstr "Nom de personne :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:447
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:474
 msgid "Function:"
 msgstr "Fonction :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:450
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:477
 msgid "Name:"
 msgstr "Nom :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:453
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:480
 msgid "Genre:"
 msgstr "Type :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:456
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:483
 msgid "Relative documents"
 msgstr "Documents relatifs"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:459
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:486
 msgid "Description:"
 msgstr "Description :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:462
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:489
 msgid "Conservation history:"
 msgstr "Historique de conservation :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:465
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:492
 msgid "Arrangement:"
 msgstr "Disposition :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:468
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:495
 msgid "Related material:"
 msgstr "Documents relatifs :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:471
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:498
 msgid "Bibliography:"
 msgstr "Bibliographie :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:474
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:501
 msgid "Userestrict:"
 msgstr "Conditions d'utilisation"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:477
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:504
 msgid "Biography or history:"
 msgstr "Biographie ou histoire :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:480
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:507
 msgid "Acquisition information:"
 msgstr "Informations d'acquisition :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:483
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:510
 msgid "Separated material:"
 msgstr "Documents externes :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:489
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:516
 msgid "Description"
 msgstr "Description"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:495
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:522
 msgid "Sub-units"
 msgstr "Sous-unités"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:501
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:528
 msgid "Repository:"
 msgstr "Dépôt :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:504
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:414
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:531
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:418
 msgid "Language:"
 msgstr "Langue :"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:513
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:540
 msgid "Information process"
 msgstr "Informations sur la description"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:516
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:543
 msgid "Original localisation"
 msgstr "Localisation originale"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:519
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:546
 msgid "Abstract"
 msgstr "Résumé"
 
-#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:557
+#: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:584
 msgid "without specific"
 msgstr "sans spécifiques"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:378
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:382
 msgid "Title statement"
 msgstr "Déclaration de titre"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:381
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:385
 msgid "Title proper:"
 msgstr "Titre :"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:384
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:388
 msgid "Author:"
 msgstr "Auteur :"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:387
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:391
 msgid "Subtitle:"
 msgstr "Sous-titre :"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:390
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:394
 msgid "Sponsor:"
 msgstr "Commanditaire :"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:393
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:397
 msgid "Publication statement"
 msgstr "Déclaration de publication"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:396
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:400
 msgid "Publisher:"
 msgstr "Éditeur :"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:399
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:403
 msgid "Date:"
 msgstr "Date :"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:402
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:406
 msgid "Address:"
 msgstr "Adresse :"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:405
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:409
 msgid "Edition statement"
 msgstr "Déclaration d'édition"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:408
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:412
 msgid "Profile"
 msgstr "Profil"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:411
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:415
 msgid "Creation:"
 msgstr "Création :"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:417
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:421
 msgid "Description rules:"
 msgstr "Règles de description :"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:420
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:424
 msgid "Number:"
 msgstr "Numéro :"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:423
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:427
 msgid "Series statement"
 msgstr "Déclaration de série"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:426
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:430
 msgid "Note statement"
 msgstr "Déclaration de note"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:429
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:433
 msgid "Revision description"
 msgstr "Description des modifications"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:438
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:442
 msgid "Class number"
 msgstr "Cote"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:450
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:454
 msgid "Extent"
 msgstr "Étendue"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:453
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:457
 msgid "Custodial history"
 msgstr "Historique de conservation"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:456
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:460
 msgid "Acquisition information"
 msgstr "Informations d'acquisition"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:459
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:463
 msgid "Biography or history"
 msgstr "Biographie ou histoire"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:462
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:466
 msgid "Legal status"
 msgstr "Statut juridique"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:465
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:469
 msgid "Language"
 msgstr "Langue"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:468
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:472
 msgid "Scope and content"
 msgstr "Portée et contenu"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:471
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:475
 msgid "Processing information"
 msgstr "Informations de traitement"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:474
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:478
 msgid "Other finding aid"
 msgstr "Trouver d'autres aides"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:477
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:481
 msgid "Condition of use"
 msgstr "Mentions légales"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:480
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:484
 msgid "Related material"
 msgstr "Documents relatifs :"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:483
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:487
 msgid "Bibliography"
 msgstr "Bibliographie :"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:486
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:490
 msgid "Repository"
 msgstr "Dépôt :"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:489
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:493
 msgid "Physical support"
 msgstr "Support physique"
 
-#: src/Bach/HomeBundle/Twig/DisplayHtml.php:495
+#: src/Bach/HomeBundle/Twig/DisplayHtml.php:499
 msgid "Odd"
 msgstr "Impair"
 

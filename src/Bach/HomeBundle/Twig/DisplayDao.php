@@ -854,7 +854,7 @@ class DisplayDao extends \Twig_Extension
                     $ret .= '<img src="/img/sound_nocover.png" alt="' . $dao . '"/>';
                 }
             }
-            if ($daotitle !== null) {
+            if ($daotitle !== null && $linkDesc == true) {
                 $ret .= '<span class="title">' . $daotitle . '</span>';
             }
             if ($all === true && $daotitle === null) {

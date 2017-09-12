@@ -1009,8 +1009,26 @@ class EADFileFormat extends FileFormat
 
                 if ($pdfFlag == true && $dao['attributes']['href']) {
                     $daolink = $dao['attributes']['href'];
+                    $flag = false;
                     if (file_exists(BACH_FILES_MISC . $daolink)
                     ) {
+                        $flag = true;
+                    } else if (strpos(BACH_FILES_MISC, 'http') === 0 // test if begin with http
+                        && strpos($daolink, 'pdf') !== false
+                    ) {
+                        // test if remote file exist
+                        $ch = curl_init(BACH_FILES_MISC .$daolink);
+                        curl_setopt($ch, CURLOPT_NOBODY, true);
+                        curl_exec($ch);
+                        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+                        if ($code == 200) {
+                            print_r(BACH_FILES_MISC .$daolink);
+                            $flag = true;
+                        }
+                        curl_close($ch);
+                    }
+                    if ($flag) {
                         $parser = new \Smalot\PdfParser\Parser();
                         try {
                             $pdf = $parser->parseFile(BACH_FILES_MISC . $daolink);

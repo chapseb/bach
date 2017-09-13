@@ -143,12 +143,24 @@ POSSIBILITY OF SUCH DAMAGE.
                         </xsl:if>
                         </xsl:variable>
 
+                        <xsl:variable name="testCommDaoloc" match=".">
+                            <xsl:if test="../../daogrp/daoloc/@communicability_general">
+                            <xsl:call-template name="calc-com">
+                                <xsl:with-param name="comm_general" select="number(../../daogrp/daoloc/@communicability_general)" />
+                                <xsl:with-param name="comm_readingroom" select="number(../../daogrp/daoloc/@communicability_sallelecture)" />
+                                <xsl:with-param name="current_year" select="number($current_year)" />
+                                <xsl:with-param name="equalip" select="$readingroom" />
+                            </xsl:call-template>
+                        </xsl:if>
+                        </xsl:variable>
+
+
                         <xsl:variable name="a" select="count(../../dao)"/>
                         <xsl:variable name="b" select="count(../../daogrp)"/>
                         <xsl:choose>
                             <xsl:when test="$a + $b &lt; 2">
                                 <xsl:choose>
-                                    <xsl:when test="$testComm and $testComm = 'false'">
+                                    <xsl:when test="($testComm and $testComm = 'false') or ($testCommDaoloc and $testCommDaoloc = 'false')">
                                     </xsl:when>
                                     <xsl:when test="../../dao and ../../dao/@role = 'image'">
                                         <xsl:variable name="linkalone" select="concat($viewer_uri, 'viewer/', ../../dao/@href)"/>

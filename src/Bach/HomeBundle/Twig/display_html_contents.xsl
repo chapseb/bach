@@ -149,7 +149,6 @@ POSSIBILITY OF SUCH DAMAGE.
                             <xsl:when test="$a + $b &lt; 2">
                                 <xsl:choose>
                                     <xsl:when test="$testComm and $testComm = 'false'">
-                                        .
                                     </xsl:when>
                                     <xsl:when test="../../dao and ../../dao/@role = 'image'">
                                         <xsl:variable name="linkalone" select="concat($viewer_uri, 'viewer/', ../../dao/@href)"/>

@@ -330,7 +330,7 @@ class DisplayHtml extends \Twig_Extension
         $host = str_replace('.', '_', $this->kernel->getContainer()->get('request')->getHost());
 
         if (!isset($_COOKIE[$host.'_bach_cookie_reader'])) {
-            $flagReadroom = true;
+            $flagReadroom = false;
         }
 
         //$authorizedArchives = $this->get('bach.home.authorization')->archivesRight();

@@ -67,6 +67,7 @@ class DisplayHtml extends \Twig_Extension
     protected $cote_location;
     protected $viewer_uri;
     protected $prod;
+    protected $readingroomip;
     protected $kernel_root_dir;
     protected $cache_key_prefix = 'html';
 
@@ -82,6 +83,8 @@ class DisplayHtml extends \Twig_Extension
     {
         $this->router = $router;
         $this->kernel_root_dir = $kernel->getRootDir();
+        $this->readingroomip = $kernel->getContainer()->getParameter('readingroom');
+        $this->kernel = $kernel;
         if ( $kernel->getEnvironment() !== 'dev' ) {
             $this->prod = true;
         } else {
@@ -308,10 +311,36 @@ class DisplayHtml extends \Twig_Extension
             simplexml_load_file(__DIR__ . '/display_html_contents.xsl')
         );
 
+        $current_date = new \DateTime();
+        $current_year = $current_date->format("Y");
+        $outputip = 'bjoedjoerq';
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $outputip
+                = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+        } else {
+            $outputip = $this->kernel->getContainer()->get(
+                'request'
+            )->getClientIp();
+        }
+        $flagReadroom = false;
+        if (strpos($this->readingroomip, $outputip) !== false) {
+            $flagReadroom = true;
+        }
+
+        $host = str_replace('.', '_', $this->kernel->getContainer()->get('request')->getHost());
+
+        if (!isset($_COOKIE[$host.'_bach_cookie_reader'])) {
+            $flagReadroom = true;
+        }
+
         //$authorizedArchives = $this->get('bach.home.authorization')->archivesRight();
         $proc->setParameter('', 'docid', $docid);
         $audience = ($audience) ? 'true' : 'false';
+        $readingroom = ($flagReadroom) ? 'true' : 'false';
+
         $proc->setParameter('', 'audience', $audience);
+        $proc->setParameter('', 'readingroom', $readingroom);
+        $proc->setParameter('', 'current_year', $current_year);
         $proc->setParameter('', 'daodetector', $daodetector);
         $proc->setParameter('', 'viewer_uri', $this->viewer_uri);
         $proc->registerPHPFunctions();

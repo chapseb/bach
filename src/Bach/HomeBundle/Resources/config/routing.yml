@@ -363,13 +363,13 @@ basket_delete_all:
 
 basket_delete_all_mat:
     pattern: /basketDeleteAllMat
-    defaults: { _controller: BachHomeBundle:Matricules:basketDeleteAllMat}
+    defaults: { _controller: BachHomeBundle:Matricules:basketDeleteAllOneType}
     requirements:
         _method: POST
 
 basket_delete_all_ead:
     pattern: /basketDeleteAllEad
-    defaults: { _controller: BachHomeBundle:Default:basketDeleteAllEad}
+    defaults: { _controller: BachHomeBundle:Default:basketDeleteAllOneType}
     requirements:
         _method: POST
 
@@ -381,13 +381,13 @@ basket_export:
 
 basket_print_ead:
     pattern: /basketPrintEad
-    defaults: { _controller: BachHomeBundle:Default:basketPrintEad }
+    defaults: { _controller: BachHomeBundle:Default:basketPrint }
     requirements:
         _method: POST
 
 basket_print_mat:
     pattern: /basketPrintMat
-    defaults: { _controller: BachHomeBundle:Matricules:basketPrintMat }
+    defaults: { _controller: BachHomeBundle:Matricules:basketPrint }
     requirements:
         _method: POST
 
@@ -411,7 +411,7 @@ searchhisto_add:
 
 searchhistomat_add:
     pattern: /searchhistomatAdd
-    defaults: { _controller: BachHomeBundle:Matricules:searchhistomatAdd}
+    defaults: { _controller: BachHomeBundle:Matricules:searchhistoAdd}
     requirements:
         _method: GET
 
@@ -423,7 +423,7 @@ searchhisto_deleteone:
 
 searchhistomat_deleteone:
     pattern: /searchhistomatDeleteone/{timedelete}
-    defaults: { _controller: BachHomeBundle:Matricules:searchHistoMatDeleteOne}
+    defaults: { _controller: BachHomeBundle:Matricules:searchHistoDeleteOne}
     requirements:
         _method: POST
 
@@ -441,31 +441,31 @@ searchhistomat_execute:
 
 search_histo_delete:
     pattern: /searchhistoDeleteEad
-    defaults: { _controller: BachHomeBundle:Default:searchHistoDeleteEad}
+    defaults: { _controller: BachHomeBundle:Default:searchHistoDelete}
     requirements:
         _method: POST
 
 search_histo_delete_mat:
     pattern: /searchhistoDeleteMat
-    defaults: { _controller: BachHomeBundle:Matricules:searchHistoDeleteMat}
+    defaults: { _controller: BachHomeBundle:Matricules:searchHistoDelete}
     requirements:
         _method: POST
 
 search_histo_delete_all_ead:
     pattern: /searchhistoDeleteAllEad
-    defaults: { _controller: BachHomeBundle:Default:searchHistoDeleteAllEad}
+    defaults: { _controller: BachHomeBundle:Default:searchHistoDeleteAll}
     requirements:
         _method: POST
 
 search_histo_delete_all_mat:
     pattern: /searchhistoDeleteAllMat
-    defaults: { _controller: BachHomeBundle:Matricules:searchHistoDeleteAllMat}
+    defaults: { _controller: BachHomeBundle:Matricules:searchHistoDeleteAll}
     requirements:
         _method: POST
 
 search_histo_delete_all:
     pattern: /searchhistoDeleteAll
-    defaults: { _controller: BachHomeBundle:Default:searchHistoDeleteAll}
+    defaults: { _controller: BachHomeBundle:Default:searchHistoDeleteAllType}
     requirements:
         _method: POST
 
@@ -483,13 +483,13 @@ search_histo_import:
 
 search_histo_print_ead:
     pattern: /searchhistoPrintEad
-    defaults: { _controller: BachHomeBundle:Default:searchHistoPrintEad }
+    defaults: { _controller: BachHomeBundle:Default:searchHistoPrint }
     requirements:
         _method: POST
 
 search_histo_print_mat:
     pattern: /searchhistoPrintMat
-    defaults: { _controller: BachHomeBundle:Matricules:searchHistoPrintMat }
+    defaults: { _controller: BachHomeBundle:Matricules:searchHistoPrint }
     requirements:
         _method: POST
 

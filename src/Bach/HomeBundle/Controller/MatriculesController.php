@@ -287,7 +287,7 @@ class MatriculesController extends SearchController
         $tpl_vars['disable_select_daterange']
             = $this->container->getParameter('display.disable_select_daterange');
 
-        $this->searchhistoMatAddAction($searchResults->getNumFound());
+        $this->searchhistoAddAction($searchResults->getNumFound());
 
         if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $incomeIp = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
@@ -1107,7 +1107,7 @@ class MatriculesController extends SearchController
      *
      * @return void
      */
-    public function basketDeleteAllMatAction()
+    public function basketDeleteAllOneTypeAction()
     {
         $session = $this->getRequest()->getSession();
 
@@ -1132,7 +1132,7 @@ class MatriculesController extends SearchController
      *
      * @return void
      */
-    public function basketPrintMatAction()
+    public function basketPrintAction()
     {
         $request = $this->getRequest();
         $session = $request->getSession();
@@ -1196,7 +1196,7 @@ class MatriculesController extends SearchController
      *
      * @return void
      */
-    public function searchhistoMatAddAction($nbResults = null)
+    public function searchhistoAddAction($nbResults = null)
     {
         $time = time();
         $session = $this->getRequest()->getSession();
@@ -1236,7 +1236,7 @@ class MatriculesController extends SearchController
      *
      * @return JsonResponse
      */
-    public function searchHistoMatDeleteOneAction($timedelete)
+    public function searchHistoDeleteOneAction($timedelete)
     {
         $session = $this->getRequest()->getSession();
         $searchhistoArray = $session->get('histosave');
@@ -1295,7 +1295,7 @@ class MatriculesController extends SearchController
      *
      * @return void
      */
-    public function searchhistoDeleteMatAction()
+    public function searchhistoDeleteAction()
     {
         $searchToDelete = json_decode($this->getRequest()->get('deleteSearchMat'));
         $session = $this->getRequest()->getSession();
@@ -1317,11 +1317,11 @@ class MatriculesController extends SearchController
     }
 
     /**
-     * Delete ead search in historic
+     * Delete all matricules search in historic
      *
      * @return void
      */
-    public function searchhistoDeleteAllMatAction()
+    public function searchhistoDeleteAllAction()
     {
         $session = $this->getRequest()->getSession();
 
@@ -1345,7 +1345,7 @@ class MatriculesController extends SearchController
      *
      * @return void
      */
-    public function searchhistoPrintMatAction()
+    public function searchhistoPrintAction()
     {
         $request = $this->getRequest();
         $session = $request->getSession();

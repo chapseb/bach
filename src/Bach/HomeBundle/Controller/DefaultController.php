@@ -1773,7 +1773,7 @@ class DefaultController extends SearchController
      *
      * @return void
      */
-    public function basketDeleteAllEadAction()
+    public function basketDeleteAllOneTypeAction()
     {
         $session = $this->getRequest()->getSession();
 
@@ -1794,7 +1794,7 @@ class DefaultController extends SearchController
      *
      * @return void
      */
-    public function basketPrintEadAction()
+    public function basketPrintAction()
     {
         $request = $this->getRequest();
         $session = $request->getSession();
@@ -1957,7 +1957,7 @@ class DefaultController extends SearchController
      *
      * @return void
      */
-    public function searchhistoDeleteEadAction()
+    public function searchhistoDeleteAction()
     {
         $searchToDelete = json_decode($this->getRequest()->get('deleteSearch'));
         $session = $this->getRequest()->getSession();
@@ -1979,11 +1979,11 @@ class DefaultController extends SearchController
     }
 
     /**
-     * Delete ead search in historic
+     * Delete all ead search in historic
      *
      * @return void
      */
-    public function searchhistoDeleteAllEadAction()
+    public function searchhistoDeleteAllAction()
     {
         $session = $this->getRequest()->getSession();
 
@@ -2007,7 +2007,7 @@ class DefaultController extends SearchController
      *
      * @return void
      */
-    public function searchhistoPrintEadAction()
+    public function searchhistoPrintAction()
     {
         $request = $this->getRequest();
         $session = $request->getSession();

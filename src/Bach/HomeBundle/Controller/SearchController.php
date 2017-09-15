@@ -799,6 +799,60 @@ abstract class SearchController extends Controller
     abstract public function infosImageAction($path, $img, $ext);
 
     /**
+     *  Basket add document action
+     *
+     * @param string $docid Document id
+     *
+     * @return void
+     */
+    abstract public function basketAddAction($docid);
+
+    /**
+     * Basket delete document action
+     *
+     * @return void
+     */
+    abstract public function basketDeleteAction();
+
+    /**
+     *  Basket delete all one type document action
+     *
+     * @return void
+     */
+    abstract public function basketDeleteAllOneTypeAction();
+
+    /**
+     *  Basket deleteAll action
+     *
+     * @return void
+     */
+    public function basketDeleteAllAction()
+    {
+        $session = $this->getRequest()->getSession();
+        $session->remove('documents');
+        if ($session->has('documents')) {
+            $deleteFlag = false;
+        } else {
+            $deleteFlag = true;
+        }
+
+        $session->set('resultAction', _('Documents have sucessfully been removed.'));
+        $resultAction = $this->getRequest()->getSession()->get('resultAction');
+        return $this->redirect(
+            $this->generateUrl(
+                'bach_display_list_basket'
+            )
+        );
+    }
+
+    /**
+     *  Basket print all oen type document action
+     *
+     * @return void
+     */
+    abstract public function basketPrintAction();
+
+    /**
      *  Basket list action
      *
      * @return void
@@ -861,34 +915,11 @@ abstract class SearchController extends Controller
         );
     }
 
-    /**
-     *  Basket deleteAll action
-     *
-     * @return void
-     */
-    public function basketDeleteAllAction()
-    {
-        $session = $this->getRequest()->getSession();
-        $session->remove('documents');
-        if ($session->has('documents')) {
-            $deleteFlag = false;
-        } else {
-            $deleteFlag = true;
-        }
-
-        $session->set('resultAction', _('Documents have sucessfully been removed.'));
-        $resultAction = $this->getRequest()->getSession()->get('resultAction');
-        return $this->redirect(
-            $this->generateUrl(
-                'bach_display_list_basket'
-            )
-        );
-    }
 
     /**
-     *  Basket export action
+     * Basket export action
      *
-     *  @return JsonResponse
+     * @return JsonResponse
      */
     public function basketExportAction()
     {
@@ -902,9 +933,9 @@ abstract class SearchController extends Controller
     }
 
     /**
-     *  Basket import action
+     * Basket import action
      *
-     *  @return void
+     * @return void
      */
     public function basketImportAction()
     {
@@ -973,7 +1004,39 @@ abstract class SearchController extends Controller
     }
 
     /**
-     *  Search historic list action
+     *  Search historic add action
+     *
+     * @param string $nbResults Results search number
+     *
+     * @return void
+     */
+    abstract public function searchhistoAddAction($nbResults = null);
+
+    /**
+     * Delete one search historic action
+     *
+     * @param string $timedelete Search time to delete
+     *
+     * @return JsonResponse
+     */
+    abstract public function searchHistoDeleteOneAction($timedelete);
+
+    /**
+     * Delete one document type search in historic
+     *
+     * @return void
+     */
+    abstract public function searchhistoDeleteAction();
+
+    /**
+     * Delete all one type document search in historic
+     *
+     * @return void
+     */
+    abstract public function searchhistoDeleteAllAction();
+
+    /**
+     * Search historic list action
      *
      * @return void
      */
@@ -1058,11 +1121,11 @@ abstract class SearchController extends Controller
     }
 
     /**
-     *  Search historic deleteAll action
+     * Search historic deleteAll action
      *
      * @return void
      */
-    public function searchHistoDeleteAllAction()
+    public function searchHistoDeleteAllTypeAction()
     {
         $session = $this->getRequest()->getSession();
         $session->remove('histosave');
@@ -1185,8 +1248,16 @@ abstract class SearchController extends Controller
         return $flag;
     }
 
+
     /**
-     *  Print a pdf
+     *  Basket print all one type document action
+     *
+     * @return void
+     */
+    abstract public function searchhistoPrintAction();
+
+    /**
+     * Print a pdf
      *
      * @param array  $params  print parameters in bach config
      * @param string $content content to print (could be with html tag)

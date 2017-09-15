@@ -1232,6 +1232,11 @@ body > #loading {
 [id=social] .button {
     display: inline;
     float: right;
+    padding-right: 5px;
+}
+
+[id=social] .scoopit, [id="matriculesSocial"] .scoopit {
+    width: 84px;
 }
 
 [id=matriculesSocial] {

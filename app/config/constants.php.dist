@@ -62,4 +62,6 @@ if ( !defined('BACH_LOG_DIR') ) {
 if ( !defined('BACH_CACHE_DIR') ) {
     define('BACH_CACHE_DIR', '/var/lib/bach/cache');
 }
-
+if ( !defined('BACH_IMG_ZOOMIFY') ) {
+    define('BACH_IMG_ZOOMIFY', 'ZoomifyFolder');
+}

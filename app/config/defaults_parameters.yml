@@ -132,18 +132,18 @@ parameters:
     social.twitter.via: 'anaphorelabs'
     social.twitter.tag: 'bach' #comma separated
     #g+ - https://developers.google.com/+/web/+1button
-    social.gplus: false
+    social.gplus: true
     social.gplus.locale: '%locale%'
     social.gplus.size: 'medium' #either small, medium, standard or tall
     social.gplus.annotation: 'bubble' #either none, bubble or inline
     social.gplus.width: '300'
     #facebook - https://developers.facebook.com/docs/plugins/like-button/
-    social.fb: false
+    social.fb: true
     social.fb.locale: 'en_US' #either en_US, fr_FR
     social.fb.width: 300
     social.fb.showFaces: false
     social.fb.layout: 'button_count'
-    social.fb.share: false
+    social.fb.share: true
     #scoopit - http://www.scoop.it/install-button
     social.scoopit: true
     social.scoopit.layout: 'horizontal' #either 'horizontal', 'vertical' or 'none'

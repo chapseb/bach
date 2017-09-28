@@ -340,7 +340,6 @@ POSSIBILITY OF SUCH DAMAGE.
         });
 
         $("#submitprintead").submit(function(event){
-            event.preventDefault();
             var ardata = $('.selected > .dateidsearchhisto');
             var dataPrint = [];
             ardata.each(function() {
@@ -351,12 +350,9 @@ POSSIBILITY OF SUCH DAMAGE.
             .attr('name', "dataPrint")
             .attr('value', dataPrint)
             .appendTo('#submitprintead');
-            console.debug(dataPrint);
-            $(this).unbind('submit').submit();
         });
 
         $("#submitprintmat").submit(function(event){
-            event.preventDefault();
             var ardata = $('.selected > .dateidsearchhisto');
             var dataPrint = [];
             ardata.each(function() {
@@ -367,8 +363,6 @@ POSSIBILITY OF SUCH DAMAGE.
             .attr('name', "dataPrint")
             .attr('value', dataPrint)
             .appendTo('#submitprintmat');
-            console.debug(dataPrint);
-            $(this).unbind('submit').submit();
         });
 
     });

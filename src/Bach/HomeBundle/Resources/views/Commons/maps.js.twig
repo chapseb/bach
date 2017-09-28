@@ -178,6 +178,9 @@
                             maxZoom: 13
                         });
 
+                        {% if mapforce == true and (centerlat is not null) and (centerlon is not null) and (zoommap is not null) %}
+                        map.setView([{{centerlat}}, {{centerlon}}],{{zoommap}});
+                        {% endif %}
                         if ( callback ) {
                             callback();
                         }

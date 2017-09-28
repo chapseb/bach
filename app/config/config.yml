@@ -83,6 +83,7 @@ twig:
         centerlat: '%centerlat%'
         centerlon: '%centerlon%'
         zoommap: '%zoommap%'
+        mapforce: '%mapforce%'
         collapsecdc: '%collapsecdc%'
         label:
             cdc: '%label.cdc%'

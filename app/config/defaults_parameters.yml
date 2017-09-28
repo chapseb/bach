@@ -165,6 +165,7 @@ parameters:
     centerlat: null
     centerlon: null
     zoommap: null
+    mapforce: false
     label.cdc: null
     label.archives: null
     label.matricules: null

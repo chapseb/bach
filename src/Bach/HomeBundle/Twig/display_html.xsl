@@ -414,22 +414,23 @@ POSSIBILITY OF SUCH DAMAGE.
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:element name="a">
-                                <xsl:attribute name="href">
-                                    <xsl:variable name="varhref" select="@href"/>
-                                    <xsl:call-template name="replace-string">
-                                        <xsl:with-param name="text" select="@href"/>
-                                        <xsl:with-param name="replace" select="'.xml'" />
-                                        <xsl:with-param name="with" select="''"/>
-                                    </xsl:call-template>
-                                </xsl:attribute>
+                            <xsl:attribute name="href">
+                                <xsl:variable name="varhref" select="@href"/>
+                                <xsl:call-template name="replace-string">
+                                    <xsl:with-param name="text" select="@href"/>
+                                    <xsl:with-param name="replace" select="'.xml'" />
+                                    <xsl:with-param name="with" select="''"/>
+                                </xsl:call-template>
+                            </xsl:attribute>
 
                             <xsl:if test="@title and . != ''">
                                 <xsl:attribute name="title">
                                     <xsl:value-of select="@title"/>
                                 </xsl:attribute>
                             </xsl:if>
+
                             <xsl:choose>
-                                <xsl:when test="@title and not(. = '')">
+                                <xsl:when test="@title and @title != ''">
                                     <xsl:copy-of select="php:function('Bach\HomeBundle\Twig\DisplayDao::getDao', string(@href), string(@title), '')"/>
                                 </xsl:when>
                                 <xsl:otherwise>
@@ -510,14 +511,14 @@ select="substring-after($text,$replace)"/>
                                             <xsl:variable name="varhref" select="archref/@href"/>
                                             <xsl:call-template name="replace-string">
                                                 <xsl:with-param name="text" select="archref/@href"/>
-                                                    <xsl:with-param name="replace" select="'.xml'" />
-                                                      <xsl:with-param name="with" select="''"/>
+                                                <xsl:with-param name="replace" select="'.xml'" />
+                                                <xsl:with-param name="with" select="''"/>
                                             </xsl:call-template>
 
                                         </xsl:attribute>
-                                        <xsl:if test="archref/@title and . != ''">
+                                        <xsl:if test="archref/@title and archref/@title != ''">
                                             <xsl:attribute name="title">
-                                                <xsl:value-of select="archref/@title"/>
+                                            <xsl:value-of select="archref/@title"/>
                                             </xsl:attribute>
                                         </xsl:if>
                                         <xsl:if test="archref/@title and . = ''">

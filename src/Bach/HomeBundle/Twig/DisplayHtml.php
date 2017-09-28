@@ -247,7 +247,7 @@ class DisplayHtml extends \Twig_Extension
             $html = $cached_doc;
         }
 
-        return $html;
+        return htmlspecialchars_decode($html);
     }
 
     /**

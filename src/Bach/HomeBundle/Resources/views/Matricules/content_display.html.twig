@@ -51,7 +51,11 @@ POSSIBILITY OF SUCH DAMAGE.
                 {{ socialButtons() }}
             </div>
         {% endif %}
+        {% if print is defined and print == true%}
+            <a href="{{ serverName ~ path('bach_display_matricules', {'docid': docid }) }}">{{ _('Open in Bach')}}</a>
+        {% else %}
             <a class="addBasket" title="{{ _('Add to basket')}}" href="{{ path('basket_add_mat',{'docid': docid})}}">{{ _('Add to basket')}}</a>
+        {% endif %}
             </h2>
         </header>
         {% if features.social and features.comments and (print is not defined or print != true) %}<div id="social">

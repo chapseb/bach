@@ -55,6 +55,8 @@ POSSIBILITY OF SUCH DAMAGE.
             {% else %}
                 {{ _('Results %resultStart% to %resultEnd% on %resultCount%')|replace({'%resultStart%': resultStart, '%resultEnd%': resultEnd, '%resultCount%': resultCount}) }}
             {% endif %}
+
+            <a href="{{ serverName ~ path('searchhisto_execute', {'query_terms': query_terms, 'filtersListSearchhisto': filters }) }}">{{ _('launch the query')}}</a>
             </div>
             <hr />
 

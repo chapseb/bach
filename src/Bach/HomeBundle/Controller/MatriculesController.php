@@ -463,6 +463,9 @@ class MatriculesController extends SearchController
                 $tplParams['communicability'] = true;
             }
         }
+        $request = $this->getRequest();
+        $tplParams['serverName'] = $request->getScheme() . '://' .
+            $request->getHttpHost() . $request->getBasePath();
         return $this->render(
             $tpl,
             $tplParams
@@ -1025,10 +1028,15 @@ class MatriculesController extends SearchController
         }
 
         if ($query_terms != '*:*') {
-            $tpl_vars['q'] = preg_replace('/[^A-Za-z0-9ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ\-]/', ' ', $query_terms);
+            $tpl_vars['q'] = preg_replace(
+                '/[^A-Za-z0-9ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ\-]/', ' ', $query_terms
+            );
         } else {
             $tpl_vars['q'] = "*:*";
         }
+        $tpl_vars['serverName'] = $this->getRequest()->getScheme().
+            '://' .  $this->getRequest()->getHost();
+        $tpl_vars['query_terms'] = $query_terms;
         return $this->render(
             'BachHomeBundle:Matricules:print_matresults.html.twig',
             array_merge(

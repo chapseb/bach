@@ -57,8 +57,9 @@ requete : {{ q }}
             {% else %}
                 {{ _('Results %resultStart% to %resultEnd% on %resultCount%')|replace({'%resultStart%': resultStart, '%resultEnd%': resultEnd, '%resultCount%': resultCount}) }}
             {% endif %}
-        </div>
+            <a href="{{ serverName ~ path('searchhistomat_execute', {'query_terms': query_terms, 'filtersListSearchhisto': filters }) }}">{{ _('launch the query')}}</a>
 
+        </div>
 {% block show_results %}
             <table class="list matricules" align="center" border="1">
                 <thead>

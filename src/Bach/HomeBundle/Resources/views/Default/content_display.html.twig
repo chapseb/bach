@@ -85,6 +85,9 @@ POSSIBILITY OF SUCH DAMAGE.
                 <a class="addBasket" title="{{ _('Add to basket')}}" href="{{ path('basket_add',{'docid': document.fragmentid})}}">{{ _('Add to basket')}}</a>
             {% endif%}
            </h2>
+            {% if print == true %}
+            <a href="{{ serverName ~ path('bach_display_document', {'docid': document.fragmentid }) }}">{{ _('Open in Bach')}}</a>
+            {% endif %}
        </header>
         {% if context or document.previous_id is defined or document.next_id is defined %}
         {% if print == false %}

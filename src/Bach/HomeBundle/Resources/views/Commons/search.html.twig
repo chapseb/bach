@@ -700,7 +700,11 @@ title="{{ _('Show or hide the graph of distribution by %datetype%')|replace({'%d
                 });
             }
 
+            {% if searchResults is defined%}
+            {% include 'BachHomeBundle:Commons:maps.js.twig' with {'ajax_path': path(block('geojson_path'), {form_name: search_form}), 'from_search': true, 'searchResults': searchResults} %}
+            {% else %}
             {% include 'BachHomeBundle:Commons:maps.js.twig' with {'ajax_path': path(block('geojson_path'), {form_name: search_form}), 'from_search': true} %}
+            {% endif %}
 
             if ( _view_params['map'] == true ) {
                 $('#map').removeClass('hidden');

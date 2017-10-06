@@ -158,7 +158,7 @@ POSSIBILITY OF SUCH DAMAGE.
                         <h3><xsl:value-of select="concat(@label, ' ')"/></h3>
                     </xsl:when>
                     <xsl:otherwise>
-                        <strong><xsl:value-of select="concat(@label, ' ')"/></strong>
+                        <strong><xsl:value-of select="concat(@label, ' ')"/>: </strong>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:if>

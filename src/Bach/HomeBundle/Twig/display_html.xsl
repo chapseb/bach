@@ -866,6 +866,45 @@ select="substring-after($text,$replace)"/>
         </span>
     </xsl:template>
 
+    <xsl:template match="head" mode="full">
+        <h4><xsl:value-of select="."/></h4>
+    </xsl:template>
+
+    <xsl:template match="table|thead|tbody" mode="contents">
+        <xsl:element name="{local-name()}">
+            <xsl:apply-templates mode="full"/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="tgroup" mode="full">
+        <xsl:apply-templates mode="full"/>
+    </xsl:template>
+
+    <xsl:template match="row" mode="full">
+        <xsl:variable name="parent-name" select="local-name(parent::node())"/>
+        <tr>
+            <xsl:apply-templates mode="full">
+                <xsl:with-param name="parent-name" select="$parent-name"/>
+            </xsl:apply-templates>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="entry" mode="full">
+        <xsl:param name="parent-name"/>
+        <xsl:choose>
+            <xsl:when test="$parent-name = 'thead'">
+                <th>
+                    <xsl:apply-templates mode="full"/>
+                </th>
+            </xsl:when>
+            <xsl:otherwise>
+                <td>
+                    <xsl:apply-templates mode="full"/>
+                </td>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
     <xsl:template match="emph" mode="contents">
         <xsl:apply-templates select="."/>
     </xsl:template>

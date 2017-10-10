@@ -1,0 +1,18 @@
+--- vendor/smalot/pdfparser/src/Smalot/PdfParser/Object.php.patch	2017-10-10 09:09:40.139900746 +0200
++++ vendor/smalot/pdfparser/src/Smalot/PdfParser/Object.php	2017-10-10 09:09:53.575049227 +0200
+@@ -274,13 +274,13 @@
+                             ($current_position_td['y'] !== false && floatval($y) < floatval($current_position_td['y']))
+                         ) {
+                             // vertical offset
+-                            $text .= "\n";
++                            $text .= "";
+                         } elseif ($current_position_td['x'] !== false && floatval($x) > floatval(
+                                 $current_position_td['x']
+                             )
+                         ) {
+                             // horizontal offset
+-                            $text .= ' ';
++                            $text .= '';
+                         }
+                         $current_position_td = array('x' => $x, 'y' => $y);
+                         break;

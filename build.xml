@@ -126,6 +126,7 @@ POSSIBILITY OF SUCH DAMAGE.
         <exec logoutput="true" dir="${project.basedir}" command="patch -p0 &lt; vendor-patches/Solarium-complex-range.patch" escape="false" />
         <exec logoutput="true" dir="${project.basedir}" command="patch -p0 &lt; vendor-patches/Sonata-EasyExtends-BadImport.patch" escape="false" />
         <exec logoutput="true" dir="${project.basedir}" command="patch -p0 &lt; vendor-patches/Doctrine-php56.patch" escape="false" />
+        <exec logoutput="true" dir="${project.basedir}" command="patch -p0 &lt; vendor-patches/Smalot-PdfParser-BadSpace.patch" escape="false" />
     </target>
 
     <!-- ================================ -->

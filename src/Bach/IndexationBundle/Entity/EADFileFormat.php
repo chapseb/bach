@@ -329,7 +329,8 @@ class EADFileFormat extends FileFormat
         'dao'                   => 'ancestor_path',
         'cUnitidbegin'          => 'int',
         'cUnitidend'            => 'int',
-        'cMediaContent'         => 'text'
+        'cMediaContent'         => 'text',
+        'fragment'              => 'text'
     );
 
     /**

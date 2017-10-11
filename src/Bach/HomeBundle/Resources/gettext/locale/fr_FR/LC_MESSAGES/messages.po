@@ -1578,7 +1578,7 @@ msgstr "Sous-unités"
 
 #: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:528
 msgid "Repository:"
-msgstr "Dépôt :"
+msgstr "Dépôt"
 
 #: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:531
 #: src/Bach/HomeBundle/Twig/DisplayHtml.php:418
@@ -1723,7 +1723,7 @@ msgstr "Bibliographie :"
 
 #: src/Bach/HomeBundle/Twig/DisplayHtml.php:490
 msgid "Repository"
-msgstr "Dépôt :"
+msgstr "Dépôt"
 
 #: src/Bach/HomeBundle/Twig/DisplayHtml.php:493
 msgid "Physical support"

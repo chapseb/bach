@@ -797,4 +797,33 @@ class DefaultController extends Controller
 
         return new Response();
     }
+
+    /**
+     * Test if publish is working
+     * If working return true
+     * Else return false
+     *
+     * @return Response
+     */
+    public function publishTestAction()
+    {
+        $logger = $this->get('logger');
+        try {
+            $em = $this->get('doctrine')->getManager();
+            $query = $em->createQuery(
+                'SELECT t FROM BachIndexationBundle:BachToken t
+                WHERE t.action = 1'
+            );
+
+            if (!empty($query->getResult())) {
+                return new Response(1);
+            } else {
+                return new Response(0);
+            }
+        } catch ( \Exception $e ) {
+            $logger->error('Exception : '.  $e->getMessage(). "\n");
+            throw $e;
+        }
+    }
+
 }

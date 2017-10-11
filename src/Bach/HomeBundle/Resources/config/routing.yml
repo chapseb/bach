@@ -522,3 +522,10 @@ api_comment_report:
     defaults: { _controller: BachIndexationBundle:Default:sendReportComment }
     requirements:
         _method: POST|GET
+
+api_publish_test:
+    pattern: /publishTest
+    defaults: { _controller: BachIndexationBundle:Default:publishTest }
+    requirements:
+        _method: POST|GET
+

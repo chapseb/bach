@@ -578,10 +578,6 @@ class DefaultController extends Controller
                     $cmd .= " --pdf-indexation";
                 }
 
-                if (strcmp($request->get('generate-image'), 'true') == 0) {
-                    $cmd .= " --generate-image";
-                }
-
                 $cmd .= " > /dev/null 2>/dev/null &";
                 exec($cmd);
                 return new Response(
@@ -653,78 +649,6 @@ class DefaultController extends Controller
         $response = new Response("mismatchTokenFile");
         $response->setStatusCode(500);
         return $response;
-    }
-
-    /**
-     * Launch generate image
-     *
-     * @return Response
-     */
-    public function generateImageAction()
-    {
-        $testTreatment = $this->getDoctrine()->getManager()
-            ->createQuery(
-                'SELECT t FROM BachIndexationBundle:DaosPrepared t
-                WHERE t.action = 1'
-            );
-        if ($testTreatment->getResult() == null) {
-            $nbRowToTreat = $this->container->getParameter('nbrowgenerateimage');
-            $query = $this->getDoctrine()->getManager()
-                ->createQuery(
-                    'SELECT t FROM BachIndexationBundle:DaosPrepared t'
-                )->setMaxResults($nbRowToTreat);
-            if (!empty($query->getResult())) {
-                $results = $query->getResult();
-                $params = array();
-                foreach ($results as $result) {
-                    $result->setAction(1);
-                    array_push($params, $result->toArray());
-                }
-                $this->getDoctrine()->getManager()->flush();
-                $urlViewer = $this->container->getParameter('viewer_uri');
-
-                $url = $urlViewer . 'ajax/generateimages';
-                // add its url 'cause viewer can send response to this bach instance
-                $params['urlSender'] = $_SERVER['SERVER_NAME'];
-                $jsonData = json_encode($params);
-                $cmd = "curl -X POST -H 'Content-Type: application/json'";
-                $cmd.= " -d '" . $jsonData . "' " . "'" . $url . "'";
-                $cmd .= " > /dev/null 2>/dev/null &";
-                exec($cmd, $output);
-            }
-            return new Response("Image generation launch");
-        }
-        return new Response("Already a treatment");
-    }
-
-    /**
-     * Delete image in database
-     *
-     * @return Response
-     */
-    public function deleteImageAction()
-    {
-        $json = $this->getRequest()->getContent();
-        $data = json_decode($json, true);
-        $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository('BachIndexationBundle:DaosPrepared');
-        foreach ($data as $row) {
-            $dao = $repository->findOneBy(
-                array(
-                    'id'=>$row['id']
-                )
-            );
-            if (!empty(stripslashes($row['lastfile']))) {
-                $dao->setAction(0);
-                $dao->setLastFile(stripslashes($row['lastfile']));
-            } else if ($row['action'] == '1') {
-                $dao->setAction(0);
-            } else {
-                $em->remove($dao);
-            }
-            $em->flush();
-        }
-        return new Response("Images prepared deleted from database.");
     }
 
     /**

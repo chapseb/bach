@@ -112,16 +112,15 @@ class ArchFileIntegration
     /**
      * Proceed task database integration
      *
-     * @param IntegrationTask $task              Task to proceed
-     * @param array           $geonames          Geoloc data
-     * @param boolean         $pdfFlag           Flag to index pdf
-     * @param boolean         $generateImageFlag Flag to generate thumb
-     * @param boolean         $transaction       Wether to flush
+     * @param IntegrationTask $task        Task to proceed
+     * @param array           $geonames    Geoloc data
+     * @param boolean         $pdfFlag     Flag to index pdf
+     * @param boolean         $transaction Wether to flush
      *
      * @return void
      */
     public function integrate(IntegrationTask $task, &$geonames, $pdfFlag,
-        $generateImageFlag, $transaction = true
+        $transaction = true
     ) {
         $spl = new \SplFileInfo($task->getPath());
         $doc = $task->getDocument();
@@ -135,20 +134,18 @@ class ArchFileIntegration
             $transaction,
             $preprocessor,
             $geonames,
-            $pdfFlag,
-            $generateImageFlag
+            $pdfFlag
         );
     }
 
     /**
      * Integrate multiple tasks at once
      *
-     * @param array          $tasks             Tasks to integrate
-     * @param ProgressHelper $progress          Progress bar
-     * @param array          $geonames          Geoloc data
-     * @param boolean        $debug             Flag to display an issue
-     * @param boolean        $pdfFlag           Flag to index pdf
-     * @param boolean        $generateImageFlag Flag to generate thumb
+     * @param array          $tasks    Tasks to integrate
+     * @param ProgressHelper $progress Progress bar
+     * @param array          $geonames Geoloc data
+     * @param boolean        $debug    Flag to display an issue
+     * @param boolean        $pdfFlag  Flag to index pdf
      *
      * @return void
      */
@@ -157,8 +154,7 @@ class ArchFileIntegration
         $progress,
         &$geonames,
         $debug,
-        $pdfFlag = false,
-        $generateImageFlag = false
+        $pdfFlag = false
     ) {
         $count = 0;
         $cleared = false;
@@ -180,7 +176,6 @@ class ArchFileIntegration
                     $task,
                     $geonames,
                     $pdfFlag,
-                    $generateImageFlag,
                     false
                 );
                 $count++;

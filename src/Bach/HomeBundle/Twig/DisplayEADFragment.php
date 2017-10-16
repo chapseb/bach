@@ -259,8 +259,15 @@ class DisplayEADFragment extends \Twig_Extension
             );
             $wordHighArray = array_diff($wordHighArray, $this->getStopWords());
 
+            $originQuery =  $request->getSession()->get('query_terms');
+            $arrayExceptionCharacter = array(
+                '(', ')',',',
+                '[', ']', '{', '}'
+            );
+            $originQuery = str_replace($arrayExceptionCharacter, '', $originQuery);
+
             //do the same thing with query terms
-            $wordQuery = explode(" ", $request->getSession()->get('query_terms'));
+            $wordQuery = explode(" ", $originQuery);
             $wordQuery = array_filter(
                 $wordQuery,
                 function ($v) {

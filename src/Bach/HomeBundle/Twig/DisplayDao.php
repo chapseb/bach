@@ -1055,7 +1055,8 @@ class DisplayDao extends \Twig_Extension
             //document is a flash sound
             $type = self::FLA_SOUND;
         } else if (preg_match($img_reg, $dao, $matches)
-            || strstr($dao, BACH_IMG_ZOOMIFY) != false
+            || (defined('BACH_IMG_ZOOMIFY')
+            && strstr($dao, BACH_IMG_ZOOMIFY) != false)
         ) {
             //document is an image
             $type = self::IMAGE;

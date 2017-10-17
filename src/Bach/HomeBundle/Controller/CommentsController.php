@@ -206,5 +206,6 @@ class CommentsController extends Controller
             $response->setData($comments);
             return $response;
         }
+        return new JsonResponse();
     }
 }

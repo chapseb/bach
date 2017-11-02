@@ -43,7 +43,7 @@ POSSIBILITY OF SUCH DAMAGE.
 {% block title_extend %} - {{ _('Consult document "%title"')|replace({'%title': the_title}) }}{% endblock %}
 
 {% block container %}
-    {% include 'BachHomeBundle:Default:content_display.html.twig' with {'docid': docid, 'document': document, 'children': children, 'print': print, 'communicability': communicability, 'audience': audience, 'aws': aws, 'cloudfront': cloudfront} %}
+    {% include 'BachHomeBundle:Default:content_display.html.twig' with {'docid': docid, 'document': document, 'children': children, 'print': print, 'communicability': communicability, 'audience': audience, 'aws': aws, 'cloudfront': cloudfront, 'query_terms': query_terms} %}
 {% endblock %}
 
 {% block js_calls %}

@@ -75,10 +75,10 @@ POSSIBILITY OF SUCH DAMAGE.
                             {% set documentTitle = listDaosTitle[document.dao[0]]%}
                         {% endif %}
                         {% if daoSeries[document.fragmentid] is defined and daoSeries[document.fragmentid] == 'series' and flagCommunicability == true and flagAudience != true%}
-                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability, 'series', aws, cloudfront, documentTitle)|raw }}
+                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability, 'series', aws, cloudfront, documentTitle, query_terms)|raw }}
                         {% else %}
                           {% if document.dao is defined and flagCommunicability == true and flagAudience != true%}
-                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability, null, aws, cloudfront, documentTitle)|raw }}
+                            {{ displayDao(document.dao, false, 'thumb', flagCommunicability, null, aws, cloudfront, documentTitle, query_terms)|raw }}
                           {% elseif document.dao is defined and flagCommunicability is defined and flagCommunicability == false and flagAudience != true%}
                             <img src="/img/thumb_comm.png" title="{{ _('This picture is not communicable') }}"/>
                           {% else %}

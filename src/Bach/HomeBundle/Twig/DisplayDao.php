@@ -125,7 +125,8 @@ class DisplayDao extends \Twig_Extension
      */
     public function display($daos, $all = false, $format = 'thumb',
         $communicability = false, $testSeries = null,
-        $aws = false, $cloudfront = null, $daotitle = null
+        $aws = false, $cloudfront = null, $daotitle = null,
+        $query = null
     ) {
         if ($all === false) {
             if ($testSeries == 'series') {
@@ -165,7 +166,8 @@ class DisplayDao extends \Twig_Extension
                     $communicability,
                     $aws,
                     $cloudfront,
-                    $daorep
+                    $daorep,
+                    $query
                 );
             }
         } else {
@@ -203,7 +205,7 @@ class DisplayDao extends \Twig_Extension
      */
     public static function displayDaos($daogrps, $daos, $viewer, $format = 'thumb',
         $ajax = false, $covers_dir = null, $communicability = false,
-        $aws = false, $cloudfront = null
+        $aws = false, $cloudfront = null, $query = null
     ) {
         //start root element
         $res = '<div>';
@@ -308,7 +310,6 @@ class DisplayDao extends \Twig_Extension
                                 $daorepHref = $daorep['href'];
                             }
                         }
-
                         $results[self::_getType($dao)][] = self::proceedDao(
                             $dao,
                             $daotitle,
@@ -323,7 +324,8 @@ class DisplayDao extends \Twig_Extension
                             $communicability,
                             $aws,
                             $cloudfront,
-                            $daorepHref
+                            $daorepHref,
+                            $query
                         );
                     }
                 }
@@ -449,7 +451,9 @@ class DisplayDao extends \Twig_Extension
                     'web',
                     $communicability,
                     $aws,
-                    $cloudfront
+                    $cloudfront,
+                    null,
+                    $query
                 );
             }
 
@@ -597,7 +601,7 @@ class DisplayDao extends \Twig_Extension
     public static function proceedDao($dao, $daotitle, $viewer, $format,
         $ajax = false, $standalone = true, $covers_dir = null, $all = true,
         $linkDesc = false, $bach_default_theme = 'web', $communicability = false,
-        $aws = false, $cloudfront = null, $daorep = null
+        $aws = false, $cloudfront = null, $daorep = null, $query = null
     ) {
         $ret = null;
 
@@ -873,8 +877,8 @@ class DisplayDao extends \Twig_Extension
             );
 
             $href = '/file/misc/' . $dao;
-            $ret = '<a href="' . $href . '" title="' . $title  .
-                '" target="_blank">';
+            $ret = "<a href='" . $href ."#search=\"". $query . "\"' title='" . $title  .
+                "' target='_blank'>";
             if ($covers_dir !== null) {
                 //check if a cover exists
                 $name_wo_ext = str_replace(

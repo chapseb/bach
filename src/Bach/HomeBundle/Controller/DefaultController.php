@@ -293,7 +293,9 @@ class DefaultController extends SearchController
             $conf_facets
         );
 
-        if ($session->get('pdf_filters') == true) {
+        if ($session->get('pdf_filters') == true
+            && $query_terms != "*:*"
+        ) {
             $query_words = explode(" ", $query_terms);
             $cMediaContentResult = array();
             foreach ($searchResults as $res) {
@@ -457,6 +459,7 @@ class DefaultController extends SearchController
         }
         ////////////////////////////////////////////////////////////////////////////////
 
+        $query_session = '';
         if (!is_null($query_terms)) {
             $hlSearchResults = $factory->getHighlighting();
             $scSearchResults = $factory->getSpellcheck();
@@ -468,7 +471,7 @@ class DefaultController extends SearchController
             $query_session = str_replace("OR", " ", $query_session);
             $query_session = str_replace("NOT", " ", $query_session);
             $session->set('query_terms', $query_session);
-
+            $tpl_vars['query_terms'] = $query_session;
             if ($this->container->getParameter('display.disable_suggestions') != true) {
                 $suggestions = $factory->getSuggestions($query_session);
             }
@@ -528,7 +531,6 @@ class DefaultController extends SearchController
         if ($this->container->getParameter('specialeads') != null) {
             $tpl_vars['specialeads'] = $this->container->getParameter('specialeads');
         }
-
         $tpl_vars['display_breadcrumb']
             = $this->container->getParameter('display.breadcrumb');
         return $this->render(
@@ -954,6 +956,9 @@ class DefaultController extends SearchController
         $baseurl = $request->getScheme() . '://' .
             $request->getHttpHost() . $request->getBasePath();
         $tpl_vars['serverName'] = $baseurl;
+
+        $highlight = $session->get('highlight')->getResult($docid);
+        $tpl_vars['query_terms'] = $session->get('query_terms');
         return $this->render(
             $tpl,
             $tpl_vars

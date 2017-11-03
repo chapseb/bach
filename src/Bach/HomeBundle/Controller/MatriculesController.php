@@ -306,7 +306,8 @@ class MatriculesController extends SearchController
             $tpl_vars['rights'] = true;
         }
         if ($tpl_vars['rights'] == false
-            && $this->get('bach.home.authorization')->archivesRight()
+            && ($this->get('bach.home.authorization')->archivesRight()
+            || $this->get('bach.home.authorization')->warehouseRight())
         ) {
             $tplParams['communicability'] = true;
         }
@@ -458,7 +459,8 @@ class MatriculesController extends SearchController
                 $tplParams['communicability'] = true;
             }
             if ($tplParams['communicability'] == false
-                && $this->get('bach.home.authorization')->archivesRight()
+                && ($this->get('bach.home.authorization')->archivesRight()
+                || $this->get('bach.home.authorization')->warehouseRight())
             ) {
                 $tplParams['communicability'] = true;
             }

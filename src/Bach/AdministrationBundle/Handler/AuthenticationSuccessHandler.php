@@ -106,6 +106,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             );
         }
         if (in_array('ROLE_ARCHIVIST', $token->getUser()->getRoles())
+            || in_array('ROLE_WAREHOUSE', $token->getUser()->getRoles())
             || in_array('ROLE_ADMIN', $token->getUser()->getRoles())
             || in_array('ROLE_SUPER_ADMIN', $token->getUser()->getRoles())
         ) {

@@ -72,6 +72,7 @@ class GroupAdmin extends SonataGroupAdmin
         $roles = [
             'ROLE_USER'         => _('User'),
             'ROLE_READER'       => _('Reader'),
+            'ROLE_WAREHOUSE'    => _('Warehouse'),
             'ROLE_CONTENT_ADMIN'=> _('Content administrator'),
             'ROLE_ARCHIVIST'    => _('Archivist'),
             'ROLE_ADMIN'        => _('Administrator')

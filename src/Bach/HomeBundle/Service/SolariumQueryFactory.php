@@ -193,7 +193,10 @@ class SolariumQueryFactory
     {
         $this->_query = $this->_client->createSelect();
 
-        if ($this->_authorized != null && !$this->_authorized->archivesRight()) {
+        if ($this->_authorized != null
+            && !$this->_authorized->archivesRight()
+            && !$this->_authorized->warehouseRight()
+        ) {
             $this->_query->createFilterQuery("audience")->setQuery(
                 '-cAudience:internal'
             );

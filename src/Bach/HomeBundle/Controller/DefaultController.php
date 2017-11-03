@@ -409,6 +409,7 @@ class DefaultController extends SearchController
             if (($flagReadroom == true
                 && ($this->container->getParameter('ip_internal')
                 || $this->get('bach.home.authorization')->readerRight()))
+                || $this->get('bach.home.authorization')->warehouseRight()
                 || $this->get('bach.home.authorization')->archivesRight()
             ) {
                 $query = $this->getDoctrine()->getManager()->createQuery(
@@ -442,7 +443,9 @@ class DefaultController extends SearchController
             $tpl_vars['listDaos'] = array_values($arrayDaosComm);
             $tpl_vars['listDaosTitle'] = $arrayDaosTitle;
 
-            if (!$this->get('bach.home.authorization')->archivesRight()) {
+            if (!$this->get('bach.home.authorization')->archivesRight()
+                && !$this->get('bach.home.authorization')->warehouseRight()
+            ) {
                 $queryAudience = $this->getDoctrine()->getManager()->createQuery(
                     "SELECT e.href FROM BachIndexationBundle:EADDaos e " .
                     "WHERE e.href IN (:ids) AND " .
@@ -901,7 +904,8 @@ class DefaultController extends SearchController
             $flagReadroom = true;
         }
         if ($flagReadroom == false
-            && $this->get('bach.home.authorization')->archivesRight()
+            && ($this->get('bach.home.authorization')->archivesRight()
+            || $this->get('bach.home.authorization')->warehouseRight())
         ) {
             $flagReadroom = true;
         }
@@ -937,7 +941,9 @@ class DefaultController extends SearchController
         }
         $authorizedArchives = $this->get('bach.home.authorization')
             ->archivesRight();
-        if ($authorizedArchives) {
+        $authorizedWarehouse = $this->get('bach.home.authorization')
+            ->warehouseRight();
+        if ($authorizedArchives || $authorizedWarehouse) {
             $tpl_vars['audience'] = true;
             $tpl_vars['communicability'] = true;
         }
@@ -1097,8 +1103,14 @@ class DefaultController extends SearchController
                     if (isset($_COOKIE[$this->getCookieName()])) {
                         $tpl_vars['cookie_param'] = true;
                     }
-                    $authorizedArchives = $this->get('bach.home.authorization')->archivesRight();
-                    $tpl_vars['audience'] = $authorizedArchives;
+                    $authorizedArchives
+                        = $this->get('bach.home.authorization')->archivesRight();
+                    $authorizedWarehouse
+                        = $this->get('bach.home.authorization')->warehouseRight();
+                    $tpl_vars['audience'] = false;
+                    if ($authorizedArchives || $authorizedWarehouse) {
+                        $tpl_vars['audience'] = true;
+                    }
                     $tpl_vars['daodetector'] = $this->container->getParameter('daodetector');
 
                     return $this->render(
@@ -1121,8 +1133,12 @@ class DefaultController extends SearchController
                         $tpl_vars['cookie_param'] = true;
                     }
 
-                    $authorizedArchives = $this->get('bach.home.authorization')->archivesRight();
-                    $tpl_vars['audience'] = $authorizedArchives;
+                    $authorizedArchives
+                        = $this->get('bach.home.authorization')->archivesRight();
+                    $authorizedWarehouse
+                        = $this->get('bach.home.authorization')->warehouseRight();
+                    $tpl_vars['audience'] = false;
+
                     $tpl_vars['daodetector'] = $this->container->getParameter('daodetector');
                     return $this->render(
                         'BachHomeBundle:Default:html.html.twig',

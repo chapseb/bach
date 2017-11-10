@@ -198,7 +198,7 @@ POSSIBILITY OF SUCH DAMAGE.
                                             </xsl:otherwise>
                                         </xsl:choose>
                                     </xsl:when>
-                                    <xsl:when test="../../daogrp and ../../daogrp/@role = 'series'">
+                                    <xsl:when test="../../daogrp and ../../daogrp/@role = 'series' and not(../../daogrp/daoloc[@role='thumbnails'])">
                                         <xsl:variable name="brutbeginlink" select="../../daogrp/daoloc[@role='image:first']/@href"/>
                                         <xsl:variable name="brutendlink" select="../../daogrp/daoloc[@role='image:last']/@href"/>
 
@@ -238,6 +238,32 @@ POSSIBILITY OF SUCH DAMAGE.
                                             <xsl:attribute name="class">gomedia_informations</xsl:attribute>
                                             <xsl:attribute name="target">_blank</xsl:attribute>
                                         </xsl:element>
+                                    </xsl:when>
+                                    <xsl:when test="../../daogrp and ../../daogrp/@role = 'series' and ../../daogrp/daoloc[@role='thumbnails']">
+                                        <xsl:variable name="linkseries" select="concat($viewer_uri, 'series/', ../../daogrp/daoloc/@href)"/>
+                                        <xsl:variable name="lastcharacterSeries" select="substring(../../daogrp/daoloc/@href, string-length(../../daogrp/daoloc/@href), 1)" />
+                                        <xsl:choose>
+                                            <xsl:when test="not(lastcharacterSeries = '/')">
+                                                <xsl:variable name="finalAdd" select="concat($linkseries, '/')"/>
+                                                <xsl:element name="a">
+                                                    <xsl:attribute name="href">
+                                                        <xsl:value-of select="$finalAdd"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="class">gomedia_informations</xsl:attribute>
+                                                    <xsl:attribute name="target">_blank</xsl:attribute>
+                                                </xsl:element>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:variable name="finalWithoutAdd" select="concat($viewer_uri, 'series/', ../../daogrp/daoloc/@href)"/>
+                                                <xsl:element name="a">
+                                                    <xsl:attribute name="href">
+                                                        <xsl:value-of select="$finalWithoutAdd"/>
+                                                    </xsl:attribute>
+                                                    <xsl:attribute name="class">gomedia_informations</xsl:attribute>
+                                                    <xsl:attribute name="target">_blank</xsl:attribute>
+                                                </xsl:element>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <span class="media_informations"></span>

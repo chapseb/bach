@@ -63,7 +63,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     <td>{{ token.bach_token }}</td>
                     <td>{{ token.action }}</td>
                     <td>{{ token.action_type }}</td>
-                    <td><a href="{{ path("bach_indexation_delete_one",{bddid: token.id}) }}" class="btn btn-delete-one" onclick="return confirm('Etes vous sûre de vouloir supprimer l\'action en cours?');" ></a></td><!-- add confirm js alert -->
+                    <td><a href="{{ path("bach_indexation_delete_one",{bddid: token.id}) }}" title="{{ _('Delete this token in database')}}" class="btn btn-delete-one" onclick="return confirm('Etes vous sûre de vouloir supprimer l\'action en cours?');" ></a></td><!-- add confirm js alert -->
                 </tr>
                 {% endfor %}
                 {% else %}

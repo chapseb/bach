@@ -41,9 +41,21 @@ bach_indexation_unblock:
     requirements:
         _method: GET
 
+bach_indexation_delete_one:
+    pattern: /deleteonequeue/{bddid}
+    defaults: { _controller: BachIndexationBundle:Default:deleteOneQueue, bddid: 0 }
+    requirements:
+        _method: GET
+
 bach_indexation_purge:
     pattern:  /purge
     defaults: { _controller: BachIndexationBundle:Default:purge }
+    requirements:
+        _method: GET
+
+bach_indexation_clean:
+    pattern:  /clean
+    defaults: { _controller: BachIndexationBundle:Default:clean }
     requirements:
         _method: GET
 

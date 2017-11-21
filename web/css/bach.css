@@ -1423,8 +1423,21 @@ form > footer {
 
 }
 
+.btn-delete-one {
+    background-position: -310px 2px;
+    background-color: #DA4F49;
+    vertical-align: middle;
+    margin: 5px;
+    height: 18px;
+    width: 18px;
+}
+
 .btn-refresh {
     background-position: -235px -19px;
+}
+
+#queuePublish tr {
+    margin: 1px;
 }
 
 legend > span {

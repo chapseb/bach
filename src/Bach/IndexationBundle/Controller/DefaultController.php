@@ -189,7 +189,64 @@ class DefaultController extends Controller
         );
     }
 
+    /**
+     * Delete oen token in bach_token table
+     * can unblock token publication if problem
+     *
+     * @param int $bddid bach_token table id
+     *
+     * @return void
+     */
+    public function deleteOneQueueAction($bddid)
+    {
+        $logger = $this->get('logger');
+        try {
+            $em = $this->get('doctrine')->getManager();
+            $query = $em->createQuery(
+                'SELECT t FROM BachIndexationBundle:BachToken t
+                WHERE t.id = :id'
+            )->setParameters(
+                array(
+                    'id' => $bddid
+                )
+            );
 
+            if (!empty($query->getResult())) {
+                $result = $query->getResult()[0];
+                $em->remove($result);
+                $em->flush();
+            }
+        } catch ( \Exception $e ) {
+            $logger->error('Exception : '.  $e->getMessage(). "\n");
+            throw $e;
+        }
+        return new RedirectResponse(
+            $this->get("router")->generate("bach_indexation_queue")
+        );
+    }
+
+    /**
+     * Clean bach_token table controller
+     *
+     * @return void
+     */
+    public function cleanAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $connection = $em->getConnection();
+        $platform   = $connection->getDatabasePlatform();
+
+        $connection->executeUpdate(
+            $platform->getTruncateTableSQL(
+                'bach_token',
+                true /* whether to cascade */
+            )
+        );
+
+        return new RedirectResponse(
+            $this->get("router")->generate("bach_indexation_queue")
+        );
+    }
 
     /**
      * Purge controller

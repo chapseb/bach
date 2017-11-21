@@ -38,12 +38,12 @@ POSSIBILITY OF SUCH DAMAGE.
         <legend>
             {{ _('Publication tokens') }}
             <span class="btn-groups pull-right">
-                <a href="{{ path("bach_indexation_unblock") }}" class="btn btn-delete" title="{{ _('Delete current token in database') }}" onclick="return confirm('Etes vous sûre de vouloir supprimer l\'action en cours?');" >{{ _('Delete blocked token') }}</a>
+                <a href="{{ path("bach_indexation_clean") }}" class="btn btn-delete" title="{{ _('Delete current token in database') }}" onclick="return confirm('Etes vous sûre de vouloir supprimer l\'action en cours?');" >{{ _('Delete blocked token') }}</a>
                 <a id="refresh" class="btn btn-refresh">{{ _('Refresh') }}</a>
             </span>
         </legend>
 
-        <table>
+        <table id="queuePublish">
             <thead>
                 <tr>
                     <th>{{ _('Id') }}</th>
@@ -51,6 +51,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     <th>{{ _('Token') }}</th>
                     <th>{{ _('Action') }}</th>
                     <th>{{ _('Type') }}</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -62,6 +63,7 @@ POSSIBILITY OF SUCH DAMAGE.
                     <td>{{ token.bach_token }}</td>
                     <td>{{ token.action }}</td>
                     <td>{{ token.action_type }}</td>
+                    <td><a href="{{ path("bach_indexation_delete_one",{bddid: token.id}) }}" class="btn btn-delete-one" onclick="return confirm('Etes vous sûre de vouloir supprimer l\'action en cours?');" ></a></td><!-- add confirm js alert -->
                 </tr>
                 {% endfor %}
                 {% else %}

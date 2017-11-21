@@ -414,7 +414,7 @@ POSSIBILITY OF SUCH DAMAGE.
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="accessrestrict|legalstatus|odd|processinfo|custodhist|arrangement|relatedmaterial|originalsloc|bibliography|userestrict|bioghist|acqinfo|separatedmaterial|otherfindaid|repository|physdesc|controlaccess|abstract" mode="full">
+    <xsl:template match="altformavail|accessrestrict|legalstatus|odd|processinfo|custodhist|arrangement|relatedmaterial|originalsloc|bibliography|userestrict|bioghist|acqinfo|separatedmaterial|otherfindaid|repository|physdesc|controlaccess|abstract" mode="full">
         <xsl:call-template name="section_content">
             <xsl:with-param name="title">
                 <xsl:choose>

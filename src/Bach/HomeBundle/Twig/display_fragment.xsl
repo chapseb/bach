@@ -418,7 +418,7 @@ POSSIBILITY OF SUCH DAMAGE.
         <xsl:call-template name="section_content">
             <xsl:with-param name="title">
                 <xsl:choose>
-                    <xsl:when test ="/archdesc or local-name() ='abstract'">true</xsl:when>
+                    <xsl:when test ="/archdesc or local-name() ='abstract' or @label">true</xsl:when>
                     <xsl:otherwise>false</xsl:otherwise>
                 </xsl:choose>
             </xsl:with-param>

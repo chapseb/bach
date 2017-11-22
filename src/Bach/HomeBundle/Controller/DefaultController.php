@@ -963,7 +963,6 @@ class DefaultController extends SearchController
             $request->getHttpHost() . $request->getBasePath();
         $tpl_vars['serverName'] = $baseurl;
 
-        $highlight = $session->get('highlight')->getResult($docid);
         $tpl_vars['query_terms'] = $session->get('query_terms');
         return $this->render(
             $tpl,

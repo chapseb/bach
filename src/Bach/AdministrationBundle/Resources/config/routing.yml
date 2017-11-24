@@ -52,3 +52,15 @@ administration_generateImages:
     defaults: { _controller: AdministrationBundle:Default:generateImages }
     requirements:
         _method: GET
+
+administration_list_queue_client:
+    pattern: /list_queue_client
+    defaults: { _controller: AdministrationBundle:Default:listQueueClient }
+    requirements:
+        _method: GET
+
+administration_queue_unblock:
+    pattern: /unblock_queue
+    defaults: { _controller: AdministrationBundle:Default:queueUnblock }
+    requirements:
+        _method: GET

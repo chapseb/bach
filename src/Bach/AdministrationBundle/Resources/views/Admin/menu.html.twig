@@ -34,6 +34,6 @@ POSSIBILITY OF SUCH DAMAGE.
     <h2>{{ _('Bach other features') }}</h2>
     <ul>
         <li{% if app.request.attributes.get('_route') == 'administration_generateImages' %} class="active"{% endif %}><a href="{{ path('administration_generateImages') }}">{{ _('Image generation') }}</a></li>
-        <!--li{% if app.request.attributes.get('_route') == 'bach_indexation_queue' %} class="active"{% endif %}><a href="{{ path('bach_indexation_queue')  }}"><span class="icon-tasks"></span>{{ _('Publication queue') }}</a></li>-->
+        <li{% if app.request.attributes.get('_route') == 'administration_list_queue_client' %} class="active"{% endif %}><a href="{{ path('administration_list_queue_client')  }}"><span class="icon-tasks"></span>{{ _('Publication queue') }}</a></li>
     </ul>
 </aside>

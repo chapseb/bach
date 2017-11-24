@@ -51,6 +51,7 @@ use Bach\AdministrationBundle\Entity\SolrAdmin\Infos;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Aws\Sqs\SqsClient;
 use Aws\Exception\AwsException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Bach default administration controller
@@ -141,6 +142,76 @@ class DefaultController extends Controller
                 'aws'         => $aws,
                 'clockending' => $resultDate
             )
+        );
+    }
+
+    /**
+     * Show list for waiting published documents
+     *
+     * @return void
+     */
+    public function listQueueClientAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em
+            ->getRepository('BachIndexationBundle:BachToken');
+
+        $entities = $repository
+            ->createQueryBuilder('t')
+            ->orderBy('t.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        foreach ($entities as $entity) {
+            $action = 1;
+            if ($entity->getAction() == 0) {
+                $action = 0;
+            }
+            $tokens[] = array(
+                'id'          => $entity->getId(),
+                'filename'    => $entity->getFilename(),
+                'bach_token'  => $entity->getBachToken(),
+                'action'      => $action,
+                'action_type' => $entity->getActionType()
+            );
+        }
+        if (!isset($tokens)) {
+            $tokens = array();
+        }
+        return $this->render(
+            'AdministrationBundle:Default:queue.html.twig',
+            array(
+                'tokens'         => $tokens
+            )
+        );
+    }
+
+    /**
+     * Delete one token in bach_token table
+     *
+     * @return void
+     */
+    public function queueUnblockAction()
+    {
+        $logger = $this->get('logger');
+        try {
+            $em = $this->get('doctrine')->getManager();
+            $query = $em->createQuery(
+                'SELECT t FROM BachIndexationBundle:BachToken t
+                WHERE t.action = 1'
+            );
+
+            if (!empty($query->getResult())) {
+                $result = $query->getResult()[0];
+                $em->remove($result);
+                $em->flush();
+            }
+        } catch ( \Exception $e ) {
+            $logger->error('Exception : '.  $e->getMessage(). "\n");
+            throw $e;
+        }
+        return new RedirectResponse(
+            $this->get("router")->generate("administration_list_queue_client")
         );
     }
 }

@@ -179,8 +179,9 @@ class DefaultController extends Controller
             $tokens = array();
         }
         return $this->render(
-            'AdministrationBundle:Default:queue.html.twig',
+            'AdministrationBundle:Default:dashboard.html.twig',
             array(
+                'template'       => 'queue_list',
                 'tokens'         => $tokens
             )
         );

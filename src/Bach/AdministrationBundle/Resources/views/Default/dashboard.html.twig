@@ -41,6 +41,8 @@ POSSIBILITY OF SUCH DAMAGE.
     {% if template == 'main' %}
     <h2 id="welcome">{{ _('Welcome to Bach\'s!') }}</h2>
     {{ _('This section contain additional informations not directly related to Bach Ricercare.') }}
+    {% elseif template == 'queue_list' %}
+            {% include 'AdministrationBundle:Default:queue.html.twig'%}
     {% else %}
         {% if aws %}
             {% if template == 'generateImages' %}

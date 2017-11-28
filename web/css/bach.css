@@ -547,6 +547,13 @@ input[type=number] {
     vertical-align: top;
 }
 
+[id=result_span]{
+    position: absolute;
+    top: 0;
+    left: 10px;
+    line-height: 30px;
+}
+
 [id=results_order] {
     background: #a3968d;
     height: 22px;
@@ -793,6 +800,7 @@ td.actions {
     padding: .8em;
     font-size: .9em;
     line-height: 1;
+    height: 12px;
 }
 
 /**
@@ -2017,7 +2025,7 @@ video[poster] {
 .printLink {
     background-image: url(../img/printsm.png);
     text-indent: -9999px;
-    height: 24px;
+    height: 20px;
     width: 24px;
     display: inline-block;
     margin-right: 10px;
@@ -2238,14 +2246,27 @@ ul.legalsList {
     }
 
     .results_count {
-        padding-bottom: 0;
+        padding-top: 0;
         padding-right: 0;
+        height: 50px;
+    }
+
+    [id=result_span] {
+        display: block;
+        left: 10px;
+        padding-top: 0;
+        padding-right: 0px;
+        padding-left: 0px;
+        position: relative;
+        top:0;
+        width: 100%;
+        text-align: center;
     }
 
     [id=change_view] {
         display: block;
         position: relative;
-        text-align: right;
+        text-align: center;
     }
 
     .ui-rangeSlider {

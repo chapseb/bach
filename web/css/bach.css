@@ -2253,7 +2253,7 @@ ul.legalsList {
 
     [id=result_span] {
         display: block;
-        left: 10px;
+        left: 0;
         padding-top: 0;
         padding-right: 0px;
         padding-left: 0px;
@@ -2285,6 +2285,11 @@ ul.legalsList {
 
     [id=social] .button {
         float: none;
+    }
+
+    #container {
+        padding-right: 2em;
+        padding-left: 3%;
     }
 
     #container .ui-tabs .ui-tabs-nav li {

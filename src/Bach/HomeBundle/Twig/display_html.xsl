@@ -360,15 +360,24 @@ POSSIBILITY OF SUCH DAMAGE.
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:element name="a">
-                                <xsl:attribute name="href">
-                                    <xsl:variable name="varhref" select="@href"/>
-                                    <xsl:call-template name="replace-string">
-                                        <xsl:with-param name="text" select="@href"/>
-                                        <xsl:with-param name="replace" select="'.xml'" />
-                                        <xsl:with-param name="with" select="''"/>
-                                    </xsl:call-template>
-                                </xsl:attribute>
-
+                                <xsl:choose>
+                                    <xsl:when test="contains(@href,'.pdf')">
+                                        <xsl:attribute name="href">
+                                            <xsl:variable name="varhrefpdf" select="@href"/>
+                                            <xsl:value-of select="concat('../file/misc/', $varhrefpdf)"/>
+                                        </xsl:attribute>
+                                    </xsl:when>
+                                <xsl:when test="contains(@href,'xml')">
+                                    <xsl:attribute name="href">
+                                        <xsl:variable name="varhref" select="@href"/>
+                                        <xsl:call-template name="replace-string">
+                                            <xsl:with-param name="text" select="@href"/>
+                                            <xsl:with-param name="replace" select="'.xml'" />
+                                            <xsl:with-param name="with" select="''"/>
+                                        </xsl:call-template>
+                                    </xsl:attribute>
+                                </xsl:when>
+                            </xsl:choose>
                             <xsl:if test="@title and . != ''">
                                 <xsl:attribute name="title">
                                     <xsl:value-of select="@title"/>

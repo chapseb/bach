@@ -1,0 +1,77 @@
+{#
+Copyright (c) 2014, Anaphore
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    (1) Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+    (2) Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the
+    distribution.
+
+    (3)The name of the author may not be used to
+   endorse or promote products derived from this software without
+   specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+#}
+
+    <fieldset class="list">
+        <legend>
+            {{ _('Publication tokens') }}
+            <span class="btn-groups pull-right">
+                <a href="{{ path("administration_queue_unblock") }}" class="btn btn-delete" title="{{ _('Delete current token in database') }}" onclick="return confirm('Etes vous sûre de vouloir supprimer l\'action en cours?');" >{{ _('Delete blocked token') }}</a>
+            </span>
+        </legend>
+
+        <table id="queuePublish">
+            <thead>
+                <tr>
+                    <th>{{ _('Id') }}</th>
+                    <th>{{ _('File name') }}</th>
+                    <th>{{ _('Token') }}</th>
+                    <th>{{ _('Action') }}</th>
+                    <th>{{ _('Type') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if tokens|length > 0 %}
+                {% for token in tokens %}
+                <tr>
+                    <td>{{ token.id }}</td>
+                    <td>{{ token.filename }}</td>
+                    <td>{{ token.bach_token }}</td>
+                    <td>{{ token.action }}</td>
+                    <td>{{ token.action_type }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="4">{{ _('No publication in queue') }}</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </fieldset>
+
+    <div id="help_window">
+        <h3>{{ _('Publication queue') }}</h3>
+        <div>
+            <p>{{ _('Publication queue list all documents that are waiting to be published. Publication happens depending on server parameters. Line color will inform you about publication success or failure.') }}</p>
+        </div>
+    </div>

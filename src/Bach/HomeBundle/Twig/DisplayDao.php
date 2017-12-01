@@ -877,8 +877,12 @@ class DisplayDao extends \Twig_Extension
             );
 
             $href = '/file/misc/' . $dao;
-            $ret = "<a href='" . $href ."#search=\"". $query . "\"' title='" . $title  .
-                "' target='_blank'>";
+            if ($query != null) {
+                $ret = '<a href="' . $href . '#search=%22' . $query . '%22" title="' . $title .
+                    '" target="_blank">';
+            } else {
+                $ret = '<a href="' . $href .'" title="' . $title . '" target="_blank">';
+            }
             if ($covers_dir !== null) {
                 //check if a cover exists
                 $name_wo_ext = str_replace(

@@ -59,10 +59,15 @@ POSSIBILITY OF SUCH DAMAGE.
                 </div>
             {% endif %}
             {% endblock %}
-            {% block navigation %}{% endblock %}
+            <div class="viewmobil">
+            <div id="nav_div">
             {% block basket_list %}{% endblock %}
             {% block searchhisto_list %}{% endblock %}
+            <br class="sautdeligne">
             {% block login %}{% endblock %}
+            </div>
+            {% block navigation %}{% endblock %}
+            </div>
             {% block flash_messages %}{% endblock %}
             {% block container %}{% endblock %}
             {% block footer %}

@@ -88,7 +88,8 @@ POSSIBILITY OF SUCH DAMAGE.
 
     <xsl:template match="did">
         <xsl:if test="not(unittitle)">
-            <h2 property="dc:title"><xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Untitled unit')"/></h2>
+            <xsl:variable name="countuntitled" select="count(ancestor::c)"/>
+            <span class="sizeTitle{$countuntitled + 1}"><strong property="dc:title"><xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Untitled unit')"/></strong></span>
         </xsl:if>
         <xsl:apply-templates/>
     </xsl:template>

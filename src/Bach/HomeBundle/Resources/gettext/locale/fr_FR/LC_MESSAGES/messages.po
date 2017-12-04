@@ -831,7 +831,7 @@ msgstr "Ce média n'est pas communicable"
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:8465
 #: src/Bach/HomeBundle/Twig/DisplayEADFragment.php:513
 msgid "Untitled unit"
-msgstr "Unité sans intutilé"
+msgstr "Unité sans intitulé"
 
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1909
 #: src/Bach/HomeBundle/Resources/gettext/twig.cache.php:1911

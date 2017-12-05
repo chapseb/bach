@@ -172,7 +172,11 @@ POSSIBILITY OF SUCH DAMAGE.
     <xsl:template match="did" mode="full">
         <xsl:if test="not(unittitle)">
             <header>
-                <h2 property="dc:title"><xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Untitled unit')"/></h2>
+                <h3 property="dc:title"><xsl:value-of select="php:function('Bach\HomeBundle\Twig\DisplayEADFragment::i18nFromXsl', 'Untitled unit')"/>
+                    <xsl:if test="unitdate">
+                        <span class="date" property="dc:date"> • <xsl:value-of select="unitdate/text()"/></span>
+                    </xsl:if>
+                </h3>
             </header>
             <xsl:apply-templates mode="specific" select="scopecontent"/>
             <xsl:apply-templates mode="specific" select="scopecontent/scopecontent"/>

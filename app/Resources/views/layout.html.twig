@@ -37,13 +37,13 @@ POSSIBILITY OF SUCH DAMAGE.
     {% block css %}{% endblock %}
     {% block favicon %}{% endblock %}
 </head>
-<body prefix="dc: http://purl.org/dc/terms/ foaf: http://xmlns.com/foaf/0.1/ gn: http://www.geonames.org/ontology#">
+<body prefix="dc: http://purl.org/dc/terms/ foaf: http://xmlns.com/foaf/0.1/ gn: http://www.geonames.org/ontology#"><div id="wrapper">
     {% block header %}
         {% block menu %}{% endblock %}
     {% endblock %}
 
     {# Main content #}
-    <div id="wrapper">
+
         <div id="container">
             {% block back2top %}
                 <a href="#container" id="back2top" title="{{ _('Back to top') }}"></a>

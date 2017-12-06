@@ -363,7 +363,7 @@ p {
 }
 
 [id=menu] li.active a {
-  background-color: #d1c6c0;
+  background-color: #d7d7d7;
   color: #4a4041;
 }
 
@@ -1650,6 +1650,10 @@ div#user_login a, #searchhistoListBtn a, #basketListBtn a {
     margin: 1px;
 }
 
+td{
+    padding-top: 10px;
+}
+
 legend > span {
     float: right;
 }
@@ -2219,26 +2223,14 @@ video[poster] {
 
 #footer_wrapper {
     position: fixed;
-    min-height: 20px;
-    background-attachment: scroll;
-    background-clip: border-box;
-    background-color: grey;
-    background-image: none;
-    background-origin: padding-box;
-    background-position-x: 0;
-    background-position-y: 0;
-    background-repeat: repeat;
-    background-size: auto auto;
-    bottom: 0;
-    color: white;
-    height: 3%;
-    left: 0;
-    padding-bottom: 5px !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    padding-top: 5px !important;
-    text-align: center;
+    color:white;
+    padding: 5px 0 !important;
+    bottom: 0em;
     width: 100%;
+    height: 3%;
+    background: grey;
+    left: 0em;
+    text-align: center;
 
 }
 
@@ -2253,7 +2245,7 @@ video[poster] {
 
 #head_cookie {
     position: absolute;
-    background-color: #d1c6c0;
+    background-color: #eee;
     margin: 10px;
     bottom: 3%;
     right: 0.5%;
@@ -2406,6 +2398,49 @@ ul.legalsList {
 
 /* Mobile view */
 @media ( max-width : 767px) {
+    [id=navigation] a:hover{
+        border-bottom: none;
+        transition: none;
+    }
+    /*span vide pour fond bland du menu mobil*/
+    .viewmobil {
+        position: fixed;
+        margin-top: 0px;
+        margin-left: 0;
+        z-index: 500;
+        top: 0;
+        height: 50px;
+        background-color: white;
+        width: 100%;
+        box-shadow: 2px 2px 10px 2px #333;
+    }
+
+    [id=nav_div] {
+        right: 0;
+        top: 0px;
+        z-index: 9999;
+        height: 20px;
+        position: fixed;
+        padding: 5px;
+        padding: 0;
+        width: auto;
+        background: transparent;
+    }
+
+    #user_login, #searchhistoListBtn, #basketListBtn {
+        position: relative;
+        top: 0;
+        right: 0;
+    }
+
+    #menu {
+        margin-top: 50px;
+    }
+
+    #basketListBtn, #searchhistoListBtn {
+        display: none !important;
+    }
+
     /** Reset widths and heights */
     html, body, [id=wrapper], [id=menu] {
         height: auto;
@@ -2419,33 +2454,45 @@ ul.legalsList {
     }
 
     .header {
-        margin: 0;
+            margin: 0;
+        }
+
+    [id=navigation] ul {
+        margin: 50px 0 0 0;
+        padding: 0 !important;
+    }
+
+    [id=navigation] li {
+        background-color: #fff;
     }
 
     [id=navigation] {
-        box-shadow: none;
         position: fixed;
-        left: 0;
-        top: 0;
-        text-align: left;
-        padding: 10px;
-        background-color: rgb(248, 248, 255);
         z-index: 9999;
-        height: auto;
         margin:0;
+        border-bottom-color: none;
+        box-shadow: none;
+        padding-top: none;
+        border-bottom:none;
+        top: 0;
+        left: 0;
+        text-align: left;
     }
 
     [id=navigation]:after {
         content: "\2261"; /* unicode "burger" */
-        /*position: absolute;
-        top: -0.15em;
-        right: 0;*/
-        width: 0.8em;
+        position: absolute;
+        z-index: 9999;
+        padding: 10px;
         text-align: center;
         font-size: 2.5em;
         font-weight: bold;
-        line-height: 0.5;
+        top: 0;
+        left: 0;
         cursor: pointer;
+        background-color: white;
+        height: 30px;
+        width: 40px;
     }
 
     .header, .header h1, [id=navigation], [id=navigation] a, [id=navigation] li {
@@ -2456,12 +2503,21 @@ ul.legalsList {
         padding: .4em 1em;
     }
 
+    .header a img {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        }
+
+    .header h1 {
+        overflow: hidden;
+    }
+
     [id=container] {
-        padding: 0 .2em;
+        padding: 0 0em;
     }
 
     [id=wrapper] {
-        margin-left: 0;
+        margin-left: 0 !important;
         padding: 0;
     }
 
@@ -2469,6 +2525,8 @@ ul.legalsList {
         float: none;
         position: relative;
         margin: 0;
+        left:0;
+        margin-bottom:25px;
     }
 
     [id="search"] input[type="text"] {
@@ -2497,20 +2555,8 @@ ul.legalsList {
     }
 
     .results_count {
-        padding-top: 0;
+        padding-bottom: 0;
         padding-right: 0;
-        height: 50px;
-    }
-
-    [id=result_span] {
-        display: block;
-        left: 0;
-        padding-top: 0;
-        padding-right: 0px;
-        padding-left: 0px;
-        position: relative;
-        top:0;
-        width: 100%;
         text-align: center;
     }
 
@@ -2538,11 +2584,6 @@ ul.legalsList {
         float: none;
     }
 
-    #container {
-        padding-right: 2em;
-        padding-left: 3%;
-    }
-
     #container .ui-tabs .ui-tabs-nav li {
         margin-top: 0;
     }
@@ -2555,32 +2596,65 @@ ul.legalsList {
         padding: .3em 0 0;
     }
 
-    h2, h3, h4, h5, h6 {
-        margin: .4em 0 .2em;
+    #footer_wrapper {
+        position: inherit;
+        padding-left: 0px;
+        height: auto;
+        margin-top: 20px;
     }
 
-    #loading p {
-        width: 90%;
-        margin-left: 5%;
+    #user_login {
+        visibility: collapse;
     }
 
-    .fb_iframe_widget > span {
-        vertical-align: baseline!important;
+    #user_login a {
+        visibility: visible;
+    }
+
+    .sautdeligne {
+        display: none;
+    }
+
+    [id="search"] > div {
+        max-width: 100%;
     }
 
     #back2top {
-        bottom: 6px;
-        right: 46px;
+        margin: -15px -15px;
     }
 
-    #footer_wrapper {
-        position: static;
-        left: 0;
-        bottom: 0px;
-        background-color: #d1c6c0;
-        width: 100%;
-        min-height: 20px;
-        margin-top:10;%
-        height: 15%;
+    [id="search_results"] {
+        text-align: left;
+    }
+
+    [id="search_results"] article {
+        min-height: 30px;
+    }
+
+    .display_doc {
+        line-height: 120%;
+    }
+
+    [id=navigation] a:hover, [id=navigation] a:focus, [id=navigation] a:active, [id=navigation] .active a {
+        border-bottom: none;
+        border-right: 2px solid grey
+    }
+
+    .breadcrumb li a {
+        font-size: medium;
+    }
+
+    .results_count {
+        height: 60px;
+    }
+
+    #container {
+        padding-right: 2em;
+        padding-left: 2em;
+    }
+
+    [id="menu"]{
+        margin-left: 2em !important;
+        margin-right: 2em !important;
     }
 }

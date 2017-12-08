@@ -77,4 +77,7 @@ msgstr "Lecteur"
 msgid "User"
 msgstr "Utilisateur"
 
+msgid "Warehouse"
+msgstr "Magasinier"
+
 #/Admin translations

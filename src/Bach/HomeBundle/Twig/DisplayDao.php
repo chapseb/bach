@@ -245,6 +245,7 @@ class DisplayDao extends \Twig_Extension
                     } else {
                         foreach ($xml_dg->children() as $node_name => $xml_dao) {
                             if ($xml_dao['role'] == 'image:first') {
+                                $gres['title'] = _('Series');
                                 $dao = (string)$xml_dao['href'];
                                 $daotitle = null;
                                 if ($xml_dao['title']) {
@@ -275,7 +276,8 @@ class DisplayDao extends \Twig_Extension
 
                                 $imageEnd = substr($dao, strrpos($dao, '/') + 1);
                                 $retLink .= '&e='. $imageEnd . '" target="_blank">';
-                                $ret = $retLink. $retImg . '</a>';
+                                $daogrptitle = '<span class="title">'.(string)$xml_dg['title'].'</span>';
+                                $ret = $retLink. $retImg . $daogrptitle . '</a>';
                                 $results[self::SERIESBOUND][] = $ret;
                             } else {
                                 break;

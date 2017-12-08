@@ -367,7 +367,10 @@ class DefaultController extends SearchController
                             'href' => $searchResult['dao'][0],
                         )
                     );
-                if ($query->getResult()[0]['role'] == 'image:first') {
+                if ($query->getResult()[0]['role'] == 'image:first'
+                    || ( isset($query->getResult()[1])
+                    && $query->getResult()[1]['role'] == 'image:first')
+                ) {
                     $daoSeries[$searchResult['fragmentid']] = 'series';
                 }
             }

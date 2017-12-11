@@ -2571,7 +2571,7 @@ ul.legalsList {
     }
 
     /** Do not work in mobile mode */
-    #dates_plot {
+    #sh_daterange, #dates_plot {
         display: none;
     }
 

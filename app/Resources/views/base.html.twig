@@ -314,7 +314,7 @@ POSSIBILITY OF SUCH DAMAGE.
         _mobile = function(){
             if ( window.innerWidth < 768 ) {
                 //hide per default on mobile
-                $('#navigation > ul').toggleClass('hidden')
+                $('#navigation > ul').addClass('hidden');
                 $('#navigation').on('click', function(){
                     $(this).find('ul').toggleClass('hidden');
                 });
@@ -338,9 +338,12 @@ POSSIBILITY OF SUCH DAMAGE.
 
         $(document).ready(function () {
 
-            $(window).resize(function() {
-                _mobile();
-            });
+            /* not in mobile mod 'cause resize make burger menu open */
+            if ( window.innerWidth >= 768 ) {
+                $(window).resize(function() {
+                    _mobile();
+                });
+            }
 
             $('.jbtn').button();
 

@@ -133,7 +133,12 @@ class DisplayDao extends \Twig_Extension
                 $directory = substr($daos[0], 0, strrpos($daos[0], '/'));
                 $imageBegin = substr($daos[0], strrpos($daos[0], '/') + 1);
                 $imageEnd = substr($daos[1], strrpos($daos[1], '/') + 1);
-                $retLink = '<a href="' . $this->_viewer . 'series/' . $directory .
+                $titleSeriesBeginEnd = '';
+                if ($daotitle != null) {
+                    $titleSeriesBeginEnd = $daotitle;
+                }
+                $retLink = '<a title="'.$titleSeriesBeginEnd
+                    .'" href="' . $this->_viewer . 'series/' . $directory .
                     '?s=' . $imageBegin . '&e=' . $imageEnd .'" target="_blank">';
                 if ($aws == true) {
                     $srcImage = @file_get_contents(

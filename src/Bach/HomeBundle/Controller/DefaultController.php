@@ -38,6 +38,7 @@
  * @category Search
  * @package  Bach
  * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
@@ -63,6 +64,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @category Search
  * @package  Bach
  * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
@@ -157,6 +159,7 @@ class DefaultController extends SearchController
             $session->set($this->getFiltersName(), null);
         }
 
+        // Add filters in query
         $filters->bind($request);
         $session->set($this->getFiltersName(), $filters);
 
@@ -176,6 +179,7 @@ class DefaultController extends SearchController
 
         $factory = $this->get($this->factoryName());
 
+        // Add geoloc and date field to factory
         //FIXME: try to avoid those 2 calls
         $factory->setGeolocFields($this->getGeolocFields());
         $factory->setDateField($this->date_field);
@@ -210,9 +214,9 @@ class DefaultController extends SearchController
 
         if (!is_null($query_terms)) {
             if ($request->get('results_order') !== null) {
-                $container->setOrder($request->get('results_order'));//$view_params->getOrder();
+                $container->setOrder($request->get('results_order'));
             } else if ($this->container->getParameter('display.ead.result_order') != null) {
-                $container->setOrder($this->container->getParameter('display.ead.result_order'));//$view_params->getOrder();
+                $container->setOrder($this->container->getParameter('display.ead.result_order'));
             } else {
                 $container->setOrder($view_params->getOrder());
             }
@@ -238,6 +242,7 @@ class DefaultController extends SearchController
             //Add filters to container
             $container->setFilters($filters);
 
+            //Add weight to some fields
             $weight = array(
                 "descriptors" =>
                     $this->container->getParameter('weight.descriptors'),
@@ -247,12 +252,14 @@ class DefaultController extends SearchController
                 "fulltext" => $this->container->getParameter('weight.fulltext'),
                 "cUnitid" => $this->container->getParameter('weight.cUnitid')
             );
+            // cMediaContent is the pdf content
             $cMediaContentQuery = array();
             if ($session->get('pdf_filters') == true) {
                 $cMediaContentQuery = array(
                     "cMediaContent" => "0.1"
                 );
             }
+            // Add weight in query
             $weight = array_merge($weight, $cMediaContentQuery);
             $container->setWeight($weight);
             if ($filters->count() > 0) {
@@ -264,6 +271,7 @@ class DefaultController extends SearchController
 
         $factory->prepareQuery($container);
 
+        // if query_terms is null, we are in index page
         if (!is_null($query_terms)) {
             $conf_facets = $this->getDoctrine()
                 ->getRepository('BachHomeBundle:Facets')
@@ -293,6 +301,7 @@ class DefaultController extends SearchController
             $conf_facets
         );
 
+        // detct if word is in the attached pdf
         if ($session->get('pdf_filters') == true
             && $query_terms != "*:*"
         ) {
@@ -317,6 +326,8 @@ class DefaultController extends SearchController
             }
             $tpl_vars['cMediaContent']   = $cMediaContentResult;
         }
+
+        // manage facets
         $this->handleFacets(
             $factory,
             $conf_facets,
@@ -335,6 +346,7 @@ class DefaultController extends SearchController
                 array('position' => 'ASC')
             );
 
+        // get facets name for display with the good name
         $all_facets = $tpl_vars['facet_names'];
         foreach ( $all_facets_table as $field ) {
             if (!isset($all_facets_table[$field->getSolrFieldName()])) {
@@ -395,6 +407,10 @@ class DefaultController extends SearchController
             $current_date = new \DateTime();
             $current_year = $current_date->format("Y");
 
+            //////////////////////////////////////////////////////////////////////
+            // communicability begin
+
+            // get client ip and compare for reading room
             if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
                 $tpl_vars['ipconnection']
                     = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
@@ -408,6 +424,7 @@ class DefaultController extends SearchController
             if (strpos($tpl_vars['ipconnection'], $testIp) !== false) {
                 $flagReadroom = true;
             }
+
             // get daos with readingroom communicability or general communicability
             if (($flagReadroom == true
                 && ($this->container->getParameter('ip_internal')
@@ -465,6 +482,7 @@ class DefaultController extends SearchController
         }
         ////////////////////////////////////////////////////////////////////////////////
 
+        // get information about words and results (highlight, suggestions, nb results, ...)
         $query_session = '';
         if (!is_null($query_terms)) {
             $hlSearchResults = $factory->getHighlighting();
@@ -513,7 +531,7 @@ class DefaultController extends SearchController
         }
 
         $tpl_vars['stats'] = $factory->getStats();
-        $this->handleYearlyResults($factory, $tpl_vars);
+        $this->handleYearlyResults($factory, $tpl_vars);    // nb result by year
         $this->handleGeoloc($factory);
 
         $tpl_vars['form'] = $form->createView();
@@ -522,7 +540,7 @@ class DefaultController extends SearchController
         $tpl_vars['pdf_search'] = $this->container->getParameter('pdf_search');
         if ($session) {
         } else {
-            $tpl_vars['results_order'] = $this->container->getParameter('display.ead.result_order');//$view_params->getOrder();
+            $tpl_vars['results_order'] = $this->container->getParameter('display.ead.result_order');
         }
         if (isset($suggestions) && $suggestions->count() > 0) {
             $tpl_vars['suggestions'] = $suggestions;
@@ -531,14 +549,15 @@ class DefaultController extends SearchController
             = $this->container->getParameter('display.disable_select_daterange');
         $tpl_vars['current_date'] = 'cDateBegin';
 
-        $this->searchhistoAddAction($searchResults->getNumFound(), $all_facets);
+        $this->searchhistoAddAction($searchResults->getNumFound(), $all_facets);    // add this search in search historic
         $tpl_vars['cloudfront'] = $this->container->getParameter('cloudfront');
         $tpl_vars['aws'] = $this->container->getParameter('aws.s3');
         if ($this->container->getParameter('specialeads') != null) {
+            // get special ead list if exist and display it in result with a different color
             $tpl_vars['specialeads'] = $this->container->getParameter('specialeads');
         }
         $tpl_vars['display_breadcrumb']
-            = $this->container->getParameter('display.breadcrumb');
+            = $this->container->getParameter('display.breadcrumb'); // if you want another breadcrumb display
         return $this->render(
             'BachHomeBundle:Default:index.html.twig',
             $tpl_vars
@@ -571,7 +590,7 @@ class DefaultController extends SearchController
                 )
             );
         } else {
-            $redirectUrl = $this->get('router')->generate('bach_archives');
+            $redirectUrl = $this->get('router')->generate('bach_archives'); // homepage
         }
 
         $request = $this->getRequest();
@@ -582,13 +601,14 @@ class DefaultController extends SearchController
                 $q = $query->getQuery();
                 $url_vars = array('query_terms' => $q);
 
+                // check session and get last request if exist
                 $session = $request->getSession();
                 $view_params = $session->get($this->getParamSessionName());
                 if ($request->get('results_order') !== null) {
-                    $view_params->setOrder((int)$request->get('results_order'));//$view_params->getOrder();
+                    $view_params->setOrder((int)$request->get('results_order'));
                 } else {
                     if (!is_null($view_params)) {
-                        $view_params->setOrder((int)$this->container->getParameter('display.ead.result_order'));//$view_params->getOrder();
+                        $view_params->setOrder((int)$this->container->getParameter('display.ead.result_order'));
                     }
                 }
                 $session->set($this->getParamSessionName(), $view_params);
@@ -756,6 +776,7 @@ class DefaultController extends SearchController
 
         $request = $this->getRequest();
         $session = $request->getSession();
+        // get highlight words for customing their display
         if ($session->get('highlight')) {
             $highlight = $session->get('highlight')->getResult($docid);
         } else {
@@ -806,6 +827,7 @@ class DefaultController extends SearchController
             )
         );
 
+        // Get result parents for breadcrumb build
         if (isset($doc['archDescUnitTitle'])) {
             $tpl_vars['archdesc'] = $doc['archDescUnitTitle'];
         }
@@ -828,6 +850,7 @@ class DefaultController extends SearchController
             }
         }
 
+        /* display max 20 subunits */
         $max_results = 20;
         $cquery = $client->createSelect();
         $pid = substr($docid, strlen($doc['headerId']) + 1);
@@ -861,6 +884,7 @@ class DefaultController extends SearchController
             $tpl_vars['children'] = false;
         }
 
+        // display in a popup or an other page
         if ($ajax === 'ajax') {
             $tpl = 'BachHomeBundle:Default:content_display.html.twig';
             $tpl_vars['ajax'] = true;
@@ -985,6 +1009,7 @@ class DefaultController extends SearchController
         $tpl_vars = $this->commonTemplateVariables();
 
         $client = $this->get($this->entryPoint());
+        // need all ead inventory to build cdc
         $query = $client->createSelect();
         $query->setQuery('fragmentid:*_description');
         $query->setFields('cUnittitle, headerId, fragmentid');
@@ -1004,6 +1029,7 @@ class DefaultController extends SearchController
         $tpl_vars['docid'] = '';
         $tpl_vars['xml_file'] = $cdc_path;
         $tpl_vars['cdc'] = true;
+        // need to know which inventory must not display in cdc
         $tpl_vars['unlistedfiles']
             = $this->container->getParameter('cdcunlistedfiles');
 
@@ -1310,7 +1336,7 @@ class DefaultController extends SearchController
      * @param string $img  Image name
      * @param string $ext  Image extension
      *
-     * @return void
+     * @return JsonResponse
      */
     public function infosImageAction($path, $img, $ext)
     {
@@ -1423,8 +1449,8 @@ class DefaultController extends SearchController
             }
             ////////////////////////////////////////////////
         }
+        // Now, get matricules information if feature active
         if ($this->container->getParameter('feature.matricules')) {
-            //we did not find any restuls in archives, try with matricules.
             $route = 'remote_matimage_infos';
             $params = array(
                 'path'  => $path,
@@ -1449,6 +1475,7 @@ class DefaultController extends SearchController
             $response_mat = @file_get_contents('http://'.$urlBase.$redirectUrl);
             $response_mat = (array)json_decode($response_mat);
         }
+        // merge all response
         $total_response = array_merge($response, $response_mat);
         $total_response['cookie'] = $this->getCookieName();
 
@@ -1479,7 +1506,7 @@ class DefaultController extends SearchController
     /**
      * Create a cookie
      *
-     * @return void
+     * @return Response
      */
     public function authorizedCookieAction()
     {
@@ -1555,7 +1582,7 @@ class DefaultController extends SearchController
 
 
     /**
-     * Print search page
+     * Print search page (like searchAction but print)
      *
      * @param string $query_terms Term(s) we search for
      * @param int    $page        Page

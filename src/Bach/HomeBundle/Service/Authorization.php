@@ -47,7 +47,7 @@ namespace Bach\HomeBundle\Service;
 use Symfony\Component\Security\Core\SecurityContext;
 
 /**
- * Bach Authorization
+ * Bach Authorization document access (reader room/archivist)
  *
  * PHP version 5
  *

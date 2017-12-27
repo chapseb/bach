@@ -229,6 +229,8 @@ class DisplayEADFragment extends \Twig_Extension
             $callback,
             $text
         );
+
+        // After we have html content, we need to do somme treatment with it
         // delete link and images for printing
         if ($print === true) {
             $text = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $text);
@@ -239,8 +241,8 @@ class DisplayEADFragment extends \Twig_Extension
             );
         }
 
-        //FIXME: Find a better way to handle highlight
-        // highlight in descriptors
+        // Add highlight on search word (add em with a class)
+        //FIXME: Find a better way to handle highlight in descriptors
         if ($highlight != false && $request->getSession()->get('query_terms') != '*:*') {
             $wordHighArray = array();
             foreach ($highlight->getFields() as $fieldArray) {
@@ -251,13 +253,14 @@ class DisplayEADFragment extends \Twig_Extension
                     }
                 }
             }
-            // delete one character word and word whiche are in stoplist
+            // delete one character word, and words find in the stoplist
             $wordHighArray = array_filter(
                 $wordHighArray,
                 function ($v) {
                     return strlen($v) > 1;
                 }
             );
+            // FIXME we have a function with it but better to have a file
             $wordHighArray = array_diff($wordHighArray, $this->getStopWords());
 
             $originQuery =  $request->getSession()->get('query_terms');
@@ -300,7 +303,7 @@ class DisplayEADFragment extends \Twig_Extension
                 $sectionSerie
             );
 
-            // need to rebuild the link because link has the search word
+            // need to rebuild the link because links can have the query word
             foreach ($allWord as $wordHigh) {
                 foreach ($matches[1] as $key => $link) {
                     if (preg_match("/\b".$wordHigh."\b/i", $matches[2][$key])
@@ -357,6 +360,7 @@ class DisplayEADFragment extends \Twig_Extension
                 );
             }
 
+            // Take care of special html char
             $text = htmlspecialchars_decode($text);
             if ($full == true) {
                 $result = preg_match_all(

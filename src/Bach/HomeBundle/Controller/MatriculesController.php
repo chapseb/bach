@@ -38,6 +38,7 @@
  * @category Search
  * @package  Bach
  * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
@@ -64,6 +65,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @category Search
  * @package  Bach
  * @author   Johan Cwiklinski <johan.cwiklinski@anaphore.eu>
+ * @author   Sebastien Chaptal <sebastien.chaptal@anaphore.eu>
  * @license  BSD 3-Clause http://opensource.org/licenses/BSD-3-Clause
  * @link     http://anaphore.eu
  */
@@ -104,19 +106,23 @@ class MatriculesController extends SearchController
         $view_params = $this->handleViewParams();
 
         $tpl_vars = $this->searchTemplateVariables($view_params, $page);
+        // in matricule, there are two views, list or thumb (txtlist is just for ead view)
         if ($tpl_vars['view'] == 'txtlist') {
             $tpl_vars['view'] = 'list';
         }
+        // if cookie exist doesn't display warning about it
         if (isset($_COOKIE[$this->getCookieName()]) ) {
             $tpl_vars['cookie_param'] = true;
         }
 
+        // Manage filters
         $filters = $session->get($this->getFiltersName());
         if (!$filters instanceof Filters || $request->get('clear_filters')) {
             $filters = new Filters();
             $session->set($this->getFiltersName(), null);
         }
 
+        // add filter which are in request
         $filters->bind($request);
         $session->set($this->getFiltersName(), $filters);
 
@@ -126,6 +132,7 @@ class MatriculesController extends SearchController
             $query_terms = '*:*';
         }
 
+        // create a new search form
         $form = $this->createForm(
             new SearchQueryFormType(
                 $query_terms,
@@ -140,6 +147,7 @@ class MatriculesController extends SearchController
         $resultCount = null;
         $searchResults = null;
 
+        // if query_terms is null, we are in index page
         if ($query_terms !== null) {
             $conf_facets = $this->getDoctrine()
                 ->getRepository('BachHomeBundle:Facets')
@@ -170,6 +178,7 @@ class MatriculesController extends SearchController
 
         $factory = $this->get($this->factoryName());
 
+        // Add geoloc and date field to factory
         //FIXME: try to avoid those 2 calls
         $factory->setGeolocFields($this->getGeolocFields());
         $factory->setDateField($current_date);
@@ -189,6 +198,7 @@ class MatriculesController extends SearchController
 
         $container = new SolariumQueryContainer();
 
+        // Add order result, query and pagination
         if ($query_terms !== null) {
             $container->setOrder($view_params->getOrder());
             $container->setField($this->getContainerFieldName(), $query_terms);
@@ -205,13 +215,17 @@ class MatriculesController extends SearchController
             $container->setNoResults();
         }
 
+        ////////////////////////////////////////////
+        // Query launch
         $factory->prepareQuery($container);
 
         $searchResults = $factory->performQuery(
             $container,
             $conf_facets
         );
+        ////////////////////////////////////////////
 
+        // Manage facets with previous query results
         $this->handleFacets(
             $factory,
             $conf_facets,
@@ -244,6 +258,7 @@ class MatriculesController extends SearchController
 
         }
 
+        // Take care of image thumb in aws (thumbs could be display in list results)
         if ($this->container->getParameter('aws.s3') == true) {
             $arrayImgAws = array();
             foreach ($searchResults as $doc) {
@@ -289,6 +304,7 @@ class MatriculesController extends SearchController
 
         $this->searchhistoAddAction($searchResults->getNumFound());
 
+        // Tests for reading room and archivist rights //////////////////
         if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $incomeIp = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
         } else {
@@ -311,6 +327,7 @@ class MatriculesController extends SearchController
         ) {
             $tplParams['communicability'] = true;
         }
+        /////////////////////////////////////////////////////////////////
 
         return $this->render(
             'BachHomeBundle:Matricules:search_form.html.twig',
@@ -390,7 +407,7 @@ class MatriculesController extends SearchController
             }
         }
 
-        // get additional Informations about this record
+        // get additional Informations in database about this record
         $zdb = $this->container->get('zend_db');
         $select = $zdb->select('matricules_file_format')
             ->where(array('id' => $docid));
@@ -403,6 +420,7 @@ class MatriculesController extends SearchController
                 = nl2br($result->current()['additional_informations']);
         }
 
+        // display in a popup or an other page
         if ($ajax === 'ajax') {
             $tpl = 'BachHomeBundle:Matricules:content_display.html.twig';
             $tplParams['ajax'] = true;
@@ -412,7 +430,6 @@ class MatriculesController extends SearchController
         }
 
         if ($this->container->getParameter('aws.s3') == true) {
-            //$tplParams['mediumAwsImage']
             $srcImage = $this->container->getParameter('viewer_uri')
                 . 'ajax/imgAws/'.
                 $doc->start_dao. '/format/medium';
@@ -420,6 +437,7 @@ class MatriculesController extends SearchController
             $srcImage = @file_get_contents($srcImage);
             $tplParams['awsSourceImage'] = $srcImage;
         }
+
         /* not display warning about cookies */
         if (isset($_COOKIE[$this->getCookieName()])) {
             $tplParams['cookie_param'] = true;
@@ -437,6 +455,7 @@ class MatriculesController extends SearchController
             $tplParams['print'] = $print;
         }
 
+        // Test communicability and access to image
         $current_date = new \DateTime();
         $tplParams['communicability'] = false;
         if (strtotime($doc->communicability_general) <= $current_date->getTimestamp()) {
@@ -465,6 +484,7 @@ class MatriculesController extends SearchController
                 $tplParams['communicability'] = true;
             }
         }
+        /////////////////////////////////////////////
         $request = $this->getRequest();
         $tplParams['serverName'] = $request->getScheme() . '://' .
             $request->getHttpHost() . $request->getBasePath();
@@ -728,12 +748,13 @@ class MatriculesController extends SearchController
 
     /**
      * Retrieve fragment informations from image
+     * Call from viewer or somewhere else
      *
      * @param string $path Image path
      * @param string $img  Image name
      * @param string $ext  Image extension
      *
-     * @return void
+     * @return JsonResponse
      */
     public function infosImageAction($path, $img, $ext)
     {
@@ -842,7 +863,7 @@ class MatriculesController extends SearchController
     }
 
     /**
-     * Print results
+     * Print results (like searchAction but for print)
      *
      * @param string $query_terms Term(s) we search for
      * @param int    $page        Page
@@ -874,6 +895,7 @@ class MatriculesController extends SearchController
             $tpl_vars['cookie_param'] = true;
         }
 
+        // Manage filters
         $filters = $session->get($this->getFiltersName());
         if (!$filters instanceof Filters || $request->get('clear_filters')) {
             $filters = new Filters();
@@ -889,6 +911,7 @@ class MatriculesController extends SearchController
             $query_terms = '*:*';
         }
 
+        // create a new search form
         $form = $this->createForm(
             new SearchQueryFormType(
                 $query_terms,
@@ -903,6 +926,7 @@ class MatriculesController extends SearchController
         $resultCount = null;
         $searchResults = null;
 
+        // if query_terms is null, we are in index page
         if ($query_terms !== null) {
             $conf_facets = $this->getDoctrine()
                 ->getRepository('BachHomeBundle:Facets')
@@ -933,10 +957,12 @@ class MatriculesController extends SearchController
 
         $factory = $this->get($this->factoryName());
 
+        // Add geoloc and date field to factory
         //FIXME: try to avoid those 2 calls
         $factory->setGeolocFields($this->getGeolocFields());
         $factory->setDateField($current_date);
         $dates_fields = array();
+        // Add other dates if are in facets
         foreach ( $conf_facets as $conf_facet ) {
             if (in_array($conf_facet->getSolrFieldName(), $this->dates_fields_mat)
                 && $conf_facet->getSolrFieldName() != $current_date
@@ -952,6 +978,7 @@ class MatriculesController extends SearchController
 
         $container = new SolariumQueryContainer();
 
+        // Add order, query and pagination
         if ($query_terms !== null) {
             $container->setOrder($view_params->getOrder());
             $container->setField($this->getContainerFieldName(), $query_terms);
@@ -962,7 +989,6 @@ class MatriculesController extends SearchController
                     "offset"    => $view_params->getResultsbyPage()*2
                 )
             );
-
             $container->setFilters($filters);
         } else {
             $container->setNoResults();
@@ -1008,6 +1034,7 @@ class MatriculesController extends SearchController
         $this->handleYearlyResults($factory, $tpl_vars);
         $this->handleGeoloc($factory);
 
+        // prepare search form for view
         $tpl_vars['form'] = $form->createView();
 
         $tpl_vars['resultStart'] = ($page - 1)

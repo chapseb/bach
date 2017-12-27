@@ -129,6 +129,7 @@ class DisplayDao extends \Twig_Extension
         $query = null
     ) {
         if ($all === false) {
+            // if series with begin and end
             if ($testSeries == 'series') {
                 $directory = substr($daos[0], 0, strrpos($daos[0], '/'));
                 $imageBegin = substr($daos[0], strrpos($daos[0], '/') + 1);

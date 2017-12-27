@@ -143,6 +143,7 @@ class SolariumQueryFactory
         }
 
         $facetSet = $this->_query->getFacetSet();
+        // Take care of facet date range
         if ( isset($this->_low_date)
             && isset($this->_up_date)
             && isset($this->_date_field)
@@ -212,6 +213,7 @@ class SolariumQueryFactory
             $begin = '';
             $end = '';
             foreach ( $container->getFilters() as $name=>$value ) {
+                // build query with date range to catch result with date range
                 if ( preg_match('/(date_(.*)_)(min|max)/', $name, $matches) ) {
                     switch ( $matches[3] ) {
                     case 'min':
@@ -291,6 +293,7 @@ class SolariumQueryFactory
                         $this->_query->createFilterQuery('geoloc')
                             ->setQuery($query);
                         break;
+                    // query for range unitid when exists
                     case 'cUnitidbegin':
                         foreach ( $value as $v ) {
                             $query = '(cUnitidbegin:[* TO ' . $v . '] AND cUnitidend:[' . $v . ' TO *])';

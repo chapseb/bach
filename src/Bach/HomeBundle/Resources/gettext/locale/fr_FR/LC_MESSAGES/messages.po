@@ -1430,7 +1430,7 @@ msgstr "Vidéos Flash"
 
 #: src/Bach/HomeBundle/Twig/DisplayDao.php:514
 msgid "Miscellaneous documents"
-msgstr "Documents divers"
+msgstr "Documents numériques"
 
 #: src/Bach/HomeBundle/Twig/DisplayDao.php:523
 msgid "XML documents"
